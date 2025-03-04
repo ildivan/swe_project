@@ -5,10 +5,16 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import backend.server.json.Message;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+
 public class Terminal {
+
     public static void main(String[] args) {
         String hostname = "localhost";
         int port = 5001;
+        Gson gson = new Gson();
 
         try (Socket socket = new Socket(hostname, port);
              OutputStream output = socket.getOutputStream();
@@ -17,40 +23,18 @@ public class Terminal {
              BufferedReader reader = new BufferedReader(new InputStreamReader(input));
              BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in))) {
 
-                Thread readThread = new Thread(() -> {
-                    try {
-                        String response;
-                        while ((response = reader.readLine()) != null) { // Esci se readLine restituisce null
-                            System.out.println(response);
-                        }
-                    } catch (IOException e) {
-                        // Gestione dell'errore di lettura
-                        System.out.println("Errore nella lettura del server: " + e.getMessage());
-                    }
-                });
-                
+            do {
+                String JSONMessage = reader.readLine();
+                if (JSONMessage == null) break;
+                Message msg = gson.fromJson(JSONMessage, Message.class);
+                System.out.println(msg.text);
 
-            Thread writeThread = new Thread(() -> {
-                do {
-                    try {
-                        System.out.print(">>");
-                        String text = consoleReader.readLine();
-                        writer.println(text);
-                    } catch (IOException e) {
-                        return;
-                    }
-                } while (true);
-            });
-
-            readThread.start();
-            writeThread.start();
-
-            try{
-                readThread.join();
-                writeThread.join();
-            }catch(Exception e){
-                System.out.println(e.getMessage());
-            }
+                if (msg.requiresResponse) {
+                    System.out.print(">>");
+                    String text = consoleReader.readLine();
+                    writer.println(text);
+                }
+            } while (true);
 
         } catch (UnknownHostException ex) {
             System.out.println("Server not found: " + ex.getMessage());

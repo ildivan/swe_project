@@ -20,7 +20,6 @@ public class Server {
                 }catch(Exception e){
                     System.out.println(e.getMessage());
                 }
-                System.out.println("LOGIN COMPLETATO");
                 //IF CONFIGURATORE RUN CONFIG THREAD
                 //IF VOLONTARIO RUN VOLUNTEER THREAD
             }

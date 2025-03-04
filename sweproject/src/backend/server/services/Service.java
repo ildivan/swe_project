@@ -19,7 +19,6 @@ public abstract class Service extends Thread {
 
             applyLogic(input,output);
 
-            socket.close();
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
             ex.printStackTrace();
@@ -27,4 +26,8 @@ public abstract class Service extends Thread {
     }
 
     public abstract void applyLogic(InputStream input, OutputStream output) throws IOException;
+
+    public void close() throws IOException {
+        socket.close();
+    }
 }
