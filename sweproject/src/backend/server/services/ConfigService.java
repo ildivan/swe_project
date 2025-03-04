@@ -8,12 +8,15 @@ public class ConfigService extends Service{
     public ConfigService(Socket socket){
         super(socket);
     }
-    
+
     @Override
-    void applyLogic(InputStream input, OutputStream output) throws IOException {
+    public void applyLogic(InputStream input, OutputStream output) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(input));
         PrintWriter writer = new PrintWriter(output, true);
 
+        while(true){
+            writer.println(reader.readLine());
+        }
 
     }
 }

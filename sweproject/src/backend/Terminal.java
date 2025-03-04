@@ -17,14 +17,38 @@ public class Terminal {
              BufferedReader reader = new BufferedReader(new InputStreamReader(input));
              BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in))) {
 
-            String text;
-            do {
-                System.out.print("Enter message: ");
-                text = consoleReader.readLine();
-                writer.println(text);
-                String response = reader.readLine();
-                System.out.println(response);
-            } while (!"bye".equalsIgnoreCase(text));
+            Thread readThread = new Thread(() -> {
+                do {
+                    try {
+                        String response = reader.readLine();
+                        System.out.println(response);
+                    } catch (IOException e) {
+                        return;
+                    }
+                } while (true);
+            });
+
+            Thread writeThread = new Thread(() -> {
+                do {
+                    try {
+                        System.out.print(">>");
+                        String text = consoleReader.readLine();
+                        writer.println(text);
+                    } catch (IOException e) {
+                        return;
+                    }
+                } while (true);
+            });
+
+            readThread.start();
+            writeThread.start();
+
+            try{
+                readThread.join();
+                writeThread.join();
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
 
         } catch (UnknownHostException ex) {
             System.out.println("Server not found: " + ex.getMessage());

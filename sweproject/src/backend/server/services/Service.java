@@ -3,7 +3,7 @@ package backend.server.services;
 import java.io.*;
 import java.net.Socket;
 
-abstract class Service extends Thread {
+public abstract class Service extends Thread {
     private final Socket socket;
 
     public Service(Socket socket) {
@@ -26,5 +26,5 @@ abstract class Service extends Thread {
         }
     }
 
-    abstract void applyLogic(InputStream input, OutputStream output) throws IOException;
+    public abstract void applyLogic(InputStream input, OutputStream output) throws IOException;
 }
