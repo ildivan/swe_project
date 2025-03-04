@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 public class Terminal {
     public static void main(String[] args) {
         String hostname = "localhost";
-        int port = 5000;
+        int port = 5001;
 
         try (Socket socket = new Socket(hostname, port);
              OutputStream output = socket.getOutputStream();
@@ -17,16 +17,18 @@ public class Terminal {
              BufferedReader reader = new BufferedReader(new InputStreamReader(input));
              BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in))) {
 
-            Thread readThread = new Thread(() -> {
-                do {
+                Thread readThread = new Thread(() -> {
                     try {
-                        String response = reader.readLine();
-                        System.out.println(response);
+                        String response;
+                        while ((response = reader.readLine()) != null) { // Esci se readLine restituisce null
+                            System.out.println(response);
+                        }
                     } catch (IOException e) {
-                        return;
+                        // Gestione dell'errore di lettura
+                        System.out.println("Errore nella lettura del server: " + e.getMessage());
                     }
-                } while (true);
-            });
+                });
+                
 
             Thread writeThread = new Thread(() -> {
                 do {

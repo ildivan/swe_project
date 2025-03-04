@@ -8,7 +8,7 @@ import java.net.*;
 
 public class Server {
     public static void main(String[] args) {
-        int port = 5000;
+        int port = 5001;
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server is listening on port " + port);
             while (true) {
