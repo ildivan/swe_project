@@ -1,4 +1,5 @@
 package backend.server.services.auth;
+import backend.server.ConnectionType;
 import backend.server.json.Message;
 import backend.server.services.Service;
 import com.google.gson.Gson;
@@ -7,8 +8,12 @@ import java.io.*;
 import java.net.Socket;
 
 public class AuthenticationSystemFront extends Service {
-    public AuthenticationSystemFront(Socket socket) {
+
+    private final ConnectionType connectionType;
+
+    public AuthenticationSystemFront(Socket socket, ConnectionType connectionType) {
         super(socket);
+        this.connectionType = connectionType;
     }
 
     @Override

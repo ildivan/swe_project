@@ -1,45 +1,68 @@
 package backend.server;// Server.java
 
-import backend.server.services.ConfigService;
-import backend.server.services.auth.AuthenticationSystemBack;
 import backend.server.services.auth.AuthenticationSystemFront;
 
 import java.io.*;
 import java.net.*;
 
 public class Server {
-    public static void main(String[] args) {
-        int port = 5001;
 
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+    private final int ClientPort;
+    private final int ServerTerminalPort;
 
-            System.out.println("Server is listening on port " + port);
+    public Server(int ClientPort, int ServerTerminalPort){
+        this.ClientPort = ClientPort;
+        this.ServerTerminalPort = ServerTerminalPort;
+    }
 
-            Thread backInt = new Thread(new AuthenticationSystemBack());
+    public void startServer(){
+        try (ServerSocket clientSS = new ServerSocket(ClientPort);
+             ServerSocket serverTerminalSS = new ServerSocket(ServerTerminalPort)) {
+
+            System.out.println("Server is listening on port " + ClientPort);
+
+            Thread backInt = new Thread(() -> {
+                try {
+                    while(true) {
+                        Socket socket = serverTerminalSS.accept();
+                        System.out.println("Internal Connection");
+                        authenticate(socket,ConnectionType.Internal);
+                    }
+                } catch (IOException | InterruptedException e) {
+                    System.out.println(e.getMessage());
+                    throw new RuntimeException(e);
+                }
+            });
             backInt.start();
 
-            
             while (true) {
-                Socket socket = serverSocket.accept();
-                AuthenticationSystemFront login = new AuthenticationSystemFront(socket);
-                login.start();
-                try{
-                    login.join();
-                }catch(Exception e){
-                    System.out.println(e.getMessage());
-                }
-                //IF CONFIGURATORE RUN CONFIG THREAD
-                //IF VOLONTARIO RUN VOLUNTEER THREAD
+                Socket socket = clientSS.accept();
+                System.out.println("External Connection");
+                authenticate(socket,ConnectionType.External);
             }
-        } catch (IOException ex) {
-            System.out.println("Server exception: " + ex.getMessage());
-            ex.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Server exception: " + e.getMessage());
+        } catch(InterruptedException e) {
+            System.out.println("Server interrupted: " + e.getMessage());
         }
     }
-        
+
+    private static void authenticate(Socket socket, ConnectionType connectionType)
+            throws InterruptedException, IOException {
+        AuthenticationSystemFront login = new AuthenticationSystemFront(socket, ConnectionType.Internal);
+        login.start();
+        login.join();
+    }
+
     public static void output(String message){
         System.out.println(message);
-    }      
+    }
+
+    public static void main(String[] args) {
+        Server s = new Server(5001,6001);
+        s.startServer();
+    }
+
 }
 
 
