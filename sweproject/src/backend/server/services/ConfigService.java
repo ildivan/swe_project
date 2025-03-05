@@ -4,21 +4,22 @@ import java.io.*;
 import java.net.Socket;
 
 import backend.server.Server;
+import com.google.gson.Gson;
 
-public class ConfigService {
+public class ConfigService extends Service<Void>{
 
-    public ConfigService(){
-        super();
+    public ConfigService(Socket socket, Gson gson){
+        super(socket, gson);
     }
 
-    public static void applyLogic() throws IOException {
-        
-        //metodo test
+    public Void applyLogic() throws IOException {
+
         startMenu();
-                
+
+        return null;
     }
                 
-    private static void startMenu() {
-        Server.output("configuratore");
+    private void startMenu() {
+        write("CONFIGURATORE",false);
     }
 }

@@ -1,33 +1,43 @@
 package backend.server.services;
 
+import backend.server.json.Message;
+import com.google.gson.Gson;
+
 import java.io.*;
 import java.net.Socket;
 
-public abstract class Service extends Thread {
+public abstract class Service <T> {
     private final Socket socket;
+    private final Gson gson;
+    private BufferedReader reader;
+    private PrintWriter writer;
 
-    public Service(Socket socket) {
+    public Service(Socket socket, Gson gson) {
         this.socket = socket;
+        this.gson = gson;
     }
 
-    public void run() {
+    public T run() {
         try {
             InputStream input = socket.getInputStream();
-            //BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            this.reader = new BufferedReader(new InputStreamReader(input));
             OutputStream output = socket.getOutputStream();
-            //PrintWriter writer = new PrintWriter(output, true);
+            this.writer = new PrintWriter(output, true);
 
-            applyLogic(input,output);
-
+            return applyLogic();
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
-            ex.printStackTrace();
+            throw new RuntimeException(ex);
         }
     }
 
-    public abstract void applyLogic(InputStream input, OutputStream output) throws IOException;
+    protected abstract T applyLogic() throws IOException;
 
-    public void close() throws IOException {
-        socket.close();
+    protected void write(String message, boolean responseRequired) {
+        writer.println(gson.toJson(new Message(message, responseRequired)));
+    }
+
+    protected String read() throws IOException {
+        return reader.readLine();
     }
 }
