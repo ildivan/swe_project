@@ -11,9 +11,15 @@ import com.google.gson.JsonSyntaxException;
 
 public class Terminal {
 
-    public static void main(String[] args) {
-        String hostname = "localhost";
-        int port = 5001;
+    private final int port;
+    private final String hostname;
+
+    public Terminal(String hostname, int port){
+        this.hostname = hostname;
+        this.port = port;
+    }
+
+    public void run(){
         Gson gson = new Gson();
 
         try (Socket socket = new Socket(hostname, port);
@@ -40,6 +46,19 @@ public class Terminal {
             System.out.println("Server not found: " + ex.getMessage());
         } catch (IOException ex) {
             System.out.println("I/O error: " + ex.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+
+        BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            System.out.println("Port: ");
+            int port = Integer.parseInt(consoleReader.readLine());
+            Terminal terminal = new Terminal("localhost", port);
+            terminal.run();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
