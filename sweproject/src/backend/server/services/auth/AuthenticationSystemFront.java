@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 import java.io.*;
 import java.net.Socket;
 
-public class AuthenticationSystem extends Service {
-    public AuthenticationSystem(Socket socket) {
+public class AuthenticationSystemFront extends Service {
+    public AuthenticationSystemFront(Socket socket) {
         super(socket);
     }
 

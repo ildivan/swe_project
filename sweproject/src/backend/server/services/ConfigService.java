@@ -3,20 +3,22 @@ package backend.server.services;
 import java.io.*;
 import java.net.Socket;
 
-public class ConfigService extends Service{
+import backend.server.Server;
 
-    public ConfigService(Socket socket){
-        super(socket);
+public class ConfigService {
+
+    public ConfigService(){
+        super();
     }
 
-    @Override
-    public void applyLogic(InputStream input, OutputStream output) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        PrintWriter writer = new PrintWriter(output, true);
-
-        while(true){
-            writer.println(reader.readLine());
-        }
-
+    public static void applyLogic() throws IOException {
+        
+        //metodo test
+        startMenu();
+                
+    }
+                
+    private static void startMenu() {
+        Server.output("configuratore");
     }
 }
