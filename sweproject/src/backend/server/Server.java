@@ -37,8 +37,14 @@ public class Server {
                             socket.close();
                             continue;
                         }
-                        //ConfigService cs = new ConfigService(socket,gson);
-                        //cs.run();
+                        switch (u.getRole()){
+                            case "configuratore":
+                            System.out.println("Configuratore");
+                                break;
+                            case "volontario":
+                                System.out.println("Volontario");
+                                break;
+                        }
                         socket.close();
                     }
                 } catch (IOException | InterruptedException e) {
@@ -63,7 +69,7 @@ public class Server {
 
     private User authenticate(Socket socket, ConnectionType connectionType)
             throws InterruptedException, IOException {
-        AuthenticationService login = new AuthenticationService(socket, gson, connectionType);
+        AuthenticationService login = new AuthenticationService(socket, connectionType);
         return login.run();
     }
 

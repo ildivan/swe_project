@@ -65,7 +65,7 @@ public class JSONIOManager {
      */
     public static void main(String[] args){
         Gson gson = new Gson();
-        User user = new User("ConfiguratoreTest", "temp_p1", "configuratore");
+        User user = new User("ConfiguratoreTest2", "final_p1", "configuratore");
         String StringJO = new String();
         StringJO = gson.toJson(user);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);

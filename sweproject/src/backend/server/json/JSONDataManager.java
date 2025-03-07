@@ -58,7 +58,7 @@ public class JSONDataManager {
      * @param path
      * @param memberName
      */
-    public static void modify(String key, String keyDesc, JsonObject JO, String path, String memberName) {
+    public static boolean modify(String key, String keyDesc, JsonObject JO, String path, String memberName) {
         
         if(!checkFileExistance(path)){
             fileManager.createJSONEmptyFile(path);};
@@ -66,13 +66,13 @@ public class JSONDataManager {
         List<JsonObject> list = fileManager.readFromFile(path, memberName);
 
         for (JsonObject o : list) {
-            if (o.get(keyDesc).getAsString().equalsIgnoreCase(key)) {
+            if (o.get(keyDesc).getAsString().equals(key)) {
                 list.set(list.indexOf(o), JO);
                 fileManager.writeToFile(path, list, memberName);
-                return;
+                return true;
             }
         }
-       // System.out.println("Oggetto non trovato.");
+       return false;
     }
 
     // Elimina
@@ -84,7 +84,7 @@ public class JSONDataManager {
         List<JsonObject> list = fileManager.readFromFile(path, memberName);
 
         for (JsonObject o : list) {
-            if (o.get(keyDesc).getAsString().equalsIgnoreCase(key)) {
+            if (o.get(keyDesc).getAsString().equals(key)) {
                 list.remove(o);
                 fileManager.writeToFile(path, list, memberName);
                 return;
@@ -102,7 +102,7 @@ public class JSONDataManager {
         List<JsonObject> list = fileManager.readFromFile(path, memberName);
 
         for (JsonObject o : list) {
-            if (o.get(keyDesc).getAsString().equalsIgnoreCase(key)) {
+            if (o.get(keyDesc).getAsString().equals(key)) {
                 return o;
             }
         }

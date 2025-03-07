@@ -9,13 +9,13 @@ import java.net.Socket;
 
 public abstract class Service <T> {
     private final Socket socket;
-    private final Gson gson;
+    protected final Gson gson = new Gson();
     private BufferedReader reader;
     private PrintWriter writer;
 
-    public Service(Socket socket, Gson gson) {
+    public Service(Socket socket) {
         this.socket = socket;
-        this.gson = gson;
+       
     }
 
     public T run() {

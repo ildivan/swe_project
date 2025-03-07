@@ -9,7 +9,7 @@ import com.google.gson.Gson;
 public class ConfigService extends Service<Void>{
 
     public ConfigService(Socket socket, Gson gson){
-        super(socket, gson);
+        super(socket);
     }
 
     public Void applyLogic() throws IOException {
