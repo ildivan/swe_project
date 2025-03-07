@@ -1,4 +1,4 @@
-package backend.server.objects;
+package backend.server.json.objects;
 
 
 
