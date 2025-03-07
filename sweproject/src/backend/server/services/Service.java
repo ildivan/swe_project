@@ -1,7 +1,8 @@
 package backend.server.services;
 
-import backend.server.json.Message;
 import com.google.gson.Gson;
+
+import backend.server.objects.Message;
 
 import java.io.*;
 import java.net.Socket;

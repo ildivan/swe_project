@@ -1,6 +1,6 @@
 package backend.server.services.auth;
 import backend.server.ConnectionType;
-import backend.server.json.Message;
+import backend.server.objects.Message;
 import backend.server.services.Service;
 import com.google.gson.Gson;
 

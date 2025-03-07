@@ -5,9 +5,10 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import backend.server.json.Message;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+
+import backend.server.objects.Message;
 
 public class Terminal {
 

@@ -24,6 +24,7 @@ public class Server {
              ServerSocket serverTerminalSS = new ServerSocket(ServerTerminalPort)) {
 
             System.out.println("Server is listening on port " + ClientPort);
+            System.out.println("Server is listening on port " + ServerTerminalPort);
 
             Thread internalConnectionThread = new Thread(() -> {
                 try {
@@ -31,8 +32,8 @@ public class Server {
                         Socket socket = serverTerminalSS.accept();
                         System.out.println("Internal Connection");
                         authenticate(socket,ConnectionType.Internal);
-                        ConfigService cs = new ConfigService(socket,gson);
-                        cs.run();
+                        //ConfigService cs = new ConfigService(socket,gson);
+                        //cs.run();
                         socket.close();
                     }
                 } catch (IOException | InterruptedException e) {
@@ -57,7 +58,7 @@ public class Server {
 
     private void authenticate(Socket socket, ConnectionType connectionType)
             throws InterruptedException, IOException {
-        AuthenticationService login = new AuthenticationService(socket, gson, ConnectionType.Internal);
+        AuthenticationService login = new AuthenticationService(socket, gson, connectionType);
         login.run();
     }
 

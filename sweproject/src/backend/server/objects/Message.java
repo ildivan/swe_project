@@ -1,4 +1,4 @@
-package backend.server.json;
+package backend.server.objects;
 
 public class Message {
     public final String text;
