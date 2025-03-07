@@ -5,7 +5,7 @@ import java.io.File;
 import java.util.*;
 
 public class JSONDataManager {
-    //private static final String PATH = "jsonFiles/users.json";
+    //private static final String PATH = "sweproject/jsonFiles/users.json";
     private static final JSONIOManager fileManager = new JSONIOManager();
         
     
@@ -26,7 +26,10 @@ public class JSONDataManager {
             fileManager.createJSONEmptyFile(path);};
             
         List<JsonObject> list = fileManager.readFromFile(path, memberName);
-
+        
+        if(list == null){
+            list = new ArrayList<>();
+        }
         // Aggiungi l'utente alla lista e salva
         list.add(JO);
         fileManager.writeToFile(path, list, memberName);
@@ -69,7 +72,7 @@ public class JSONDataManager {
                 return;
             }
         }
-        System.out.println("Oggetto non trovato.");
+       // System.out.println("Oggetto non trovato.");
     }
 
     // Elimina
@@ -87,7 +90,7 @@ public class JSONDataManager {
                 return;
             }
         }
-        System.out.println("Oggetto non trovato.");
+       //System.out.println("Oggetto non trovato.");
     }
 
     // Recupera un oggetto

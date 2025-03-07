@@ -3,6 +3,7 @@ package backend.server;// Server.java
 import backend.server.services.ConfigService;
 import backend.server.services.auth.AuthenticationService;
 import com.google.gson.Gson;
+import backend.server.objects.User;
 
 import java.io.*;
 import java.net.*;
@@ -31,7 +32,11 @@ public class Server {
                     while(true) {
                         Socket socket = serverTerminalSS.accept();
                         System.out.println("Internal Connection");
-                        authenticate(socket,ConnectionType.Internal);
+                        User u = authenticate(socket,ConnectionType.Internal);
+                        if(u == null){
+                            socket.close();
+                            continue;
+                        }
                         //ConfigService cs = new ConfigService(socket,gson);
                         //cs.run();
                         socket.close();
@@ -56,10 +61,10 @@ public class Server {
         }
     }
 
-    private void authenticate(Socket socket, ConnectionType connectionType)
+    private User authenticate(Socket socket, ConnectionType connectionType)
             throws InterruptedException, IOException {
         AuthenticationService login = new AuthenticationService(socket, gson, connectionType);
-        login.run();
+        return login.run();
     }
 
     public static void output(String message){

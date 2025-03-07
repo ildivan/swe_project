@@ -1,5 +1,8 @@
 package backend.server.json;
 import com.google.gson.*;
+
+import backend.server.objects.User;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -12,6 +15,11 @@ public class JSONIOManager {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray objectArray = json.getAsJsonArray(memberName);
+            
+            if(objectArray == null){
+                return null;
+            }
+
             List<JsonObject> list = new ArrayList<>();
             for (JsonElement elem : objectArray) {
                 list.add(elem.getAsJsonObject());
@@ -49,6 +57,21 @@ public class JSONIOManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * metodo per creare noi un configuratore con utente e password di default
+     * @param args
+     */
+    public static void main(String[] args){
+        Gson gson = new Gson();
+        User user = new User("ConfiguratoreTest", "temp_p1", "configuratore");
+        String StringJO = new String();
+        StringJO = gson.toJson(user);
+        JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
+
+        JSONDataManager.add("sweproject/JsonFiles/users.json", JO, "users");
+
     }
 }
 
