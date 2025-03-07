@@ -8,7 +8,7 @@ public class JSONIOManager {
     private final Gson gson = new Gson();
 
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
-    public List<JsonObject> readFromFile(String filePath, String memberName) {
+    public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray objectArray = json.getAsJsonArray(memberName);
@@ -24,7 +24,7 @@ public class JSONIOManager {
     }
 
     // Funzione per scrivere la lista degli oggetti serializzati nel file JSON
-    public void writeToFile(String filePath, List<JsonObject> list, String memberName) {
+    public synchronized void writeToFile(String filePath, List<JsonObject> list, String memberName) {
         JsonObject json = new JsonObject();
         JsonArray objectArray = new JsonArray();
         for (JsonObject user : list) {
@@ -39,7 +39,7 @@ public class JSONIOManager {
         }
     }
 
-    public boolean createJSONEmptyFile(String path) {
+    public synchronized boolean createJSONEmptyFile(String path) {
         Object emptyObject = new Object();
 
         try (FileWriter writer = new FileWriter(path)) {
