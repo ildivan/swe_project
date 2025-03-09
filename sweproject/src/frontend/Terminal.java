@@ -6,9 +6,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
-import backend.server.objects.Message;
+import backend.server.json.objects.Message;
 
 public class Terminal {
 

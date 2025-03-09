@@ -2,7 +2,7 @@ package backend.server.services;
 
 import com.google.gson.Gson;
 
-import backend.server.objects.Message;
+import backend.server.json.objects.Message;
 
 import java.io.*;
 import java.net.Socket;
