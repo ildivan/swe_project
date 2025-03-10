@@ -1,8 +1,8 @@
 package backend.server.services.auth;
 import backend.server.ConnectionType;
 import backend.server.json.JSONDataManager;
-import backend.server.objects.Message;
-import backend.server.objects.User;
+import backend.server.json.objects.Message;
+import backend.server.json.objects.User;
 import backend.server.services.Service;
 import com.google.gson.Gson;
 

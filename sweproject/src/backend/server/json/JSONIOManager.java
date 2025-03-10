@@ -1,7 +1,7 @@
 package backend.server.json;
 import com.google.gson.*;
 
-import backend.server.objects.User;
+import backend.server.json.objects.User;
 
 import java.io.*;
 import java.nio.file.*;

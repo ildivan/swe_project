@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import org.mindrot.jbcrypt.*;
 
 import backend.server.json.JSONDataManager;
-import backend.server.objects.User;
+import backend.server.json.objects.User;
 
 public class AuthenticationUtil {
 

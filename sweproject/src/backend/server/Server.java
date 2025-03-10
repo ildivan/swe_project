@@ -3,7 +3,7 @@ package backend.server;// Server.java
 import backend.server.services.ConfigService;
 import backend.server.services.auth.AuthenticationService;
 import com.google.gson.Gson;
-import backend.server.objects.User;
+import backend.server.json.objects.User;
 
 import java.io.*;
 import java.net.*;
