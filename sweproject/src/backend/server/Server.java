@@ -39,7 +39,8 @@ public class Server {
                         }
                         switch (u.getRole()){
                             case "configuratore":
-                            System.out.println("Configuratore");
+                                System.out.println("Configuratore");
+                                new ConfigService(socket,gson).run();
                                 break;
                             case "volontario":
                                 System.out.println("Volontario");
@@ -56,7 +57,7 @@ public class Server {
 
             while (true) {
                 Socket socket = clientSS.accept();
-                System.out.println("External Connection");
+                System.out.println("External Connection"); //è sicuramente un fruitore da implementare
                 authenticate(socket,ConnectionType.External);
                 socket.close();
             }
