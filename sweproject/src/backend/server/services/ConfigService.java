@@ -14,22 +14,10 @@ import com.google.gson.Gson;
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String QUESTION = "\n\nInserire scelta: ";
-    private Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
+    private final Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
 
-    {
-        vociVisibili.put("Aggiungi Volontario", true);
-        vociVisibili.put("Aggiungi Luogo", false);
-        vociVisibili.put("Mostra Volontari", false);
-        vociVisibili.put("Mostra Luoghi", true);
-    }
 
-    private Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
-    {
-        chiamateMetodi.put("Aggiungi Volontario", this::addVolunteer);
-        chiamateMetodi.put("Aggiungi Luogo", this::addPlace);
-        chiamateMetodi.put("Mostra Volontari", this::showVolunteers);
-        chiamateMetodi.put("Mostra Luoghi", this::showPlaces);
-    }
+    private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
     /*
      * per quello che puo fare in base alla data io farei una mappa con key un boolean che ha
      * true se la voce puo essere eseguita false se no, e ogni volta si controlla la data, modificano 
@@ -37,6 +25,17 @@ public class ConfigService extends Service<Void>{
      */
     public ConfigService(Socket socket, Gson gson){
         super(socket);
+
+        vociVisibili.put("Aggiungi Volontario", true);
+        vociVisibili.put("Aggiungi Luogo", false);
+        vociVisibili.put("Mostra Volontari", false);
+        vociVisibili.put("Mostra Luoghi", true);
+        
+
+        chiamateMetodi.put("Aggiungi Volontario", this::addVolunteer);
+        chiamateMetodi.put("Aggiungi Luogo", this::addPlace);
+        chiamateMetodi.put("Mostra Volontari", this::showVolunteers);
+        chiamateMetodi.put("Mostra Luoghi", this::showPlaces);
     }
 
     public Void applyLogic() throws IOException {
