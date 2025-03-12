@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-
-import backend.server.Server;
 import com.google.gson.Gson;
 
 public class ConfigService extends Service<Void>{
@@ -27,8 +24,8 @@ public class ConfigService extends Service<Void>{
         super(socket);
 
         vociVisibili.put("Aggiungi Volontario", true);
-        vociVisibili.put("Aggiungi Luogo", false);
-        vociVisibili.put("Mostra Volontari", false);
+        vociVisibili.put("Aggiungi Luogo", true);
+        vociVisibili.put("Mostra Volontari", true);
         vociVisibili.put("Mostra Luoghi", true);
         
 

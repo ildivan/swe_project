@@ -1,6 +1,9 @@
 package backend.server;// Server.java
 
 import backend.server.services.ConfigService;
+import backend.server.services.Service;
+import backend.server.services.UserService;
+import backend.server.services.VolunteerService;
 import backend.server.services.auth.AuthenticationService;
 import com.google.gson.Gson;
 import backend.server.json.objects.User;
@@ -37,16 +40,13 @@ public class Server {
                             socket.close();
                             continue;
                         }
-                        switch (u.getRole()){
-                            case "configuratore":
-                                System.out.println("Configuratore");
-                                new ConfigService(socket,gson).run();
-                                break;
-                            case "volontario":
-                                System.out.println("Volontario");
-                                break;
-                        }
+
+                        //pattern solid delle inteerfacce per generalizzare e non dover riscrivere 
+                        //il codice se aggiungo unnuovo tipo di utente 
+                        Service<?> s = obtainService(u, socket);
+                        s.run();
                         socket.close();
+                        
                     }
                 } catch (IOException | InterruptedException e) {
                     System.out.println(e.getMessage());
@@ -74,6 +74,18 @@ public class Server {
         return login.run();
     }
 
+    private Service<?> obtainService(User u, Socket socket){
+        switch (u.getRole()){
+            case "configuratore":
+                return new ConfigService(socket,gson);
+            case "volontario":
+                //return new VolunteerService(socket,gson);
+            case "fruitore":
+                //return new UserService(socket,gson);
+            default:
+                return null;
+        }
+    }
     public static void output(String message){
         System.out.println(message);
     }
