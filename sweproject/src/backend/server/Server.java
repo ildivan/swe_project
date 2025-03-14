@@ -1,6 +1,6 @@
 package backend.server;// Server.java
 
-import backend.server.domainlevel.ActivityManager;
+import backend.server.domainlevel.PlanManager;
 import backend.server.domainlevel.User;
 import backend.server.domainlevel.domainservices.ConfigService;
 import backend.server.domainlevel.domainservices.Service;
@@ -18,13 +18,13 @@ public class Server {
     private final int ClientPort;
     private final int ServerTerminalPort;
     private final Gson gson;
-    private ActivityManager activityManager;
+    private PlanManager activityManager;
 
     public Server(int ClientPort, int ServerTerminalPort){
         this.ClientPort = ClientPort;
         this.ServerTerminalPort = ServerTerminalPort;
         this.gson = new Gson();
-        this.activityManager = new ActivityManager();
+        this.activityManager = new PlanManager();
     }
 
     public void startServer(){

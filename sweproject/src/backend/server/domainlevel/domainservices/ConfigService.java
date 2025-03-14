@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 
-import backend.server.domainlevel.ActivityManager;
+import backend.server.domainlevel.PlanManager;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String QUESTION = "\n\nInserire scelta: ";
     private final Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
     private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
-    private ActivityManager activityManager;
+    private PlanManager activityManager;
 
-    public ConfigService(Socket socket, Gson gson, ActivityManager activityManager){
+    public ConfigService(Socket socket, Gson gson, PlanManager activityManager){
         super(socket);
         this.activityManager = activityManager;
         vociVisibili.put("Aggiungi Volontario", true);

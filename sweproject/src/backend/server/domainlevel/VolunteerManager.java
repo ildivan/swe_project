@@ -1,0 +1,5 @@
+package backend.server.domainlevel;
+
+public class VolunteerManager {
+
+}
