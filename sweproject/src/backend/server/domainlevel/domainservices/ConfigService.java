@@ -1,4 +1,4 @@
-package backend.server.services;
+package backend.server.domainlevel.domainservices;
 
 import java.io.*;
 import java.net.Socket;
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 
-import backend.server.json.objects.ActivityManager;
+import backend.server.domainlevel.ActivityManager;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
@@ -102,13 +102,11 @@ public class ConfigService extends Service<Void>{
     }
 
     private void addVolunteer() {
-        //write("addVOl",false);
-        activityManager.inc();
+        write("addVOl",false);
     }   
 
     private void addPlace() {
-       // write("addPlace",false);
-       write(String.valueOf(activityManager.getTest()),false);
+       write("addPlace",false);
     }
 
     private void showVolunteers() {

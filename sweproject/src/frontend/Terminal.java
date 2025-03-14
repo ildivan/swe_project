@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 
 import com.google.gson.Gson;
 
-import backend.server.json.objects.Message;
+import backend.server.genericservices.Message;
 
 public class Terminal {
 

@@ -1,4 +1,4 @@
-package backend.server.json;
+package backend.server.genericservices.json;
 import com.google.gson.JsonObject;
 
 import java.io.File;

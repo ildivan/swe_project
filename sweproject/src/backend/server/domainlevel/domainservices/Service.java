@@ -1,8 +1,7 @@
-package backend.server.services;
+package backend.server.domainlevel.domainservices;
 
 import com.google.gson.Gson;
-
-import backend.server.json.objects.Message;
+import backend.server.genericservices.*;
 
 import java.io.*;
 import java.net.Socket;

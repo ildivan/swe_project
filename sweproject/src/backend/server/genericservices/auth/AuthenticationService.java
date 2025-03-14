@@ -1,9 +1,10 @@
-package backend.server.services.auth;
+package backend.server.genericservices.auth;
 import backend.server.ConnectionType;
-import backend.server.json.JSONDataManager;
-import backend.server.json.objects.Message;
-import backend.server.json.objects.User;
-import backend.server.services.Service;
+import backend.server.domainlevel.User;
+import backend.server.domainlevel.domainservices.Service;
+import backend.server.genericservices.Message;
+import backend.server.genericservices.json.JSONDataManager;
+
 import com.google.gson.Gson;
 
 import java.io.*;

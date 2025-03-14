@@ -1,11 +1,11 @@
-package backend.server.services.auth;
+package backend.server.genericservices.auth;
 
 import com.google.gson.JsonObject;
 
 import org.mindrot.jbcrypt.*;
 
-import backend.server.json.JSONDataManager;
-import backend.server.json.objects.User;
+import backend.server.domainlevel.User;
+import backend.server.genericservices.json.JSONDataManager;
 
 public class AuthenticationUtil {
 

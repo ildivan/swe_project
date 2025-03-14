@@ -1,4 +1,4 @@
-package backend.server.json.objects;
+package backend.server.domainlevel;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -13,7 +13,9 @@ public class ActivityManager {
     si puo fare qualcos ain quel gionro e se il volontario ha dato disponibilita tale giornoxs
     */
     private MonthlyActivity monthlyActivity; 
-    private int test=0;
+    
+    private boolean configured = false; //flag che indica se è stata configurato l'oggetto,
+    //con area di interesse, luoghi; sara controllata da volontari e fruitori prima di fare qualsiasi cosa
 
     public ActivityManager(){
         this.areaOfIntrest = "";
@@ -21,13 +23,5 @@ public class ActivityManager {
         this.volunteers = new HashMap<>();
         this.activities = new ArrayList<>();
         this.monthlyActivity = new MonthlyActivity();
-    }
-
-    public void inc(){
-        test++;
-    }
-
-    public int getTest(){
-        return test;
     }
 }

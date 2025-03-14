@@ -1,14 +1,14 @@
 package backend.server;// Server.java
 
-import backend.server.services.ConfigService;
-import backend.server.services.Service;
-import backend.server.services.UserService;
-import backend.server.services.VolunteerService;
-import backend.server.services.auth.AuthenticationService;
-import com.google.gson.Gson;
+import backend.server.domainlevel.ActivityManager;
+import backend.server.domainlevel.User;
+import backend.server.domainlevel.domainservices.ConfigService;
+import backend.server.domainlevel.domainservices.Service;
+import backend.server.domainlevel.domainservices.UserService;
+import backend.server.domainlevel.domainservices.VolunteerService;
+import backend.server.genericservices.auth.AuthenticationService;
 
-import backend.server.json.objects.ActivityManager;
-import backend.server.json.objects.User;
+import com.google.gson.Gson;
 
 import java.io.*;
 import java.net.*;
