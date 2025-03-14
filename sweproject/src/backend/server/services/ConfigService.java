@@ -8,21 +8,18 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 
+import backend.server.json.objects.ActivityManager;
+
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String QUESTION = "\n\nInserire scelta: ";
     private final Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
-
-
     private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
-    /*
-     * per quello che puo fare in base alla data io farei una mappa con key un boolean che ha
-     * true se la voce puo essere eseguita false se no, e ogni volta si controlla la data, modificano 
-     * le key in base alla data e si mostrano all'utente solo le key che hanno true
-     */
-    public ConfigService(Socket socket, Gson gson){
-        super(socket);
+    private ActivityManager activityManager;
 
+    public ConfigService(Socket socket, Gson gson, ActivityManager activityManager){
+        super(socket);
+        this.activityManager = activityManager;
         vociVisibili.put("Aggiungi Volontario", true);
         vociVisibili.put("Aggiungi Luogo", true);
         vociVisibili.put("Mostra Volontari", true);
@@ -36,6 +33,7 @@ public class ConfigService extends Service<Void>{
     }
 
     public Void applyLogic() throws IOException {
+        
         boolean continuare = true;
         do{
             //ANDR GESTITO IL TEMPO IN QUELCHE MODO QUA
@@ -104,11 +102,13 @@ public class ConfigService extends Service<Void>{
     }
 
     private void addVolunteer() {
-        write("addVOl",false);
+        //write("addVOl",false);
+        activityManager.inc();
     }   
 
     private void addPlace() {
-        write("addPlace",false);
+       // write("addPlace",false);
+       write(String.valueOf(activityManager.getTest()),false);
     }
 
     private void showVolunteers() {

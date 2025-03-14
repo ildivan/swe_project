@@ -6,6 +6,8 @@ import backend.server.services.UserService;
 import backend.server.services.VolunteerService;
 import backend.server.services.auth.AuthenticationService;
 import com.google.gson.Gson;
+
+import backend.server.json.objects.ActivityManager;
 import backend.server.json.objects.User;
 
 import java.io.*;
@@ -16,11 +18,13 @@ public class Server {
     private final int ClientPort;
     private final int ServerTerminalPort;
     private final Gson gson;
+    private ActivityManager activityManager;
 
     public Server(int ClientPort, int ServerTerminalPort){
         this.ClientPort = ClientPort;
         this.ServerTerminalPort = ServerTerminalPort;
         this.gson = new Gson();
+        this.activityManager = new ActivityManager();
     }
 
     public void startServer(){
@@ -43,9 +47,22 @@ public class Server {
 
                         //pattern solid delle inteerfacce per generalizzare e non dover riscrivere 
                         //il codice se aggiungo unnuovo tipo di utente 
-                        Service<?> s = obtainService(u, socket);
-                        s.run();
-                        socket.close();
+                        Thread serviceThread = new Thread(() -> {
+                            try {
+                                // Ottieni il servizio associato all'utente e alla connessione
+                                Service<?> s = obtainService(u, socket);
+                                s.run();  // Esegui il servizio
+                            } finally {
+                                try {
+                                    socket.close();  // Assicurati di chiudere il socket alla fine
+                                } catch (IOException e) {
+                                    System.out.println("Error closing socket: " + e.getMessage());
+                                }
+                            }
+                        });
+            
+                        // Avvia il thread che gestisce il servizio
+                        serviceThread.start();
                         
                     }
                 } catch (IOException | InterruptedException e) {
@@ -77,7 +94,7 @@ public class Server {
     private Service<?> obtainService(User u, Socket socket){
         switch (u.getRole()){
             case "configuratore":
-                return new ConfigService(socket,gson);
+                return new ConfigService(socket,gson,activityManager);
             case "volontario":
                 //return new VolunteerService(socket,gson);
             case "fruitore":

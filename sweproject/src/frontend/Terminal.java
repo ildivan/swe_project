@@ -55,7 +55,9 @@ public class Terminal {
         try {
             System.out.println("Port: ");
             int port = Integer.parseInt(consoleReader.readLine());
+            System.out.println("Port: ");
             Terminal terminal = new Terminal("localhost", port);
+            System.out.println("Port: ");
             terminal.run();
         } catch (IOException e) {
             throw new RuntimeException(e);

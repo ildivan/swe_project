@@ -13,4 +13,21 @@ public class ActivityManager {
     si puo fare qualcos ain quel gionro e se il volontario ha dato disponibilita tale giornoxs
     */
     private MonthlyActivity monthlyActivity; 
+    private int test=0;
+
+    public ActivityManager(){
+        this.areaOfIntrest = "";
+        this.places = new ArrayList<>();
+        this.volunteers = new HashMap<>();
+        this.activities = new ArrayList<>();
+        this.monthlyActivity = new MonthlyActivity();
+    }
+
+    public void inc(){
+        test++;
+    }
+
+    public int getTest(){
+        return test;
+    }
 }
