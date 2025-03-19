@@ -12,9 +12,9 @@ public class JSONIOManager {
 
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
-        try (Reader reader = Files.newBufferedReader(Paths.get("JF/users.json"))) {
+        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
             JsonObject json = gson.fromJson(reader, JsonObject.class);
-            JsonArray objectArray = json.getAsJsonArray("users");
+            JsonArray objectArray = json.getAsJsonArray(memberName);
             
             if(objectArray == null){
                 return null;
