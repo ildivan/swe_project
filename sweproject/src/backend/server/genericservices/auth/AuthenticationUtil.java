@@ -5,22 +5,28 @@ import com.google.gson.JsonObject;
 import org.mindrot.jbcrypt.*;
 
 import backend.server.domainlevel.User;
-import backend.server.genericservices.json.JSONDataManager;
+import backend.server.genericservices.DataLayer.DataContainer;
+import backend.server.genericservices.DataLayer.DataLayer;
+import backend.server.genericservices.DataLayer.JSONDataManager;
 
 public class AuthenticationUtil {
 
     private static final int HASH_ROUNDS = 12;
-
+    private static DataLayer dataLayer = new JSONDataManager();
+    
     public static boolean checkIfTemp(String username) {
-        JsonObject userJO = JSONDataManager.get(username, "name", "sweproject/JsonFIles/users.json", "users");
-        return userJO.get("password").getAsString().contains("temp");
+        DataContainer dataContainer = new DataContainer("sweproject/JsonFIles/users.json", "users", "name", username);
+        JsonObject userJO = dataLayer.get(dataContainer);
+    return userJO.get("password").getAsString().contains("temp");
     }
 
     public static boolean changePassword(String username, String newPassword) {
-        JsonObject userJO = JSONDataManager.get(username, "name", "sweproject/JsonFIles/users.json", "users");
+        DataContainer dataContainer1 = new DataContainer("sweproject/JsonFIles/users.json", "users", "name", username);
+        JsonObject userJO = dataLayer.get(dataContainer1);
         String newPasswordCrypted = cryptPassword(newPassword);
         userJO.addProperty("password", newPasswordCrypted);
-        return JSONDataManager.modify(username, "name", userJO, "sweproject/JsonFIles/users.json", "users");
+        DataContainer dataContainer2 = new DataContainer("sweproject/JsonFIles/users.json", userJO, "users", "name", username);
+        return dataLayer.modify(dataContainer2);
     }
 
     private static String cryptPassword(String password) {
@@ -30,7 +36,8 @@ public class AuthenticationUtil {
     }
 
     public static boolean verifyPassword(String username, String password) {
-        JsonObject userJO = JSONDataManager.get(username, "name", "sweproject/JsonFIles/users.json", "users");
+        DataContainer dataContainer = new DataContainer("sweproject/JsonFIles/users.json", "users", "name", username);
+        JsonObject userJO = dataLayer.get(dataContainer);
         String hashedPassword = userJO.get("password").getAsString();
         return BCrypt.checkpw(password, hashedPassword);
     }

@@ -3,7 +3,9 @@ import backend.server.ConnectionType;
 import backend.server.domainlevel.User;
 import backend.server.domainlevel.domainservices.Service;
 import backend.server.genericservices.Message;
-import backend.server.genericservices.json.JSONDataManager;
+import backend.server.genericservices.DataLayer.DataContainer;
+import backend.server.genericservices.DataLayer.DataLayer;
+import backend.server.genericservices.DataLayer.JSONDataManager;
 
 import com.google.gson.Gson;
 
@@ -13,6 +15,7 @@ import java.net.Socket;
 public class AuthenticationService extends Service<User> {
 
     private final ConnectionType connectionType;
+    private static DataLayer dataLayer = new JSONDataManager();
 
     public AuthenticationService(Socket socket, ConnectionType connectionType) {
         super(socket);
@@ -26,8 +29,9 @@ public class AuthenticationService extends Service<User> {
         
         write("Inserisci username:", true);
         username = read();
-        
-        if(!JSONDataManager.exists(username, "name", "sweproject/JsonFIles/users.json", "users")){
+
+        DataContainer dataContainer = new DataContainer("sweproject/JsonFIles/users.json", "users", "name", username);
+        if(!dataLayer.exists(dataContainer)){
             write("Utente inesistente, connessione chiusa", false);
             return null;
         }
@@ -49,8 +53,8 @@ public class AuthenticationService extends Service<User> {
                 return null;
             }
         }
-
-        user = gson.fromJson(JSONDataManager.get(username, "name", "sweproject/JsonFIles/users.json", "users"), User.class);
+        DataContainer dataContainer1 = new DataContainer("sweproject/JsonFIles/users.json", "users", "name", username);
+        user = gson.fromJson(dataLayer.get(dataContainer1), User.class);
         return user;
     }
             

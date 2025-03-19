@@ -1,4 +1,4 @@
-package backend.server.genericservices.json;
+package backend.server.genericservices.DataLayer;
 import com.google.gson.*;
 
 import backend.server.domainlevel.User;
@@ -65,12 +65,15 @@ public class JSONIOManager {
      */
     public static void main(String[] args){
         Gson gson = new Gson();
+        DataLayer DataLayer = new JSONDataManager();
         User user = new User("ConfiguratoreTest2", "final_p1", "configuratore");
         String StringJO = new String();
         StringJO = gson.toJson(user);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
 
-        JSONDataManager.add("sweproject/JsonFiles/users.json", JO, "users");
+        DataContainer dataContainer = new DataContainer("sweproject/JsonFiles/users.json", JO, "users");
+        
+        DataLayer.add(dataContainer);
 
     }
 }
