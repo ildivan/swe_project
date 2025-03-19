@@ -7,19 +7,26 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
+import backend.server.Configs;
 import backend.server.domainlevel.PlanManager;
+import backend.server.genericservices.Service;
+import backend.server.genericservices.DataLayer.DataLayer;
+import backend.server.genericservices.DataLayer.JSONDataContainer;
+import backend.server.genericservices.DataLayer.JSONDataManager;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String QUESTION = "\n\nInserire scelta: ";
     private final Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
     private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
-    private PlanManager activityManager;
+    private DataLayer dataLayer = new JSONDataManager();
+  
 
-    public ConfigService(Socket socket, Gson gson, PlanManager activityManager){
+    public ConfigService(Socket socket, Gson gson){
         super(socket);
-        this.activityManager = activityManager;
+        //TODO avere un json che contiene le varie chiamate hai metodi e se sono visibili o no
         vociVisibili.put("Aggiungi Volontario", true);
         vociVisibili.put("Aggiungi Luogo", true);
         vociVisibili.put("Mostra Volontari", true);
@@ -37,6 +44,14 @@ public class ConfigService extends Service<Void>{
         boolean continuare = true;
         do{
             //ANDR GESTITO IL TEMPO IN QUELCHE MODO QUA
+            if(checkIfUserConfigured()){
+                if(firstTimeConfiguration()){
+                    write("Configurazione completata", false);
+                }else{
+                    write("Errore durante la configurazione", false);
+                    return null;
+                }
+            };
             startMenu();
             continuare = continueChoice();
         }while(continuare);
@@ -99,6 +114,44 @@ public class ConfigService extends Service<Void>{
             return false;
         }
         return true;
+    }
+
+    private boolean checkIfUserConfigured() {
+        if(dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "userConfigured")).isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
+    private boolean firstTimeConfiguration(){
+        try {
+        write("Prima configurazione necessaria:", false);
+        write("Inserire luogo di esercizio", true);
+        String areaOfIntrest = null;
+      
+        areaOfIntrest = read();
+       
+        write("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", true);
+        Integer maxSubscriptions = Integer.parseInt(read());
+
+        Configs configs = new Configs();
+        configs.setUserConfigured(true);
+        configs.setAreaOfIntrest(areaOfIntrest);
+        configs.setMaxSubscriptions(maxSubscriptions);
+
+        String StringJO = new String();
+        StringJO = gson.toJson(configs);
+        JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
+
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","false", "userConfigured");
+        dataLayer.modify(dataContainer);
+
+        return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        
     }
 
     private void addVolunteer() {

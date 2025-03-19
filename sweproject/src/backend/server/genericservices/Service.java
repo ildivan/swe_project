@@ -1,16 +1,15 @@
-package backend.server.domainlevel.domainservices;
+package backend.server.genericservices;
 
 import com.google.gson.Gson;
-import backend.server.genericservices.*;
-
 import java.io.*;
 import java.net.Socket;
 
 public abstract class Service <T> {
-    private final Socket socket;
+   
+    protected final Socket socket;
     protected final Gson gson = new Gson();
-    private BufferedReader reader;
-    private PrintWriter writer;
+    protected BufferedReader reader;
+    protected PrintWriter writer;
 
     public Service(Socket socket) {
         this.socket = socket;

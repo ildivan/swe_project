@@ -3,41 +3,41 @@ package backend.server;// Server.java
 import backend.server.domainlevel.PlanManager;
 import backend.server.domainlevel.User;
 import backend.server.domainlevel.domainservices.ConfigService;
-import backend.server.domainlevel.domainservices.Service;
+import backend.server.genericservices.Service;
+import backend.server.genericservices.DataLayer.DataLayer;
+import backend.server.genericservices.DataLayer.JSONDataContainer;
+import backend.server.genericservices.DataLayer.JSONDataManager;
 import backend.server.genericservices.auth.AuthenticationService;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+
+
 
 public class Server {
 
     private final int ClientPort;
     private final int ServerTerminalPort;
     private final Gson gson;
-    private PlanManager activityManager;
 
     public Server(int ClientPort, int ServerTerminalPort){
         this.ClientPort = ClientPort;
         this.ServerTerminalPort = ServerTerminalPort;
         this.gson = new Gson();
-        this.activityManager = new PlanManager();
+       // this.planManager = new PlanManager();
     }
 
     public void startServer(){
         try (ServerSocket clientSS = new ServerSocket(ClientPort);
-             ServerSocket serverTerminalSS = new ServerSocket(ServerTerminalPort)) {
+            ServerSocket serverTerminalSS = new ServerSocket(ServerTerminalPort)) {
 
             System.out.println("Server is listening on port " + ClientPort);
             System.out.println("Server is listening on port " + ServerTerminalPort);
+
+            firstTimeConfiguration();
+            System.out.println("First time default configuration completed");
 
             Thread internalConnectionThread = new Thread(() -> {
                 try {
@@ -99,7 +99,7 @@ public class Server {
     private Service<?> obtainService(User u, Socket socket){
         switch (u.getRole()){
             case "configuratore":
-                return new ConfigService(socket,gson,activityManager);
+                return new ConfigService(socket,gson);
             case "volontario":
                 //return new VolunteerService(socket,gson);
             case "fruitore":
@@ -112,27 +112,25 @@ public class Server {
         System.out.println(message);
     }
 
-    public static void main(String[] args) {
-        String currentDir = System.getProperty("user.dir");
-        System.out.println("La directory di lavoro corrente è: " + currentDir);
-        // try (Reader reader = Files.newBufferedReader(Paths.get("/Users/riccardomodina/Documents/GitHub/swe_project/sweproject/JF/users.json"))) {
-        //     Gson gson = new Gson();
-        //     JsonObject json = gson.fromJson(reader, JsonObject.class);
-        //     JsonArray objectArray = json.getAsJsonArray("users");
-            
-        //     if(objectArray == null){
-        //         System.out.println("Errore");
-        //     }
+    private void firstTimeConfiguration(){
+        DataLayer dl = new JSONDataManager();
+        if(!dl.checkFileExistance(new JSONDataContainer("JF/configs.json"))){
+            dl.createJSONEmptyFile(new JSONDataContainer("JF/configs.json"));
+        }
 
-        //     List<JsonObject> list = new ArrayList<>();
-        //     for (JsonElement elem : objectArray) {
-        //         list.add(elem.getAsJsonObject());
-        //     }
-        //     System.out.println(list);
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-            
-        // }
+        Configs configs = new Configs();
+        String StringJO = new String();
+        StringJO = gson.toJson(configs);
+        JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
+        
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","true", "userConfigured");
+        
+        dl.modify(dataContainer);
+    }
+
+    public static void main(String[] args) {
+        // String currentDir = System.getProperty("user.dir");
+        // System.out.println("La directory di lavoro corrente è: " + currentDir);
 
         Server s = new Server(5001,6001);
         s.startServer();

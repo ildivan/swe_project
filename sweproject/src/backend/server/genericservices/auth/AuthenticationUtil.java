@@ -3,7 +3,7 @@ package backend.server.genericservices.auth;
 import com.google.gson.JsonObject;
 
 import org.mindrot.jbcrypt.*;
-import backend.server.genericservices.DataLayer.DataContainer;
+import backend.server.genericservices.DataLayer.JSONDataContainer;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataManager;
 
@@ -13,17 +13,17 @@ public class AuthenticationUtil {
     private static DataLayer dataLayer = new JSONDataManager();
     
     public static boolean checkIfTemp(String username) {
-        DataContainer dataContainer = new DataContainer("JF/users.json", "users", username, "name");
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", "users", username, "name");
         JsonObject userJO = dataLayer.get(dataContainer);
     return userJO.get("password").getAsString().contains("temp");
     }
 
     public static boolean changePassword(String username, String newPassword) {
-        DataContainer dataContainer1 = new DataContainer("JF/users.json", "users", username, "name");
+        JSONDataContainer dataContainer1 = new JSONDataContainer("JF/users.json", "users", username, "name");
         JsonObject userJO = dataLayer.get(dataContainer1);
         String newPasswordCrypted = cryptPassword(newPassword);
         userJO.addProperty("password", newPasswordCrypted);
-        DataContainer dataContainer2 = new DataContainer("JF/users.json", userJO, "users", username, "name");
+        JSONDataContainer dataContainer2 = new JSONDataContainer("JF/users.json", userJO, "users", username, "name");
         return dataLayer.modify(dataContainer2);
     }
 
@@ -34,7 +34,7 @@ public class AuthenticationUtil {
     }
 
     public static boolean verifyPassword(String username, String password) {
-        DataContainer dataContainer = new DataContainer("JF/users.json", "users", username, "name");
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", "users", username, "name");
         JsonObject userJO = dataLayer.get(dataContainer);
         String hashedPassword = userJO.get("password").getAsString();
         return BCrypt.checkpw(password, hashedPassword);

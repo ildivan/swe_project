@@ -14,12 +14,12 @@ public class PlanManager {
     
     
     //private ArrayList<Activity> activities; //elenco delle visite sui luoghi (es luogo a visita completa il sabato)
-    private PlanManager activities; //elenco delle visite sui luoghi (es luogo a visita completa il sabato)
+    private ActivityManager activities; //elenco delle visite sui luoghi (es luogo a visita completa il sabato)
     /*elenco delle attività proposte mensili (struttura creata usando le 4 var sopra)
     qua dentro ci sara una struttura che orende una visita e la associa alla data effettiva solo se
     si puo fare qualcos ain quel gionro e se il volontario ha dato disponibilita tale giornoxs
     */
-    private MonthlyPlan monthlyActivity; 
+    private MonthlyPlanManager monthlyActivity; //classe che mi gestisce la creazione del piano mensile
     
     private boolean configured = false; //flag che indica se è stata configurato l'oggetto,
     //con area di interesse, luoghi; sara controllata da volontari e fruitori prima di fare qualsiasi cosa

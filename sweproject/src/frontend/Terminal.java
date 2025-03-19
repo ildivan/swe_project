@@ -1,12 +1,9 @@
 package frontend;
 
 import java.io.*;
-
 import java.net.Socket;
 import java.net.UnknownHostException;
-
 import com.google.gson.Gson;
-
 import backend.server.genericservices.Message;
 
 public class Terminal {

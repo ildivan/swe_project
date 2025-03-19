@@ -1,8 +1,8 @@
 package backend.server.genericservices.auth;
 import backend.server.ConnectionType;
 import backend.server.domainlevel.User;
-import backend.server.domainlevel.domainservices.Service;
-import backend.server.genericservices.DataLayer.DataContainer;
+import backend.server.genericservices.Service;
+import backend.server.genericservices.DataLayer.JSONDataContainer;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataManager;
 
@@ -27,7 +27,7 @@ public class AuthenticationService extends Service<User> {
         write("Inserisci username:", true);
         username = read();
 
-        DataContainer dataContainer = new DataContainer("JF/users.json", "users", username,"name");
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", "users", username,"name");
         if(!dataLayer.exists(dataContainer)){
             write(String.valueOf(dataLayer.exists(dataContainer)), false);
             write("Utente inesistente, connessione chiusa", false);
@@ -51,7 +51,7 @@ public class AuthenticationService extends Service<User> {
                 return null;
             }
         }
-        DataContainer dataContainer1 = new DataContainer("JF/users.json", "users", username, "name");
+        JSONDataContainer dataContainer1 = new JSONDataContainer("JF/users.json", "users", username, "name");
         user = gson.fromJson(dataLayer.get(dataContainer1), User.class);
         return user;
     }

@@ -1,1 +1,1 @@
-{"users":[{"name":"CT","password":"$2a$12$SXxe9/MMAE3ih7wa/T70v.iVQOz0qrgqWDxjloJ.MTTUMw4rcONKq","role":"configuratore"},{"name":"ConfiguratoreTest2","password":"temp_p2","role":"configuratore"}]}
+{"users":[{"name":"CT","password":"$2a$12$SXxe9/MMAE3ih7wa/T70v.iVQOz0qrgqWDxjloJ.MTTUMw4rcONKq","role":"configuratore"},{"name":"CT2","password":"$2a$12$eUnvB.08Z4KxIGATkf88a.i0XGa.HzBG36wVjkWsHpTdcuzKK4BE2","role":"configuratore"},{"name":"CT3","password":"temp_p3","role":"configuratore"}]}

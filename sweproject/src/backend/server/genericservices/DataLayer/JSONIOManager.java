@@ -66,12 +66,12 @@ public class JSONIOManager {
     public static void main(String[] args){
         Gson gson = new Gson();
         DataLayer DataLayer = new JSONDataManager();
-        User user = new User("ConfiguratoreTest2", "final_p1", "configuratore");
+        User user = new User("CT3", "temp_p3", "configuratore");
         String StringJO = new String();
         StringJO = gson.toJson(user);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
 
-        DataContainer dataContainer = new DataContainer("JF/users.json", JO, "users");
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", JO, "users");
         
         DataLayer.add(dataContainer);
 

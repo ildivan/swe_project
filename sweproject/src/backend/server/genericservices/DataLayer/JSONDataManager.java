@@ -20,10 +20,10 @@ public class JSONDataManager implements DataLayer {
      * @param memberName nome dell'array contenuto nel json
      */
     @Override
-    public void add(DataContainer dataContainer) {
+    public void add(JSONDataContainer dataContainer) {
 
 
-        if(!checkFileExistance(dataContainer.getPath())){
+        if(!checkFileExistance(dataContainer)){
             fileManager.createJSONEmptyFile(dataContainer.getPath());};
             
         List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
@@ -42,8 +42,8 @@ public class JSONDataManager implements DataLayer {
      * @return
      */
     
-    private boolean checkFileExistance(String path) {
-        File file = new File(path);
+    public boolean checkFileExistance(JSONDataContainer dataContainer) {
+        File file = new File(dataContainer.getPath());
 
         if (file.exists()) {
             return true;
@@ -61,9 +61,9 @@ public class JSONDataManager implements DataLayer {
      * @param memberName
      */
     @Override
-    public boolean modify(DataContainer dataContainer) {
+    public boolean modify(JSONDataContainer dataContainer) {
         
-        if(!checkFileExistance(dataContainer.getPath())){
+        if(!checkFileExistance(dataContainer)){
             fileManager.createJSONEmptyFile(dataContainer.getPath());};
 
         List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
@@ -80,9 +80,9 @@ public class JSONDataManager implements DataLayer {
 
     // Elimina
     @Override
-    public void delete(DataContainer dataContainer) {
+    public void delete(JSONDataContainer dataContainer) {
         
-        if(!checkFileExistance(dataContainer.getPath())){
+        if(!checkFileExistance(dataContainer)){
             fileManager.createJSONEmptyFile(dataContainer.getPath());};
 
         List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
@@ -99,9 +99,9 @@ public class JSONDataManager implements DataLayer {
 
     // Recupera un oggetto
     @Override
-    public JsonObject get(DataContainer dataContainer) {
+    public JsonObject get(JSONDataContainer dataContainer) {
         
-        if(!checkFileExistance(dataContainer.getPath())){
+        if(!checkFileExistance(dataContainer)){
             fileManager.createJSONEmptyFile(dataContainer.getPath());};
 
         List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
@@ -114,17 +114,24 @@ public class JSONDataManager implements DataLayer {
         return null;
     }
 
-    // Verifica se un oggetto esiste
+    /**
+     * verifica se un oggetto esiste
+     */
     @Override
-    public boolean exists(DataContainer dataContainer) {
+    public boolean exists(JSONDataContainer dataContainer) {
         
-        if(!checkFileExistance(dataContainer.getPath())){
+        if(!checkFileExistance(dataContainer)){
             fileManager.createJSONEmptyFile(dataContainer.getPath());};
         
-        DataContainer DC = new DataContainer(dataContainer.getPath(), dataContainer.getMemberName(), dataContainer.getKey(), dataContainer.getKeyDesc());
+        JSONDataContainer DC = new JSONDataContainer(dataContainer.getPath(), dataContainer.getMemberName(), dataContainer.getKey(), dataContainer.getKeyDesc());
         JsonObject o = get(DC);
         return o != null;
 
+    }
+
+    @Override
+    public void createJSONEmptyFile(JSONDataContainer dataContainer) {
+        fileManager.createJSONEmptyFile(dataContainer.getPath());
     }
 
 }

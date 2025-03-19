@@ -2,7 +2,7 @@ package backend.server.domainlevel;
 
 import com.google.gson.JsonObject;
 
-public class VolunteerManager implements Manager{
+public class MonthlyPlanManager implements Manager{
 
     @Override
     public void add(JsonObject data) {
@@ -33,5 +33,5 @@ public class VolunteerManager implements Manager{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAll'");
     }
-
+    
 }

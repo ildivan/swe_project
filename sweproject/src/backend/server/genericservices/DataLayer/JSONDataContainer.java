@@ -2,14 +2,14 @@ package backend.server.genericservices.DataLayer;
 
 import com.google.gson.JsonObject;
 
-public class DataContainer {
+public class JSONDataContainer {
     private String path;
     private JsonObject JO;
     private String memberName;
     private String key; 
     private String keyDesc;
 
-    public DataContainer(String path, JsonObject JO, String memberName, String key, String keyDesc) {
+    public JSONDataContainer(String path, JsonObject JO, String memberName, String key, String keyDesc) {
         this.path = path;
         this.JO = JO;
         this.memberName = memberName;
@@ -17,20 +17,20 @@ public class DataContainer {
         this.keyDesc = keyDesc;
     }
 
-    public DataContainer(String path, String memberName, String key, String keyDesc) {
+    public JSONDataContainer(String path, String memberName, String key, String keyDesc) {
         this.path = path;
         this.memberName = memberName;
         this.key = key;
         this.keyDesc = keyDesc;
     }
 
-    public DataContainer(String path, JsonObject JO, String memberName) {
+    public JSONDataContainer(String path, JsonObject JO, String memberName) {
         this.path = path;
         this.JO = JO;
         this.memberName = memberName;
     }
 
-    public DataContainer(String path) {
+    public JSONDataContainer(String path) {
         this.path = path;
     }
 
