@@ -8,13 +8,13 @@ import java.nio.file.*;
 import java.util.*;
 
 public class JSONIOManager {
-    private final Gson gson = new Gson();
+    private Gson gson = new Gson();
 
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
-        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
+        try (Reader reader = Files.newBufferedReader(Paths.get("JF/users.json"))) {
             JsonObject json = gson.fromJson(reader, JsonObject.class);
-            JsonArray objectArray = json.getAsJsonArray(memberName);
+            JsonArray objectArray = json.getAsJsonArray("users");
             
             if(objectArray == null){
                 return null;
@@ -27,7 +27,7 @@ public class JSONIOManager {
             return list;
         } catch (IOException e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            return null;
         }
     }
 
@@ -71,7 +71,7 @@ public class JSONIOManager {
         StringJO = gson.toJson(user);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
 
-        DataContainer dataContainer = new DataContainer("sweproject/JsonFiles/users.json", JO, "users");
+        DataContainer dataContainer = new DataContainer("JF/users.json", JO, "users");
         
         DataLayer.add(dataContainer);
 

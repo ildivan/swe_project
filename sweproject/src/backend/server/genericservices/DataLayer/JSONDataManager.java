@@ -6,7 +6,7 @@ import java.util.*;
 
 public class JSONDataManager implements DataLayer {
     //private static final String PATH = "sweproject/jsonFiles/users.json";
-    private static final JSONIOManager fileManager = new JSONIOManager();
+    private static JSONIOManager fileManager = new JSONIOManager();
         
     
     public JSONDataManager() {

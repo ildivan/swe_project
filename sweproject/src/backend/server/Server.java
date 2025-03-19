@@ -4,14 +4,19 @@ import backend.server.domainlevel.PlanManager;
 import backend.server.domainlevel.User;
 import backend.server.domainlevel.domainservices.ConfigService;
 import backend.server.domainlevel.domainservices.Service;
-import backend.server.domainlevel.domainservices.UserService;
-import backend.server.domainlevel.domainservices.VolunteerService;
 import backend.server.genericservices.auth.AuthenticationService;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Server {
 
@@ -108,6 +113,27 @@ public class Server {
     }
 
     public static void main(String[] args) {
+        String currentDir = System.getProperty("user.dir");
+        System.out.println("La directory di lavoro corrente è: " + currentDir);
+        // try (Reader reader = Files.newBufferedReader(Paths.get("/Users/riccardomodina/Documents/GitHub/swe_project/sweproject/JF/users.json"))) {
+        //     Gson gson = new Gson();
+        //     JsonObject json = gson.fromJson(reader, JsonObject.class);
+        //     JsonArray objectArray = json.getAsJsonArray("users");
+            
+        //     if(objectArray == null){
+        //         System.out.println("Errore");
+        //     }
+
+        //     List<JsonObject> list = new ArrayList<>();
+        //     for (JsonElement elem : objectArray) {
+        //         list.add(elem.getAsJsonObject());
+        //     }
+        //     System.out.println(list);
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+            
+        // }
+
         Server s = new Server(5001,6001);
         s.startServer();
     }
