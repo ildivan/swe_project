@@ -1,11 +1,13 @@
 package backend.server;
 
 public class Configs {
+    private String configType;
     private boolean userConfigured;
     private String areaOfIntrest;
     private Integer maxSubscriptions;
 
     public Configs() {
+        this.configType = "normalFunctionConfigs";
         this.userConfigured = false;
         this.areaOfIntrest = null;
         this.maxSubscriptions = null;
@@ -33,6 +35,14 @@ public class Configs {
 
     public void setMaxSubscriptions(Integer maxSubscriptions) {
         this.maxSubscriptions = maxSubscriptions;
+    }
+
+    public String getConfigType() {
+        return configType;
+    }
+
+    public void setConfigType(String configType) {
+        this.configType = configType;
     }
 
 

@@ -44,7 +44,7 @@ public class ConfigService extends Service<Void>{
         boolean continuare = true;
         do{
             //ANDR GESTITO IL TEMPO IN QUELCHE MODO QUA
-            if(checkIfUserConfigured()){
+            if(!checkIfUserConfigured()){
                 if(firstTimeConfiguration()){
                     write("Configurazione completata", false);
                 }else{
@@ -89,7 +89,7 @@ public class ConfigService extends Service<Void>{
 
         for (Map.Entry<String, Boolean> entry : vociVisibili.entrySet()) {
             if (entry.getValue()) {
-                write(String.valueOf(entry.getValue()), false);
+                //   write(String.valueOf(entry.getValue()), false);
                 opzioniVisibili.add(entry.getKey());
             }
         }
@@ -117,10 +117,14 @@ public class ConfigService extends Service<Void>{
     }
 
     private boolean checkIfUserConfigured() {
-        if(dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "userConfigured")).isEmpty()){
-            return false;
-        }
-        return true;
+        write("primo metodo", false);
+        JsonObject JO = new JsonObject();
+        JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
+        // if(JO.isEmpty()){
+        //    // return false;
+        // }
+        write(String.format("%b",JO.get("userConfigured").getAsBoolean() ), false);
+        return JO.get("userConfigured").getAsBoolean();
     }
 
     private boolean firstTimeConfiguration(){
@@ -143,7 +147,7 @@ public class ConfigService extends Service<Void>{
         StringJO = gson.toJson(configs);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
 
-        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","false", "userConfigured");
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","normalFunctionConfigs", "configType");
         dataLayer.modify(dataContainer);
 
         return true;
