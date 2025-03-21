@@ -5,12 +5,16 @@ public class Configs {
     private boolean userConfigured;
     private String areaOfIntrest;
     private Integer maxSubscriptions;
+    private boolean placesFirtsConfigured;
+    private boolean activitiesFirtsConfigured;
 
     public Configs() {
         this.configType = "normalFunctionConfigs";
         this.userConfigured = false;
         this.areaOfIntrest = null;
         this.maxSubscriptions = null;
+        this.placesFirtsConfigured = false;
+        this.activitiesFirtsConfigured = false;
     }
 
     public boolean getUserConfigured() {
@@ -43,6 +47,22 @@ public class Configs {
 
     public void setConfigType(String configType) {
         this.configType = configType;
+    }
+
+    public boolean getPlacesFirtsConfigured() {
+        return placesFirtsConfigured;
+    }
+
+    public void setPlacesFirtsConfigured(boolean placesFirtsConfigured) {
+        this.placesFirtsConfigured = placesFirtsConfigured;
+    }
+
+    public boolean getActivitiesFirtsConfigured() {
+        return activitiesFirtsConfigured;
+    }
+
+    public void setActivitiesFirtsConfigured(boolean activitiesFirtsConfigured) {
+        this.activitiesFirtsConfigured = activitiesFirtsConfigured;
     }
 
     

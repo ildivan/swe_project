@@ -46,7 +46,7 @@ public class ConfigService extends Service<Void>{
             //ANDR GESTITO IL TEMPO IN QUELCHE MODO QUA
             if(!checkIfUserConfigured()){
                 if(firstTimeConfiguration()){
-                    write("Configurazione completata", false);
+                    write("Configurazione base completata", false);
                 }else{
                     write("Errore durante la configurazione", false);
                     return null;
@@ -83,6 +83,7 @@ public class ConfigService extends Service<Void>{
         
     }
 
+    //todo fare una classe menu che mi gestisce il JSON del menu
     private List<String> buildMenu() {
         
         List<String> opzioniVisibili = new ArrayList<>();
@@ -116,6 +117,7 @@ public class ConfigService extends Service<Void>{
         return true;
     }
 
+
     private boolean checkIfUserConfigured() {
         write("primo metodo", false);
         JsonObject JO = new JsonObject();
@@ -130,14 +132,11 @@ public class ConfigService extends Service<Void>{
     private boolean firstTimeConfiguration(){
         try {
         write("Prima configurazione necessaria:", false);
-        write("Inserire luogo di esercizio", true);
-        String areaOfIntrest = null;
-      
-        areaOfIntrest = read();
-       
-        write("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", true);
-        Integer maxSubscriptions = Integer.parseInt(read());
+        String areaOfIntrest = configureArea();
+        Integer maxSubscriptions = configureMaxSubscriptions();
 
+        //richiesta la configurazone dei luoghi e delle attivita
+        //in base a come vanno le due cose sopra, modifico i config in un metodo a parte
         Configs configs = new Configs();
         configs.setUserConfigured(true);
         configs.setAreaOfIntrest(areaOfIntrest);
@@ -157,6 +156,20 @@ public class ConfigService extends Service<Void>{
         }
         
     }
+
+    private String configureArea() throws IOException{
+        write("Inserire luogo di esercizio", true);
+        String areaOfIntrest = null;
+        areaOfIntrest = read();
+        return areaOfIntrest;
+    }
+    
+    private Integer configureMaxSubscriptions() throws IOException{
+        write("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", true);
+        Integer maxSubscriptions = Integer.parseInt(read());
+        return maxSubscriptions;
+    }
+
 
     private void modNumMaxSub(){
         write("\nInserire nuovo numero di iscrizioni massime",true);
