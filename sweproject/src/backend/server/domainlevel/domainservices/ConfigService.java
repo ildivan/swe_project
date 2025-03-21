@@ -26,12 +26,13 @@ public class ConfigService extends Service<Void>{
     public ConfigService(Socket socket, Gson gson){
         super(socket);
         //TODO avere un json che contiene le varie chiamate hai metodi e se sono visibili o no
+        vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
         vociVisibili.put("Aggiungi Volontario", true);
         vociVisibili.put("Aggiungi Luogo", true);
         vociVisibili.put("Mostra Volontari", true);
         vociVisibili.put("Mostra Luoghi", true);
         
-
+        chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", this::modNumMaxSub);
         chiamateMetodi.put("Aggiungi Volontario", this::addVolunteer);
         chiamateMetodi.put("Aggiungi Luogo", this::addPlace);
         chiamateMetodi.put("Mostra Volontari", this::showVolunteers);
@@ -155,6 +156,26 @@ public class ConfigService extends Service<Void>{
             return false;
         }
         
+    }
+
+    private void modNumMaxSub(){
+        write("\nInserire nuovo numero di iscrizioni massime",true);
+        Integer n = 0;
+        try {
+            n = Integer.parseInt(read());
+        } catch (NumberFormatException | IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
+        Configs configs = gson.fromJson(oldConfigsJO, Configs.class);
+        configs.setMaxSubscriptions(n);
+        JsonObject newConfigsJO = gson.toJsonTree(configs).getAsJsonObject();
+
+        dataLayer.modify(new JSONDataContainer("JF/configs.json", newConfigsJO, "configs","normalFunctionConfigs", "configType"));
+
+
     }
 
     private void addVolunteer() {
