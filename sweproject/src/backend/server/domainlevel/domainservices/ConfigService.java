@@ -10,10 +10,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import backend.server.Configs;
+import backend.server.domainlevel.Place;
+import backend.server.domainlevel.Address;
 import backend.server.genericservices.Service;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataContainer;
 import backend.server.genericservices.DataLayer.JSONDataManager;
+import backend.server.genericservices.DataLayer.JSONUtil;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
@@ -108,9 +111,15 @@ public class ConfigService extends Service<Void>{
     }
 
 
-    private boolean continueChoice() throws IOException {
+    private boolean continueChoice() {
         write("Proseguire? (s/n)",true);
-        String choice = read();
+        String choice = "";
+        try {
+            choice = read();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         if(choice.equals("n")){
             return false;
         }
@@ -141,6 +150,11 @@ public class ConfigService extends Service<Void>{
         configs.setUserConfigured(true);
         configs.setAreaOfIntrest(areaOfIntrest);
         configs.setMaxSubscriptions(maxSubscriptions);
+        
+        addPlace();
+        configs.setPlacesFirtsConfigured(true);
+        addActivity();
+        configs.setActivitiesFirtsConfigured(true);
 
         String StringJO = new String();
         StringJO = gson.toJson(configs);
@@ -184,7 +198,7 @@ public class ConfigService extends Service<Void>{
         JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
         Configs configs = gson.fromJson(oldConfigsJO, Configs.class);
         configs.setMaxSubscriptions(n);
-        JsonObject newConfigsJO = gson.toJsonTree(configs).getAsJsonObject();
+        JsonObject newConfigsJO = JSONUtil.createJson(configs);
 
         dataLayer.modify(new JSONDataContainer("JF/configs.json", newConfigsJO, "configs","normalFunctionConfigs", "configType"));
 
@@ -195,8 +209,41 @@ public class ConfigService extends Service<Void>{
         write("addVOl",false);
     }   
 
-    private void addPlace() {
-       write("addPlace",false);
+    private void addPlace(){
+        boolean continuare = false;
+        write("Inizio configurazione e inserimento luoghi", false);
+        do{
+            try{
+
+                //TODO CONTROLLARE ESISTENZA DEL LUOGO E POI AGGIUNGERLO DOPO AVER PRESO IL NOME
+                write("Inserire nome luogo", true);
+                String name = read();
+                write("Inserire descrizione luogo", true);
+                String description = read();
+                write("Inserire indirizzo luogo", false);
+                Address address = addNewAddress();
+                dataLayer.add(new JSONDataContainer("JF/places.json", JSONUtil.createJson(new Place(name, address, description)),"places"));
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+            continuare = continueChoice();
+        }while(continuare);
+    }
+
+    private Address addNewAddress() throws IOException {
+        write("Inserire via", true);
+        String street = read();
+        write("Inserire città", true);
+        String city = read();
+        write("Inserire nazione", true);
+        String nation = read();
+        write("Inserire CAP", true);
+        String zipCode = read();
+        return new Address(street, city, nation, zipCode);
+    }
+
+    private void addActivity() {
+        write("addAct",false);
     }
 
     private void showVolunteers() {

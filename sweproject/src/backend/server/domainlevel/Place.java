@@ -5,11 +5,13 @@ public class Place{
     private String name;
     private Address address;
     private String description;
+    private boolean atLeastOneActivityRelated;
 
     public Place(String name, Address address, String description){
         this.name = name;
         this.address = address;
         this.description = description;
+        this.atLeastOneActivityRelated = false;
     }
 
     public String getName(){
