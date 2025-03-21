@@ -1,8 +1,10 @@
-package backend.server.domainlevel;
+package backend.server.domainlevel.domainmanagers;
 
 import com.google.gson.JsonObject;
 
-public class PlacesManager implements Manager {
+import backend.server.domainlevel.Manager;
+
+public class MonthlyPlanManager implements Manager{
 
     @Override
     public void add(JsonObject data) {
@@ -33,5 +35,5 @@ public class PlacesManager implements Manager {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAll'");
     }
-
+    
 }

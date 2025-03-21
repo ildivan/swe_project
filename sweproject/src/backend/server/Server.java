@@ -1,6 +1,5 @@
 package backend.server;// Server.java
 
-import backend.server.domainlevel.PlanManager;
 import backend.server.domainlevel.User;
 import backend.server.domainlevel.domainservices.ConfigService;
 import backend.server.genericservices.Service;

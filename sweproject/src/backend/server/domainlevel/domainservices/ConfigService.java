@@ -10,7 +10,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import backend.server.Configs;
-import backend.server.domainlevel.PlanManager;
 import backend.server.genericservices.Service;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataContainer;

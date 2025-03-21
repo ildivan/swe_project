@@ -1,8 +1,10 @@
-package backend.server.domainlevel;
+package backend.server.domainlevel.domainmanagers;
 
 import com.google.gson.JsonObject;
 
-public class VolunteerManager implements Manager{
+import backend.server.domainlevel.Manager;
+
+public class PlacesManager implements Manager {
 
     @Override
     public void add(JsonObject data) {
