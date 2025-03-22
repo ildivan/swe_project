@@ -37,4 +37,18 @@ public class Place{
     public void setDescription(String description){
         this.description = description;
     }
+
+    public boolean getAtLeastOneActivityRelated(){
+        return atLeastOneActivityRelated;
+    }
+
+    public void setAtLeastOneActivityRelated(boolean atLeastOneActivityRelated){
+        this.atLeastOneActivityRelated = atLeastOneActivityRelated;
+    }
+
+    @Override
+    public String toString(){
+        //TODO ADDRESS TO STRING
+        return "------------"+"\nPlace:" + "\nName=" + name +"\nAddress=" + address + "\nDescription=" + description+  "\n------------";
+    }
 }

@@ -97,7 +97,9 @@ public class JSONDataManager implements DataLayer {
        //System.out.println("Oggetto non trovato.");
     }
 
-    // Recupera un oggetto
+    /**
+     * path, membername, key e keydesc
+     */
     @Override
     public JsonObject get(JSONDataContainer dataContainer) {
         
@@ -133,6 +135,26 @@ public class JSONDataManager implements DataLayer {
     public void createJSONEmptyFile(JSONDataContainer dataContainer) {
         fileManager.createJSONEmptyFile(dataContainer.getPath());
     }
+
+    public List<JsonObject> getList(JSONDataContainer dataContainer) {
+
+        if (!checkFileExistance(dataContainer)) {
+            fileManager.createJSONEmptyFile(dataContainer.getPath());
+        }
+    
+        List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+        List<JsonObject> result = new ArrayList<>();
+    
+        for (JsonObject o : list) {
+          
+            if (o.get(dataContainer.getKeyDesc()).getAsString().equals(dataContainer.getKey())) {
+                result.add(o);  
+            }
+        }
+    
+        return result.isEmpty() ? null : result; 
+    }
+    
 
 }
 

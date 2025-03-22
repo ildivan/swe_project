@@ -1,5 +1,7 @@
 package backend.server.domainlevel.domainmanagers;
 
+import java.util.List;
+
 import com.google.gson.JsonObject;
 
 import backend.server.domainlevel.Manager;
@@ -34,6 +36,24 @@ public class MonthlyPlanManager implements Manager{
     public void getAll(JsonObject data) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+    }
+
+    @Override
+    public boolean exists(String key) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'exists'");
+    }
+
+    @Override
+    public boolean checkIfThereIsSomethingWithCondition() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'checkIfThereIsSomethingWithCondition'");
+    }
+
+    @Override
+    public List<Object> getCustomList() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getCustomList'");
     }
     
 }

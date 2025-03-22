@@ -118,6 +118,11 @@ public class Server {
         }
 
         Configs configs = new Configs();
+
+        //per partire senza dover inserire i luoghi
+        //configs.setPlacesFirtsConfigured(true);
+
+        
         String StringJO = new String();
         StringJO = gson.toJson(configs);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);

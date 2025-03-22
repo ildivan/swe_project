@@ -11,7 +11,9 @@ import com.google.gson.JsonObject;
 
 import backend.server.Configs;
 import backend.server.domainlevel.Place;
+import backend.server.domainlevel.domainmanagers.PlacesManager;
 import backend.server.domainlevel.Address;
+import backend.server.domainlevel.Manager;
 import backend.server.genericservices.Service;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataContainer;
@@ -24,6 +26,7 @@ public class ConfigService extends Service<Void>{
     private final Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
     private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
     private DataLayer dataLayer = new JSONDataManager();
+    private Manager placesManager = new PlacesManager();
   
 
     public ConfigService(Socket socket, Gson gson){
@@ -56,7 +59,7 @@ public class ConfigService extends Service<Void>{
                 }
             };
             startMenu();
-            continuare = continueChoice();
+            continuare = continueChoice("scelta operazioni");
         }while(continuare);
         write("\nArrivederci!\n", false);
 
@@ -111,8 +114,8 @@ public class ConfigService extends Service<Void>{
     }
 
 
-    private boolean continueChoice() {
-        write("Proseguire? (s/n)",true);
+    private boolean continueChoice(String message) {
+        write(String.format("Proseguire con %s? (s/n)", message),true);
         String choice = "";
         try {
             choice = read();
@@ -138,6 +141,17 @@ public class ConfigService extends Service<Void>{
         return JO.get("userConfigured").getAsBoolean();
     }
 
+    private boolean checkIfPlacesConfigured() {
+    
+        JsonObject JO = new JsonObject();
+        JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "placesFirtsConfigured"));
+         if(JO==null){
+            write("true", false);
+           return true;
+         }
+        return false;
+    }
+
     private boolean firstTimeConfiguration(){
         try {
         write("Prima configurazione necessaria:", false);
@@ -150,9 +164,16 @@ public class ConfigService extends Service<Void>{
         configs.setUserConfigured(true);
         configs.setAreaOfIntrest(areaOfIntrest);
         configs.setMaxSubscriptions(maxSubscriptions);
-        
-        addPlace();
+
+   
+       if(!checkIfPlacesConfigured()){
         configs.setPlacesFirtsConfigured(true);
+        write("Inizio prima configurazione luoghi", false);
+        addPlace();
+       }
+       //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
+
+        write("Inizio prima configurazione attività", false);
         addActivity();
         configs.setActivitiesFirtsConfigured(true);
 
@@ -211,22 +232,24 @@ public class ConfigService extends Service<Void>{
 
     private void addPlace(){
         boolean continuare = false;
-        write("Inizio configurazione e inserimento luoghi", false);
+        
         do{
             try{
-
-                //TODO CONTROLLARE ESISTENZA DEL LUOGO E POI AGGIUNGERLO DOPO AVER PRESO IL NOME
                 write("Inserire nome luogo", true);
                 String name = read();
+                if(placesManager.exists(name)){
+                    write("Luogo già esistente", false);
+                    return;
+                }
                 write("Inserire descrizione luogo", true);
                 String description = read();
                 write("Inserire indirizzo luogo", false);
                 Address address = addNewAddress();
-                dataLayer.add(new JSONDataContainer("JF/places.json", JSONUtil.createJson(new Place(name, address, description)),"places"));
+                placesManager.add(JSONUtil.createJson(new Place(name, address, description)));
             }catch(IOException e){
                 e.printStackTrace();
             }
-            continuare = continueChoice();
+            continuare = continueChoice("inserimento luoghi");
         }while(continuare);
     }
 
@@ -243,9 +266,30 @@ public class ConfigService extends Service<Void>{
     }
 
     private void addActivity() {
-        write("addAct",false);
+        if(placesManager.checkIfThereIsSomethingWithCondition()){
+            write("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
+            addActivityOnNoConfiguredPlaces();
+        }
+
+        //altrimenti ciclo while che chiede se vuoli continuare ad inserire attivita o no (scegli il luogo e chiami addactivitywithplace)
     }
 
+    private void addActivityOnNoConfiguredPlaces() {
+
+        write("enter",false);
+       List<Place> places = (List<Place>) placesManager.getCustomList();
+         for (Place place : places) {
+              write("Inserire attività per il luogo:\n " + place.toString(), false);
+              addActivityWithPlace(place);
+        }
+    }
+              
+    private void addActivityWithPlace(Place place) {
+        // crei l'attivita dato il posto
+        write("ok",false);
+      
+    }
+              
     private void showVolunteers() {
         write("showVol",false);
     }
