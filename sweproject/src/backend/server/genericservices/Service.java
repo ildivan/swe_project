@@ -39,4 +39,24 @@ public abstract class Service <T> {
     protected String read() throws IOException {
         return reader.readLine();
     }
+
+    /**
+     * ask the user if he wants to continue with the operation
+     * @param message the operation the user wants to continue
+     * @return
+     */
+    protected boolean continueChoice(String message) {
+        write(String.format("Proseguire con %s? (s/n)", message),true);
+        String choice = "";
+        try {
+            choice = read();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if(choice.equals("n")){
+            return false;
+        }
+        return true;
+    }
 }

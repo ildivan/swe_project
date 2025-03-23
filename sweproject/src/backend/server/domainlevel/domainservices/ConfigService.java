@@ -2,9 +2,6 @@ package backend.server.domainlevel.domainservices;
 
 import java.io.*;
 import java.net.Socket;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,23 +10,18 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import backend.server.Configs;
-import backend.server.domainlevel.Place;
-import backend.server.domainlevel.User;
-import backend.server.domainlevel.VolunteerData;
-import backend.server.domainlevel.domainmanagers.PlacesManager;
-import backend.server.domainlevel.domainmanagers.VolunteerManager;
-import backend.server.domainlevel.Activity;
-import backend.server.domainlevel.Address;
-import backend.server.domainlevel.Manager;
+import backend.server.domainlevel.*;
+import backend.server.domainlevel.domainmanagers.*;
 import backend.server.genericservices.Service;
-import backend.server.genericservices.DataLayer.DataLayer;
-import backend.server.genericservices.DataLayer.JSONDataContainer;
-import backend.server.genericservices.DataLayer.JSONDataManager;
-import backend.server.genericservices.DataLayer.JSONUtil;
+import backend.server.genericservices.DataLayer.*;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String QUESTION = "\n\nInserire scelta: ";
+    private static final String USER_KEY_DESC = "userConfigured";
+    private static final String PLACE_KEY_DESC = "placesFirtsConfigured";
+    private static final String ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
+
     private final Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
     private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
     private DataLayer dataLayer = new JSONDataManager();
@@ -52,13 +44,17 @@ public class ConfigService extends Service<Void>{
         chiamateMetodi.put("Mostra Volontari", this::showVolunteers);
         chiamateMetodi.put("Mostra Luoghi", this::showPlaces);
     }
-
+    /**
+     * apply the logic of the service
+     * @return null
+     * @throws IOException
+     */
     public Void applyLogic() throws IOException {
         
         boolean continuare = true;
         do{
             //ANDR GESTITO IL TEMPO IN QUELCHE MODO QUA
-            if(!checkIfUserConfigured()){
+            if(!checkIfConfigured(USER_KEY_DESC)){
                 if(firstTimeConfiguration()){
                     write("Configurazione base completata", false);
                 }else{
@@ -73,7 +69,11 @@ public class ConfigService extends Service<Void>{
 
         return null;
     }
-                
+    
+    /**
+     * start the menu keeping the user in a loop until he decides to exit
+     * @throws IOException
+     */
     private void startMenu() throws IOException {
         //da implemetare il controllo sull'inserimento dell'intero
         List<String> menu = buildMenu();
@@ -97,7 +97,10 @@ public class ConfigService extends Service<Void>{
         
     }
 
-    //todo fare una classe menu che mi gestisce il JSON del menu
+    /**
+     * build the menu based on the visibility of the options
+     * @return
+     */
     private List<String> buildMenu() {
         
         List<String> opzioniVisibili = new ArrayList<>();
@@ -113,6 +116,11 @@ public class ConfigService extends Service<Void>{
         
     }
 
+    /**
+     * convert the menu to a string
+     * @param menu recive the list of the menu option to print on the terminal for the user
+     * @return
+     */
     private String menuToString(List<String> menu) {
         String menuOut = "";
         for (int i = 0; i < menu.size(); i++) {
@@ -121,56 +129,48 @@ public class ConfigService extends Service<Void>{
         return menuOut;
     }
 
-
-    private boolean continueChoice(String message) {
-        write(String.format("Proseguire con %s? (s/n)", message),true);
-        String choice = "";
-        try {
-            choice = read();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        if(choice.equals("n")){
-            return false;
-        }
-        return true;
-    }
-
-
-    private boolean checkIfUserConfigured() {
-       // write("primo metodo", false);
+    /**
+     * check if place and max number of subscriptions are configured -> firtst things to configure
+     * @return true if the user is already configured
+     */
+    private boolean checkIfConfigured(String keyDesc) {
         JsonObject JO = new JsonObject();
         JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
-        // if(JO.isEmpty()){
-        //    // return false;
-        // }
-        //write(String.format("%b",JO.get("userConfigured").getAsBoolean() ), false);
-        return JO.get("userConfigured").getAsBoolean();
+        return JO.get(keyDesc).getAsBoolean();
     }
 
-    private boolean checkIfPlacesConfigured() {
+    /**
+     * check if the places are already configured - only the first configuration
+     * @return true if the places are already configured - for the first configuration
+     */
+    // private boolean checkIfPlacesConfigured() {
     
-        JsonObject JO = new JsonObject();
-        JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "placesFirtsConfigured"));
-         if(JO==null){
-           // write("true", false);
-           return true;
-         }
-        return false;
-    }
+    //     JsonObject JO = new JsonObject();
+    //     JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "placesFirtsConfigured"));
+    //      if(JO==null){
+    //        return true;
+    //      }
+    //     return false;
+    // }
 
-    private boolean checkIfActivityConfigured() {
+    /**
+     * check if the places are already configured - only the first configuration
+     * @return true if the places are already configured - for the first configuration
+     */
+    // private boolean checkIfActivityConfigured() {
     
-        JsonObject JO = new JsonObject();
-        JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "activitiesFirtsConfigured"));
-         if(JO==null){
-           // write("true", false);
-           return true;
-         }
-        return false;
-    }
+    //     JsonObject JO = new JsonObject();
+    //     JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "activitiesFirtsConfigured"));
+    //      if(JO==null){
+    //        return true;
+    //      }
+    //     return false;
+    // }
 
+    /**
+     * starts the first configuration of areaofintrest maxsubscriptions, places and activities related
+     * @return true if ended correctly
+     */
     private boolean firstTimeConfiguration(){
         try {
         write("Prima configurazione necessaria:", false);
@@ -185,13 +185,13 @@ public class ConfigService extends Service<Void>{
         configs.setMaxSubscriptions(maxSubscriptions);
 
    
-       if(!checkIfPlacesConfigured()){
+       if(!checkIfConfigured(PLACE_KEY_DESC)){
             write("Inizio prima configurazione luoghi", false);
             addPlace();
             configs.setPlacesFirtsConfigured(true);
        }
        //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
-        if(!checkIfActivityConfigured()){
+        if(!checkIfConfigured(ACTIVITY_KEY_DESC)){
             write("Inizio prima configurazione attività", false);
             addActivity();
             configs.setActivitiesFirtsConfigured(true);
@@ -212,6 +212,11 @@ public class ConfigService extends Service<Void>{
         
     }
 
+    /**
+     * method to configure the area of intrest
+     * @return  the area of intrest
+     * @throws IOException
+     */
     private String configureArea() throws IOException{
         write("Inserire luogo di esercizio", true);
         String areaOfIntrest = null;
@@ -219,13 +224,20 @@ public class ConfigService extends Service<Void>{
         return areaOfIntrest;
     }
     
+    /**
+     * method to configure the max number of subscriptions
+     * @return the max number of subscriptions
+     * @throws IOException
+     */
     private Integer configureMaxSubscriptions() throws IOException{
         write("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", true);
         Integer maxSubscriptions = Integer.parseInt(read());
         return maxSubscriptions;
     }
 
-
+    /**
+     * method to modify the max number of subscriptions
+     */
     private void modNumMaxSub(){
         write("\nInserire nuovo numero di iscrizioni massime",true);
         Integer n = 0;
@@ -237,15 +249,20 @@ public class ConfigService extends Service<Void>{
         }
 
         JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
-        Configs configs = gson.fromJson(oldConfigsJO, Configs.class);
+       // Configs configs = gson.fromJson(oldConfigsJO, Configs.class);
+        Configs configs;
+        configs = JSONUtil.createObject(oldConfigsJO, Configs.class);
         configs.setMaxSubscriptions(n);
         JsonObject newConfigsJO = JSONUtil.createJson(configs);
 
         dataLayer.modify(new JSONDataContainer("JF/configs.json", newConfigsJO, "configs","normalFunctionConfigs", "configType"));
-
-
     }
 
+    /**
+     * method to add a new volunteer, asks the name, then checks if it already exists, if not it adds it to the user and to the voluteer database
+     * in the user database it creates a temporarly password to be changed by the volunteer the first time he logs in
+     * ideally the configurator adds the volunteer and then he tells the volunteer the temporarly password generated
+     */
     private void addVolunteer() {
         write("\nInserire nome del volontario", true);
         String name = "";
@@ -263,6 +280,11 @@ public class ConfigService extends Service<Void>{
         }
     }   
 
+    /**
+     * method to check if a volunteer already exists
+     * @param name name of the volunteer to check
+     * @return true if the volunteer already exists
+     */
     private boolean checkIfVolunteersExist(String name) {
         if(volunteerManager.exists(name)){
             return true;
@@ -270,18 +292,30 @@ public class ConfigService extends Service<Void>{
         return false;
     }
 
+    /**
+     * method to add a volunteer to the database both volunteers and users calling the method to add the user profile
+     * @param name
+     */
     private void addVolunteerWithName(String name) {
         VolunteerData volunteer = new VolunteerData(name);
         dataLayer.add(new JSONDataContainer("JF/volunteers.json", JSONUtil.createJson(volunteer), "volunteers"));
         addNewVolunteerUserProfile(name);
     }
 
+    /**
+     * method to add a new user profile to user database creating a new random password
+     * @param name
+     */
     private void addNewVolunteerUserProfile(String name) {
-        String tempPass = "temp" + Math.random();
+        String tempPass = "temp_" + Math.random();
+        write(String.format("Nova password temporanea per volontario: %s\n%s", name, tempPass), false);
         User u = new User(name, tempPass, "volontario");
         dataLayer.add(new JSONDataContainer("JF/users.json", JSONUtil.createJson(u), "users"));
     }
 
+    /**
+     * method to add a new place to the database
+     */
     private void addPlace(){
         boolean continuare = false;
         
@@ -305,6 +339,11 @@ public class ConfigService extends Service<Void>{
         }while(continuare);
     }
 
+    /**
+     * util method for the previous method to add a new address
+     * @return the new address
+     * @throws IOException
+     */
     private Address addNewAddress() throws IOException {
         write("Inserire via", true);
         String street = read();
@@ -317,15 +356,38 @@ public class ConfigService extends Service<Void>{
         return new Address(street, city, nation, zipCode);
     }
 
+    /**
+     * method to add a new activity to the database
+     */
     private void addActivity() {
         if(placesManager.checkIfThereIsSomethingWithCondition()){
             write("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
             addActivityOnNoConfiguredPlaces();
         }
 
-        //altrimenti ciclo while che chiede se vuoli continuare ad inserire attivita o no (scegli il luogo e chiami addactivitywithplace)
+        try{
+            do{
+                showPlaces();
+                write("\nInserire luogo per l'attività", true);
+                String placeName = read();
+
+                while(!placesManager.exists(placeName)){
+                        write("Luogo non esistente, riprovare", false);
+                        write("\nInserire luogo per l'attività", true);
+                        placeName = read();
+                }
+                    
+                Place place = JSONUtil.createObject(placesManager.get(placeName), Place.class);      
+                addActivityWithPlace(place);
+            }while(continueChoice("aggiunta attività"));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * show places where there is no activity related
+     */
     private void addActivityOnNoConfiguredPlaces() {
 
         write("enter",false);
@@ -336,6 +398,10 @@ public class ConfigService extends Service<Void>{
         }
     }
               
+    /**
+     * creat an activity on the place passed in input in the method
+     * @param place place to relate the activity
+     */
     private void addActivityWithPlace(Place place) {
         Activity activity;
         try {
@@ -375,6 +441,11 @@ public class ConfigService extends Service<Void>{
       
     }
 
+    /**
+     * util method: add a list of volunteers to a specific activity that is being buildt in the previous method
+     * @return
+     * @throws IOException
+     */
     private String[] addVolunteersToActivity() throws IOException {
         ArrayList<String> volunteers = new ArrayList<>();
         do{
@@ -393,7 +464,13 @@ public class ConfigService extends Service<Void>{
         return volunteers.toArray(new String[volunteers.size()]);
         
     }
-
+    
+    /**
+     * util method: make you choose the meeting point
+     * @param p place where you are building the activity on
+     * @return
+     * @throws IOException
+     */
     private Address getMeetingPoint(Place p) throws IOException {
         write("\nInserire punto di ritrovo (indirizzo): (d-indirizzo luogo/altro inserire)", true);
         if(read().equals("d")){
@@ -402,11 +479,19 @@ public class ConfigService extends Service<Void>{
             return addNewAddress();
         }
     }
-              
+
+    /**
+     * method to show all volunteers
+     * UNIMPLEMENTED
+     */
     private void showVolunteers() {
         write("showVol",false);
     }
 
+    /**
+     * method to show all places
+     * UNIMPLEMENTED
+     */
     private void showPlaces() {
         write("showPla",false);
     }

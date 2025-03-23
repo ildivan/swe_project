@@ -27,7 +27,7 @@ public class MonthlyPlanManager implements Manager{
     }
 
     @Override
-    public void get(JsonObject data) {
+    public JsonObject get(String key) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'get'");
     }

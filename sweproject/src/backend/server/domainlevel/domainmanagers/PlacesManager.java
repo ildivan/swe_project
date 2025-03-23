@@ -36,9 +36,9 @@ public class PlacesManager implements Manager {
     }
 
     @Override
-    public void get(JsonObject data) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
+    public JsonObject get(String key) {
+        return dataLayer.get(new JSONDataContainer(PATH, MEMBER_NAME, key, KEY_DESC));
+        
     }
 
     @Override

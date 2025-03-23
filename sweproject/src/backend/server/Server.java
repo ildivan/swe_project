@@ -17,6 +17,8 @@ import java.net.*;
 
 public class Server {
 
+    private static final boolean NO_CONFIG_NEEDED = true; //true e non devi fare le prime configurazioni di luoghi, attività, luogo di attivita e massimo numero iscrizioni
+
     private final int ClientPort;
     private final int ServerTerminalPort;
     private final Gson gson;
@@ -119,12 +121,17 @@ public class Server {
 
         Configs configs = new Configs();
 
-        //togli il commento sotto per partire senza dover inserire i luoghi
-        configs.setPlacesFirtsConfigured(true);
+        if(NO_CONFIG_NEEDED){
+           
+            configs.setPlacesFirtsConfigured(true);
+            configs.setActivitiesFirtsConfigured(true);
+            configs.setAreaOfIntrest("Brescia");
+            configs.setMaxSubscriptions(12);
+            configs.setUserConfigured(true);
 
-        //togli il commento sotto per partire senza dover iserire attivita su luoghi (non necessario)
-        configs.setActivitiesFirtsConfigured(true);
+        }
 
+        
         
         String StringJO = new String();
         StringJO = gson.toJson(configs);
