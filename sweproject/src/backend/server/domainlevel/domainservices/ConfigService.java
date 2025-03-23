@@ -2,6 +2,9 @@ package backend.server.domainlevel.domainservices;
 
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,6 +15,7 @@ import com.google.gson.JsonObject;
 import backend.server.Configs;
 import backend.server.domainlevel.Place;
 import backend.server.domainlevel.domainmanagers.PlacesManager;
+import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Address;
 import backend.server.domainlevel.Manager;
 import backend.server.genericservices.Service;
@@ -131,13 +135,13 @@ public class ConfigService extends Service<Void>{
 
 
     private boolean checkIfUserConfigured() {
-        write("primo metodo", false);
+       // write("primo metodo", false);
         JsonObject JO = new JsonObject();
         JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
         // if(JO.isEmpty()){
         //    // return false;
         // }
-        write(String.format("%b",JO.get("userConfigured").getAsBoolean() ), false);
+        //write(String.format("%b",JO.get("userConfigured").getAsBoolean() ), false);
         return JO.get("userConfigured").getAsBoolean();
     }
 
@@ -146,7 +150,18 @@ public class ConfigService extends Service<Void>{
         JsonObject JO = new JsonObject();
         JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "placesFirtsConfigured"));
          if(JO==null){
-            write("true", false);
+           // write("true", false);
+           return true;
+         }
+        return false;
+    }
+
+    private boolean checkIfActivityConfigured() {
+    
+        JsonObject JO = new JsonObject();
+        JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "activitiesFirtsConfigured"));
+         if(JO==null){
+           // write("true", false);
            return true;
          }
         return false;
@@ -167,15 +182,16 @@ public class ConfigService extends Service<Void>{
 
    
        if(!checkIfPlacesConfigured()){
-        configs.setPlacesFirtsConfigured(true);
-        write("Inizio prima configurazione luoghi", false);
-        addPlace();
+            write("Inizio prima configurazione luoghi", false);
+            addPlace();
+            configs.setPlacesFirtsConfigured(true);
        }
        //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
-
-        write("Inizio prima configurazione attività", false);
-        addActivity();
-        configs.setActivitiesFirtsConfigured(true);
+        if(!checkIfActivityConfigured()){
+            write("Inizio prima configurazione attività", false);
+            addActivity();
+            configs.setActivitiesFirtsConfigured(true);
+        }
 
         String StringJO = new String();
         StringJO = gson.toJson(configs);
@@ -285,9 +301,50 @@ public class ConfigService extends Service<Void>{
     }
               
     private void addActivityWithPlace(Place place) {
-        // crei l'attivita dato il posto
-        write("ok",false);
+        Activity activity;
+        try {
+            write("\nInserire titolo attività", true);
+            String title = read();
+            write("\nInserire descrizione attività", true);
+            String description = read();
+            Address meetingPoint = getMeetingPoint(place);
+            write("\nInserire data inizio attività (dd-mm-yyyy)", true);
+            //DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            //LocalDate firstProgrammableDate = LocalDate.parse(read(), formatterDate);
+            String firstProgrammableDate = read();
+            write("\nInserire data fine attività (dd-mm-yyyy)", true);
+            //LocalDate lastProgrammableDate = LocalDate.parse(read(), formatterDate);
+            String lastProgrammableDate = read();
+            write("\nInserire giorni della settimana programmabili separati da una virgola", true);
+            String[] programmableDays = read().split(",");
+            write("\nInserire ora programmabile (HH:mm)", true);
+            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            //LocalTime programmableHour = LocalTime.parse(read(), formatter);
+            String programmableHour = read();
+            write("\nInserire durata attività (HH:mm)", true);
+            //LocalTime duration = LocalTime.parse(read(), formatter);
+            String duration = read();
+            write("\nInserire se è necessario un biglietto", true);
+            boolean bigliettoNecessario = Boolean.parseBoolean(read());
+            write("\nInserire numero massimo partecipanti", true);
+            int maxPartecipanti = Integer.parseInt(read());
+            write("\nInserire numero minimo partecipanti", true);
+            int minPartecipanti = Integer.parseInt(read());
+            activity = new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti);
+            dataLayer.add(new JSONDataContainer("JF/activities.json", JSONUtil.createJson(activity), "activities"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }       
       
+    }
+
+    private Address getMeetingPoint(Place p) throws IOException {
+        write("\nInserire punto di ritrovo (indirizzo): (d-indirizzo luogo/altro inserire)", true);
+        if(read().equals("d")){
+            return p.getAddress();
+        }else{
+            return addNewAddress();
+        }
     }
               
     private void showVolunteers() {

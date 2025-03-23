@@ -1,1 +1,59 @@
-{"places":[{"name":"casa modina","address":{"street":"via morola 8b","city":"castelli calepio","state":"italia","zipCode":"24060"},"description":"desc","atLeastOneActivityRelated":false},{"name":"gambone","address":{"street":"morola","city":"cc","state":"italia","zipCode":"24060"},"description":"descg","atLeastOneActivityRelated":false},{"name":"portico","address":{"street":"morolq","city":"cccc","state":"itttt","zipCode":"24060"},"description":"desc","atLeastOneActivityRelated":false},{"name":"h","address":{},"atLeastOneActivityRelated":false}]}
+{
+    "places": [
+        {
+            "name": "Piazza della Loggia",
+            "address": {
+                "street": "Piazza della Loggia",
+                "city": "Brescia",
+                "state": "Italia",
+                "zipCode": "25121"
+            },
+            "description": "Una delle piazze più importanti e storiche di Brescia, famosa per la sua architettura rinascimentale.",
+            "atLeastOneActivityRelated": true
+        },
+        {
+            "name": "Castello di Brescia",
+            "address": {
+                "street": "Castello di Brescia",
+                "city": "Brescia",
+                "state": "Italia",
+                "zipCode": "25121"
+            },
+            "description": "Un antico castello che domina la città, con panorami mozzafiato e un museo al suo interno.",
+            "atLeastOneActivityRelated": true
+        },
+        {
+            "name": "Museo di Santa Giulia",
+            "address": {
+                "street": "Via dei Musei, 81/b",
+                "city": "Brescia",
+                "state": "Italia",
+                "zipCode": "25121"
+            },
+            "description": "Un museo archeologico e d'arte situato nel complesso monastico di Santa Giulia, patrimonio dell'umanità UNESCO.",
+            "atLeastOneActivityRelated": true
+        },
+        {
+            "name": "Teatro Grande",
+            "address": {
+                "street": "Piazza Cesare Beccaria",
+                "city": "Brescia",
+                "state": "Italia",
+                "zipCode": "25121"
+            },
+            "description": "Un teatro storico di Brescia, ospita spettacoli teatrali, concerti e altre performance artistiche.",
+            "atLeastOneActivityRelated": true
+        },
+        {
+            "name": "Lago di Garda",
+            "address": {
+                "street": "Lago di Garda",
+                "city": "Brescia",
+                "state": "Italia",
+                "zipCode": "25015"
+            },
+            "description": "Uno dei laghi più famosi d'Italia, con paesaggi naturali mozzafiato e numerose attività all'aria aperta.",
+            "atLeastOneActivityRelated": true
+        }
+    ]
+}

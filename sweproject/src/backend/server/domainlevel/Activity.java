@@ -1,25 +1,23 @@
 package backend.server.domainlevel;
 
-import java.time.*;
-
 public class Activity {
 
     private String placeName;
     private String title;
     private String description;
     private Address meetingPoint;
-    private LocalDate firstProgrammableDate;
-    private LocalDate lastProgrammableDate;
+    private String firstProgrammableDate;
+    private String lastProgrammableDate;
     private String[] programmableDays;
-    private LocalTime programmableHour;
-    private LocalTime duration;
+    private String programmableHour;
+    private String duration;
     private boolean bigliettoNecessario;
     private int maxPartecipanti;
     private int minPartecipanti;
 
     public Activity(String placeName, String title, String description, Address meetingPoint,
-        LocalDate firstProgrammableDate, LocalDate lastProgrammableDate, String[] programmableDays,
-        LocalTime programmableHour, LocalTime duration, boolean bigliettoNecessario, int maxPartecipanti, int minPartecipanti){
+    String firstProgrammableDate, String lastProgrammableDate, String[] programmableDays,
+    String programmableHour, String duration, boolean bigliettoNecessario, int maxPartecipanti, int minPartecipanti){
        
         this.placeName = placeName;
         this.title = title;
@@ -67,19 +65,19 @@ public class Activity {
         this.meetingPoint = meetingPoint;
     }
 
-    public LocalDate getFirstProgrammableDate() {
+    public String getFirstProgrammableDate() {
         return firstProgrammableDate;
     }
 
-    public void setFirstProgrammableDate(LocalDate firstProgrammableDate) {
+    public void setFirstProgrammableDate(String firstProgrammableDate) {
         this.firstProgrammableDate = firstProgrammableDate;
     }
 
-    public LocalDate getLastProgrammableDate() {
+    public String getLastProgrammableDate() {
         return lastProgrammableDate;
     }
 
-    public void setLastProgrammableDate(LocalDate lastProgrammableDate) {
+    public void setLastProgrammableDate(String lastProgrammableDate) {
         this.lastProgrammableDate = lastProgrammableDate;
     }
 
@@ -91,19 +89,19 @@ public class Activity {
         this.programmableDays = programmableDays;
     }
 
-    public LocalTime getProgrammableHour() {
+    public String getProgrammableHour() {
         return programmableHour;
     }
 
-    public void setProgrammableHour(LocalTime programmableHour) {
+    public void setProgrammableHour(String programmableHour) {
         this.programmableHour = programmableHour;
     }
 
-    public LocalTime getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(LocalTime duration) {
+    public void setDuration(String duration) {
         this.duration = duration;
     }
 

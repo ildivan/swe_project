@@ -119,15 +119,18 @@ public class Server {
 
         Configs configs = new Configs();
 
-        //per partire senza dover inserire i luoghi
+        //togli il commento sotto per partire senza dover inserire i luoghi
         //configs.setPlacesFirtsConfigured(true);
+
+        //togli il commento sotto per partire senza dover iserire attivita su luoghi (non necessario)
+       // configs.setActivitiesFirtsConfigured(true);
 
         
         String StringJO = new String();
         StringJO = gson.toJson(configs);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
         
-        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","true", "userConfigured");
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","normalFunctionConfigs", "configType");
         
         dl.modify(dataContainer);
     }

@@ -42,7 +42,7 @@ public class AuthenticationService extends Service<User> {
             write("Inserisci password:", true);
             String pass = read();
             if(verifyPassword(username, pass)){
-                write("DEBUG: calsse auth service line 42 password corretta", false);
+                //write("DEBUG: calsse auth service line 42 password corretta", false);
                 break;
             }
             write(String.format("Password sbagliata riprovare, tentativi rimasti %d",2-i), false);
