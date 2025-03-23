@@ -17,7 +17,8 @@
             "duration": "02:00",
             "bigliettoNecessario": true,
             "maxPartecipanti": 20,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Marco", "Luca"]
         },
         {
             "placeName": "Piazza della Loggia",
@@ -36,7 +37,8 @@
             "duration": "01:30",
             "bigliettoNecessario": true,
             "maxPartecipanti": 15,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Lucia", "Marta"]
         },
         {
             "placeName": "Castello di Brescia",
@@ -55,7 +57,8 @@
             "duration": "03:00",
             "bigliettoNecessario": true,
             "maxPartecipanti": 15,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Marta", "Luca"]
         },
         {
             "placeName": "Castello di Brescia",
@@ -74,7 +77,8 @@
             "duration": "02:00",
             "bigliettoNecessario": false,
             "maxPartecipanti": 20,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Marco", "Lucia"]
         },
         {
             "placeName": "Museo di Santa Giulia",
@@ -93,7 +97,8 @@
             "duration": "02:30",
             "bigliettoNecessario": true,
             "maxPartecipanti": 25,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Lucia", "Marta"]
         },
         {
             "placeName": "Museo di Santa Giulia",
@@ -112,7 +117,8 @@
             "duration": "01:30",
             "bigliettoNecessario": true,
             "maxPartecipanti": 20,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Marco", "Lucia"]
         },
         {
             "placeName": "Teatro Grande",
@@ -131,7 +137,8 @@
             "duration": "01:30",
             "bigliettoNecessario": true,
             "maxPartecipanti": 20,
-            "minPartecipanti": 10
+            "minPartecipanti": 10,
+            "volunteers": ["Luca", "Marta"]
         },
         {
             "placeName": "Teatro Grande",
@@ -150,7 +157,8 @@
             "duration": "02:00",
             "bigliettoNecessario": true,
             "maxPartecipanti": 100,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Marta"]
         },
         {
             "placeName": "Lago di Garda",
@@ -169,7 +177,8 @@
             "duration": "05:00",
             "bigliettoNecessario": false,
             "maxPartecipanti": 25,
-            "minPartecipanti": 10
+            "minPartecipanti": 10,
+            "volunteers": ["Lucia", "Marco"]
         },
         {
             "placeName": "Lago di Garda",
@@ -188,7 +197,8 @@
             "duration": "03:00",
             "bigliettoNecessario": true,
             "maxPartecipanti": 15,
-            "minPartecipanti": 5
+            "minPartecipanti": 5,
+            "volunteers": ["Marco"]
         }
     ]
 }

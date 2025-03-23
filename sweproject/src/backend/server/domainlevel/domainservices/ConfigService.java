@@ -14,7 +14,10 @@ import com.google.gson.JsonObject;
 
 import backend.server.Configs;
 import backend.server.domainlevel.Place;
+import backend.server.domainlevel.User;
+import backend.server.domainlevel.VolunteerData;
 import backend.server.domainlevel.domainmanagers.PlacesManager;
+import backend.server.domainlevel.domainmanagers.VolunteerManager;
 import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Address;
 import backend.server.domainlevel.Manager;
@@ -31,6 +34,7 @@ public class ConfigService extends Service<Void>{
     private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
     private DataLayer dataLayer = new JSONDataManager();
     private Manager placesManager = new PlacesManager();
+    private Manager volunteerManager = new VolunteerManager();
   
 
     public ConfigService(Socket socket, Gson gson){
@@ -243,8 +247,40 @@ public class ConfigService extends Service<Void>{
     }
 
     private void addVolunteer() {
-        write("addVOl",false);
+        write("\nInserire nome del volontario", true);
+        String name = "";
+        try {
+            name = read();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (!checkIfVolunteersExist(name)) {
+            addVolunteerWithName(name);
+            
+        } else {
+            write("Volontario già esistente", false);
+        }
     }   
+
+    private boolean checkIfVolunteersExist(String name) {
+        if(volunteerManager.exists(name)){
+            return true;
+        }
+        return false;
+    }
+
+    private void addVolunteerWithName(String name) {
+        VolunteerData volunteer = new VolunteerData(name);
+        dataLayer.add(new JSONDataContainer("JF/volunteers.json", JSONUtil.createJson(volunteer), "volunteers"));
+        addNewVolunteerUserProfile(name);
+    }
+
+    private void addNewVolunteerUserProfile(String name) {
+        String tempPass = "temp" + Math.random();
+        User u = new User(name, tempPass, "volontario");
+        dataLayer.add(new JSONDataContainer("JF/users.json", JSONUtil.createJson(u), "users"));
+    }
 
     private void addPlace(){
         boolean continuare = false;
@@ -330,12 +366,32 @@ public class ConfigService extends Service<Void>{
             int maxPartecipanti = Integer.parseInt(read());
             write("\nInserire numero minimo partecipanti", true);
             int minPartecipanti = Integer.parseInt(read());
-            activity = new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti);
+            String[] volunteers = addVolunteersToActivity();
+            activity = new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti, volunteers);
             dataLayer.add(new JSONDataContainer("JF/activities.json", JSONUtil.createJson(activity), "activities"));
         } catch (IOException e) {
             e.printStackTrace();
         }       
       
+    }
+
+    private String[] addVolunteersToActivity() throws IOException {
+        ArrayList<String> volunteers = new ArrayList<>();
+        do{
+            showVolunteers();
+            write("\nInserire volontario da agggiungere all'attività", true);
+            String vol = read();
+            if(checkIfVolunteersExist(vol)){
+               volunteers.add(vol);
+            }else{
+                write("Volontario non esistente, si vuole creare un nuovo volontario? (s/n)", true);
+                if(read().equals("s")){
+                    addVolunteerWithName(vol);
+                }
+            }
+        }while(continueChoice("aggiunta volontari all'attività"));
+        return volunteers.toArray(new String[volunteers.size()]);
+        
     }
 
     private Address getMeetingPoint(Place p) throws IOException {

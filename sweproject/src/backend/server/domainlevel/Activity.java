@@ -14,10 +14,11 @@ public class Activity {
     private boolean bigliettoNecessario;
     private int maxPartecipanti;
     private int minPartecipanti;
+    private String[] volunteers;
 
     public Activity(String placeName, String title, String description, Address meetingPoint,
     String firstProgrammableDate, String lastProgrammableDate, String[] programmableDays,
-    String programmableHour, String duration, boolean bigliettoNecessario, int maxPartecipanti, int minPartecipanti){
+    String programmableHour, String duration, boolean bigliettoNecessario, int maxPartecipanti, int minPartecipanti, String[] volunteers) {
        
         this.placeName = placeName;
         this.title = title;
@@ -31,6 +32,7 @@ public class Activity {
         this.bigliettoNecessario = bigliettoNecessario;
         this.maxPartecipanti = maxPartecipanti;
         this.minPartecipanti = minPartecipanti;
+        this.volunteers = volunteers;
     }
 
     public String getPlaceName() {
@@ -127,5 +129,13 @@ public class Activity {
 
     public void setMinPartecipanti(int minPartecipanti) {
         this.minPartecipanti = minPartecipanti;
+    }
+
+    public String[] getVolunteers() {
+        return volunteers;
+    }
+
+    public void setVolunteers(String[] volunteers) {
+        this.volunteers = volunteers;
     }
 }

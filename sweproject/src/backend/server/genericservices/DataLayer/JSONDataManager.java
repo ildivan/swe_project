@@ -109,6 +109,9 @@ public class JSONDataManager implements DataLayer {
         List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
 
         for (JsonObject o : list) {
+            if(o.get(dataContainer.getKeyDesc()) == null){
+                return null;
+            }
             if (o.get(dataContainer.getKeyDesc()).getAsString().equals(dataContainer.getKey())) {
                 return o;
             }

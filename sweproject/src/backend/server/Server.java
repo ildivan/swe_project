@@ -120,10 +120,10 @@ public class Server {
         Configs configs = new Configs();
 
         //togli il commento sotto per partire senza dover inserire i luoghi
-        //configs.setPlacesFirtsConfigured(true);
+        configs.setPlacesFirtsConfigured(true);
 
         //togli il commento sotto per partire senza dover iserire attivita su luoghi (non necessario)
-       // configs.setActivitiesFirtsConfigured(true);
+        configs.setActivitiesFirtsConfigured(true);
 
         
         String StringJO = new String();
