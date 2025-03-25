@@ -1,1 +1,59 @@
-{"users":[{"name":"CT","password":"$2a$12$SXxe9/MMAE3ih7wa/T70v.iVQOz0qrgqWDxjloJ.MTTUMw4rcONKq","role":"configuratore"},{"name":"CT2","password":"$2a$12$eUnvB.08Z4KxIGATkf88a.i0XGa.HzBG36wVjkWsHpTdcuzKK4BE2","role":"configuratore"},{"name":"CT3","password":"temp_p3","role":"configuratore"},{"name":"marco","password":"temp0.470003500248675","role":"volontario"},{"name":"lucia","password":"temp0.822318206305791","role":"volontario"},{"name":"marta","password":"temp0.2875994644928289","role":"volontario"},{"name":"luca","password":"temp0.9610413940195237","role":"volontario"},{"name":"marco","password":"temp0.7020955586755712","role":"volontario"},{"name":"luca","password":"temp0.9579170288159027","role":"volontario"},{"name":"luca","password":"temp0.7291923414518343","role":"volontario"}]}
+{
+  "users": [
+    {
+      "name": "CT",
+      "password": "$2a$12$SXxe9/MMAE3ih7wa/T70v.iVQOz0qrgqWDxjloJ.MTTUMw4rcONKq",
+      "role": "configuratore"
+    },
+    {
+      "name": "CT3",
+      "password": "temp_p3",
+      "role": "configuratore"
+    },
+    {
+      "name": "marco",
+      "password": "temp0.470003500248675",
+      "role": "volontario"
+    },
+    {
+      "name": "lucia",
+      "password": "temp0.822318206305791",
+      "role": "volontario"
+    },
+    {
+      "name": "marta",
+      "password": "temp0.2875994644928289",
+      "role": "volontario"
+    },
+    {
+      "name": "luca",
+      "password": "temp0.9610413940195237",
+      "role": "volontario"
+    },
+    {
+      "name": "marco",
+      "password": "temp0.7020955586755712",
+      "role": "volontario"
+    },
+    {
+      "name": "luca",
+      "password": "temp0.9579170288159027",
+      "role": "volontario"
+    },
+    {
+      "name": "luca",
+      "password": "temp0.7291923414518343",
+      "role": "volontario"
+    },
+    {
+      "name": "riccardo",
+      "password": "temp_0.20520613396943999",
+      "role": "volontario"
+    },
+    {
+      "name": "CT3",
+      "password": "temp_p3",
+      "role": "configuratore"
+    }
+  ]
+}

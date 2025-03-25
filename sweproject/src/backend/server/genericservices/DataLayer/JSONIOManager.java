@@ -8,7 +8,7 @@ import java.nio.file.*;
 import java.util.*;
 
 public class JSONIOManager {
-    private Gson gson = new Gson();
+    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {

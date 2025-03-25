@@ -17,7 +17,7 @@ import java.net.*;
 
 public class Server {
 
-    private static final boolean NO_CONFIG_NEEDED = true; //true e non devi fare le prime configurazioni di luoghi, attività, luogo di attivita e massimo numero iscrizioni
+    private static final boolean CONFIG_NEEDED = false; //false e non devi fare le prime configurazioni di luoghi, attività, luogo di attivita e massimo numero iscrizioni
 
     private final int ClientPort;
     private final int ServerTerminalPort;
@@ -121,7 +121,7 @@ public class Server {
 
         Configs configs = new Configs();
 
-        if(NO_CONFIG_NEEDED){
+        if(!CONFIG_NEEDED){
            
             configs.setPlacesFirtsConfigured(true);
             configs.setActivitiesFirtsConfigured(true);
