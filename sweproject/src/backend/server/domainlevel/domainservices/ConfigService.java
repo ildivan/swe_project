@@ -27,10 +27,12 @@ public class ConfigService extends Service<Void>{
     private DataLayer dataLayer = new JSONDataManager();
     private Manager placesManager = new PlacesManager();
     private Manager volunteerManager = new VolunteerManager();
+    private String configType;
   
 
-    public ConfigService(Socket socket, Gson gson){
+    public ConfigService(Socket socket, Gson gson, String configType) {
         super(socket);
+        this.configType = configType;
         //TODO avere un json che contiene le varie chiamate hai metodi e se sono visibili o no
         vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
         vociVisibili.put("Aggiungi Volontario", true);
@@ -54,7 +56,7 @@ public class ConfigService extends Service<Void>{
         boolean continuare = true;
         do{
             //ANDR GESTITO IL TEMPO IN QUELCHE MODO QUA
-            if(!checkIfConfigured(USER_KEY_DESC)){
+            if(configType.equalsIgnoreCase("normalFunctionConfigs")){
                 if(firstTimeConfiguration()){
                     write("Configurazione base completata", false);
                 }else{
@@ -62,6 +64,7 @@ public class ConfigService extends Service<Void>{
                     return null;
                 }
             };
+
             startMenu();
             continuare = continueChoice("scelta operazioni");
         }while(continuare);
@@ -135,7 +138,7 @@ public class ConfigService extends Service<Void>{
      */
     private boolean checkIfConfigured(String keyDesc) {
         JsonObject JO = new JsonObject();
-        JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
+        JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", configType, "configType"));
         return JO.get(keyDesc).getAsBoolean();
     }
 
@@ -173,38 +176,40 @@ public class ConfigService extends Service<Void>{
      */
     private boolean firstTimeConfiguration(){
         try {
-        write("Prima configurazione necessaria:", false);
-        String areaOfIntrest = configureArea();
-        Integer maxSubscriptions = configureMaxSubscriptions();
+            write("Prima configurazione necessaria:", false);
+            String areaOfIntrest = configureArea();
+            Integer maxSubscriptions = configureMaxSubscriptions();
+    
+            //richiesta la configurazone dei luoghi e delle attivita
+            //in base a come vanno le due cose sopra, modifico i config in un metodo a parte
+            Configs configs = new Configs();
+            configs.setUserConfigured(true);
+            configs.setAreaOfIntrest(areaOfIntrest);
+            configs.setMaxSubscriptions(maxSubscriptions);
+    
+       
+            if(!checkIfConfigured(PLACE_KEY_DESC)){
+                write("Inizio prima configurazione luoghi", false);
+                addPlace();
+                configs.setPlacesFirtsConfigured(true);
+            }
+                //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
+            if(!checkIfConfigured(ACTIVITY_KEY_DESC)){
+                write("Inizio prima configurazione attività", false);
+                addActivity();
+                configs.setActivitiesFirtsConfigured(true);
+            }
+            
+            String StringJO = new String();
+            StringJO = gson.toJson(configs);
+            JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
+            
+            JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs", "normalFunctionConfigs", "configType");
+            dataLayer.modify(dataContainer);
+            
+            return true;
+            
 
-        //richiesta la configurazone dei luoghi e delle attivita
-        //in base a come vanno le due cose sopra, modifico i config in un metodo a parte
-        Configs configs = new Configs();
-        configs.setUserConfigured(true);
-        configs.setAreaOfIntrest(areaOfIntrest);
-        configs.setMaxSubscriptions(maxSubscriptions);
-
-   
-       if(!checkIfConfigured(PLACE_KEY_DESC)){
-            write("Inizio prima configurazione luoghi", false);
-            addPlace();
-            configs.setPlacesFirtsConfigured(true);
-       }
-       //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
-        if(!checkIfConfigured(ACTIVITY_KEY_DESC)){
-            write("Inizio prima configurazione attività", false);
-            addActivity();
-            configs.setActivitiesFirtsConfigured(true);
-        }
-
-        String StringJO = new String();
-        StringJO = gson.toJson(configs);
-        JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
-
-        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","normalFunctionConfigs", "configType");
-        dataLayer.modify(dataContainer);
-
-        return true;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -248,14 +253,14 @@ public class ConfigService extends Service<Void>{
             e.printStackTrace();
         }
 
-        JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "normalFunctionConfigs", "configType"));
+        JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", configType, "configType"));
        // Configs configs = gson.fromJson(oldConfigsJO, Configs.class);
         Configs configs;
         configs = JSONUtil.createObject(oldConfigsJO, Configs.class);
         configs.setMaxSubscriptions(n);
         JsonObject newConfigsJO = JSONUtil.createJson(configs);
 
-        dataLayer.modify(new JSONDataContainer("JF/configs.json", newConfigsJO, "configs","normalFunctionConfigs", "configType"));
+        dataLayer.modify(new JSONDataContainer("JF/configs.json", newConfigsJO, "configs",configType, "configType"));
     }
 
     /**
@@ -360,13 +365,18 @@ public class ConfigService extends Service<Void>{
      * method to add a new activity to the database
      */
     private void addActivity() {
+        boolean jump = false;
         if(placesManager.checkIfThereIsSomethingWithCondition()){
             write("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
             addActivityOnNoConfiguredPlaces();
+            jump = true;
         }
 
         try{
             do{
+                if(jump){
+                    continue;
+                }
                 showPlaces();
                 write("\nInserire luogo per l'attività", true);
                 String placeName = read();

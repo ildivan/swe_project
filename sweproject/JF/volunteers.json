@@ -1,1 +1,24 @@
-{"volunteers":[{"name":"marco","disponibilityDays":[]},{"name":"lucia","disponibilityDays":[]},{"name":"marta","disponibilityDays":[]},{"name":"luca","disponibilityDays":[]},{"name":"riccardo","disponibilityDays":[]}]}
+{
+    "volunteers": [
+        {
+            "name": "marco",
+            "disponibilityDays": []
+        },
+        {
+            "name": "lucia",
+            "disponibilityDays": []
+        },
+        {
+            "name": "marta",
+            "disponibilityDays": []
+        },
+        {
+            "name": "luca",
+            "disponibilityDays": []
+        },
+        {
+            "name": "riccardo",
+            "disponibilityDays": []
+        }
+    ]
+}

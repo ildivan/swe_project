@@ -17,8 +17,6 @@ import java.net.*;
 
 public class Server {
 
-    private static final boolean CONFIG_NEEDED = false; //false e non devi fare le prime configurazioni di luoghi, attività, luogo di attivita e massimo numero iscrizioni
-
     private final int ClientPort;
     private final int ServerTerminalPort;
     private final Gson gson;
@@ -30,15 +28,16 @@ public class Server {
        // this.planManager = new PlanManager();
     }
 
-    public void startServer(){
+    public void startServer(String configType){
         try (ServerSocket clientSS = new ServerSocket(ClientPort);
             ServerSocket serverTerminalSS = new ServerSocket(ServerTerminalPort)) {
-
             System.out.println("Server is listening on port " + ClientPort);
             System.out.println("Server is listening on port " + ServerTerminalPort);
 
-            firstTimeConfiguration();
-            System.out.println("First time default configuration completed");
+            if(configType.equals(ConfigType.NORMAL.getValue())){
+                firstTimeConfiguration();
+                System.out.println("First time default configuration completed");
+            }
 
             Thread internalConnectionThread = new Thread(() -> {
                 try {
@@ -56,7 +55,7 @@ public class Server {
                         Thread serviceThread = new Thread(() -> {
                             try {
                                 // Ottieni il servizio associato all'utente e alla connessione
-                                Service<?> s = obtainService(u, socket);
+                                Service<?> s = obtainService(u, socket, configType);
                                 s.run();  // Esegui il servizio
                             } finally {
                                 try {
@@ -97,10 +96,10 @@ public class Server {
         return login.run();
     }
 
-    private Service<?> obtainService(User u, Socket socket){
+    private Service<?> obtainService(User u, Socket socket, String configType){
         switch (u.getRole()){
             case "configuratore":
-                return new ConfigService(socket,gson);
+                return new ConfigService(socket,gson,configType);
             case "volontario":
                 //return new VolunteerService(socket,gson);
             case "fruitore":
@@ -120,24 +119,12 @@ public class Server {
         }
 
         Configs configs = new Configs();
-
-        if(!CONFIG_NEEDED){
-           
-            configs.setPlacesFirtsConfigured(true);
-            configs.setActivitiesFirtsConfigured(true);
-            configs.setAreaOfIntrest("Brescia");
-            configs.setMaxSubscriptions(12);
-            configs.setUserConfigured(true);
-
-        }
-
-        
         
         String StringJO = new String();
         StringJO = gson.toJson(configs);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
         
-        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs","normalFunctionConfigs", "configType");
+        JSONDataContainer dataContainer = new JSONDataContainer("JF/configs.json", JO, "configs", ConfigType.NORMAL.getValue(), "configType");
         
         dl.modify(dataContainer);
     }
@@ -146,8 +133,10 @@ public class Server {
         // String currentDir = System.getProperty("user.dir");
         // System.out.println("La directory di lavoro corrente è: " + currentDir);
 
+        //String configType = ConfigType.NORMAL.getValue();
+        String configType = ConfigType.NO_FIRST_CONFIG.getValue();
         Server s = new Server(5001,6001);
-        s.startServer();
+        s.startServer(configType);
     }
 
 }

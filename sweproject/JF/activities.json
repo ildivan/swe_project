@@ -1,204 +1,262 @@
 {
-    "activities": [
-        {
-            "placeName": "Piazza della Loggia",
-            "title": "Tour Completo Piazza delle Loggia",
-            "description": "Un tour che esplora la storia e l'architettura della piazza centrale di Brescia.",
-            "meetingPoint": {
-                "street": "Piazza della Loggia",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "01-04-2025",
-            "lastProgrammableDate": "01-10-2025",
-            "programmableDays": ["Sabato", "Martedi"],
-            "programmableHour": "09:00",
-            "duration": "02:00",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 20,
-            "minPartecipanti": 5,
-            "volunteers": ["Marco", "Luca"]
-        },
-        {
-            "placeName": "Piazza della Loggia",
-            "title": "Visita Storica alla Torre dell'Orologio",
-            "description": "Scopri la storia della Torre dell'Orologio, una delle principali attrazioni storiche di Brescia.",
-            "meetingPoint": {
-                "street": "Piazza della Loggia",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "02-04-2025",
-            "lastProgrammableDate": "01-10-2025",
-            "programmableDays": ["Domenica", "Giovedi"],
-            "programmableHour": "16:00",
-            "duration": "01:30",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 15,
-            "minPartecipanti": 5,
-            "volunteers": ["Lucia", "Marta"]
-        },
-        {
-            "placeName": "Castello di Brescia",
-            "title": "Visita Guidata al Castello di Brescia",
-            "description": "Esplora il Castello di Brescia, un'antica fortezza con un panorama mozzafiato sulla città.",
-            "meetingPoint": {
-                "street": "Castello di Brescia",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "10-04-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Domenica", "Giovedi"],
-            "programmableHour": "11:00",
-            "duration": "03:00",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 15,
-            "minPartecipanti": 5,
-            "volunteers": ["Marta", "Luca"]
-        },
-        {
-            "placeName": "Castello di Brescia",
-            "title": "Passeggiata al Parco del Castello",
-            "description": "Un'esperienza immersiva nel verde del parco che circonda il Castello di Brescia.",
-            "meetingPoint": {
-                "street": "Castello di Brescia",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "15-04-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Lunedi", "Venerdi"],
-            "programmableHour": "15:00",
-            "duration": "02:00",
-            "bigliettoNecessario": false,
-            "maxPartecipanti": 20,
-            "minPartecipanti": 5,
-            "volunteers": ["Marco", "Lucia"]
-        },
-        {
-            "placeName": "Museo di Santa Giulia",
-            "title": "Tour del Museo di Santa Giulia",
-            "description": "Scopri la storia antica di Brescia con una visita al Museo di Santa Giulia, sito UNESCO.",
-            "meetingPoint": {
-                "street": "Via dei Musei, 81/b",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "15-04-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Lunedi", "Venerdi"],
-            "programmableHour": "10:00",
-            "duration": "02:30",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 25,
-            "minPartecipanti": 5,
-            "volunteers": ["Lucia", "Marta"]
-        },
-        {
-            "placeName": "Museo di Santa Giulia",
-            "title": "Visita alla Chiesa di San Salvatore",
-            "description": "Visita la Chiesa di San Salvatore all'interno del Museo di Santa Giulia e scopri la sua storia.",
-            "meetingPoint": {
-                "street": "Via dei Musei, 81/b",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "16-04-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Martedi", "Giovedi"],
-            "programmableHour": "13:00",
-            "duration": "01:30",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 20,
-            "minPartecipanti": 5,
-            "volunteers": ["Marco", "Lucia"]
-        },
-        {
-            "placeName": "Teatro Grande",
-            "title": "Visita al Teatro Grande di Brescia",
-            "description": "Un tour guidato all'interno del teatro storico di Brescia, esplorando la sua architettura e la storia culturale.",
-            "meetingPoint": {
-                "street": "Piazza Cesare Beccaria",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "01-05-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Mercoledi", "Sabato"],
-            "programmableHour": "14:00",
-            "duration": "01:30",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 20,
-            "minPartecipanti": 10,
-            "volunteers": ["Luca", "Marta"]
-        },
-        {
-            "placeName": "Teatro Grande",
-            "title": "Spettacolo Teatrale al Teatro Grande",
-            "description": "Un'esperienza immersiva con uno spettacolo teatrale all'interno del famoso teatro di Brescia.",
-            "meetingPoint": {
-                "street": "Piazza Cesare Beccaria",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25121"
-            },
-            "firstProgrammableDate": "10-05-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Venerdi", "Domenica"],
-            "programmableHour": "20:30",
-            "duration": "02:00",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 100,
-            "minPartecipanti": 5,
-            "volunteers": ["Marta"]
-        },
-        {
-            "placeName": "Lago di Garda",
-            "title": "Escursione al Lago di Garda",
-            "description": "Partecipa a una passeggiata panoramica lungo il Lago di Garda, godendo della bellezza naturale del lago.",
-            "meetingPoint": {
-                "street": "Lago di Garda",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25015"
-            },
-            "firstProgrammableDate": "01-06-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Domenica", "Venerdi"],
-            "programmableHour": "08:00",
-            "duration": "05:00",
-            "bigliettoNecessario": false,
-            "maxPartecipanti": 25,
-            "minPartecipanti": 10,
-            "volunteers": ["Lucia", "Marco"]
-        },
-        {
-            "placeName": "Lago di Garda",
-            "title": "Tour in Barca sul Lago di Garda",
-            "description": "Un tour guidato in barca sul Lago di Garda, per scoprire le meraviglie naturali e storiche del lago.",
-            "meetingPoint": {
-                "street": "Lago di Garda",
-                "city": "Brescia",
-                "state": "Italia",
-                "zipCode": "25015"
-            },
-            "firstProgrammableDate": "01-06-2025",
-            "lastProgrammableDate": "30-09-2025",
-            "programmableDays": ["Sabato", "Domenica"],
-            "programmableHour": "09:30",
-            "duration": "03:00",
-            "bigliettoNecessario": true,
-            "maxPartecipanti": 15,
-            "minPartecipanti": 5,
-            "volunteers": ["Marco"]
-        }
-    ]
+  "activities": [
+    {
+      "placeName": "Piazza della Loggia",
+      "title": "Tour Completo Piazza delle Loggia",
+      "description": "Un tour che esplora la storia e l\u0027architettura della piazza centrale di Brescia.",
+      "meetingPoint": {
+        "street": "Piazza della Loggia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "01-04-2025",
+      "lastProgrammableDate": "01-10-2025",
+      "programmableDays": [
+        "Sabato",
+        "Martedi"
+      ],
+      "programmableHour": "09:00",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Piazza della Loggia",
+      "title": "Visita Storica alla Torre dell\u0027Orologio",
+      "description": "Scopri la storia della Torre dell\u0027Orologio, una delle principali attrazioni storiche di Brescia.",
+      "meetingPoint": {
+        "street": "Piazza della Loggia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "02-04-2025",
+      "lastProgrammableDate": "01-10-2025",
+      "programmableDays": [
+        "Domenica",
+        "Giovedi"
+      ],
+      "programmableHour": "16:00",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 15,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Castello di Brescia",
+      "title": "Visita Guidata al Castello di Brescia",
+      "description": "Esplora il Castello di Brescia, un\u0027antica fortezza con un panorama mozzafiato sulla città.",
+      "meetingPoint": {
+        "street": "Castello di Brescia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "10-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Domenica",
+        "Giovedi"
+      ],
+      "programmableHour": "11:00",
+      "duration": "03:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 15,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marta",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Castello di Brescia",
+      "title": "Passeggiata al Parco del Castello",
+      "description": "Un\u0027esperienza immersiva nel verde del parco che circonda il Castello di Brescia.",
+      "meetingPoint": {
+        "street": "Castello di Brescia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "15-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Venerdi"
+      ],
+      "programmableHour": "15:00",
+      "duration": "02:00",
+      "bigliettoNecessario": false,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Museo di Santa Giulia",
+      "title": "Tour del Museo di Santa Giulia",
+      "description": "Scopri la storia antica di Brescia con una visita al Museo di Santa Giulia, sito UNESCO.",
+      "meetingPoint": {
+        "street": "Via dei Musei, 81/b",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "15-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Venerdi"
+      ],
+      "programmableHour": "10:00",
+      "duration": "02:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 25,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Museo di Santa Giulia",
+      "title": "Visita alla Chiesa di San Salvatore",
+      "description": "Visita la Chiesa di San Salvatore all\u0027interno del Museo di Santa Giulia e scopri la sua storia.",
+      "meetingPoint": {
+        "street": "Via dei Musei, 81/b",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "16-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi"
+      ],
+      "programmableHour": "13:00",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Teatro Grande",
+      "title": "Visita al Teatro Grande di Brescia",
+      "description": "Un tour guidato all\u0027interno del teatro storico di Brescia, esplorando la sua architettura e la storia culturale.",
+      "meetingPoint": {
+        "street": "Piazza Cesare Beccaria",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "01-05-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Mercoledi",
+        "Sabato"
+      ],
+      "programmableHour": "14:00",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Luca",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Teatro Grande",
+      "title": "Spettacolo Teatrale al Teatro Grande",
+      "description": "Un\u0027esperienza immersiva con uno spettacolo teatrale all\u0027interno del famoso teatro di Brescia.",
+      "meetingPoint": {
+        "street": "Piazza Cesare Beccaria",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "10-05-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Venerdi",
+        "Domenica"
+      ],
+      "programmableHour": "20:30",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 100,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Lago di Garda",
+      "title": "Escursione al Lago di Garda",
+      "description": "Partecipa a una passeggiata panoramica lungo il Lago di Garda, godendo della bellezza naturale del lago.",
+      "meetingPoint": {
+        "street": "Lago di Garda",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25015"
+      },
+      "firstProgrammableDate": "01-06-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Domenica",
+        "Venerdi"
+      ],
+      "programmableHour": "08:00",
+      "duration": "05:00",
+      "bigliettoNecessario": false,
+      "maxPartecipanti": 25,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Lucia",
+        "Marco"
+      ]
+    },
+    {
+      "placeName": "Lago di Garda",
+      "title": "Tour in Barca sul Lago di Garda",
+      "description": "Un tour guidato in barca sul Lago di Garda, per scoprire le meraviglie naturali e storiche del lago.",
+      "meetingPoint": {
+        "street": "Lago di Garda",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25015"
+      },
+      "firstProgrammableDate": "01-06-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Sabato",
+        "Domenica"
+      ],
+      "programmableHour": "09:30",
+      "duration": "03:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 15,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco"
+      ]
+    }
+  ]
 }

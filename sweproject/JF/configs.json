@@ -1,1 +1,18 @@
-{"configs":[{"configType":"normalFunctionConfigs","userConfigured":true,"areaOfIntrest":"Brescia","maxSubscriptions":23,"placesFirtsConfigured":true,"activitiesFirtsConfigured":true}]}
+{
+  "configs": [
+    {
+      "configType": "normalFunctionConfigs",
+      "userConfigured": false,
+      "placesFirtsConfigured": false,
+      "activitiesFirtsConfigured": false
+    },
+    {
+      "configType": "noFirstConfig",
+      "userConfigured": true,
+      "areaOfIntrest": "Brescia",
+      "maxSubscriptions": 12,
+      "placesFirtsConfigured": true,
+      "activitiesFirtsConfigured": true
+    }
+  ]
+}
