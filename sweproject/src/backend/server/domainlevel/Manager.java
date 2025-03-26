@@ -9,9 +9,9 @@ public interface Manager {
     public void remove(JsonObject data);
     public void update(JsonObject data);
     public JsonObject get(String key);
-    public void getAll(JsonObject data);
     public boolean exists(String key);
     public boolean checkIfThereIsSomethingWithCondition();
     public List<?> getCustomList();
+    public String getAll();
 
 }

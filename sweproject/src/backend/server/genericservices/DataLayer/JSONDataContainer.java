@@ -30,6 +30,11 @@ public class JSONDataContainer {
         this.memberName = memberName;
     }
 
+    public JSONDataContainer(String path, String memberName) {
+        this.path = path;
+        this.memberName = memberName;
+    }
+
     public JSONDataContainer(String path) {
         this.path = path;
     }

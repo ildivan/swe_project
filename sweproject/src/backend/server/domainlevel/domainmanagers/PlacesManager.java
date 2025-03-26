@@ -6,11 +6,13 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.Place;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataContainer;
 import backend.server.genericservices.DataLayer.JSONDataManager;
+import backend.server.genericservices.DataLayer.JSONUtil;
 
 public class PlacesManager implements Manager {
     private static final String PATH = "JF/places.json";
@@ -42,9 +44,15 @@ public class PlacesManager implements Manager {
     }
 
     @Override
-    public void getAll(JsonObject data) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+    public String getAll() {
+        String out = "";
+        List<JsonObject> places = dataLayer.getAll(new JSONDataContainer(PATH, MEMBER_NAME));
+        for (JsonObject jo : places){
+            Place a = JSONUtil.createObject(jo, Place.class);
+            out = out + a.toString();
+        }
+
+        return out;
     }
 
     @Override

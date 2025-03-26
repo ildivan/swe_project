@@ -158,6 +158,15 @@ public class JSONDataManager implements DataLayer {
         return result.isEmpty() ? null : result; 
     }
     
+    /**
+     * mettere path e membername
+     * @param dataContainer
+     * @return
+     */
+    @Override
+    public List<JsonObject> getAll(JSONDataContainer dataContainer){
+        return fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+    }
 
 }
 

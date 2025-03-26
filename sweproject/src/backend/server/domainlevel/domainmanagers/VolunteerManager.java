@@ -5,10 +5,14 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Manager;
+import backend.server.domainlevel.User;
+import backend.server.domainlevel.VolunteerData;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataContainer;
 import backend.server.genericservices.DataLayer.JSONDataManager;
+import backend.server.genericservices.DataLayer.JSONUtil;
 
 public class VolunteerManager implements Manager{
     private static final String PATH = "JF/volunteers.json";
@@ -21,6 +25,7 @@ public class VolunteerManager implements Manager{
     @Override
     public void add(JsonObject data) {
         dataLayer.add(new JSONDataContainer(PATH, data, MEMBER_NAME));
+        VMIOUtil.addNewVolunteerUserProfile(JSONUtil.createObject(data, VolunteerData.class).getName());
     }
 
     @Override
@@ -42,9 +47,15 @@ public class VolunteerManager implements Manager{
     }
 
     @Override
-    public void getAll(JsonObject data) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
+    public String getAll() {
+       String out = "";
+        List<JsonObject> volunteers = dataLayer.getAll(new JSONDataContainer(PATH, MEMBER_NAME));
+        for (JsonObject jo : volunteers){
+            VolunteerData a = JSONUtil.createObject(jo, VolunteerData.class);
+            out = out + a.toString();
+        }
+
+        return out;
     }
 
     @Override
@@ -67,5 +78,7 @@ public class VolunteerManager implements Manager{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getCustomList'");
     }
+
+
 
 }

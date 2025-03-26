@@ -12,13 +12,13 @@ import com.google.gson.JsonObject;
 import backend.server.Configs;
 import backend.server.domainlevel.*;
 import backend.server.domainlevel.domainmanagers.*;
+import backend.server.genericservices.IOUtil;
 import backend.server.genericservices.Service;
 import backend.server.genericservices.DataLayer.*;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
-    private static final String QUESTION = "\n\nInserire scelta: ";
-    private static final String USER_KEY_DESC = "userConfigured";
+    private static final String QUESTION = "\n\nInserire scelta: (0 per uscire)";
     private static final String PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
 
@@ -27,24 +27,33 @@ public class ConfigService extends Service<Void>{
     private DataLayer dataLayer = new JSONDataManager();
     private Manager placesManager = new PlacesManager();
     private Manager volunteerManager = new VolunteerManager();
+    private Manager activityManager = new ActivityManager(); 
     private String configType;
   
 
     public ConfigService(Socket socket, Gson gson, String configType) {
         super(socket);
         this.configType = configType;
-        //TODO avere un json che contiene le varie chiamate hai metodi e se sono visibili o no
+        //TODO avere un json che contiene le varie chiamate hai metodi e se sono visibili o n
         vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
         vociVisibili.put("Aggiungi Volontario", true);
         vociVisibili.put("Aggiungi Luogo", true);
+        vociVisibili.put("Aggiungi Attività", true);
         vociVisibili.put("Mostra Volontari", true);
         vociVisibili.put("Mostra Luoghi", true);
+        vociVisibili.put("Mostra Attività", true);
+        vociVisibili.put("Genera Piano Mensile", true);
         
         chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", this::modNumMaxSub);
         chiamateMetodi.put("Aggiungi Volontario", this::addVolunteer);
         chiamateMetodi.put("Aggiungi Luogo", this::addPlace);
+        chiamateMetodi.put("Aggiungi Attività", this::addActivity);
         chiamateMetodi.put("Mostra Volontari", this::showVolunteers);
         chiamateMetodi.put("Mostra Luoghi", this::showPlaces);
+        chiamateMetodi.put("Mostra Attività", this::showActivities);
+        chiamateMetodi.put("Genera Piano Mensile", this::generateMonthlyPlan);
+        
+
     }
     /**
      * apply the logic of the service
@@ -65,8 +74,12 @@ public class ConfigService extends Service<Void>{
                 }
             };
 
-            startMenu();
-            continuare = continueChoice("scelta operazioni");
+            if(startMenu()){
+                continuare = continueChoice("scelta operazioni");
+            }else{
+                continuare = false;
+            }
+            
         }while(continuare);
         write("\nArrivederci!\n", false);
 
@@ -75,19 +88,22 @@ public class ConfigService extends Service<Void>{
     
     /**
      * start the menu keeping the user in a loop until he decides to exit
-     * @throws IOException
+     * 
      */
-    private void startMenu() throws IOException {
+    private boolean startMenu() {
         //da implemetare il controllo sull'inserimento dell'intero
         List<String> menu = buildMenu();
         String Smenu = menuToString(menu);
         boolean sceltaValida = true;
+        int choice = 1000;
         
         do{
-            write(Smenu + QUESTION, true);
-            int choice = Integer.parseInt(read());
-    
-            if (choice >= 1 && choice <= menu.size()) {
+            choice = IOUtil.readInteger(Smenu + QUESTION);
+        
+            if (choice >= 0 && choice <= menu.size()) {
+                if(choice == 0){
+                    return false;
+                }
                 sceltaValida = true;
                 String sceltaStringa = menu.get(choice - 1);
                 chiamateMetodi.get(sceltaStringa).run();
@@ -97,6 +113,7 @@ public class ConfigService extends Service<Void>{
                 write("Scelta non valida, riprovare", false);
             }
         }while(!sceltaValida);
+        return true;
         
     }
 
@@ -141,34 +158,6 @@ public class ConfigService extends Service<Void>{
         JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", configType, "configType"));
         return JO.get(keyDesc).getAsBoolean();
     }
-
-    /**
-     * check if the places are already configured - only the first configuration
-     * @return true if the places are already configured - for the first configuration
-     */
-    // private boolean checkIfPlacesConfigured() {
-    
-    //     JsonObject JO = new JsonObject();
-    //     JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "placesFirtsConfigured"));
-    //      if(JO==null){
-    //        return true;
-    //      }
-    //     return false;
-    // }
-
-    /**
-     * check if the places are already configured - only the first configuration
-     * @return true if the places are already configured - for the first configuration
-     */
-    // private boolean checkIfActivityConfigured() {
-    
-    //     JsonObject JO = new JsonObject();
-    //     JO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", "false", "activitiesFirtsConfigured"));
-    //      if(JO==null){
-    //        return true;
-    //      }
-    //     return false;
-    // }
 
     /**
      * starts the first configuration of areaofintrest maxsubscriptions, places and activities related
@@ -223,10 +212,7 @@ public class ConfigService extends Service<Void>{
      * @throws IOException
      */
     private String configureArea() throws IOException{
-        write("Inserire luogo di esercizio", true);
-        String areaOfIntrest = null;
-        areaOfIntrest = read();
-        return areaOfIntrest;
+        return IOUtil.readString("Inserire luogo di esercizio");
     }
     
     /**
@@ -235,23 +221,14 @@ public class ConfigService extends Service<Void>{
      * @throws IOException
      */
     private Integer configureMaxSubscriptions() throws IOException{
-        write("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", true);
-        Integer maxSubscriptions = Integer.parseInt(read());
-        return maxSubscriptions;
+        return IOUtil.readInteger("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa");
     }
 
     /**
      * method to modify the max number of subscriptions
      */
     private void modNumMaxSub(){
-        write("\nInserire nuovo numero di iscrizioni massime",true);
-        Integer n = 0;
-        try {
-            n = Integer.parseInt(read());
-        } catch (NumberFormatException | IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        Integer n = IOUtil.readInteger("\nInserire nuovo numero di iscrizioni massime");
 
         JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", configType, "configType"));
        // Configs configs = gson.fromJson(oldConfigsJO, Configs.class);
@@ -269,54 +246,13 @@ public class ConfigService extends Service<Void>{
      * ideally the configurator adds the volunteer and then he tells the volunteer the temporarly password generated
      */
     private void addVolunteer() {
-        write("\nInserire nome del volontario", true);
-        String name = "";
-        try {
-            name = read();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        if (!checkIfVolunteersExist(name)) {
-            addVolunteerWithName(name);
-            
+        String name = IOUtil.readString("\nInserire nome del volontario");
+        if (!volunteerManager.exists(name)) {
+            volunteerManager.add(JSONUtil.createJson(new VolunteerData(name)));
         } else {
-            write("Volontario già esistente", false);
+            write("\nVolontario già esistente", false);
         }
     }   
-
-    /**
-     * method to check if a volunteer already exists
-     * @param name name of the volunteer to check
-     * @return true if the volunteer already exists
-     */
-    private boolean checkIfVolunteersExist(String name) {
-        if(volunteerManager.exists(name)){
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * method to add a volunteer to the database both volunteers and users calling the method to add the user profile
-     * @param name
-     */
-    private void addVolunteerWithName(String name) {
-        VolunteerData volunteer = new VolunteerData(name);
-        dataLayer.add(new JSONDataContainer("JF/volunteers.json", JSONUtil.createJson(volunteer), "volunteers"));
-        addNewVolunteerUserProfile(name);
-    }
-
-    /**
-     * method to add a new user profile to user database creating a new random password
-     * @param name
-     */
-    private void addNewVolunteerUserProfile(String name) {
-        String tempPass = "temp_" + Math.random();
-        write(String.format("Nova password temporanea per volontario: %s\n%s", name, tempPass), false);
-        User u = new User(name, tempPass, "volontario");
-        dataLayer.add(new JSONDataContainer("JF/users.json", JSONUtil.createJson(u), "users"));
-    }
 
     /**
      * method to add a new place to the database
@@ -325,21 +261,15 @@ public class ConfigService extends Service<Void>{
         boolean continuare = false;
         
         do{
-            try{
-                write("Inserire nome luogo", true);
-                String name = read();
+                String name = IOUtil.readString("Inserire nome luogo");
                 if(placesManager.exists(name)){
                     write("Luogo già esistente", false);
                     return;
                 }
-                write("Inserire descrizione luogo", true);
-                String description = read();
+                String description = IOUtil.readString("Inserire descrizione luogo");
                 write("Inserire indirizzo luogo", false);
                 Address address = addNewAddress();
                 placesManager.add(JSONUtil.createJson(new Place(name, address, description)));
-            }catch(IOException e){
-                e.printStackTrace();
-            }
             continuare = continueChoice("inserimento luoghi");
         }while(continuare);
     }
@@ -349,16 +279,8 @@ public class ConfigService extends Service<Void>{
      * @return the new address
      * @throws IOException
      */
-    private Address addNewAddress() throws IOException {
-        write("Inserire via", true);
-        String street = read();
-        write("Inserire città", true);
-        String city = read();
-        write("Inserire nazione", true);
-        String nation = read();
-        write("Inserire CAP", true);
-        String zipCode = read();
-        return new Address(street, city, nation, zipCode);
+    private Address addNewAddress() {
+        return AMIOUtil.getAddress();
     }
 
     /**
@@ -371,28 +293,23 @@ public class ConfigService extends Service<Void>{
             addActivityOnNoConfiguredPlaces();
             jump = true;
         }
-
-        try{
             do{
                 if(jump){
                     continue;
                 }
                 showPlaces();
-                write("\nInserire luogo per l'attività", true);
-                String placeName = read();
+                String placeName = IOUtil.readString("\nInserire luogo per l'attività");
 
                 while(!placesManager.exists(placeName)){
                         write("Luogo non esistente, riprovare", false);
-                        write("\nInserire luogo per l'attività", true);
-                        placeName = read();
+                        placeName = IOUtil.readString("\nInserire luogo per l'attività");
+
                 }
                     
                 Place place = JSONUtil.createObject(placesManager.get(placeName), Place.class);      
                 addActivityWithPlace(place);
             }while(continueChoice("aggiunta attività"));
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+
     }
 
     /**
@@ -401,8 +318,8 @@ public class ConfigService extends Service<Void>{
     private void addActivityOnNoConfiguredPlaces() {
 
         write("enter",false);
-       List<Place> places = (List<Place>) placesManager.getCustomList();
-         for (Place place : places) {
+        List<Place> places = (List<Place>) placesManager.getCustomList();
+        for (Place place : places) {
               write("Inserire attività per il luogo:\n " + place.toString(), false);
               addActivityWithPlace(place);
         }
@@ -413,97 +330,37 @@ public class ConfigService extends Service<Void>{
      * @param place place to relate the activity
      */
     private void addActivityWithPlace(Place place) {
-        Activity activity;
-        try {
-            write("\nInserire titolo attività", true);
-            String title = read();
-            write("\nInserire descrizione attività", true);
-            String description = read();
-            Address meetingPoint = getMeetingPoint(place);
-            write("\nInserire data inizio attività (dd-mm-yyyy)", true);
-            //DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            //LocalDate firstProgrammableDate = LocalDate.parse(read(), formatterDate);
-            String firstProgrammableDate = read();
-            write("\nInserire data fine attività (dd-mm-yyyy)", true);
-            //LocalDate lastProgrammableDate = LocalDate.parse(read(), formatterDate);
-            String lastProgrammableDate = read();
-            write("\nInserire giorni della settimana programmabili separati da una virgola", true);
-            String[] programmableDays = read().split(",");
-            write("\nInserire ora programmabile (HH:mm)", true);
-            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            //LocalTime programmableHour = LocalTime.parse(read(), formatter);
-            String programmableHour = read();
-            write("\nInserire durata attività (HH:mm)", true);
-            //LocalTime duration = LocalTime.parse(read(), formatter);
-            String duration = read();
-            write("\nInserire se è necessario un biglietto", true);
-            boolean bigliettoNecessario = Boolean.parseBoolean(read());
-            write("\nInserire numero massimo partecipanti", true);
-            int maxPartecipanti = Integer.parseInt(read());
-            write("\nInserire numero minimo partecipanti", true);
-            int minPartecipanti = Integer.parseInt(read());
-            String[] volunteers = addVolunteersToActivity();
-            activity = new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti, volunteers);
-            dataLayer.add(new JSONDataContainer("JF/activities.json", JSONUtil.createJson(activity), "activities"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }       
-      
-    }
-
-    /**
-     * util method: add a list of volunteers to a specific activity that is being buildt in the previous method
-     * @return
-     * @throws IOException
-     */
-    private String[] addVolunteersToActivity() throws IOException {
-        ArrayList<String> volunteers = new ArrayList<>();
-        do{
-            showVolunteers();
-            write("\nInserire volontario da agggiungere all'attività", true);
-            String vol = read();
-            if(checkIfVolunteersExist(vol)){
-               volunteers.add(vol);
-            }else{
-                write("Volontario non esistente, si vuole creare un nuovo volontario? (s/n)", true);
-                if(read().equals("s")){
-                    addVolunteerWithName(vol);
-                }
-            }
-        }while(continueChoice("aggiunta volontari all'attività"));
-        return volunteers.toArray(new String[volunteers.size()]);
-        
-    }
-    
-    /**
-     * util method: make you choose the meeting point
-     * @param p place where you are building the activity on
-     * @return
-     * @throws IOException
-     */
-    private Address getMeetingPoint(Place p) throws IOException {
-        write("\nInserire punto di ritrovo (indirizzo): (d-indirizzo luogo/altro inserire)", true);
-        if(read().equals("d")){
-            return p.getAddress();
-        }else{
-            return addNewAddress();
-        }
+        activityManager.add(JSONUtil.createJson(place));
     }
 
     /**
      * method to show all volunteers
-     * UNIMPLEMENTED
      */
     private void showVolunteers() {
-        write("showVol",false);
+        write(volunteerManager.getAll(), false);
     }
 
     /**
      * method to show all places
-     * UNIMPLEMENTED
      */
     private void showPlaces() {
-        write("showPla",false);
+        write(placesManager.getAll(), false);
+    }
+
+    /**
+     * method to show all activities
+     */
+    public void showActivities() {
+        write(activityManager.getAll(), false);
+    }
+
+    /**
+     * method to generate a monthly plan
+     * UNIMPLEMENTED
+     */
+
+    private void generateMonthlyPlan() {
+        write("genMon",false);
     }
     
 }

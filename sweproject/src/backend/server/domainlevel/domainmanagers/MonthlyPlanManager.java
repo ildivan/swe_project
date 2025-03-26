@@ -33,7 +33,7 @@ public class MonthlyPlanManager implements Manager{
     }
 
     @Override
-    public void getAll(JsonObject data) {
+    public String getAll() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getAll'");
     }

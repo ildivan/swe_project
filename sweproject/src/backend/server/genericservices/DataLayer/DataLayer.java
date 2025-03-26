@@ -13,6 +13,7 @@ public interface DataLayer {
     public boolean checkFileExistance(JSONDataContainer dataContainer);
     public void createJSONEmptyFile(JSONDataContainer dataContainer);
     public List<JsonObject> getList(JSONDataContainer dataContainer);
+    public List<JsonObject> getAll(JSONDataContainer dataContainer);
 
 
 }

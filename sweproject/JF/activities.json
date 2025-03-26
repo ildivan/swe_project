@@ -257,6 +257,140 @@
       "volunteers": [
         "Marco"
       ]
+    },
+    {
+      "placeName": "Duomo Vecchio (Rotonda di San Lorenzo)",
+      "title": "Visita Guidata al Duomo Vecchio",
+      "description": "Esplora la storica Rotonda di San Lorenzo, una delle chiese romaniche più affascinanti d\u0027Italia.",
+      "meetingPoint": {
+        "street": "Piazza Paolo VI",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "05-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Mercoledi",
+        "Sabato"
+      ],
+      "programmableHour": "10:00",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Duomo Nuovo",
+      "title": "Tour della Cattedrale di Brescia",
+      "description": "Scopri la maestosità del Duomo Nuovo con una visita guidata tra le sue navate e la cupola imponente.",
+      "meetingPoint": {
+        "street": "Piazza Paolo VI",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "06-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi",
+        "Domenica"
+      ],
+      "programmableHour": "11:30",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 25,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Pinacoteca Tosio Martinengo",
+      "title": "Tour Artistico alla Pinacoteca",
+      "description": "Ammira le opere di grandi maestri del Rinascimento in un tour guidato attraverso la Pinacoteca.",
+      "meetingPoint": {
+        "street": "Piazza Moretto, 4",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "07-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Mercoledi",
+        "Venerdi"
+      ],
+      "programmableHour": "14:00",
+      "duration": "02:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Tempio Capitolino",
+      "title": "Alla Scoperta del Tempio Capitolino",
+      "description": "Un tour approfondito tra le rovine del Tempio Capitolino, sito UNESCO che racconta la Brescia romana.",
+      "meetingPoint": {
+        "street": "Via dei Musei, 57",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "08-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi",
+        "Sabato"
+      ],
+      "programmableHour": "09:30",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Parco delle Colline di Brescia",
+      "title": "Escursione al Parco delle Colline",
+      "description": "Una passeggiata nella natura tra i sentieri panoramici del Parco delle Colline di Brescia.",
+      "meetingPoint": {
+        "street": "Parco delle Colline",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "09-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Giovedi",
+        "Domenica"
+      ],
+      "programmableHour": "10:00",
+      "duration": "03:00",
+      "bigliettoNecessario": false,
+      "maxPartecipanti": 30,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Luca"
+      ]
     }
   ]
 }

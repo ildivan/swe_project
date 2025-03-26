@@ -138,4 +138,27 @@ public class Activity {
     public void setVolunteers(String[] volunteers) {
         this.volunteers = volunteers;
     }
+
+    public String toString(){
+        StringBuffer out = new StringBuffer();
+        out.append("\n\n----------------\n\n");
+        out.append(String.format("Attività: %s", getTitle()));
+        out.append(String.format("\nDescrizione attività: %s", getDescription()));
+        out.append(String.format("\nPunto di ritrovo: %s", getMeetingPoint()));
+        out.append(String.format("\nMassimo numero partecipanti: %s", getMaxPartecipanti()));
+        out.append(String.format("\nPrima data utile: %s", getFirstProgrammableDate()));
+        out.append(String.format("\nUltima data utile: %s", getLastProgrammableDate()));
+        out.append(String.format("\nOra di inizio: %s", getProgrammableHour()));
+        out.append(String.format("\nDurata: %s", getDuration()));
+        out.append(String.format("\nVolontari associati: %s", getVolunteersToString(volunteers)));
+        return out.toString();
+    }
+
+    private String getVolunteersToString(String[] volunteers){
+        String out = "";
+        for(String s :volunteers){
+            out = out + s + ", ";
+        }
+        return out;
+    }
 }

@@ -133,7 +133,7 @@ public class Server {
         // String currentDir = System.getProperty("user.dir");
         // System.out.println("La directory di lavoro corrente è: " + currentDir);
 
-        //String configType = ConfigType.NORMAL.getValue();
+        // String configType = ConfigType.NORMAL.getValue();
         String configType = ConfigType.NO_FIRST_CONFIG.getValue();
         Server s = new Server(5001,6001);
         s.startServer(configType);

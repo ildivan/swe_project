@@ -2,23 +2,23 @@
     "volunteers": [
         {
             "name": "marco",
-            "disponibilityDays": []
+            "nondisponibilityDays": []
         },
         {
             "name": "lucia",
-            "disponibilityDays": []
+            "nondisponibilityDays": []
         },
         {
             "name": "marta",
-            "disponibilityDays": []
+            "nondisponibilityDays": []
         },
         {
             "name": "luca",
-            "disponibilityDays": []
+            "nondisponibilityDays": []
         },
         {
             "name": "riccardo",
-            "disponibilityDays": []
+            "nondisponibilityDays": []
         }
     ]
 }
