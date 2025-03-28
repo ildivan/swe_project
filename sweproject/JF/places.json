@@ -108,7 +108,7 @@
         "zipCode": "25121"
       },
       "description": "Un\u0027area naturale protetta con sentieri per trekking e panorami suggestivi sulla città.",
-      "atLeastOneActivityRelated": true
+      "atLeastOneActivityRelated": false
     }
   ]
 }

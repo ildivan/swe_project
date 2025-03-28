@@ -7,7 +7,7 @@ import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Address;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.Place;
-import backend.server.domainlevel.VolunteerData;
+import backend.server.domainlevel.Volunteer;
 import backend.server.genericservices.IOUtil;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataContainer;

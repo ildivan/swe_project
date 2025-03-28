@@ -3,11 +3,11 @@ package backend.server.domainlevel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VolunteerData {
+public class Volunteer {
     private String name;
     private List<String> nondisponibilityDays; //contiene le date in formato standard dd-mm-yyyy delle NON disponibilità dei volontari
 
-    public VolunteerData(String name){
+    public Volunteer(String name){
         this.name = name;
         this.nondisponibilityDays = new ArrayList<>();
     }

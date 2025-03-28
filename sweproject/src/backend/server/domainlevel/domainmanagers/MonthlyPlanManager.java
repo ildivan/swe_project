@@ -8,6 +8,17 @@ import backend.server.domainlevel.Manager;
 
 public class MonthlyPlanManager implements Manager{
 
+     //TODO
+    /*
+     * 1. metodo per prendere la data di sistema (potrà essere avviato solo il 16 di ogni mese) e
+     * popolare la map con le date di ogni giono
+     * 
+     * 2. metodo per settare i gionri preclusi
+     * 
+     * 3. metodo per creare il monthly plan (che chiama per ogni gionro non precluso un daily plan manager
+     * che crea il piano di ogni giorno)
+     */
+
     @Override
     public void add(JsonObject data) {
         // TODO Auto-generated method stub

@@ -12,48 +12,27 @@ import com.google.gson.JsonObject;
 import backend.server.Configs;
 import backend.server.domainlevel.*;
 import backend.server.domainlevel.domainmanagers.*;
+import backend.server.domainlevel.domainmanagers.menumanager.ConfiguratorMenu;
+import backend.server.domainlevel.domainmanagers.menumanager.IMenuManager;
 import backend.server.genericservices.IOUtil;
 import backend.server.genericservices.Service;
 import backend.server.genericservices.DataLayer.*;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
-    private static final String QUESTION = "\n\nInserire scelta: (0 per uscire)";
     private static final String PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
-
-    private final Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
-    private final Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
     private DataLayer dataLayer = new JSONDataManager();
     private Manager placesManager = new PlacesManager();
     private Manager volunteerManager = new VolunteerManager();
     private Manager activityManager = new ActivityManager(); 
+    private IMenuManager menu = new ConfiguratorMenu(this);
     private String configType;
   
 
     public ConfigService(Socket socket, Gson gson, String configType) {
         super(socket);
         this.configType = configType;
-        //TODO avere un json che contiene le varie chiamate hai metodi e se sono visibili o n
-        vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
-        vociVisibili.put("Aggiungi Volontario", true);
-        vociVisibili.put("Aggiungi Luogo", true);
-        vociVisibili.put("Aggiungi Attività", true);
-        vociVisibili.put("Mostra Volontari", true);
-        vociVisibili.put("Mostra Luoghi", true);
-        vociVisibili.put("Mostra Attività", true);
-        vociVisibili.put("Genera Piano Mensile", true);
-        
-        chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", this::modNumMaxSub);
-        chiamateMetodi.put("Aggiungi Volontario", this::addVolunteer);
-        chiamateMetodi.put("Aggiungi Luogo", this::addPlace);
-        chiamateMetodi.put("Aggiungi Attività", this::addActivity);
-        chiamateMetodi.put("Mostra Volontari", this::showVolunteers);
-        chiamateMetodi.put("Mostra Luoghi", this::showPlaces);
-        chiamateMetodi.put("Mostra Attività", this::showActivities);
-        chiamateMetodi.put("Genera Piano Mensile", this::generateMonthlyPlan);
-        
-
     }
     /**
      * apply the logic of the service
@@ -63,8 +42,11 @@ public class ConfigService extends Service<Void>{
     public Void applyLogic() throws IOException {
         
         boolean continuare = true;
-        do{
-            //ANDR GESTITO IL TEMPO IN QUELCHE MODO QUA
+        
+            /*
+             * classe che mi gestisce la valutazione della data odierna qua, in base alla data mi restituisce 
+             * la mappa con le varie possibili voci
+             */
             if(configType.equalsIgnoreCase("normalFunctionConfigs")){
                 if(firstTimeConfiguration()){
                     write("Configurazione base completata", false);
@@ -74,81 +56,21 @@ public class ConfigService extends Service<Void>{
                 }
             };
 
-            if(startMenu()){
-                continuare = continueChoice("scelta operazioni");
-            }else{
+        do{
+            Runnable toRun = menu.startMenu();
+            if(toRun==null){
                 continuare = false;
+            }else{
+                toRun.run();
+                continuare = continueChoice("scelta operazioni");
             }
-            
+                
         }while(continuare);
         write("\nArrivederci!\n", false);
 
         return null;
     }
-    
-    /**
-     * start the menu keeping the user in a loop until he decides to exit
-     * 
-     */
-    private boolean startMenu() {
-        //da implemetare il controllo sull'inserimento dell'intero
-        List<String> menu = buildMenu();
-        String Smenu = menuToString(menu);
-        boolean sceltaValida = true;
-        int choice = 1000;
-        
-        do{
-            choice = IOUtil.readInteger(Smenu + QUESTION);
-        
-            if (choice >= 0 && choice <= menu.size()) {
-                if(choice == 0){
-                    return false;
-                }
-                sceltaValida = true;
-                String sceltaStringa = menu.get(choice - 1);
-                chiamateMetodi.get(sceltaStringa).run();
-                
-            } else {
-                sceltaValida = false;
-                write("Scelta non valida, riprovare", false);
-            }
-        }while(!sceltaValida);
-        return true;
-        
-    }
-
-    /**
-     * build the menu based on the visibility of the options
-     * @return
-     */
-    private List<String> buildMenu() {
-        
-        List<String> opzioniVisibili = new ArrayList<>();
-
-        for (Map.Entry<String, Boolean> entry : vociVisibili.entrySet()) {
-            if (entry.getValue()) {
-                //   write(String.valueOf(entry.getValue()), false);
-                opzioniVisibili.add(entry.getKey());
-            }
-        }
-
-        return opzioniVisibili;
-        
-    }
-
-    /**
-     * convert the menu to a string
-     * @param menu recive the list of the menu option to print on the terminal for the user
-     * @return
-     */
-    private String menuToString(List<String> menu) {
-        String menuOut = "";
-        for (int i = 0; i < menu.size(); i++) {
-            menuOut += ((i + 1) + ") " + menu.get(i)+"\n");
-        }
-        return menuOut;
-    }
-
+   
     /**
      * check if place and max number of subscriptions are configured -> firtst things to configure
      * @return true if the user is already configured
@@ -227,7 +149,7 @@ public class ConfigService extends Service<Void>{
     /**
      * method to modify the max number of subscriptions
      */
-    private void modNumMaxSub(){
+    public void modNumMaxSub(){
         Integer n = IOUtil.readInteger("\nInserire nuovo numero di iscrizioni massime");
 
         JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", configType, "configType"));
@@ -245,10 +167,10 @@ public class ConfigService extends Service<Void>{
      * in the user database it creates a temporarly password to be changed by the volunteer the first time he logs in
      * ideally the configurator adds the volunteer and then he tells the volunteer the temporarly password generated
      */
-    private void addVolunteer() {
+    public void addVolunteer() {
         String name = IOUtil.readString("\nInserire nome del volontario");
         if (!volunteerManager.exists(name)) {
-            volunteerManager.add(JSONUtil.createJson(new VolunteerData(name)));
+            volunteerManager.add(JSONUtil.createJson(new Volunteer(name)));
         } else {
             write("\nVolontario già esistente", false);
         }
@@ -257,7 +179,7 @@ public class ConfigService extends Service<Void>{
     /**
      * method to add a new place to the database
      */
-    private void addPlace(){
+    public void addPlace(){
         boolean continuare = false;
         
         do{
@@ -286,7 +208,7 @@ public class ConfigService extends Service<Void>{
     /**
      * method to add a new activity to the database
      */
-    private void addActivity() {
+    public void addActivity() {
         boolean jump = false;
         if(placesManager.checkIfThereIsSomethingWithCondition()){
             write("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
@@ -336,14 +258,14 @@ public class ConfigService extends Service<Void>{
     /**
      * method to show all volunteers
      */
-    private void showVolunteers() {
+    public void showVolunteers() {
         write(volunteerManager.getAll(), false);
     }
 
     /**
      * method to show all places
      */
-    private void showPlaces() {
+    public void showPlaces() {
         write(placesManager.getAll(), false);
     }
 
@@ -359,7 +281,7 @@ public class ConfigService extends Service<Void>{
      * UNIMPLEMENTED
      */
 
-    private void generateMonthlyPlan() {
+    public void generateMonthlyPlan() {
         write("genMon",false);
     }
     

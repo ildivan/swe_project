@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.User;
-import backend.server.domainlevel.VolunteerData;
+import backend.server.domainlevel.Volunteer;
 import backend.server.genericservices.DataLayer.DataLayer;
 import backend.server.genericservices.DataLayer.JSONDataContainer;
 import backend.server.genericservices.DataLayer.JSONDataManager;
@@ -25,7 +25,7 @@ public class VolunteerManager implements Manager{
     @Override
     public void add(JsonObject data) {
         dataLayer.add(new JSONDataContainer(PATH, data, MEMBER_NAME));
-        VMIOUtil.addNewVolunteerUserProfile(JSONUtil.createObject(data, VolunteerData.class).getName());
+        VMIOUtil.addNewVolunteerUserProfile(JSONUtil.createObject(data, Volunteer.class).getName());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class VolunteerManager implements Manager{
        String out = "";
         List<JsonObject> volunteers = dataLayer.getAll(new JSONDataContainer(PATH, MEMBER_NAME));
         for (JsonObject jo : volunteers){
-            VolunteerData a = JSONUtil.createObject(jo, VolunteerData.class);
+            Volunteer a = JSONUtil.createObject(jo, Volunteer.class);
             out = out + a.toString();
         }
 

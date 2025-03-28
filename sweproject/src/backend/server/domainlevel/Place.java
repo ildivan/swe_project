@@ -49,6 +49,6 @@ public class Place{
     @Override
     public String toString(){
         //TODO ADDRESS TO STRING
-        return "------------"+"\nPlace:" + "\nName=" + name +"\nAddress=" + address + "\nDescription=" + description+  "\n------------";
+        return "------------"+"\nPlace:" + "\nName=" + name +"\nAddress=" + address.toString() + "\nDescription=" + description+  "\n------------";
     }
 }
