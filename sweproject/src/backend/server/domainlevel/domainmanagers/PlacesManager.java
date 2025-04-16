@@ -18,8 +18,15 @@ public class PlacesManager implements Manager {
     private static final String PATH = "JF/places.json";
     private static final String MEMBER_NAME = "places";
     private static final String KEY_DESC = "name";
-    DataLayer dataLayer = new JSONDataManager();
-    Gson gson = new Gson();
+    DataLayer dataLayer;
+    Gson gson;
+
+
+    public PlacesManager(Gson gson){
+        super();
+        this.gson = gson;
+        this.dataLayer = new JSONDataManager(gson);
+    }
 
     @Override
     public void add(JsonObject data) {

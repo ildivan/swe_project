@@ -1,0 +1,2 @@
+1- potrei trasformare tutti i dati tipo visite volontari etc in un set piuttosto che una list, per evitare dupicati, oppure fare dei controlli
+sull'esistenza

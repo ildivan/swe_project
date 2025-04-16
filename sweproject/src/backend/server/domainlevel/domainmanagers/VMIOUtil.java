@@ -1,16 +1,16 @@
 package backend.server.domainlevel.domainmanagers;
-
 import backend.server.domainlevel.User;
 import backend.server.genericservices.IOUtil;
 import backend.server.genericservices.datalayer.DataLayer;
 import backend.server.genericservices.datalayer.JSONDataContainer;
 import backend.server.genericservices.datalayer.JSONDataManager;
 import backend.server.genericservices.datalayer.JSONUtil;
+import backend.server.genericservices.gson.GsonFactory;
+import com.google.gson.Gson;
 
 public class VMIOUtil extends IOUtil{
-
-    private static DataLayer dataLayer = new JSONDataManager();
-
+    private static final Gson gson = GsonFactory.getGson();
+    private static DataLayer dataLayer = new JSONDataManager(gson);
 
      /**
      * method to add a new user profile to user database creating a new random password

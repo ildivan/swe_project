@@ -20,20 +20,29 @@ public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
-    private DataLayer dataLayer = new JSONDataManager();
-    private Manager placesManager = new PlacesManager();
-    private Manager volunteerManager = new VolunteerManager();
-    private Manager activityManager = new ActivityManager(); 
-    private Manager configManager = new ConfigManager(); 
-    private Manager monthlyManager = new MonthlyPlanManager();
+    private Gson gson;
+    private DataLayer dataLayer; 
+    private Manager placesManager; 
+    private Manager volunteerManager; 
+    private Manager activityManager; 
+    private Manager configManager;
+    private Manager monthlyManager;
 
     private IMenuManager menu = new ConfiguratorMenu(this);
     private String configType;
+    
   
 
     public ConfigService(Socket socket, Gson gson, String configType) {
         super(socket);
         this.configType = configType;
+        this.gson = gson;
+        this.dataLayer = new JSONDataManager(gson);
+        this.placesManager = new PlacesManager(gson);
+        this.volunteerManager = new VolunteerManager(gson);
+        this.activityManager = new ActivityManager(gson); 
+        this.configManager = new ConfigManager(gson); 
+        this.monthlyManager = new MonthlyPlanManager(gson);
     }
     /**
      * apply the logic of the service

@@ -5,22 +5,11 @@ import backend.server.domainlevel.domainservices.ConfigService;
 import backend.server.genericservices.*;
 import backend.server.genericservices.auth.AuthenticationService;
 import backend.server.genericservices.datalayer.*;
-
+import backend.server.genericservices.gson.GsonFactory;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.*;
-import java.time.LocalDate;
 
 
 
@@ -28,20 +17,7 @@ public class Server {
 
     private final int ClientPort;
     private final int ServerTerminalPort;
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
-        @Override
-        public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
-        }
-    })
-    .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-        @Override
-        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return LocalDate.parse(json.getAsString());
-        }
-    })
-    .create();
-
+    private static final Gson gson = GsonFactory.getGson();
     public Server(int ClientPort, int ServerTerminalPort){
         this.ClientPort = ClientPort;
         this.ServerTerminalPort = ServerTerminalPort;
@@ -133,7 +109,7 @@ public class Server {
     }
 
     private void firstTimeConfiguration(){
-        DataLayer dl = new JSONDataManager();
+        DataLayer dl = new JSONDataManager(gson);
         if(!dl.checkFileExistance(new JSONDataContainer("JF/configs.json"))){
             dl.createJSONEmptyFile(new JSONDataContainer("JF/configs.json"));
         }
@@ -154,6 +130,8 @@ public class Server {
         // System.out.println("La directory di lavoro corrente è: " + currentDir);
 
         // String configType = ConfigType.NORMAL.getValue();
+
+        
         String configType = ConfigType.NO_FIRST_CONFIG.getValue();
         Server s = new Server(5001,6001);
         s.startServer(configType);

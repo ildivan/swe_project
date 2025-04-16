@@ -1,17 +1,15 @@
 package backend.server.genericservices.auth;
-
 import com.google.gson.JsonObject;
-
 import backend.server.genericservices.datalayer.DataLayer;
 import backend.server.genericservices.datalayer.JSONDataContainer;
 import backend.server.genericservices.datalayer.JSONDataManager;
-
+import backend.server.genericservices.gson.GsonFactory;
 import org.mindrot.jbcrypt.*;
 
 public class AuthenticationUtil {
 
     private static final int HASH_ROUNDS = 12;
-    private static DataLayer dataLayer = new JSONDataManager();
+    private static DataLayer dataLayer = new JSONDataManager(GsonFactory.getGson());
     
     public static boolean checkIfTemp(String username) {
         JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", "users", username, "name");
@@ -40,4 +38,6 @@ public class AuthenticationUtil {
         String hashedPassword = userJO.get("password").getAsString();
         return BCrypt.checkpw(password, hashedPassword);
     }
+
+    
 }

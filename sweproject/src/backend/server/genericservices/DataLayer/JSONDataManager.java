@@ -1,4 +1,5 @@
 package backend.server.genericservices.datalayer;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import java.io.File;
@@ -6,11 +7,13 @@ import java.util.*;
 
 public class JSONDataManager implements DataLayer {
     //private static final String PATH = "sweproject/jsonFiles/users.json";
-    private static JSONIOManager fileManager = new JSONIOManager();
+    private static JSONIOController fileManager = new JSONIOController();
+    private static Gson gson;
         
     
-    public JSONDataManager() {
+    public JSONDataManager(Gson gson) {
         super();
+        this.gson = gson;
     }
     
     /**

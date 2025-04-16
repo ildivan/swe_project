@@ -1,7 +1,9 @@
 package backend.server.domainlevel.domainmanagers;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import backend.server.domainlevel.Activity;
@@ -17,7 +19,15 @@ public class ActivityManager implements Manager{
     
     private static final String PATH = "JF/activities.json";
     private static final String MEMBER_NAME = "activities";
-    DataLayer dataLayer = new JSONDataManager();
+     DataLayer dataLayer;
+    Gson gson;
+
+
+    public ActivityManager(Gson gson){
+        super();
+        this.gson = gson;
+        this.dataLayer = new JSONDataManager(gson);
+    }
 
     @Override
     public void add(JsonObject data) {
@@ -59,6 +69,16 @@ public class ActivityManager implements Manager{
             out = out + a.toString();
         }
 
+        return out;
+    }
+
+    public List<Activity> getAllAsActivities(){
+        List<JsonObject> activities = dataLayer.getAll(new JSONDataContainer(PATH, MEMBER_NAME));
+        List<Activity> out = new ArrayList<>();
+        for (JsonObject jo : activities){
+            Activity a = JSONUtil.createObject(jo, Activity.class);
+            out.add(a);
+        }
         return out;
     }
 

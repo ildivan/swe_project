@@ -1,11 +1,12 @@
 {
   "mc": [
     {
-      "monthAndYear": "2025-04-23",
+      "monthAndYear": "16-05-2025",
       "planConfigured": false,
       "precludeDates": [
-        "2025-05-12",
-        "2025-05-15"
+        "12-06-2025",
+        "15-06-2025",
+        "23-05-2025"
       ],
       "type": "current"
     }

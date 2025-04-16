@@ -5,13 +5,13 @@ import backend.server.genericservices.Service;
 import backend.server.genericservices.datalayer.DataLayer;
 import backend.server.genericservices.datalayer.JSONDataContainer;
 import backend.server.genericservices.datalayer.JSONDataManager;
-
+import backend.server.genericservices.gson.GsonFactory;
 import java.io.*;
 import java.net.Socket;
 
 public class AuthenticationService extends Service<User> {
     private ConnectionType connectionType;
-    private static DataLayer dataLayer = new JSONDataManager();
+    private static DataLayer dataLayer = new JSONDataManager(GsonFactory.getGson());
 
     public AuthenticationService(Socket socket, ConnectionType connectionType) {
         super(socket);
@@ -86,4 +86,5 @@ public class AuthenticationService extends Service<User> {
                 return false;
             }
     }
+
 }

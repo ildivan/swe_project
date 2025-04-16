@@ -7,23 +7,46 @@ import backend.server.domainlevel.monthlydomain.MonthlyConfig;
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.lang.reflect.Type;
+//DA VERIFICARE SE è DAVVERO UN CONTROLLER
+public class JSONIOController {
+    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final Gson gson = new GsonBuilder()
+        .setPrettyPrinting()
 
-public class JSONIOManager {
-    private Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
-        @Override
-        public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
-        }
-    })
-    .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-        @Override
-        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return LocalDate.parse(json.getAsString());
-        }
-    })
-    .create();
+        // LocalDate
+        .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+            @Override
+            public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+                return new JsonPrimitive(src.format(dateFormatter)); // Format: dd-mm-yyyy
+            }
+        })
+        .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+            @Override
+            public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                return LocalDate.parse(json.getAsString(), dateFormatter);
+            }
+        })
+
+        // LocalTime
+        .registerTypeAdapter(LocalTime.class, new JsonSerializer<LocalTime>() {
+            @Override
+            public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
+                return new JsonPrimitive(src.format(timeFormatter)); // Format: HH:mm
+            }
+        })
+        .registerTypeAdapter(LocalTime.class, new JsonDeserializer<LocalTime>() {
+            @Override
+            public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                return LocalTime.parse(json.getAsString(), timeFormatter);
+            }
+        })
+
+        .create();
 
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
@@ -95,7 +118,7 @@ public class JSONIOManager {
                 }
             })
             .create();
-         DataLayer DataLayer = new JSONDataManager();
+         DataLayer DataLayer = new JSONDataManager(gson);
 
         // User user = new User("CT3", "temp_p3", "configuratore");
         MonthlyConfig monthlyConfig = new MonthlyConfig(LocalDate.of(2025, 4, 23), false, new HashSet<LocalDate>());

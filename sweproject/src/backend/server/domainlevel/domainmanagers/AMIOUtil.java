@@ -1,23 +1,21 @@
 package backend.server.domainlevel.domainmanagers;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
+import com.google.gson.Gson;
 import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Address;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.Place;
-import backend.server.domainlevel.Volunteer;
 import backend.server.genericservices.IOUtil;
-import backend.server.genericservices.datalayer.DataLayer;
-import backend.server.genericservices.datalayer.JSONDataContainer;
-import backend.server.genericservices.datalayer.JSONDataManager;
-import backend.server.genericservices.datalayer.JSONUtil;
+import backend.server.genericservices.gson.GsonFactory;
 
 public class AMIOUtil extends IOUtil {
-
-    private static Manager volunteerManager = new VolunteerManager();
-    private static DataLayer dataLayer = new JSONDataManager();
+    private static final Gson gson = GsonFactory.getGson();
+    private static Manager volunteerManager = new VolunteerManager(gson);
 
     public static Address getAddress(){
         String street = readString("Inserire via");
@@ -31,17 +29,13 @@ public class AMIOUtil extends IOUtil {
             String title = readString("\nInserire titolo attività");
             String description = readString("\nInserire descrizione attività");
             Address meetingPoint = getMeetingPoint(place);
-            //DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            //LocalDate firstProgrammableDate = LocalDate.parse(read(), formatterDate);
-            String firstProgrammableDate = readString("\nInserire data inizio attività (dd-mm-yyyy)");
-            //LocalDate lastProgrammableDate = LocalDate.parse(read(), formatterDate);
-            String lastProgrammableDate = readString("\nInserire data fine attività (dd-mm-yyyy)");
+            DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate firstProgrammableDate = LocalDate.parse(readString("\nInserire data inizio attività (dd-mm-yyyy)"), formatterDate);
+            LocalDate lastProgrammableDate = LocalDate.parse(readString("\nInserire data fine attività (dd-mm-yyyy)"), formatterDate);
             String[] programmableDays = readString("\nInserire giorni della settimana programmabili separati da una virgola").split(",");
-            //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-            //LocalTime programmableHour = LocalTime.parse(read(), formatter);
-            String programmableHour = readString("\nInserire ora programmabile (HH:mm)");
-            //LocalTime duration = LocalTime.parse(read(), formatter);
-            String duration = readString("\nInserire durata attività (HH:mm)");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime programmableHour = LocalTime.parse(readString("\nInserire ora programmabile (HH:mm)"), formatter);
+            LocalTime duration = LocalTime.parse(readString("\nInserire durata attività (HH:mm)"), formatter);
             boolean bigliettoNecessario = readBoolean("\nInserire se è necessatio il biglietto: (true/false)");
             int maxPartecipanti = readInteger("\nInserire numero massimo partecipanti");
             int minPartecipanti = readInteger("\nInserire numero minimo partecipanti");

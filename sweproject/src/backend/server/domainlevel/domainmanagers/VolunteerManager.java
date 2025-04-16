@@ -18,8 +18,15 @@ public class VolunteerManager implements Manager{
     private static final String PATH = "JF/volunteers.json";
     private static final String MEMBER_NAME = "volunteers";
     private static final String KEY_DESC = "name";
-    DataLayer dataLayer = new JSONDataManager();
-    Gson gson = new Gson();
+    DataLayer dataLayer;
+    Gson gson;
+
+
+    public VolunteerManager(Gson gson){
+        super();
+        this.gson = gson;
+        this.dataLayer = new JSONDataManager(gson);
+    }
 
 
     @Override

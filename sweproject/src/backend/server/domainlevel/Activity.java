@@ -1,24 +1,29 @@
 package backend.server.domainlevel;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Activity {
 
     private String placeName;
     private String title;
     private String description;
     private Address meetingPoint;
-    private String firstProgrammableDate;
-    private String lastProgrammableDate;
+    private LocalDate firstProgrammableDate;
+    private LocalDate lastProgrammableDate;
     private String[] programmableDays;
-    private String programmableHour;
-    private String duration;
+    private LocalTime programmableHour;
+    private LocalTime duration;
     private boolean bigliettoNecessario;
     private int maxPartecipanti;
     private int minPartecipanti;
     private String[] volunteers;
 
     public Activity(String placeName, String title, String description, Address meetingPoint,
-    String firstProgrammableDate, String lastProgrammableDate, String[] programmableDays,
-    String programmableHour, String duration, boolean bigliettoNecessario, int maxPartecipanti, int minPartecipanti, String[] volunteers) {
+    LocalDate firstProgrammableDate, LocalDate lastProgrammableDate, String[] programmableDays,
+    LocalTime programmableHour, LocalTime duration, boolean bigliettoNecessario, int maxPartecipanti, int minPartecipanti, String[] volunteers) {
        
         this.placeName = placeName;
         this.title = title;
@@ -67,19 +72,19 @@ public class Activity {
         this.meetingPoint = meetingPoint;
     }
 
-    public String getFirstProgrammableDate() {
+    public LocalDate getFirstProgrammableDate() {
         return firstProgrammableDate;
     }
 
-    public void setFirstProgrammableDate(String firstProgrammableDate) {
+    public void setFirstProgrammableDate(LocalDate firstProgrammableDate) {
         this.firstProgrammableDate = firstProgrammableDate;
     }
 
-    public String getLastProgrammableDate() {
+    public LocalDate getLastProgrammableDate() {
         return lastProgrammableDate;
     }
 
-    public void setLastProgrammableDate(String lastProgrammableDate) {
+    public void setLastProgrammableDate(LocalDate lastProgrammableDate) {
         this.lastProgrammableDate = lastProgrammableDate;
     }
 
@@ -91,20 +96,24 @@ public class Activity {
         this.programmableDays = programmableDays;
     }
 
-    public String getProgrammableHour() {
+    public LocalTime getProgrammableHour() {
         return programmableHour;
     }
 
-    public void setProgrammableHour(String programmableHour) {
+    public void setProgrammableHour(LocalTime programmableHour) {
         this.programmableHour = programmableHour;
     }
 
-    public String getDuration() {
+    public LocalTime getDurationAsLocalTime() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDurationAsLocalTime(LocalTime duration) {
         this.duration = duration;
+    }
+
+    public Duration getDurationAsDuration() {
+        return Duration.between(LocalTime.MIDNIGHT, duration);
     }
 
     public boolean isBigliettoNecessario() {
@@ -139,17 +148,23 @@ public class Activity {
         this.volunteers = volunteers;
     }
 
+    public LocalTime getEndTime(){
+        return programmableHour.plus(Duration.between(LocalTime.MIDNIGHT, duration));
+    }
+
     public String toString(){
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         StringBuffer out = new StringBuffer();
         out.append("\n\n----------------\n\n");
         out.append(String.format("Attività: %s", getTitle()));
         out.append(String.format("\nDescrizione attività: %s", getDescription()));
         out.append(String.format("\nPunto di ritrovo: %s", getMeetingPoint()));
         out.append(String.format("\nMassimo numero partecipanti: %s", getMaxPartecipanti()));
-        out.append(String.format("\nPrima data utile: %s", getFirstProgrammableDate()));
-        out.append(String.format("\nUltima data utile: %s", getLastProgrammableDate()));
-        out.append(String.format("\nOra di inizio: %s", getProgrammableHour()));
-        out.append(String.format("\nDurata: %s", getDuration()));
+        out.append(String.format("\nPrima data utile: %s", getFirstProgrammableDate().format(formatterDate)));
+        out.append(String.format("\nUltima data utile: %s", getLastProgrammableDate().format(formatterDate)));
+        out.append(String.format("\nOra di inizio: %s", getProgrammableHour().format(formatter)));
+        out.append(String.format("\nDurata: %s", getDurationAsLocalTime().format(formatter)));
         out.append(String.format("\nVolontari associati: %s", getVolunteersToString(volunteers)));
         return out.toString();
     }
