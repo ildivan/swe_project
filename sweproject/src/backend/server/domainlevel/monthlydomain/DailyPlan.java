@@ -62,6 +62,7 @@ public class DailyPlan {
     private boolean isOnCorrectDay(Activity a){
         String dayOfTheWeekofDate = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN);
         dayOfTheWeekofDate = capitalize(dayOfTheWeekofDate);
+        dayOfTheWeekofDate = dayOfTheWeekofDate.replace('ì', 'i');
         return Arrays.asList(a.getProgrammableDays()).contains(dayOfTheWeekofDate); 
     }
 
