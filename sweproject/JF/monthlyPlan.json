@@ -3,8 +3,8 @@
     {
       "date": "16-04-2025",
       "monthlyPlan": {
-        "2025-05-31": {
-          "date": "31-05-2025",
+        "2025-05-17": {
+          "date": "17-05-2025",
           "plan": {
             "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
             "Cena al Castello di Brescia": "19:30 - 23:30",
@@ -13,37 +13,27 @@
             "Tour Completo Piazza delle Loggia": "09:00 - 11:00"
           }
         },
-        "2025-05-30": {
-          "date": "30-05-2025",
+        "2025-05-18": {
+          "date": "18-05-2025",
           "plan": {
-            "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": "17:00 - 20:00",
             "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Tour Serale alla Pinacoteca Tosio Martinengo": "18:00 - 20:00",
-            "Tour del Museo di Santa Giulia": "10:00 - 12:30",
-            "Tour Artistico alla Pinacoteca": "14:00 - 16:30"
-          }
-        },
-        "2025-05-29": {
-          "date": "29-05-2025",
-          "plan": {
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
             "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
             "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
             "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
           }
         },
-        "2025-05-28": {
-          "date": "28-05-2025",
+        "2025-05-19": {
+          "date": "19-05-2025",
           "plan": {
             "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Tour delle Antiche Armi": "11:00 - 13:00",
-            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
-            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
+            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
+            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
+            "Visita al Castello di Brescia": "14:00 - 17:00"
           }
         },
-        "2025-05-27": {
-          "date": "27-05-2025",
+        "2025-05-20": {
+          "date": "20-05-2025",
           "plan": {
             "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
             "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
@@ -53,20 +43,20 @@
             "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
           }
         },
-        "2025-05-26": {
-          "date": "26-05-2025",
+        "2025-05-21": {
+          "date": "21-05-2025",
           "plan": {
             "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
-            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
-            "Visita al Castello di Brescia": "14:00 - 17:00"
+            "Tour delle Antiche Armi": "11:00 - 13:00",
+            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
+            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
           }
         },
-        "2025-05-25": {
-          "date": "25-05-2025",
+        "2025-05-22": {
+          "date": "22-05-2025",
           "plan": {
-            "Passeggiata al Parco dell\u0027Acqua al Tramonto": "17:00 - 20:00",
             "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
             "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
             "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
             "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
@@ -82,27 +72,27 @@
             "Tour Completo Piazza delle Loggia": "09:00 - 11:00"
           }
         },
-        "2025-05-22": {
-          "date": "22-05-2025",
+        "2025-05-25": {
+          "date": "25-05-2025",
           "plan": {
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": "17:00 - 20:00",
             "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
             "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
             "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
             "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
           }
         },
-        "2025-05-21": {
-          "date": "21-05-2025",
+        "2025-05-26": {
+          "date": "26-05-2025",
           "plan": {
             "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Tour delle Antiche Armi": "11:00 - 13:00",
-            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
-            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
+            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
+            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
+            "Visita al Castello di Brescia": "14:00 - 17:00"
           }
         },
-        "2025-05-20": {
-          "date": "20-05-2025",
+        "2025-05-27": {
+          "date": "27-05-2025",
           "plan": {
             "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
             "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
@@ -112,17 +102,47 @@
             "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
           }
         },
-        "2025-05-19": {
-          "date": "19-05-2025",
+        "2025-05-28": {
+          "date": "28-05-2025",
           "plan": {
             "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
-            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
-            "Visita al Castello di Brescia": "14:00 - 17:00"
+            "Tour delle Antiche Armi": "11:00 - 13:00",
+            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
+            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
           }
         },
-        "2025-05-18": {
-          "date": "18-05-2025",
+        "2025-05-29": {
+          "date": "29-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
+            "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
+            "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
+            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
+          }
+        },
+        "2025-05-30": {
+          "date": "30-05-2025",
+          "plan": {
+            "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Tour Serale alla Pinacoteca Tosio Martinengo": "18:00 - 20:00",
+            "Tour del Museo di Santa Giulia": "10:00 - 12:30",
+            "Tour Artistico alla Pinacoteca": "14:00 - 16:30"
+          }
+        },
+        "2025-05-31": {
+          "date": "31-05-2025",
+          "plan": {
+            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
+            "Cena al Castello di Brescia": "19:30 - 23:30",
+            "Tour delle Antiche Armi": "11:00 - 13:00",
+            "Visita al Castello di Brescia": "14:00 - 17:00",
+            "Tour Completo Piazza delle Loggia": "09:00 - 11:00"
+          }
+        },
+        "2025-06-01": {
+          "date": "01-06-2025",
           "plan": {
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": "17:00 - 20:00",
             "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
@@ -131,8 +151,114 @@
             "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
           }
         },
-        "2025-05-17": {
-          "date": "17-05-2025",
+        "2025-06-02": {
+          "date": "02-06-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
+            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
+            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
+            "Visita al Castello di Brescia": "14:00 - 17:00"
+          }
+        },
+        "2025-06-03": {
+          "date": "03-06-2025",
+          "plan": {
+            "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Passeggiata Naturalistica al Parco Ducos": "10:00 - 12:00",
+            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
+            "Tesori Nascosti della Biblioteca Queriniana": "15:00 - 16:30",
+            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
+          }
+        },
+        "2025-06-04": {
+          "date": "04-06-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
+            "Tour delle Antiche Armi": "11:00 - 13:00",
+            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
+            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
+          }
+        },
+        "2025-06-05": {
+          "date": "05-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
+            "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
+            "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
+            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
+          }
+        },
+        "2025-06-06": {
+          "date": "06-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Tour Serale alla Pinacoteca Tosio Martinengo": "18:00 - 20:00",
+            "Escursione al Lago di Garda": "08:00 - 13:00",
+            "Tour Artistico alla Pinacoteca": "14:00 - 16:30"
+          }
+        },
+        "2025-06-07": {
+          "date": "07-06-2025",
+          "plan": {
+            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
+            "Cena al Castello di Brescia": "19:30 - 23:30",
+            "Tour delle Antiche Armi": "11:00 - 13:00",
+            "Visita al Castello di Brescia": "14:00 - 17:00",
+            "Tour Completo Piazza delle Loggia": "09:00 - 11:00"
+          }
+        },
+        "2025-06-08": {
+          "date": "08-06-2025",
+          "plan": {
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": "17:00 - 20:00",
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
+            "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
+            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
+          }
+        },
+        "2025-06-09": {
+          "date": "09-06-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
+            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
+            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
+            "Visita al Castello di Brescia": "14:00 - 17:00"
+          }
+        },
+        "2025-06-10": {
+          "date": "10-06-2025",
+          "plan": {
+            "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Passeggiata Naturalistica al Parco Ducos": "10:00 - 12:00",
+            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
+            "Tesori Nascosti della Biblioteca Queriniana": "15:00 - 16:30",
+            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
+          }
+        },
+        "2025-06-11": {
+          "date": "11-06-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
+            "Tour delle Antiche Armi": "11:00 - 13:00",
+            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
+            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
+          }
+        },
+        "2025-06-13": {
+          "date": "13-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
+            "Tour Serale alla Pinacoteca Tosio Martinengo": "18:00 - 20:00",
+            "Escursione al Lago di Garda": "08:00 - 13:00",
+            "Tour Artistico alla Pinacoteca": "14:00 - 16:30"
+          }
+        },
+        "2025-06-14": {
+          "date": "14-06-2025",
           "plan": {
             "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
             "Cena al Castello di Brescia": "19:30 - 23:30",
@@ -148,132 +274,6 @@
             "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
             "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
             "Visita al Castello di Brescia": "14:00 - 17:00"
-          }
-        },
-        "2025-06-14": {
-          "date": "14-06-2025",
-          "plan": {
-            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
-            "Cena al Castello di Brescia": "19:30 - 23:30",
-            "Tour delle Antiche Armi": "11:00 - 13:00",
-            "Visita al Castello di Brescia": "14:00 - 17:00",
-            "Tour Completo Piazza delle Loggia": "09:00 - 11:00"
-          }
-        },
-        "2025-06-13": {
-          "date": "13-06-2025",
-          "plan": {
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Tour Serale alla Pinacoteca Tosio Martinengo": "18:00 - 20:00",
-            "Escursione al Lago di Garda": "08:00 - 13:00",
-            "Tour Artistico alla Pinacoteca": "14:00 - 16:30"
-          }
-        },
-        "2025-06-11": {
-          "date": "11-06-2025",
-          "plan": {
-            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Tour delle Antiche Armi": "11:00 - 13:00",
-            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
-            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
-          }
-        },
-        "2025-06-10": {
-          "date": "10-06-2025",
-          "plan": {
-            "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Passeggiata Naturalistica al Parco Ducos": "10:00 - 12:00",
-            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
-            "Tesori Nascosti della Biblioteca Queriniana": "15:00 - 16:30",
-            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
-          }
-        },
-        "2025-06-09": {
-          "date": "09-06-2025",
-          "plan": {
-            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
-            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
-            "Visita al Castello di Brescia": "14:00 - 17:00"
-          }
-        },
-        "2025-06-08": {
-          "date": "08-06-2025",
-          "plan": {
-            "Passeggiata al Parco dell\u0027Acqua al Tramonto": "17:00 - 20:00",
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
-            "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
-            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
-          }
-        },
-        "2025-06-07": {
-          "date": "07-06-2025",
-          "plan": {
-            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
-            "Cena al Castello di Brescia": "19:30 - 23:30",
-            "Tour delle Antiche Armi": "11:00 - 13:00",
-            "Visita al Castello di Brescia": "14:00 - 17:00",
-            "Tour Completo Piazza delle Loggia": "09:00 - 11:00"
-          }
-        },
-        "2025-06-06": {
-          "date": "06-06-2025",
-          "plan": {
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Tour Serale alla Pinacoteca Tosio Martinengo": "18:00 - 20:00",
-            "Escursione al Lago di Garda": "08:00 - 13:00",
-            "Tour Artistico alla Pinacoteca": "14:00 - 16:30"
-          }
-        },
-        "2025-06-05": {
-          "date": "05-06-2025",
-          "plan": {
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
-            "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
-            "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
-            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
-          }
-        },
-        "2025-06-04": {
-          "date": "04-06-2025",
-          "plan": {
-            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Tour delle Antiche Armi": "11:00 - 13:00",
-            "Tour Artistico alla Pinacoteca": "14:00 - 16:30",
-            "Spettacolo al Teatro Sociale di Brescia": "18:30 - 20:30"
-          }
-        },
-        "2025-06-03": {
-          "date": "03-06-2025",
-          "plan": {
-            "Passeggiata Archeologica nel Foro Romano": "08:30 - 10:00",
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Passeggiata Naturalistica al Parco Ducos": "10:00 - 12:00",
-            "Visita Serale al Museo delle Armi": "17:30 - 20:00",
-            "Tesori Nascosti della Biblioteca Queriniana": "15:00 - 16:30",
-            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
-          }
-        },
-        "2025-06-02": {
-          "date": "02-06-2025",
-          "plan": {
-            "Tour della Piazza del Duomo di Brescia": "09:00 - 11:00",
-            "Visita Serale al Duomo Nuovo": "17:30 - 19:30",
-            "Passeggiata Fascista: Architettura e Storia": "11:00 - 12:30",
-            "Visita al Castello di Brescia": "14:00 - 17:00"
-          }
-        },
-        "2025-06-01": {
-          "date": "01-06-2025",
-          "plan": {
-            "Passeggiata al Parco dell\u0027Acqua al Tramonto": "17:00 - 20:00",
-            "Spettacolo Teatrale al Teatro Grande": "20:00 - 22:30",
-            "Mostra d\u0027Arte a Palazzo Martinengo": "14:30 - 16:30",
-            "Escursione al Parco dell\u0027Acqua": "08:30 - 11:30",
-            "Tour del Teatro Sociale di Brescia": "12:00 - 14:30"
           }
         }
       }

@@ -1,2 +1,6 @@
 1- potrei trasformare tutti i dati tipo visite volontari etc in un set piuttosto che una list, per evitare dupicati, oppure fare dei controlli
 sull'esistenza
+2- inserire i dati del giorno della settimana 
+disponibile come giorno possibile della visita 
+va messo fatto un controllo che se trova una 'ì' 
+la mette 'i', vedi nella classe dailuy plan che c'è il metodo

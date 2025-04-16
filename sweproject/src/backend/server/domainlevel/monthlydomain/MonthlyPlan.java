@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public class MonthlyPlan extends ReadWrite {
 
     private Map<LocalDate, DailyPlan> buildMonthlyMap() {
         DataLayer dataLayer = new JSONDataManager(this.getGson());
-        HashMap<LocalDate, DailyPlan> monthlyMap = new HashMap<>();
+        HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
         MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
         date = mc.getMonthAndYear();
