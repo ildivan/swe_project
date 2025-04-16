@@ -1,9 +1,21 @@
 package frontend;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.time.LocalDate;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+
 import backend.server.genericservices.Message;
 
 public class Terminal {
@@ -17,7 +29,19 @@ public class Terminal {
     }
 
     public void run(){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+        @Override
+        public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
+        }
+    })
+    .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return LocalDate.parse(json.getAsString());
+        }
+    })
+    .create();
 
         try (Socket socket = new Socket(hostname, port);
              OutputStream output = socket.getOutputStream();

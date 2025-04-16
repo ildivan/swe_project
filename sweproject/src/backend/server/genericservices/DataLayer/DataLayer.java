@@ -1,4 +1,4 @@
-package backend.server.genericservices.DataLayer;
+package backend.server.genericservices.datalayer;
 
 import java.util.List;
 

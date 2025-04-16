@@ -9,10 +9,10 @@ import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.User;
 import backend.server.domainlevel.Volunteer;
-import backend.server.genericservices.DataLayer.DataLayer;
-import backend.server.genericservices.DataLayer.JSONDataContainer;
-import backend.server.genericservices.DataLayer.JSONDataManager;
-import backend.server.genericservices.DataLayer.JSONUtil;
+import backend.server.genericservices.datalayer.DataLayer;
+import backend.server.genericservices.datalayer.JSONDataContainer;
+import backend.server.genericservices.datalayer.JSONDataManager;
+import backend.server.genericservices.datalayer.JSONUtil;
 
 public class VolunteerManager implements Manager{
     private static final String PATH = "JF/volunteers.json";
@@ -29,13 +29,13 @@ public class VolunteerManager implements Manager{
     }
 
     @Override
-    public void remove(JsonObject data) {
+    public void remove(JsonObject data, String key) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'remove'");
     }
 
     @Override
-    public void update(JsonObject data) {
+    public void update(JsonObject data, String key) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }

@@ -2,10 +2,9 @@ package backend.server.genericservices.auth;
 import backend.server.ConnectionType;
 import backend.server.domainlevel.User;
 import backend.server.genericservices.Service;
-import backend.server.genericservices.DataLayer.JSONDataContainer;
-import backend.server.genericservices.DataLayer.DataLayer;
-import backend.server.genericservices.DataLayer.JSONDataManager;
-
+import backend.server.genericservices.datalayer.DataLayer;
+import backend.server.genericservices.datalayer.JSONDataContainer;
+import backend.server.genericservices.datalayer.JSONDataManager;
 
 import java.io.*;
 import java.net.Socket;

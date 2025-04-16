@@ -2,16 +2,25 @@ package backend.server;// Server.java
 
 import backend.server.domainlevel.User;
 import backend.server.domainlevel.domainservices.ConfigService;
-import backend.server.genericservices.Service;
-import backend.server.genericservices.DataLayer.DataLayer;
-import backend.server.genericservices.DataLayer.JSONDataContainer;
-import backend.server.genericservices.DataLayer.JSONDataManager;
+import backend.server.genericservices.*;
 import backend.server.genericservices.auth.AuthenticationService;
+import backend.server.genericservices.datalayer.*;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 import java.io.*;
+import java.lang.reflect.Type;
 import java.net.*;
+import java.time.LocalDate;
 
 
 
@@ -19,12 +28,23 @@ public class Server {
 
     private final int ClientPort;
     private final int ServerTerminalPort;
-    private final Gson gson;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+        @Override
+        public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
+        }
+    })
+    .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return LocalDate.parse(json.getAsString());
+        }
+    })
+    .create();
 
     public Server(int ClientPort, int ServerTerminalPort){
         this.ClientPort = ClientPort;
         this.ServerTerminalPort = ServerTerminalPort;
-        this.gson = new Gson();
        // this.planManager = new PlanManager();
     }
 

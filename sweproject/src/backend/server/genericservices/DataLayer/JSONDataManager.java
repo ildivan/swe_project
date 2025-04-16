@@ -1,4 +1,4 @@
-package backend.server.genericservices.DataLayer;
+package backend.server.genericservices.datalayer;
 import com.google.gson.JsonObject;
 
 import java.io.File;

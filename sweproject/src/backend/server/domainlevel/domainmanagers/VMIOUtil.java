@@ -2,10 +2,10 @@ package backend.server.domainlevel.domainmanagers;
 
 import backend.server.domainlevel.User;
 import backend.server.genericservices.IOUtil;
-import backend.server.genericservices.DataLayer.DataLayer;
-import backend.server.genericservices.DataLayer.JSONDataContainer;
-import backend.server.genericservices.DataLayer.JSONDataManager;
-import backend.server.genericservices.DataLayer.JSONUtil;
+import backend.server.genericservices.datalayer.DataLayer;
+import backend.server.genericservices.datalayer.JSONDataContainer;
+import backend.server.genericservices.datalayer.JSONDataManager;
+import backend.server.genericservices.datalayer.JSONUtil;
 
 public class VMIOUtil extends IOUtil{
 

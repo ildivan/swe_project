@@ -2,10 +2,8 @@ package backend.server.domainlevel.domainservices;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -14,9 +12,9 @@ import backend.server.domainlevel.*;
 import backend.server.domainlevel.domainmanagers.*;
 import backend.server.domainlevel.domainmanagers.menumanager.ConfiguratorMenu;
 import backend.server.domainlevel.domainmanagers.menumanager.IMenuManager;
-import backend.server.genericservices.IOUtil;
-import backend.server.genericservices.Service;
-import backend.server.genericservices.DataLayer.*;
+import backend.server.domainlevel.monthlydomain.MonthlyConfig;
+import backend.server.genericservices.*;
+import backend.server.genericservices.datalayer.*;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
@@ -26,6 +24,9 @@ public class ConfigService extends Service<Void>{
     private Manager placesManager = new PlacesManager();
     private Manager volunteerManager = new VolunteerManager();
     private Manager activityManager = new ActivityManager(); 
+    private Manager configManager = new ConfigManager(); 
+    private Manager monthlyManager = new MonthlyPlanManager();
+
     private IMenuManager menu = new ConfiguratorMenu(this);
     private String configType;
   
@@ -151,15 +152,10 @@ public class ConfigService extends Service<Void>{
      */
     public void modNumMaxSub(){
         Integer n = IOUtil.readInteger("\nInserire nuovo numero di iscrizioni massime");
-
-        JsonObject oldConfigsJO = dataLayer.get(new JSONDataContainer("JF/configs.json", "configs", configType, "configType"));
-       // Configs configs = gson.fromJson(oldConfigsJO, Configs.class);
-        Configs configs;
-        configs = JSONUtil.createObject(oldConfigsJO, Configs.class);
+        Configs configs = JSONUtil.createObject(configManager.get(configType), Configs.class);
         configs.setMaxSubscriptions(n);
         JsonObject newConfigsJO = JSONUtil.createJson(configs);
-
-        dataLayer.modify(new JSONDataContainer("JF/configs.json", newConfigsJO, "configs",configType, "configType"));
+        configManager.update(newConfigsJO, configType);
     }
 
     /**
@@ -282,7 +278,27 @@ public class ConfigService extends Service<Void>{
      */
 
     public void generateMonthlyPlan() {
-        write("genMon",false);
+        monthlyManager.add(new JsonObject());
+        
+    }
+
+    public void addNonUsableDate(){
+
+        /*
+        TODO
+         * potrei fare che in base al numero del mese prende questo mese o il prossimo,
+         * per l'anno usa questo a meno che il mese iniziale sia dicembre, li va cambaito 
+         */
+
+        int day = IOUtil.readInteger("Inserire giorno non disponibile");
+        int month = IOUtil.readInteger("Inserire mese relativo");
+        int year = IOUtil.readInteger("Inserire anno relativo");
+
+        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current","type")), MonthlyConfig.class);
+        mc.getPrecludeDates().add(LocalDate.of(year, month, day));
+        JsonObject newConfigsJO = JSONUtil.createJson(mc);
+        dataLayer.modify(new JSONDataContainer("JF/monthlyConfigs.json", newConfigsJO, "mc", "current", "type"));
+
     }
     
 }

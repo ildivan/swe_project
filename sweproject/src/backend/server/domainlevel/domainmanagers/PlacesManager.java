@@ -9,10 +9,10 @@ import com.google.gson.JsonObject;
 import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.Place;
-import backend.server.genericservices.DataLayer.DataLayer;
-import backend.server.genericservices.DataLayer.JSONDataContainer;
-import backend.server.genericservices.DataLayer.JSONDataManager;
-import backend.server.genericservices.DataLayer.JSONUtil;
+import backend.server.genericservices.datalayer.DataLayer;
+import backend.server.genericservices.datalayer.JSONDataContainer;
+import backend.server.genericservices.datalayer.JSONDataManager;
+import backend.server.genericservices.datalayer.JSONUtil;
 
 public class PlacesManager implements Manager {
     private static final String PATH = "JF/places.json";
@@ -27,12 +27,12 @@ public class PlacesManager implements Manager {
     }
 
     @Override
-    public void remove(JsonObject data) {
+    public void remove(JsonObject data, String key) {
         
     }
 
     @Override
-    public void update(JsonObject data) {
+    public void update(JsonObject data, String key) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }

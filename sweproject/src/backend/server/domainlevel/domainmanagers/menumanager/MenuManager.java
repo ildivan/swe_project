@@ -18,16 +18,17 @@ public abstract class MenuManager extends ReadWrite implements IMenuManager{
      * @return
      */
     private List<String> buildMenu(){
-        List<String> opzioniVisibili = new ArrayList<>();
+        Map<String,Boolean> showableMap = buildMenuVisibility(this.vociVisibili);
+        List<String> showableList = new ArrayList<>();
 
-        for (Map.Entry<String, Boolean> entry : this.vociVisibili.entrySet()) {
+        for (Map.Entry<String, Boolean> entry : showableMap.entrySet()) {
             if (entry.getValue()) {
                 //   write(String.valueOf(entry.getValue()), false);
-                opzioniVisibili.add(entry.getKey());
+                showableList.add(entry.getKey());
             }
         }
 
-        return opzioniVisibili;
+        return showableList;
     }
 
     /**
@@ -42,6 +43,14 @@ public abstract class MenuManager extends ReadWrite implements IMenuManager{
         }
         return menuOut;
     }
+
+    /**
+     * decide witch menu voice to show based on the date
+     * @param map
+     * @return
+     */
+    protected abstract Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map);
+    
 
     /**
      * start the menu keeping the user in a loop until he decides to exit

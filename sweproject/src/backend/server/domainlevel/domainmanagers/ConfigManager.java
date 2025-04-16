@@ -2,34 +2,28 @@ package backend.server.domainlevel.domainmanagers;
 
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import backend.server.domainlevel.Activity;
+import backend.server.Configs;
 import backend.server.domainlevel.Manager;
-import backend.server.domainlevel.Place;
+import backend.server.domainlevel.Volunteer;
 import backend.server.genericservices.datalayer.DataLayer;
 import backend.server.genericservices.datalayer.JSONDataContainer;
 import backend.server.genericservices.datalayer.JSONDataManager;
 import backend.server.genericservices.datalayer.JSONUtil;
 
-public class ActivityManager implements Manager{
-    
-    
-    private static final String PATH = "JF/activities.json";
-    private static final String MEMBER_NAME = "activities";
+public class ConfigManager implements Manager{
+    private static final String PATH = "JF/configs.json";
+    private static final String MEMBER_NAME = "configs";
+    private static final String KEY_DESC = "configType";
     DataLayer dataLayer = new JSONDataManager();
+    Gson gson = new Gson();
 
     @Override
     public void add(JsonObject data) {
-        JsonObject toAdd = getActivity(JSONUtil.createObject(data, Place.class));
-        dataLayer.add(new JSONDataContainer(PATH, toAdd, MEMBER_NAME));
-    }
-
-    private JsonObject getActivity(Place place){
-        Activity activity = AMIOUtil.getActivity(place);
-        String[] volunteers = AMIOUtil.addVolunteersToActivity();
-        activity.setVolunteers(volunteers);
-        return JSONUtil.createJson(activity);
+        dataLayer.add(new JSONDataContainer(PATH, data, MEMBER_NAME));
+        //UNIMPLEMENTED
     }
 
     @Override
@@ -40,26 +34,12 @@ public class ActivityManager implements Manager{
 
     @Override
     public void update(JsonObject data, String key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        dataLayer.modify(new JSONDataContainer(PATH, data, MEMBER_NAME,key, KEY_DESC));
     }
 
     @Override
     public JsonObject get(String key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'get'");
-    }
-
-    @Override
-    public String getAll() {
-        String out = "";
-        List<JsonObject> activities = dataLayer.getAll(new JSONDataContainer(PATH, MEMBER_NAME));
-        for (JsonObject jo : activities){
-            Activity a = JSONUtil.createObject(jo, Activity.class);
-            out = out + a.toString();
-        }
-
-        return out;
+       return dataLayer.get(new JSONDataContainer(PATH, MEMBER_NAME, key, KEY_DESC));
     }
 
     @Override
@@ -75,9 +55,15 @@ public class ActivityManager implements Manager{
     }
 
     @Override
-    public List<Object> getCustomList() {
+    public List<?> getCustomList() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getCustomList'");
+    }
+
+    @Override
+    public String getAll() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAll'");
     }
     
 }

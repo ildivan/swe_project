@@ -9,10 +9,10 @@ import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.Place;
 import backend.server.domainlevel.Volunteer;
 import backend.server.genericservices.IOUtil;
-import backend.server.genericservices.DataLayer.DataLayer;
-import backend.server.genericservices.DataLayer.JSONDataContainer;
-import backend.server.genericservices.DataLayer.JSONDataManager;
-import backend.server.genericservices.DataLayer.JSONUtil;
+import backend.server.genericservices.datalayer.DataLayer;
+import backend.server.genericservices.datalayer.JSONDataContainer;
+import backend.server.genericservices.datalayer.JSONDataManager;
+import backend.server.genericservices.datalayer.JSONUtil;
 
 public class AMIOUtil extends IOUtil {
 

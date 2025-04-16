@@ -1,14 +1,29 @@
-package backend.server.genericservices.DataLayer;
+package backend.server.genericservices.datalayer;
 import com.google.gson.*;
 
 import backend.server.domainlevel.User;
+import backend.server.domainlevel.monthlydomain.MonthlyConfig;
 
 import java.io.*;
 import java.nio.file.*;
+import java.time.LocalDate;
 import java.util.*;
+import java.lang.reflect.Type;
 
 public class JSONIOManager {
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+        @Override
+        public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
+        }
+    })
+    .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+        @Override
+        public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            return LocalDate.parse(json.getAsString());
+        }
+    })
+    .create();
 
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
@@ -50,6 +65,8 @@ public class JSONIOManager {
     public synchronized boolean createJSONEmptyFile(String path) {
         Object emptyObject = new Object();
 
+        System.out.println("Writing to: " + path);
+
         try (FileWriter writer = new FileWriter(path)) {
             gson.toJson(emptyObject, writer);
             return true;
@@ -60,18 +77,34 @@ public class JSONIOManager {
     }
 
     /**
-     * metodo per creare noi un configuratore con utente e password di default
+     * metodo per creare noi un configuratore con utente e password di default e altro
      * @param args
      */
     public static void main(String[] args){
-        Gson gson = new Gson();
-        DataLayer DataLayer = new JSONDataManager();
-        User user = new User("CT3", "temp_p3", "configuratore");
+        Gson gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
+                @Override
+                public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
+                    return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
+                }
+            })
+            .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+                @Override
+                public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return LocalDate.parse(json.getAsString());
+                }
+            })
+            .create();
+         DataLayer DataLayer = new JSONDataManager();
+
+        // User user = new User("CT3", "temp_p3", "configuratore");
+        MonthlyConfig monthlyConfig = new MonthlyConfig(LocalDate.of(2025, 4, 23), false, new HashSet<LocalDate>());
+        
         String StringJO = new String();
-        StringJO = gson.toJson(user);
+        StringJO = gson.toJson(monthlyConfig);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
 
-        JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", JO, "users");
+        JSONDataContainer dataContainer = new JSONDataContainer("sweproject/JF/monthlyConfigs.json", JO, "mc");
         
         DataLayer.add(dataContainer);
 
