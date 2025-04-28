@@ -14,6 +14,29 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public class FrontEndUtils {
+
+    private enum ConnectionType {
+        CLIENT(5001),
+        SERVER(6001);
+    
+        private final int code;
+    
+        ConnectionType(int code) {
+            this.code = code;
+        }
+    
+        public int getCode() {
+            return code;
+        }
+    }
+
+    public static int getClientPort() {
+        return ConnectionType.CLIENT.getCode();
+    }
+    public static int getServerPort() {
+        return ConnectionType.SERVER.getCode();
+    }
+
     /*
      * simula la pulizia della console per avere un effetto di refresh
      */

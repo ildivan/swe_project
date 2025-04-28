@@ -166,7 +166,7 @@ public class ConfigService extends Service<Void>{
      */
     public void modNumMaxSub(){
         write(CLEAR,false);
-        Integer n = IOUtil.readInteger("\nInserire nuovo numero di iscrizioni massime");
+        Integer n = IOUtil.readInteger("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
         Configs configs = JSONUtil.createObject(configManager.get(configType), Configs.class);
         configs.setMaxSubscriptions(n);
         JsonObject newConfigsJO = JSONUtil.createJson(configs);

@@ -6,6 +6,8 @@ import backend.server.genericservices.datalayer.DataLayer;
 import backend.server.genericservices.datalayer.JSONDataContainer;
 import backend.server.genericservices.datalayer.JSONDataManager;
 import backend.server.genericservices.gson.GsonFactory;
+import backend.server.utils.IOUtil;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -23,17 +25,24 @@ public class AuthenticationService extends Service<User> {
     public User applyLogic() throws IOException {
         String username;
         User user = null;
+        String riprovare = "n"; // n no y si
         
         write(CLEAR, false);
-        write("Inserisci username:", true);
-        username = read();
+        
+        do{
+            username = IOUtil.readString("Inserisci username:");
 
-        JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", "users", username,"name");
-        if(!dataLayer.exists(dataContainer)){
-            write(String.valueOf(dataLayer.exists(dataContainer)), false);
-            write("Utente inesistente, connessione chiusa", false);
-            return null;
-        }
+            JSONDataContainer dataContainer = new JSONDataContainer("JF/users.json", "users", username,"name");
+            if(!dataLayer.exists(dataContainer)){
+                //DEBUG write(String.valueOf(dataLayer.exists(dataContainer)), false);
+                riprovare = IOUtil.readString("Utente inesistente, vuoi riprovare? (y/n):");
+                if(riprovare.equals("n")){
+                    write("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
+                    return null;
+                }
+            }
+        }while(riprovare.equals("y"));
+        
         
         if(AuthenticationUtil.checkIfTemp(username)){
             changePassword(username);

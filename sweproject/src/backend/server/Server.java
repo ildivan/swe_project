@@ -15,20 +15,19 @@ import java.net.*;
 
 public class Server {
 
-    private final int ClientPort;
-    private final int ServerTerminalPort;
+    private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
+    private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
     private static final Gson gson = GsonFactory.getGson();
-    public Server(int ClientPort, int ServerTerminalPort){
-        this.ClientPort = ClientPort;
-        this.ServerTerminalPort = ServerTerminalPort;
+    public Server(){
+       
        // this.planManager = new PlanManager();
     }
 
     public void startServer(String configType){
-        try (ServerSocket clientSS = new ServerSocket(ClientPort);
-            ServerSocket serverTerminalSS = new ServerSocket(ServerTerminalPort)) {
-            System.out.println("Server is listening on port " + ClientPort);
-            System.out.println("Server is listening on port " + ServerTerminalPort);
+        try (ServerSocket clientSS = new ServerSocket(CLIENT_PORT);
+            ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
+            System.out.println("Server is listening on port " + CLIENT_PORT);
+            System.out.println("Server is listening on port " + SERVER_TERMINA_PORT);
 
             if(configType.equals(ConfigType.NORMAL.getValue())){
                 firstTimeConfiguration();
@@ -133,7 +132,7 @@ public class Server {
 
         
         String configType = ConfigType.NO_FIRST_CONFIG.getValue();
-        Server s = new Server(5001,6001);
+        Server s = new Server();
         s.startServer(configType);
     }
 

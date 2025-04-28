@@ -60,10 +60,17 @@ public class Terminal {
         public static void main(String[] args) {
 
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
+        int port = 0;
         try {
             FrontEndUtils.clearConsole();
-            System.out.println("Port: ");
-            int port = Integer.parseInt(consoleReader.readLine());
+            
+            do{ 
+                System.out.println("Port: ");
+                port = Integer.parseInt(consoleReader.readLine());
+                if(port != FrontEndUtils.getClientPort() && port != FrontEndUtils.getServerPort()){
+                    System.out.println("Port not valid (6001 for server or 5001 for user)");
+                }
+            }while(port != FrontEndUtils.getClientPort() && port != FrontEndUtils.getServerPort());
            
             Terminal terminal = new Terminal("localhost", port);
             
