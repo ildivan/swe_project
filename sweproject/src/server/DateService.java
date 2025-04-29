@@ -1,14 +1,32 @@
 package server;
 
 import java.time.*;
+import server.objects.interfaceforservices.IActionDateService;
+
 
 public class DateService {
     
-    public static LocalDate getTodayDate(){
+    public enum Service {
+		GET_TODAY_DATE((params) -> DateService.getTodayDate()),
+		GET_TODAY_DAY((params) -> DateService.getTodayDay()),
+		CHECK_IF_BETWEEN((params) -> DateService.checkIfIsBetween((LocalDate) params[0], (LocalDate) params[1], (LocalDate) params[2]));
+
+		private final IActionDateService<?> service;
+	
+		Service(IActionDateService<?> service) {
+			this.service = service;
+		}
+	
+		public Object start(Object... params) {
+			return service.apply(params);
+		}
+	}
+
+    private static LocalDate getTodayDate(){
         return LocalDate.now();
     }
 
-    public static String getTodayDay(){
+    private static String getTodayDay(){
         return getTodayDate().getDayOfWeek().toString();
     }
 
@@ -16,7 +34,7 @@ public class DateService {
      * controlla se una data @target è copresa includendo gli estremi tra @start e @end
      * 
      */
-    public static boolean checkIfIsBetween(LocalDate target, LocalDate start, LocalDate end) {
+    private static boolean checkIfIsBetween(LocalDate target, LocalDate start, LocalDate end) {
         if (target == null || start == null || end == null) {
             throw new IllegalArgumentException("Le date non possono essere null");
         }

@@ -1,7 +1,8 @@
 package server.ioservice;
 
 import java.io.IOException;
-import server.objects.interfaceforservices.iointerfaces.IActionIOService;
+
+import server.objects.interfaceforservices.IActionIOService;
 
 public class IOService extends ReadWrite{
 

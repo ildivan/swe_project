@@ -1,4 +1,4 @@
-package server.objects.interfaceforservices.iointerfaces;
+package server.objects.interfaceforservices;
 
 @FunctionalInterface
 public interface IActionIOService<R> {

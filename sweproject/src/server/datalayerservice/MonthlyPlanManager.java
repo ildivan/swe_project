@@ -1,5 +1,6 @@
 package server.datalayerservice;
 
+import java.time.LocalDate;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -19,11 +20,12 @@ public class MonthlyPlanManager implements Manager{
         this.gson = gson;
         this.dataLayer = new JSONDataManager(gson);
         this.activityManager = new ActivityManager(gson);
-        this.monthlyPlan = new MonthlyPlan(DateService.getTodayDate());
+        LocalDate today = (LocalDate) DateService.Service.GET_TODAY_DATE.start();
+        this.monthlyPlan = new MonthlyPlan(today);
     }
 
     public MonthlyPlanManager() {
-        this.monthlyPlan = new MonthlyPlan(DateService.getTodayDate());
+        this.monthlyPlan = new MonthlyPlan((LocalDate) DateService.Service.GET_TODAY_DATE.start());
 
     }
 

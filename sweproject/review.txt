@@ -1,0 +1,40 @@
+29/04/2025
+
+revisione degli elaborati mandati da altri
+
+- to string non messo in classi di dominio
+- troppi metodi statici non vanno bene -> pochi
+oggetti implicano poca riusabilità, l'avere oggetti e non metodi 
+statici permette di mettere sopra interfaccie e quindi poi ampliare al 
+massimo la riusabilità
+
+-puoi passare l'oggetto da scrivere in un jsonobject * che contiene in un campo la 
+classe che rappresenta, cosi puoi tirare fuori la classe e ottenere tutti i dati
+che ti servono, da capire come generalizzare
+anche i metodi read e wrtie non vanno pernulla bene, devi passaer un oggetto che contiene
+le informazoni da stampare non direttamente la stringa da stampare
+
+-SEPARA MODELLO DALLA VISTA (anche le eccezzioni che sollevi devono contenere
+tutte le informazioni che poi permettono di costruire il messaggio di errore, 
+non gia il messaggio di errore)
+
+-implementare log di quello che succcede
+
+* magari un oggetto che contiene un campo del tipo di classe rappresentata 
+nel JO e un JO effettivo e questa classe è quella che poi usi per passare messaggi
+tra i vari servizi della applicazione
+
+- ricorda i test usano dati e file chenon sono quelli di utilizzo
+
+- data container deve esssere piu generico, deve avere jo e un oggetto con tutti i dati
+questo oggetto contiene tutti i dati per andare a localizzare dove salvare il jo
+crei una interfaccia, //e sotto questa interfaccia crei gli oggetti 
+che in base al tipo di salvataggio avranno i dati necessari//
+piu che altrio io direi una interfaccia che contiene un oggetto con tutti i dati
+per localizzare il dato, e un attributo che contiene il tipo di cosa che uso
+per interagire con i dati (JSON,Databse etc) cosi poi io leggo che cosa sto usando
+e chiamo il controller che poi parlera al datalayer in base a cosa uso, avrò una
+interfaccia che si estende in tutti i controller per parlare con il datalayer in 
+base a che tipo di salvataggio di dati uso, 
+un datalayer ogni tipo
+

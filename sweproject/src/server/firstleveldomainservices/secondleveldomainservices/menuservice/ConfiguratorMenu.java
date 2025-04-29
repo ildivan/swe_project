@@ -1,5 +1,6 @@
 package server.firstleveldomainservices.secondleveldomainservices.menuservice;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +33,7 @@ public class ConfiguratorMenu extends MenuManager{
 
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
-        if(DateService.getTodayDate().getDayOfMonth()==16){
+        if(((LocalDate) DateService.Service.GET_TODAY_DATE.start()).getDayOfMonth()==16){
             map.put("Genera Piano Mensile", true);
             //fare che se il piano non è stato generato il 16 laprima cosa da fare è quella, vanno osxurate tutte le altre voci
             return map;

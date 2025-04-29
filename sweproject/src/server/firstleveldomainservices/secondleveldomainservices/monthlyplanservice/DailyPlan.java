@@ -53,7 +53,7 @@ public class DailyPlan {
      * controllo se sono nel periodo di programmazione possibile della visita
      */
     private boolean isProgrammablePeriodCheck(Activity a){
-        return DateService.checkIfIsBetween(date, a.getFirstProgrammableDate(), a.getLastProgrammableDate());
+        return (Boolean) DateService.Service.CHECK_IF_BETWEEN.start(date, a.getFirstProgrammableDate(), a.getLastProgrammableDate());
     }
 
     /*
