@@ -11,7 +11,7 @@ import server.ioservice.IOService;
 
 
 public class VMIOUtil{
-    private static final Gson gson = GsonFactoryService.getGson();
+    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
     private static DataLayer dataLayer = new JSONDataManager(gson);
 
      /**

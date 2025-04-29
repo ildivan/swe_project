@@ -1,4 +1,5 @@
 package server.authservice;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import server.GsonFactoryService;
@@ -11,7 +12,7 @@ import org.mindrot.jbcrypt.*;
 public class AuthenticationUtil {
 
     private static final int HASH_ROUNDS = 12;
-    private static DataLayer dataLayer = new JSONDataManager(GsonFactoryService.getGson());
+    private static DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
     
     public static boolean checkIfTemp(String username) {
         DataContainer dataContainer = new DataContainer("JF/users.json", "users", username, "name");

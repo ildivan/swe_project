@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gson.Gson;
+
 import server.GsonFactoryService;
 import server.datalayerservice.DataContainer;
 import server.datalayerservice.DataLayer;
@@ -43,7 +46,7 @@ public class MonthlyPlan{
 
 
     private Map<LocalDate, DailyPlan> buildMonthlyMap() {
-        DataLayer dataLayer = new JSONDataManager(GsonFactoryService.getGson());
+        DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
         MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
@@ -95,7 +98,7 @@ public class MonthlyPlan{
      * clear the preclude dates in the config of the monthly plan
      */
     private void clearPrecludedDates() {
-        DataLayer dataLayer = new JSONDataManager(GsonFactoryService.getGson());
+        DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
         MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
         mc.setPrecludeDates(new HashSet<>());
 
@@ -106,7 +109,7 @@ public class MonthlyPlan{
      * change month of plan into monthly configs
      */
     private void incrementMonthOfPlan() {
-        DataLayer dataLayer = new JSONDataManager(GsonFactoryService.getGson());
+        DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
         MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
         LocalDate date = mc.getMonthAndYear();
         LocalDate newDate = date.plusMonths(1);

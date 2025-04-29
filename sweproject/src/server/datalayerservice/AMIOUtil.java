@@ -7,19 +7,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.google.gson.Gson;
-
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 import server.ioservice.IOService;
-import server.ioservice.ReadWrite;
 import server.GsonFactoryService;
 
 
 public class AMIOUtil{
-    private static final Gson gson = GsonFactoryService.getGson();
+    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
     private static Manager volunteerManager = new VolunteerManager(gson);
 
     public static Address getAddress(){

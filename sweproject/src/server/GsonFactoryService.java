@@ -15,9 +15,26 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
+import server.objects.interfaceforservices.IActionDateService;
+
 public class GsonFactoryService {
 
-    public static Gson getGson(){
+    public enum Service {
+        GET_GSON((params) -> GsonFactoryService.getGson());
+
+        private IActionDateService<?> service;
+
+        Service(IActionDateService<?> service) {
+            this.service = service;
+        }
+
+        public Object start(Object... params) {
+            return service.apply(params);
+        }
+    }
+
+
+    private static Gson getGson(){
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         Gson gson = new GsonBuilder()

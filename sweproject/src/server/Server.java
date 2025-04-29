@@ -25,7 +25,7 @@ public class Server {
 
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
-    private static final Gson gson = GsonFactoryService.getGson();
+    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
     public Server(){
        
        // this.planManager = new PlanManager();

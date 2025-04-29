@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import server.GsonFactoryService;
 
 public class JSONUtil {
-    private static Gson gson = GsonFactoryService.getGson();
+    private static Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
     public static <T> JsonObject createJson(T object){
         return gson.toJsonTree(object).getAsJsonObject();
     }

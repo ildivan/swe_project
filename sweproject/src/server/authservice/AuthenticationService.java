@@ -12,7 +12,7 @@ import server.GsonFactoryService;
 public class AuthenticationService extends Service<User> {
     private static final String CLEAR = "CLEAR";
     private ConnectionType connectionType;
-    private static final Gson gson = GsonFactoryService.getGson();
+    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
     private static DataLayer dataLayer = new JSONDataManager(gson);
 
     public AuthenticationService(Socket socket, ConnectionType connectionType) {
