@@ -1,6 +1,6 @@
 package server.objects;
 
-import server.ioservice.IOService;
+import server.ioservice.IOServiceWithCommandLine;
 import java.io.*;
 import java.net.Socket;
 
@@ -30,7 +30,7 @@ public abstract class Service <T> {
      * @return
      */
     protected static boolean continueChoice(String message) {
-        String choice = (String) IOService.Service.READ_STRING.start(String.format("\nProseguire con %s? (s/n)", message));
+        String choice = (String) IOServiceWithCommandLine.Service.READ_STRING.start(String.format("\nProseguire con %s? (s/n)", message));
        
         if(choice.equals("n")){
             return false;

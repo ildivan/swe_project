@@ -25,7 +25,7 @@ public class ActivityManager implements IBasicDLServices{
 
     @Override
     public void add(JsonObject data) {
-        JsonObject toAdd = getActivity(JSONUtil.createObject(data, Place.class));
+        JsonObject toAdd = getActivity(JSONService.createObject(data, Place.class));
         dataLayer.add(new DataContainer(PATH, toAdd, MEMBER_NAME));
     }
 
@@ -33,7 +33,7 @@ public class ActivityManager implements IBasicDLServices{
         Activity activity = AMIOUtil.getActivity(place);
         String[] volunteers = AMIOUtil.addVolunteersToActivity();
         activity.setVolunteers(volunteers);
-        return JSONUtil.createJson(activity);
+        return JSONService.createJson(activity);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class ActivityManager implements IBasicDLServices{
         String out = "";
         List<JsonObject> activities = dataLayer.getAll(new DataContainer(PATH, MEMBER_NAME));
         for (JsonObject jo : activities){
-            Activity a = JSONUtil.createObject(jo, Activity.class);
+            Activity a = JSONService.createObject(jo, Activity.class);
             out = out + a.toString();
         }
 
@@ -70,7 +70,7 @@ public class ActivityManager implements IBasicDLServices{
         List<JsonObject> activities = dataLayer.getAll(new DataContainer(PATH, MEMBER_NAME));
         List<Activity> out = new ArrayList<>();
         for (JsonObject jo : activities){
-            Activity a = JSONUtil.createObject(jo, Activity.class);
+            Activity a = JSONService.createObject(jo, Activity.class);
             out.add(a);
         }
         return out;

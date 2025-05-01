@@ -13,7 +13,7 @@ import server.GsonFactoryService;
 import server.datalayerservice.DataContainer;
 import server.datalayerservice.DataLayer;
 import server.datalayerservice.JSONDataManager;
-import server.datalayerservice.JSONUtil;
+import server.datalayerservice.JSONService;
 import server.firstleveldomainservices.Activity;
 
 
@@ -49,7 +49,7 @@ public class MonthlyPlan{
         DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
-        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        MonthlyConfig mc = JSONService.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
         date = mc.getMonthAndYear();
 
         // Calcola il 16 del mese successivo
@@ -99,10 +99,10 @@ public class MonthlyPlan{
      */
     private void clearPrecludedDates() {
         DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
-        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        MonthlyConfig mc = JSONService.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
         mc.setPrecludeDates(new HashSet<>());
 
-        dataLayer.modify(new DataContainer("JF/monthlyConfigs.json", JSONUtil.createJson(mc),"mc", "current", "type"));
+        dataLayer.modify(new DataContainer("JF/monthlyConfigs.json", JSONService.createJson(mc),"mc", "current", "type"));
     }
 
     /**
@@ -110,12 +110,12 @@ public class MonthlyPlan{
      */
     private void incrementMonthOfPlan() {
         DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
-        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        MonthlyConfig mc = JSONService.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
         LocalDate date = mc.getMonthAndYear();
         LocalDate newDate = date.plusMonths(1);
         mc.setMonthAndYear(newDate);
 
-        dataLayer.modify(new DataContainer("JF/monthlyConfigs.json", JSONUtil.createJson(mc),"mc", "current", "type"));
+        dataLayer.modify(new DataContainer("JF/monthlyConfigs.json", JSONService.createJson(mc),"mc", "current", "type"));
     }
 
     

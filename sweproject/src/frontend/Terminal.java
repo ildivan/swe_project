@@ -4,8 +4,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import com.google.gson.Gson;
-
-import server.objects.*;
+import server.messages.IOStringMessage;
 
 public class Terminal {
     private static final String CLEAR = "CLEAR";
@@ -29,22 +28,23 @@ public class Terminal {
              BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in))) {
 
             do {
+                //è un gson perche in formatterCommandLineView il metodo write manda un json
                 String JSONMessage = reader.readLine();
                 if (JSONMessage == null) break;
-                Message msg = gson.fromJson(JSONMessage, Message.class);
-                if (msg.text.equals(CLEAR)) {
+                IOStringMessage msg = gson.fromJson(JSONMessage, IOStringMessage.class);
+                if (msg.getText().equals(CLEAR)) {
                     FrontEndUtils.clearConsole();
                 }else{
-                    if (msg.text.equals(SPACE)){
+                    if (msg.getText().equals(SPACE)){
                         FrontEndUtils.spaceConsole();
                     }else{
-                        System.out.println(msg.text);
+                        System.out.println(msg.getText());
                     }
                     
                 }
                 
 
-                if (msg.requiresResponse) {
+                if (msg.getIfRequiresResponse()) {
                     System.out.print(">>");
                     String text = consoleReader.readLine();
                     writer.println(text);

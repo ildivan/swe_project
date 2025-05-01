@@ -15,3 +15,24 @@ O MEGLIO UNA INTERFACCIA COMUNE A SERVICE E ALL'INTERFACCIA DELLO SCAMBIO DEI ME
 PERMETTE DI FARE L'UMBOXING DI QUESTO OGGETTO CHE CONTIEN UN JO E LA CLASSE CORRISPONDENTE AL 
 JO CONTENUTO
 ---------
+
+
+classe message
+
+attributo che contiene l'informazione realtiva alla classe che rappresento
+
+
+CI SARA UNA CLASSE NELLA IMLEMENTAZIOne A OGGETTI DEI SERVIZI CHE VA A PREPARARE GLI OGGETTI TIPO LA LISTA DELLE ATTIVITA
+A ESSERE STAMPATE A STRINGA -> FORSE è UN ADAPTER, PREPARA GLI OGGETTI PER ESSERE VISUALIZZATI NEL TIPO DI INTERFACCIA CHE POSSIEDO
+OSSIA INTEERFACCIA TESTUALE
+
+
+
+to do 
+ - eliminare interfaccia per i servcizi e rimuover quella roba dei servizi, tanto se li devo istanziare a che cosa mi serve
+
+- dovrei mandare al server un iomessageil cui contenuto che ora è una stringa ma non va bene dovrebbe essere qualcosa che poi diventa una stringa 
+DA CHIEDERE NON SAPREI COME GENERALIZZARLO
+
+-dovrei fare che in wrtie si mandi un oggetto (che contiene le informazioni per fare
+la stringa) che viene poi aperto dal terminal che decide cosa farne piuttosto che una stringa

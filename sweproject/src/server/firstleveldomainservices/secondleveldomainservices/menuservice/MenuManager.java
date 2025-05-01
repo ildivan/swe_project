@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import server.ioservice.IOService;
+import server.ioservice.IOServiceWithCommandLine;
 
 
 
@@ -52,7 +52,7 @@ public abstract class MenuManager implements MenuService{
         Runnable toReturn = null;
         
         do{
-            choice = (Integer) IOService.Service.READ_INTEGER.start(Smenu + QUESTION);
+            choice = (Integer) IOServiceWithCommandLine.Service.READ_INTEGER.start(Smenu + QUESTION);
         
             if (choice >= 0 && choice <= menu.size()) {
                 if(choice == 0){
@@ -64,7 +64,7 @@ public abstract class MenuManager implements MenuService{
                 
             } else {
                 sceltaValida = false;
-                IOService.Service.WRITE.start("Scelta non valida, riprovare", false);
+                IOServiceWithCommandLine.Service.WRITE.start("Scelta non valida, riprovare", false);
             }
         }while(!sceltaValida);
         return toReturn;

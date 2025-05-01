@@ -49,7 +49,7 @@ public class PlacesManager implements IBasicDLServices {
         String out = "";
         List<JsonObject> places = dataLayer.getAll(new DataContainer(PATH, MEMBER_NAME));
         for (JsonObject jo : places){
-            Place a = JSONUtil.createObject(jo, Place.class);
+            Place a = JSONService.createObject(jo, Place.class);
             out = out + a.toString();
         }
 

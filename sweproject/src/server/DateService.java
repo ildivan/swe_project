@@ -1,7 +1,7 @@
 package server;
 
 import java.time.*;
-import server.objects.interfaceforservices.IActionDateService;
+import server.objects.interfaceforservices.IActionService;
 
 
 public class DateService {
@@ -11,9 +11,9 @@ public class DateService {
 		GET_TODAY_DAY((params) -> DateService.getTodayDay()),
 		CHECK_IF_BETWEEN((params) -> DateService.checkIfIsBetween((LocalDate) params[0], (LocalDate) params[1], (LocalDate) params[2]));
 
-		private final IActionDateService<?> service;
+		private final IActionService<?> service;
 	
-		Service(IActionDateService<?> service) {
+		Service(IActionService<?> service) {
 			this.service = service;
 		}
 	

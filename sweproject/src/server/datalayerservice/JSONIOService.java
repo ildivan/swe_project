@@ -4,7 +4,7 @@ import com.google.gson.*;
 
 import server.GsonFactoryService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
-import server.objects.interfaceforservices.IActionDateService;
+import server.objects.interfaceforservices.IActionService;
 
 import java.io.*;
 import java.nio.file.*;
@@ -22,9 +22,9 @@ public class JSONIOService {
         WRITE_TO_FILE((params) -> JSONIOService.writeToFile((String) params[0], (List<JsonObject>) params[1], (String) params[2])),
         CREATE_JSON_EMPTY_FILE((params) -> JSONIOService.createJSONEmptyFile((String) params[0]));
 
-        private IActionDateService<?> service;
+        private IActionService<?> service;
 
-        Service(IActionDateService<?> service) {
+        Service(IActionService<?> service) {
             this.service = service;
         }
 

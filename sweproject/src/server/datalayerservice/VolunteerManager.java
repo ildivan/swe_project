@@ -26,7 +26,7 @@ public class VolunteerManager implements IBasicDLServices{
     @Override
     public void add(JsonObject data) {
         dataLayer.add(new DataContainer(PATH, data, MEMBER_NAME));
-        VMIOUtil.addNewVolunteerUserProfile(JSONUtil.createObject(data, Volunteer.class).getName());
+        VMIOUtil.addNewVolunteerUserProfile(JSONService.createObject(data, Volunteer.class).getName());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class VolunteerManager implements IBasicDLServices{
        String out = "";
         List<JsonObject> volunteers = dataLayer.getAll(new DataContainer(PATH, MEMBER_NAME));
         for (JsonObject jo : volunteers){
-            Volunteer a = JSONUtil.createObject(jo, Volunteer.class);
+            Volunteer a = JSONService.createObject(jo, Volunteer.class);
             out = out + a.toString();
         }
 

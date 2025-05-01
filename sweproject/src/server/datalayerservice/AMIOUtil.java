@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
-import server.ioservice.IOService;
+import server.ioservice.IOServiceWithCommandLine;
 import server.GsonFactoryService;
 
 
@@ -20,29 +20,29 @@ public class AMIOUtil{
     private static IBasicDLServices volunteerManager = new VolunteerManager(gson);
 
     public static Address getAddress(){
-        String street = (String) IOService.Service.READ_STRING.start("Inserire via");
-        String city = (String) IOService.Service.READ_STRING.start("Inserire città");
-        String nation = (String) IOService.Service.READ_STRING.start("Inserire nazione");
-        String zipCode = (String) IOService.Service.READ_STRING.start("Inserire CAP");
+        String street = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire via");
+        String city = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire città");
+        String nation = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire nazione");
+        String zipCode = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire CAP");
         while(!isNumeric(zipCode)){
-            IOService.Service.WRITE.start("CAP non valido, inserire solo numeri", false);
-            zipCode = (String) IOService.Service.READ_STRING.start("Inserire CAP");
+            IOServiceWithCommandLine.Service.WRITE.start("CAP non valido, inserire solo numeri", false);
+            zipCode = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire CAP");
         }
         return new Address(street, city, nation, zipCode);
     }
 
     public static Activity getActivity(Place place){
-            String title = (String) IOService.Service.READ_STRING.start("\nInserire titolo attività");
-            String description = (String) IOService.Service.READ_STRING.start("\nInserire descrizione attività");
+            String title = (String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire titolo attività");
+            String description = (String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire descrizione attività");
             Address meetingPoint = getMeetingPoint(place);
             LocalDate firstProgrammableDate = getDate("\nInserire data inizio attività (dd-mm-yyyy)");
             LocalDate lastProgrammableDate = getDate("\nInserire data fine attività (dd-mm-yyyy)");
             String[] programmableDays = insertDays();
             LocalTime programmableHour = getTime("\nInserire ora programmabile (HH:mm)");
             LocalTime duration = getTime("\nInserire durata attività (HH:mm)");
-            boolean bigliettoNecessario = (Boolean) IOService.Service.READ_BOOLEAN.start("\nInserire se è necessatio il biglietto: (true/false)");
-            int maxPartecipanti = (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire numero massimo partecipanti",1, 1000);
-            int minPartecipanti = (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire numero minimo partecipanti",1,maxPartecipanti);
+            boolean bigliettoNecessario = (Boolean) IOServiceWithCommandLine.Service.READ_BOOLEAN.start("\nInserire se è necessatio il biglietto: (true/false)");
+            int maxPartecipanti = (Integer) IOServiceWithCommandLine.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire numero massimo partecipanti",1, 1000);
+            int minPartecipanti = (Integer) IOServiceWithCommandLine.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire numero minimo partecipanti",1,maxPartecipanti);
             
             return new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti, null);
     }
@@ -59,11 +59,11 @@ public class AMIOUtil{
     
         while (!validTime) {
             try {
-                String input = (String) IOService.Service.READ_STRING.start(message);
+                String input = (String) IOServiceWithCommandLine.Service.READ_STRING.start(message);
                 time = LocalTime.parse(input, formatterTime);
                 validTime = true;
             } catch (DateTimeParseException e) {
-                IOService.Service.WRITE.start("Orario non valido! Assicurati di usare il formato HH:mm (es. 14:30)", false);
+                IOServiceWithCommandLine.Service.WRITE.start("Orario non valido! Assicurati di usare il formato HH:mm (es. 14:30)", false);
             }
         }
         return time;
@@ -82,11 +82,11 @@ public class AMIOUtil{
 
             while (!validDate) {
                 try {
-                    String input = (String) IOService.Service.READ_STRING.start(message);
+                    String input = (String) IOServiceWithCommandLine.Service.READ_STRING.start(message);
                     date = LocalDate.parse(input, formatterDate);
                     validDate = true;
                 } catch (DateTimeParseException e) {
-                    IOService.Service.WRITE.start("Data non valida! Assicurati di usare il formato dd-MM-yyyy", false);
+                    IOServiceWithCommandLine.Service.WRITE.start("Data non valida! Assicurati di usare il formato dd-MM-yyyy", false);
                 }
             }
             return date;
@@ -99,7 +99,7 @@ public class AMIOUtil{
      * @throws IOException
      */
     private static Address getMeetingPoint(Place p){
-        if(((String) IOService.Service.READ_STRING.start("\nInserire punto di ritrovo (indirizzo): (d-indirizzo luogo/altro inserire)")).equals("d")){
+        if(((String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire punto di ritrovo (indirizzo): (d-indirizzo luogo/altro inserire)")).equals("d")){
             return p.getAddress();
         }else{
             return getAddress();
@@ -114,12 +114,12 @@ public class AMIOUtil{
     public static String[] addVolunteersToActivity(){
         ArrayList<String> volunteers = new ArrayList<>();
         do{
-            IOService.Service.WRITE.start(volunteerManager.getAll(),false);
-            String vol = (String) IOService.Service.READ_STRING.start("\nInserire volontario da aggiungere all'attività");
+            IOServiceWithCommandLine.Service.WRITE.start(volunteerManager.getAll(),false);
+            String vol = (String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire volontario da aggiungere all'attività");
             if(checkIfVolunteersExist(vol)){
                volunteers.add(vol);
             }else{
-                IOService.Service.WRITE.start("Volontario non esistente, aggiungere un volontario corretto", false);
+                IOServiceWithCommandLine.Service.WRITE.start("Volontario non esistente, aggiungere un volontario corretto", false);
                 continue;
             }
         }while(continueChoice("aggiunta volontari all'attività"));
@@ -159,9 +159,9 @@ public class AMIOUtil{
         boolean cont = true;
         while (cont) {
           
-            String day = (String) IOService.Service.READ_STRING.start("Inserisci un giorno della settimana in cui la visita si può programmare (es Lunedi): ");
+            String day = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserisci un giorno della settimana in cui la visita si può programmare (es Lunedi): ");
             days.add(day);
-            String answer = (String) IOService.Service.READ_STRING.start("Vuoi inserire un altro giorno? (s/n): ");
+            String answer = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Vuoi inserire un altro giorno? (s/n): ");
             if (!answer.equalsIgnoreCase("s")) {
                 cont = false;
             }
@@ -175,7 +175,7 @@ public class AMIOUtil{
      * @return
      */
     protected static boolean continueChoice(String message) {
-        String choice = (String) IOService.Service.READ_STRING.start(String.format("\nProseguire con %s? (s/n)", message));
+        String choice = (String) IOServiceWithCommandLine.Service.READ_STRING.start(String.format("\nProseguire con %s? (s/n)", message));
        
         if(choice.equals("n")){
             return false;

@@ -6,8 +6,8 @@ import server.authservice.User;
 import server.datalayerservice.DataContainer;
 import server.datalayerservice.DataLayer;
 import server.datalayerservice.JSONDataManager;
-import server.datalayerservice.JSONUtil;
-import server.ioservice.IOService;
+import server.datalayerservice.JSONService;
+import server.ioservice.IOServiceWithCommandLine;
 
 
 public class VMIOUtil{
@@ -20,8 +20,8 @@ public class VMIOUtil{
      */
     public static void addNewVolunteerUserProfile(String name) {
         String tempPass = "temp_" + Math.random();
-        IOService.Service.WRITE.start(String.format("Nuova password temporanea per volontario: %s\n%s", name, tempPass), false);
+        IOServiceWithCommandLine.Service.WRITE.start(String.format("Nuova password temporanea per volontario: %s\n%s", name, tempPass), false);
         User u = new User(name, tempPass, "volontario");
-        dataLayer.add(new DataContainer("JF/users.json", JSONUtil.createJson(u), "users"));
+        dataLayer.add(new DataContainer("JF/users.json", JSONService.createJson(u), "users"));
     }
 }

@@ -7,10 +7,10 @@ import com.google.gson.Gson;
 import server.DateService;
 import server.GsonFactoryService;
 import server.datalayerservice.ActivityManager;
-import server.datalayerservice.JSONUtil;
+import server.datalayerservice.JSONService;
 import server.datalayerservice.MonthlyPlanManager;
 import server.firstleveldomainservices.Activity;
-import server.objects.interfaceforservices.IActionDateService;
+import server.objects.interfaceforservices.IActionService;
 
 public class MonthlyPlanService {
     private static Gson gson = (Gson)GsonFactoryService.Service.GET_GSON.start();
@@ -20,9 +20,9 @@ public class MonthlyPlanService {
     public enum Service {
         BUILD_PLAN((params) -> MonthlyPlanService.buldMonthlyPlan());
 
-        private IActionDateService<?> service;
+        private IActionService<?> service;
 
-        Service(IActionDateService<?> service) {
+        Service(IActionService<?> service) {
             this.service = service;
         }
 
@@ -37,7 +37,7 @@ public class MonthlyPlanService {
         List<Activity> activity = activityManager.getAllAsActivities();
         monthlyPlan.generateMonthlyPlan(activity);
         MonthlyPlanManager monthlyPlanManager = new MonthlyPlanManager(gson);
-        monthlyPlanManager.add(JSONUtil.createJson(monthlyPlan));
+        monthlyPlanManager.add(JSONService.createJson(monthlyPlan));
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
         //DA FARE
     }

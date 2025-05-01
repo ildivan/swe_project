@@ -1,7 +1,7 @@
 package server.objects.interfaceforservices;
 
 @FunctionalInterface
-public interface IActionDateService<R> {
+public interface IActionService<R> {
     R apply(Object... params);
 }
 

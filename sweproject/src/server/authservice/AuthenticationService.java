@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 import server.objects.*;
 import server.datalayerservice.*;
-import server.ioservice.IOService;
+import server.ioservice.IOServiceWithCommandLine;
 import server.GsonFactoryService;
 
 public class AuthenticationService extends Service<User> {
@@ -26,17 +26,17 @@ public class AuthenticationService extends Service<User> {
         User user = null;
         String riprovare = "n"; // n no y si
         
-        IOService.Service.WRITE.start(CLEAR, false);
+        IOServiceWithCommandLine.Service.WRITE.start(CLEAR, false);
         
         do{
-            username = (String) IOService.Service.READ_STRING.start("Inserisci username:");
+            username = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserisci username:");
 
             DataContainer dataContainer = new DataContainer("JF/users.json", "users", username,"name");
             if(!dataLayer.exists(dataContainer)){
                 //DEBUG write(String.valueOf(dataLayer.exists(dataContainer)), false);
-                riprovare = (String) IOService.Service.READ_STRING.start("Utente inesistente, vuoi riprovare? (y/n):");
+                riprovare = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Utente inesistente, vuoi riprovare? (y/n):");
                 if(riprovare.equalsIgnoreCase("n")){
-                    IOService.Service.WRITE.start("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
+                    IOServiceWithCommandLine.Service.WRITE.start("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
                     return null;
                 }
             }
@@ -48,14 +48,14 @@ public class AuthenticationService extends Service<User> {
         }
             
         for(int i = 0; i < 3; i++){
-            String pass = (String) IOService.Service.READ_STRING.start("Inserisci password:");
+            String pass = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserisci password:");
             if(verifyPassword(username, pass)){
                 //write("DEBUG: calsse auth service line 42 password corretta", false);
                 break;
             }
-            IOService.Service.WRITE.start(String.format("Password sbagliata riprovare, tentativi rimasti %d",2-i), false);
+            IOServiceWithCommandLine.Service.WRITE.start(String.format("Password sbagliata riprovare, tentativi rimasti %d",2-i), false);
             if(i == 2){
-                IOService.Service.WRITE.start("Tentativi esauriti, connessione chiusa", false);
+                IOServiceWithCommandLine.Service.WRITE.start("Tentativi esauriti, connessione chiusa", false);
                 return null;
             }
         }
@@ -71,14 +71,14 @@ public class AuthenticationService extends Service<User> {
      */
     private void changePassword(String username) {
         
-        String newPassword = (String) IOService.Service.READ_STRING.start("Inserisci nuova password:", true);;
+        String newPassword = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserisci nuova password:", true);;
         
         if(!newPassword.equals("")){
             if(AuthenticationUtil.changePassword(username, newPassword)){
-                IOService.Service.WRITE.start("Password cambiata con successo", false);}
+                IOServiceWithCommandLine.Service.WRITE.start("Password cambiata con successo", false);}
 
         } else {
-            IOService.Service.WRITE.start("Errore nel cambiare la password", false);
+            IOServiceWithCommandLine.Service.WRITE.start("Errore nel cambiare la password", false);
         }
     }
 
@@ -86,7 +86,7 @@ public class AuthenticationService extends Service<User> {
             if(AuthenticationUtil.verifyPassword(username, Password)){
                 return true;
             } else {
-                IOService.Service.WRITE.start("Password errata", false);
+                IOServiceWithCommandLine.Service.WRITE.start("Password errata", false);
                 return false;
             }
     }

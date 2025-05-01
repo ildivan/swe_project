@@ -15,16 +15,16 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-import server.objects.interfaceforservices.IActionDateService;
+import server.objects.interfaceforservices.IActionService;
 
 public class GsonFactoryService {
 
     public enum Service {
         GET_GSON((params) -> GsonFactoryService.getGson());
 
-        private IActionDateService<?> service;
+        private IActionService<?> service;
 
-        Service(IActionDateService<?> service) {
+        Service(IActionService<?> service) {
             this.service = service;
         }
 

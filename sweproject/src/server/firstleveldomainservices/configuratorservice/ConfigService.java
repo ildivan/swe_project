@@ -15,7 +15,7 @@ import server.firstleveldomainservices.secondleveldomainservices.menuservice.Men
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
-import server.ioservice.IOService;
+import server.ioservice.IOServiceWithCommandLine;
 import server.objects.Configs;
 import server.objects.Service;
 
@@ -65,17 +65,17 @@ public class ConfigService extends Service<Void>{
              */
             if(configType.equalsIgnoreCase("normalFunctionConfigs")){
                 if(firstTimeConfiguration()){
-                    IOService.Service.WRITE.start("Configurazione base completata", false);
+                    IOServiceWithCommandLine.Service.WRITE.start("Configurazione base completata", false);
                 }else{
-                    IOService.Service.WRITE.start("Errore durante la configurazione", false);
+                    IOServiceWithCommandLine.Service.WRITE.start("Errore durante la configurazione", false);
                     return null;
                 }
             };
 
         do{
-            IOService.Service.WRITE.start(CLEAR,false);
+            IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
             Runnable toRun = menu.startMenu();
-            IOService.Service.WRITE.start(SPACE, false);
+            IOServiceWithCommandLine.Service.WRITE.start(SPACE, false);
             if(toRun==null){
                 continuare = false;
             }else{
@@ -84,7 +84,7 @@ public class ConfigService extends Service<Void>{
             }
                 
         }while(continuare);
-        IOService.Service.WRITE.start("\nArrivederci!\n", false);
+        IOServiceWithCommandLine.Service.WRITE.start("\nArrivederci!\n", false);
 
         return null;
     }
@@ -105,7 +105,7 @@ public class ConfigService extends Service<Void>{
      */
     private boolean firstTimeConfiguration(){
         try {
-            IOService.Service.WRITE.start("Prima configurazione necessaria:", false);
+            IOServiceWithCommandLine.Service.WRITE.start("Prima configurazione necessaria:", false);
             String areaOfIntrest = configureArea();
             Integer maxSubscriptions = configureMaxSubscriptions();
     
@@ -118,13 +118,13 @@ public class ConfigService extends Service<Void>{
     
        
             if(!checkIfConfigured(PLACE_KEY_DESC)){
-                IOService.Service.WRITE.start("Inizio prima configurazione luoghi", false);
+                IOServiceWithCommandLine.Service.WRITE.start("Inizio prima configurazione luoghi", false);
                 addPlace();
                 configs.setPlacesFirtsConfigured(true);
             }
                 //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
             if(!checkIfConfigured(ACTIVITY_KEY_DESC)){
-                IOService.Service.WRITE.start("Inizio prima configurazione attività", false);
+                IOServiceWithCommandLine.Service.WRITE.start("Inizio prima configurazione attività", false);
                 addActivity();
                 configs.setActivitiesFirtsConfigured(true);
             }
@@ -152,7 +152,7 @@ public class ConfigService extends Service<Void>{
      * @throws IOException
      */
     private String configureArea() throws IOException{
-        return (String) IOService.Service.READ_STRING.start("Inserire luogo di esercizio");
+        return (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire luogo di esercizio");
       
     }
     
@@ -162,20 +162,20 @@ public class ConfigService extends Service<Void>{
      * @throws IOException
      */
     private Integer configureMaxSubscriptions() throws IOException{
-        return (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", 1, 50);
+        return (Integer) IOServiceWithCommandLine.Service.READ_INTEGER_WITH_BOUNDARIES.start("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", 1, 50);
     }
 
     /**
      * method to modify the max number of subscriptions
      */
     public void modNumMaxSub(){
-        IOService.Service.WRITE.start(CLEAR,false);
-        Integer n = (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
-        Configs configs = JSONUtil.createObject(configManager.get(configType), Configs.class);
+        IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
+        Integer n = (Integer) IOServiceWithCommandLine.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
+        Configs configs = JSONService.createObject(configManager.get(configType), Configs.class);
         configs.setMaxSubscriptions(n);
-        JsonObject newConfigsJO = JSONUtil.createJson(configs);
+        JsonObject newConfigsJO = JSONService.createJson(configs);
         configManager.update(newConfigsJO, configType);
-        IOService.Service.WRITE.start("\nNumero massimo di iscrizioni modificato", false);
+        IOServiceWithCommandLine.Service.WRITE.start("\nNumero massimo di iscrizioni modificato", false);
     }
 
     /**
@@ -184,12 +184,12 @@ public class ConfigService extends Service<Void>{
      * ideally the configurator adds the volunteer and then he tells the volunteer the temporarly password generated
      */
     public void addVolunteer() {
-        IOService.Service.WRITE.start(CLEAR,false);
-        String name = (String) IOService.Service.READ_STRING.start("\nInserire nome del volontario");
+        IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
+        String name = (String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire nome del volontario");
         if (!volunteerManager.exists(name)) {
-            volunteerManager.add(JSONUtil.createJson(new Volunteer(name)));
+            volunteerManager.add(JSONService.createJson(new Volunteer(name)));
         } else {
-            IOService.Service.WRITE.start("\nVolontario già esistente", false);
+            IOServiceWithCommandLine.Service.WRITE.start("\nVolontario già esistente", false);
         }
     }   
 
@@ -197,19 +197,19 @@ public class ConfigService extends Service<Void>{
      * method to add a new place to the database
      */
     public void addPlace(){
-        IOService.Service.WRITE.start(CLEAR,false);
+        IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
         boolean continuare = false;
         
         do{
-                String name = (String) IOService.Service.READ_STRING.start("Inserire nome luogo");
+                String name = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire nome luogo");
                 if(placesManager.exists(name)){
-                    IOService.Service.WRITE.start("Luogo già esistente", false);
+                    IOServiceWithCommandLine.Service.WRITE.start("Luogo già esistente", false);
                     return;
                 }
-                String description = (String) IOService.Service.READ_STRING.start("Inserire descrizione luogo");
-                IOService.Service.WRITE.start("Inserire indirizzo luogo", false);
+                String description = (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire descrizione luogo");
+                IOServiceWithCommandLine.Service.WRITE.start("Inserire indirizzo luogo", false);
                 Address address = addNewAddress();
-                placesManager.add(JSONUtil.createJson(new Place(name, address, description)));
+                placesManager.add(JSONService.createJson(new Place(name, address, description)));
             continuare = continueChoice("inserimento luoghi");
         }while(continuare);
     }
@@ -227,10 +227,10 @@ public class ConfigService extends Service<Void>{
      * method to add a new activity to the database
      */
     public void addActivity() {
-        IOService.Service.WRITE.start(CLEAR,false);
+        IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
         boolean jump = false;
         if(placesManager.checkIfThereIsSomethingWithCondition()){
-            IOService.Service.WRITE.start("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
+            IOServiceWithCommandLine.Service.WRITE.start("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
             addActivityOnNoConfiguredPlaces();
             jump = true;
         }
@@ -239,15 +239,15 @@ public class ConfigService extends Service<Void>{
                     continue;
                 }
                 showPlaces();
-                String placeName = (String) IOService.Service.READ_STRING.start("\nInserire luogo per l'attività");
+                String placeName = (String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire luogo per l'attività");
 
                 while(!placesManager.exists(placeName)){
-                    IOService.Service.WRITE.start("Luogo non esistente, riprovare", false);
-                        placeName = (String) IOService.Service.READ_STRING.start("\nInserire luogo per l'attività");
+                    IOServiceWithCommandLine.Service.WRITE.start("Luogo non esistente, riprovare", false);
+                        placeName = (String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire luogo per l'attività");
 
                 }
                     
-                Place place = JSONUtil.createObject(placesManager.get(placeName), Place.class);      
+                Place place = JSONService.createObject(placesManager.get(placeName), Place.class);      
                 addActivityWithPlace(place);
             }while(continueChoice("aggiunta attività"));
 
@@ -258,10 +258,10 @@ public class ConfigService extends Service<Void>{
      */
     private void addActivityOnNoConfiguredPlaces() {
 
-        IOService.Service.WRITE.start("enter",false);
+        IOServiceWithCommandLine.Service.WRITE.start("enter",false);
         List<Place> places = (List<Place>) placesManager.getCustomList();
         for (Place place : places) {
-            IOService.Service.WRITE.start("Inserire attività per il luogo:\n " + place.toString(), false);
+            IOServiceWithCommandLine.Service.WRITE.start("Inserire attività per il luogo:\n " + place.toString(), false);
               addActivityWithPlace(place);
         }
     }
@@ -271,31 +271,31 @@ public class ConfigService extends Service<Void>{
      * @param place place to relate the activity
      */
     private void addActivityWithPlace(Place place) {
-        activityManager.add(JSONUtil.createJson(place));
+        activityManager.add(JSONService.createJson(place));
     }
 
     /**
      * method to show all volunteers
      */
     public void showVolunteers() {
-        IOService.Service.WRITE.start(volunteerManager.getAll(), false);
-        IOService.Service.WRITE.start(SPACE,false);
+        IOServiceWithCommandLine.Service.WRITE.start(volunteerManager.getAll(), false);
+        IOServiceWithCommandLine.Service.WRITE.start(SPACE,false);
     }
 
     /**
      * method to show all places
      */
     public void showPlaces() {
-        IOService.Service.WRITE.start(placesManager.getAll(), false);
-        IOService.Service.WRITE.start(SPACE,false);
+        IOServiceWithCommandLine.Service.WRITE.start(placesManager.getAll(), false);
+        IOServiceWithCommandLine.Service.WRITE.start(SPACE,false);
     }
 
     /**
      * method to show all activities
      */
     public void showActivities() {
-        IOService.Service.WRITE.start(activityManager.getAll(), false);
-        IOService.Service.WRITE.start(SPACE,false);
+        IOServiceWithCommandLine.Service.WRITE.start(activityManager.getAll(), false);
+        IOServiceWithCommandLine.Service.WRITE.start(SPACE,false);
     }
 
     /**
@@ -305,7 +305,7 @@ public class ConfigService extends Service<Void>{
 
     public void generateMonthlyPlan() {
         MonthlyPlanService.Service.BUILD_PLAN.start();
-        IOService.Service.WRITE.start("Piano mensile generato", false);
+        IOServiceWithCommandLine.Service.WRITE.start("Piano mensile generato", false);
         showMonthlyPlan();
     }
 
@@ -321,21 +321,21 @@ public class ConfigService extends Service<Void>{
      * method to add a non usable date for the next monthly plan
      */
     public void addNonUsableDate(){
-        IOService.Service.WRITE.start(CLEAR,false);
-        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current","type")), MonthlyConfig.class);
+        IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
+        MonthlyConfig mc = JSONService.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current","type")), MonthlyConfig.class);
 
         int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
         int minNumDay = 1;
             
 
         
-        int day = (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("Inserire giorno non disponibile", minNumDay, maxNumDay);
+        int day = (Integer) IOServiceWithCommandLine.Service.READ_INTEGER_WITH_BOUNDARIES.start("Inserire giorno non disponibile", minNumDay, maxNumDay);
 
         int month = setMonthOnPrecludeDay(mc, day);
         int year = setYearOnPrecludeDay(mc, day);
 
         mc.getPrecludeDates().add(LocalDate.of(year, month, day));
-        JsonObject newConfigsJO = JSONUtil.createJson(mc);
+        JsonObject newConfigsJO = JSONService.createJson(mc);
         dataLayer.modify(new DataContainer("JF/monthlyConfigs.json", newConfigsJO, "mc", "current", "type"));
 
     }
