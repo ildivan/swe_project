@@ -1,52 +1,25 @@
 package server.ioservice;
 
 import java.io.IOException;
-
 import server.ControlTypeService;
 import server.datalayerservice.JSONService;
 import server.messages.IOMessageReadIntWithBoundaries;
 import server.messages.IOStringMessage;
 import server.messages.Message;
-import server.objects.interfaceforservices.IActionService;
 
-public class IOServiceWithCommandLine extends FormatterCommandLineView{
+public class IOServiceWithCommandLine extends FormatterCommandLineView implements IIOService {
 	private static final ControlTypeService controlTypeService = new ControlTypeService();
 
 	private final static String FORMAT_ERROR = "Attenzione: il dato inserito non e' nel formato corretto";
-    
-	/**
-	 * struttura di enum per rendere questa classe un servizio
-	 */
-	public enum Service {
-		READ_INTEGER(( params) -> IOServiceWithCommandLine.readInteger((Message) params[0])),
-		READ_INTEGER_WITH_BOUNDARIES(( params) -> IOServiceWithCommandLine.readIntegerWithMinMax((Message) params[0])),
-		READ_STRING(( params) -> IOServiceWithCommandLine.readString((Message) params[0])),
-		READ_BOOLEAN(( params) -> IOServiceWithCommandLine.readBoolean((Message) params[0])),
-		WRITE(( params) -> {
-			IOServiceWithCommandLine.write((Message) params[0]);
-			return null;
-		});
-	
-		private final IActionService<?> service;
-	
-		Service(IActionService<?> service) {
-			this.service = service;
-		}
-	
-		// il problem compile time viene ignorato poiche a run time il tipo viene deciso e controllato
-        // in modo sicuro
-        @SuppressWarnings("unchecked")
-        public <T> T start(Object... params) {
-            // Il tipo viene deciso dinamicamente, quindi il casting avviene in modo sicuro
-            return (T) service.apply(params);
-        }
+
+	public void write(Message message) {
+		super.write(message);
 	}
-
-
-	/*
+	/**
 	 * metodo per leggere un intero dall'utente
+	 * @param message message che contiene un oggetto stringa con il messsaggio di richiesta
 	 */
-    private static int readInteger(Message message){
+    public int readInteger(Message message){
 		//leggo la stringa che mi arriva dal server che mi descrive la richiesta
 		String stringMessage = controlTypeService.controlAndGet(message, String.class);
 		//creo un messaggio di tipo IOStringMessage per il terminale contenente il fatto che necessito di risposta
@@ -77,11 +50,11 @@ public class IOServiceWithCommandLine extends FormatterCommandLineView{
 	  
     }
 
-	/*
+	/**
 	 * metodo per leggere un intero con massimo e minimo dall'utente
-	 * String message, int min, int max
+	 * @param message message che contiene un oggetto IOMessageReadIntWithBoundaries con il messsaggio di richiesta,
 	 */
-	private static int readIntegerWithMinMax(Message message) {
+	public int readIntegerWithMinMax(Message message) {
 		//unbooxo il messaggio che mi arriva dal server che mi descrive la richiesta
 		IOMessageReadIntWithBoundaries messageWithBoundaries = controlTypeService.controlAndGet(message, IOMessageReadIntWithBoundaries.class);
 		int min = messageWithBoundaries.getMin();
@@ -115,8 +88,12 @@ public class IOServiceWithCommandLine extends FormatterCommandLineView{
 		return valoreLetto;
 	}
 	
-
-	private static String readString(Message message) {
+	/**
+	 * metodo per leggere una stringa dall'utente
+	 * @param message un message che contiene un oggetto stringa con il messsaggio di richiesta
+	 * @return
+	 */
+	public String readString(Message message) {
 		//leggo la stringa che mi arriva dal server che mi descrive la richiesta
 		String stringMessage = controlTypeService.controlAndGet(message, String.class);
 		//creo un messaggio di tipo IOStringMessage per il terminale contenente il fatto che necessito di risposta
@@ -134,7 +111,12 @@ public class IOServiceWithCommandLine extends FormatterCommandLineView{
 		}
 	}
 
-	private static boolean readBoolean(Message message){
+	/**
+	 * metodo per leggere un booleano dall'utente
+	 * @param message un message che contiene un oggetto stringa con il messsaggio di richiesta
+	 * @return
+	 */
+	public boolean readBoolean(Message message){
 		//leggo la stringa che mi arriva dal server che mi descrive la richiesta
 		String stringMessage = controlTypeService.controlAndGet(message, String.class);
 		//creo un messaggio di tipo IOStringMessage per il terminale contenente il fatto che necessito di risposta
@@ -152,5 +134,35 @@ public class IOServiceWithCommandLine extends FormatterCommandLineView{
 		}
 	}
 
+	 /**
+     * ask the user if he wants to continue with the operation
+     * 
+     * necessita che message contenga una classe string
+     * 
+     * @param message the operation the user wants to continue
+     * @return
+     */
+	
+    public boolean continueChoice(Message message) {
+       
+        String ioString = controlTypeService.controlAndGet(message, String.class);
+        //creo la stringa contentente il messaggio da visualizzare all'utente
+        ioString = String.format("\nProseguire con %s? (s/n)", ioString);
+        //incapsulo la stringa in un oggetto che rappresenta il messaggio con la necessita o meno di risposta
+        IOStringMessage toWrite = new IOStringMessage(JSONService.Service.CREATE_JSON.start(ioString), true);
+        //creo il messaggio che sarà mandato al server da mandare al client che poi lo formatterà per visualizzarlo
+        Message ioMessage = new Message(JSONService.Service.CREATE_JSON.start(toWrite), IOStringMessage.class);
+
+        write(ioMessage);
+        String choice = "";
+        try {
+            choice = controlTypeService.controlAndGet(read(), String.class);
+            //controllo che la risposta sia effettivamente una stringa;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return !"n".equals(choice);
+    }
+        
 	
 }

@@ -15,6 +15,7 @@ import server.objects.ServerConnectionPorts;
 import server.objects.Service;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.ioservice.FormatterCommandLineView;
+import server.ioservice.IExternalFormatter;
 
 import java.io.*;
 import java.net.*;
@@ -26,6 +27,7 @@ public class Server {
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
     private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
+
     public Server(){
        
        // this.planManager = new PlanManager();
@@ -46,7 +48,8 @@ public class Server {
                 try {
                     while(true) {
                         Socket socket = serverTerminalSS.accept();
-                        FormatterCommandLineView.setConnection(socket);
+                        IExternalFormatter formatter = new FormatterCommandLineView();
+                        formatter.setConnection(socket);
                         System.out.println("Internal Connection");
                         User u = authenticate(socket,ConnectionType.Internal);
                         if(u == null){
@@ -55,10 +58,11 @@ public class Server {
                         }
 
                         //pattern solid delle inteerfacce per generalizzare e non dover riscrivere 
-                        //il codice se aggiungo unnuovo tipo di utente 
+                        //il codice se aggiungo unnuovo tipo di utente ????
                         Thread serviceThread = new Thread(() -> {
                             try {
-                                FormatterCommandLineView.setConnection(socket);
+                                IExternalFormatter innerformatter = new FormatterCommandLineView();
+                                innerformatter.setConnection(socket);
                                 // Ottieni il servizio associato all'utente e alla connessione
                                 Service<?> s = obtainService(u, socket, configType);
                                 s.run();  // Esegui il servizio

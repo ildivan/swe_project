@@ -15,13 +15,19 @@ import server.firstleveldomainservices.secondleveldomainservices.menuservice.Men
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
+import server.ioservice.IIOService;
 import server.ioservice.IOServiceWithCommandLine;
+import server.messages.IOMessageReadIntWithBoundaries;
+import server.messages.IOStringMessage;
+import server.messages.Message;
 import server.objects.Configs;
 import server.objects.Service;
 
 
 public class ConfigService extends Service<Void>{
-   // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
+   private static final int MASSIMO_NUMERO_ISCRIZIONI = 50;
+   private static final int MINIMO_NUMERO_ISCRIZIONI = 1;
+    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
     private static final String CLEAR = "CLEAR";
@@ -32,10 +38,9 @@ public class ConfigService extends Service<Void>{
     private IBasicDLServices volunteerManager; 
     private IBasicDLServices activityManager; 
     private IBasicDLServices configManager;
-    private IBasicDLServices monthlyManager;
-
     private MenuService menu = new ConfiguratorMenu(this);
     private String configType;
+    private IIOService ioService;
     
   
 
@@ -48,7 +53,7 @@ public class ConfigService extends Service<Void>{
         this.volunteerManager = new VolunteerManager(gson);
         this.activityManager = new ActivityManager(gson); 
         this.configManager = new ConfigManager(gson); 
-        this.monthlyManager = new MonthlyPlanManager(gson);
+        this.ioService = new IOServiceWithCommandLine();
     }
     /**
      * apply the logic of the service
@@ -65,26 +70,46 @@ public class ConfigService extends Service<Void>{
              */
             if(configType.equalsIgnoreCase("normalFunctionConfigs")){
                 if(firstTimeConfiguration()){
-                    IOServiceWithCommandLine.Service.WRITE.start("Configurazione base completata", false);
+                    /*
+                     * NEL CASO CAMBIASSE L'IMPLEMENTAZIONE DI WRITE BASTEREBBE GESTIRE NEL METODO WRITE 
+                     * DIVERSAMENTE IL MESAGGIO PASSATO
+                     * LA STRING POTREBBE ESSERE UN IDENTIFICATIVO PER QUALCHE EVENTO CHE DEVE PARTIRE AD ESEMPIO(?)
+                     * oppure in casi piu estremi posso cambiare il tipo di oggetto messo in message, andrebbe pero
+                     * rivisto il codice qua 
+                     */
+                    IOStringMessage ioStringMessage = new IOStringMessage("Configurazione base completata", false);
+                    Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+                    ioService.write(message);
                 }else{
-                    IOServiceWithCommandLine.Service.WRITE.start("Errore durante la configurazione", false);
+                    IOStringMessage ioStringMessage = new IOStringMessage("ERRORE: errore durante la configurazione", false);
+                    Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+                    ioService.write(message);
                     return null;
                 }
             };
 
         do{
-            IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
+            IOStringMessage ioStringMessage = new IOStringMessage(CLEAR, false);
+            Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+            ioService.write(message);
+
             Runnable toRun = menu.startMenu();
-            IOServiceWithCommandLine.Service.WRITE.start(SPACE, false);
+
+            ioStringMessage = new IOStringMessage(SPACE, false);
+            message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+            ioService.write(message);
             if(toRun==null){
                 continuare = false;
             }else{
                 toRun.run();
-                continuare = continueChoice("scelta operazioni");
+                continuare = ioService.continueChoice(new Message(JSONService.createJson("scelta operazioni"), String.class));
             }
                 
         }while(continuare);
-        IOServiceWithCommandLine.Service.WRITE.start("\nArrivederci!\n", false);
+        
+        IOStringMessage ioStringMessage = new IOStringMessage("\nArrivederci!\n", false);
+        Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+        ioService.write(message);
 
         return null;
     }
@@ -105,7 +130,9 @@ public class ConfigService extends Service<Void>{
      */
     private boolean firstTimeConfiguration(){
         try {
-            IOServiceWithCommandLine.Service.WRITE.start("Prima configurazione necessaria:", false);
+            IOStringMessage ioStringMessage = new IOStringMessage("Prima configurazione necessaria:", false);
+            Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+            ioService.write(message);
             String areaOfIntrest = configureArea();
             Integer maxSubscriptions = configureMaxSubscriptions();
     
@@ -118,13 +145,17 @@ public class ConfigService extends Service<Void>{
     
        
             if(!checkIfConfigured(PLACE_KEY_DESC)){
-                IOServiceWithCommandLine.Service.WRITE.start("Inizio prima configurazione luoghi", false);
+                ioStringMessage = new IOStringMessage("Inizio prima configurazione luoghi", false);
+                message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+                ioService.write(message);
                 addPlace();
                 configs.setPlacesFirtsConfigured(true);
             }
                 //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
             if(!checkIfConfigured(ACTIVITY_KEY_DESC)){
-                IOServiceWithCommandLine.Service.WRITE.start("Inizio prima configurazione attività", false);
+                ioStringMessage = new IOStringMessage("Inizio prima configurazione attività", false);
+                message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+                ioService.write(message);
                 addActivity();
                 configs.setActivitiesFirtsConfigured(true);
             }
@@ -152,7 +183,10 @@ public class ConfigService extends Service<Void>{
      * @throws IOException
      */
     private String configureArea() throws IOException{
-        return (String) IOServiceWithCommandLine.Service.READ_STRING.start("Inserire luogo di esercizio");
+        String ioStringMessage = new String("Inserire luogo di esercizio");
+        Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+        
+        return ioService.readString(message);
       
     }
     
@@ -162,20 +196,35 @@ public class ConfigService extends Service<Void>{
      * @throws IOException
      */
     private Integer configureMaxSubscriptions() throws IOException{
-        return (Integer) IOServiceWithCommandLine.Service.READ_INTEGER_WITH_BOUNDARIES.start("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", 1, 50);
+        IOMessageReadIntWithBoundaries ioStringMessage = new IOMessageReadIntWithBoundaries("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", true, MINIMO_NUMERO_ISCRIZIONI, MASSIMO_NUMERO_ISCRIZIONI);
+        Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+        return ioService.readIntegerWithMinMax(message);
     }
 
     /**
      * method to modify the max number of subscriptions
      */
     public void modNumMaxSub(){
-        IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
-        Integer n = (Integer) IOServiceWithCommandLine.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
+        //spazio la console
+        IOStringMessage ioStringMessage = new IOStringMessage(CLEAR, false);
+        Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+        ioService.write(message);
+
+        //richiedo il numero massimo di iscrizioni
+        IOMessageReadIntWithBoundaries ioM = new IOMessageReadIntWithBoundaries(String.format("\nInserire nuovo numero di iscrizioni massime (massimo numero %d)", MASSIMO_NUMERO_ISCRIZIONI), true, MINIMO_NUMERO_ISCRIZIONI, MASSIMO_NUMERO_ISCRIZIONI);
+        message = new Message(JSONService.createJson(ioM), IOStringMessage.class);
+        Integer n = ioService.readIntegerWithMinMax(message);
+
+        //modifico il numero massimo di iscrizioni
         Configs configs = JSONService.createObject(configManager.get(configType), Configs.class);
         configs.setMaxSubscriptions(n);
         JsonObject newConfigsJO = JSONService.createJson(configs);
         configManager.update(newConfigsJO, configType);
-        IOServiceWithCommandLine.Service.WRITE.start("\nNumero massimo di iscrizioni modificato", false);
+
+        //scrivo il messaggio di conferma
+        ioStringMessage = new IOStringMessage("\nNumero massimo di iscrizioni modificato", false);
+        message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+        ioService.write(message);
     }
 
     /**
@@ -184,8 +233,13 @@ public class ConfigService extends Service<Void>{
      * ideally the configurator adds the volunteer and then he tells the volunteer the temporarly password generated
      */
     public void addVolunteer() {
-        IOServiceWithCommandLine.Service.WRITE.start(CLEAR,false);
-        String name = (String) IOServiceWithCommandLine.Service.READ_STRING.start("\nInserire nome del volontario");
+        IOStringMessage ioStringMessage = new IOStringMessage(CLEAR, false);
+        Message message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+        ioService.write(message);
+
+        ioStringMessage = new IOStringMessage("\nInserire nome del volontario", true);
+        message = new Message(JSONService.createJson(ioStringMessage), IOStringMessage.class);
+        String name = (String) IOServiceWithCommandLine.Service.READ_STRING.start();
         if (!volunteerManager.exists(name)) {
             volunteerManager.add(JSONService.createJson(new Volunteer(name)));
         } else {
