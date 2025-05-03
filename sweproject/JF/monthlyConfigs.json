@@ -3,7 +3,9 @@
     {
       "monthAndYear": "16-06-2025",
       "planConfigured": false,
-      "precludeDates": [],
+      "precludeDates": [
+        "12-07-2025"
+      ],
       "type": "current"
     }
   ]

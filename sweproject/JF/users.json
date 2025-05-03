@@ -6,11 +6,6 @@
       "role": "configuratore"
     },
     {
-      "name": "CT3",
-      "password": "temp_p3",
-      "role": "configuratore"
-    },
-    {
       "name": "marco",
       "password": "$2a$12$vVoK/tcgciRY/vZx2j03d.O/Cfq1IMpfpYhp.0jRXTwevItewGULK",
       "role": "volontario"
@@ -51,8 +46,8 @@
       "role": "volontario"
     },
     {
-      "name": "CT3",
-      "password": "temp_p3",
+      "name": "CT2",
+      "password": "temp_p2",
       "role": "configuratore"
     }
   ]

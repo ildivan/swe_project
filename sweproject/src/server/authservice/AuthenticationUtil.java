@@ -1,32 +1,36 @@
 package server.authservice;
-import com.google.gson.Gson;
+
 import com.google.gson.JsonObject;
-
-import server.GsonFactoryService;
-import server.datalayerservice.DataContainer;
-import server.datalayerservice.DataLayer;
-import server.datalayerservice.JSONDataManager;
-
+import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.JsonDataLocalizationInformation;
 import org.mindrot.jbcrypt.*;
 
 public class AuthenticationUtil {
 
+    private static final String USERS_KEY_DESCRIPTION = "name";
+    private static final String USERS_MEMBER_NAME = "users";
+    private static final String USERS_PATH = "JF/users.json";
     private static final int HASH_ROUNDS = 12;
-    private static DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
+    
     
     public static boolean checkIfTemp(String username) {
-        DataContainer dataContainer = new DataContainer("JF/users.json", "users", username, "name");
-        JsonObject userJO = dataLayer.get(dataContainer);
-    return userJO.get("password").getAsString().contains("temp");
+       
+        JsonObject userJO = getUserJsonObject(username);
+        
+        return userJO.get("password").getAsString().contains("temp");
     }
 
     public static boolean changePassword(String username, String newPassword) {
-        DataContainer dataContainer1 = new DataContainer("JF/users.json", "users", username, "name");
-        JsonObject userJO = dataLayer.get(dataContainer1);
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(USERS_PATH);
+        locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
+        locInfo.setMemberName(USERS_MEMBER_NAME);
+        locInfo.setKey(username);
+        JsonObject userJO = getUserJsonObject(username);
         String newPasswordCrypted = cryptPassword(newPassword);
         userJO.addProperty("password", newPasswordCrypted);
-        DataContainer dataContainer2 = new DataContainer("JF/users.json", userJO, "users", username, "name");
-        return dataLayer.modify(dataContainer2);
+
+        return DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.modify(userJO, locInfo));
     }
 
     private static String cryptPassword(String password) {
@@ -36,10 +40,19 @@ public class AuthenticationUtil {
     }
 
     public static boolean verifyPassword(String username, String password) {
-        DataContainer dataContainer = new DataContainer("JF/users.json", "users", username, "name");
-        JsonObject userJO = dataLayer.get(dataContainer);
+        
+        JsonObject userJO = getUserJsonObject(username);
         String hashedPassword = userJO.get("password").getAsString();
         return BCrypt.checkpw(password, hashedPassword);
+    }
+
+    public static JsonObject getUserJsonObject(String username){
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(USERS_PATH);
+        locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
+        locInfo.setMemberName(USERS_MEMBER_NAME);
+        locInfo.setKey(username);
+        return DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
     }
 
     

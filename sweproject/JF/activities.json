@@ -404,13 +404,19 @@
       },
       "firstProgrammableDate": "01-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Martedi", "Giovedi"],
+      "programmableDays": [
+        "Martedi",
+        "Giovedi"
+      ],
       "programmableHour": "10:00",
       "duration": "01:30",
       "bigliettoNecessario": true,
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
-      "volunteers": ["Lucia", "Marco"]
+      "volunteers": [
+        "Lucia",
+        "Marco"
+      ]
     },
     {
       "placeName": "Parco Tarello",
@@ -424,13 +430,18 @@
       },
       "firstProgrammableDate": "01-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Lunedi", "Mercoledi"],
+      "programmableDays": [
+        "Lunedi",
+        "Mercoledi"
+      ],
       "programmableHour": "09:00",
       "duration": "01:30",
       "bigliettoNecessario": false,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": ["Marta"]
+      "volunteers": [
+        "Marta"
+      ]
     },
     {
       "placeName": "Museo delle Armi Luigi Marzoli",
@@ -444,18 +455,23 @@
       },
       "firstProgrammableDate": "03-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Mercoledi", "Sabato"],
+      "programmableDays": [
+        "Mercoledi",
+        "Sabato"
+      ],
       "programmableHour": "11:00",
       "duration": "02:00",
       "bigliettoNecessario": true,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": ["Luca"]
+      "volunteers": [
+        "Luca"
+      ]
     },
     {
       "placeName": "Piazza del Foro",
       "title": "Passeggiata Archeologica nel Foro Romano",
-      "description": "Un tour tra i resti dell'antico foro romano di Brescia.",
+      "description": "Un tour tra i resti dell\u0027antico foro romano di Brescia.",
       "meetingPoint": {
         "street": "Piazza del Foro",
         "city": "Brescia",
@@ -464,18 +480,24 @@
       },
       "firstProgrammableDate": "02-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Martedi", "Venerdi"],
+      "programmableDays": [
+        "Martedi",
+        "Venerdi"
+      ],
       "programmableHour": "08:30",
       "duration": "01:30",
       "bigliettoNecessario": false,
       "maxPartecipanti": 30,
       "minPartecipanti": 5,
-      "volunteers": ["Marco", "Marta"]
+      "volunteers": [
+        "Marco",
+        "Marta"
+      ]
     },
     {
       "placeName": "Museo di Scienze Naturali",
       "title": "Laboratorio Naturalistico per Famiglie",
-      "description": "Un'attività interattiva pensata per adulti e bambini per esplorare la natura.",
+      "description": "Un\u0027attività interattiva pensata per adulti e bambini per esplorare la natura.",
       "meetingPoint": {
         "street": "Via Ozanam, 4",
         "city": "Brescia",
@@ -484,13 +506,19 @@
       },
       "firstProgrammableDate": "04-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Domenica", "Sabato"],
+      "programmableDays": [
+        "Domenica",
+        "Sabato"
+      ],
       "programmableHour": "10:30",
       "duration": "02:00",
       "bigliettoNecessario": true,
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
-      "volunteers": ["Lucia", "Marco"]
+      "volunteers": [
+        "Lucia",
+        "Marco"
+      ]
     },
     {
       "placeName": "Quartiere del Carmine",
@@ -504,13 +532,19 @@
       },
       "firstProgrammableDate": "05-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Giovedi", "Sabato"],
+      "programmableDays": [
+        "Giovedi",
+        "Sabato"
+      ],
       "programmableHour": "16:00",
       "duration": "01:30",
       "bigliettoNecessario": false,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": ["Marta", "Luca"]
+      "volunteers": [
+        "Marta",
+        "Luca"
+      ]
     },
     {
       "placeName": "Biblioteca Queriniana",
@@ -524,13 +558,18 @@
       },
       "firstProgrammableDate": "03-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Martedi", "Venerdi"],
+      "programmableDays": [
+        "Martedi",
+        "Venerdi"
+      ],
       "programmableHour": "15:00",
       "duration": "01:30",
       "bigliettoNecessario": true,
       "maxPartecipanti": 15,
       "minPartecipanti": 3,
-      "volunteers": ["Lucia"]
+      "volunteers": [
+        "Lucia"
+      ]
     },
     {
       "placeName": "Piazza Vittoria",
@@ -544,17 +583,23 @@
       },
       "firstProgrammableDate": "01-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Lunedi", "Mercoledi"],
+      "programmableDays": [
+        "Lunedi",
+        "Mercoledi"
+      ],
       "programmableHour": "11:00",
       "duration": "01:30",
       "bigliettoNecessario": false,
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
-      "volunteers": ["Marco", "Marta"]
+      "volunteers": [
+        "Marco",
+        "Marta"
+      ]
     },
     {
       "placeName": "Palazzo Martinengo Cesaresco",
-      "title": "Mostra d'Arte a Palazzo Martinengo",
+      "title": "Mostra d\u0027Arte a Palazzo Martinengo",
       "description": "Visita una mostra temporanea all’interno del prestigioso palazzo storico.",
       "meetingPoint": {
         "street": "Via Musei, 30",
@@ -564,17 +609,22 @@
       },
       "firstProgrammableDate": "01-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Giovedi", "Domenica"],
+      "programmableDays": [
+        "Giovedi",
+        "Domenica"
+      ],
       "programmableHour": "14:30",
       "duration": "02:00",
       "bigliettoNecessario": true,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": ["Lucia"]
+      "volunteers": [
+        "Lucia"
+      ]
     },
     {
       "placeName": "Museo del Risorgimento",
-      "title": "Storia dell'Unità d'Italia a Brescia",
+      "title": "Storia dell\u0027Unità d\u0027Italia a Brescia",
       "description": "Ripercorri gli eventi che hanno reso Brescia protagonista del Risorgimento.",
       "meetingPoint": {
         "street": "Via del Castello, 9",
@@ -584,29 +634,35 @@
       },
       "firstProgrammableDate": "06-05-2025",
       "lastProgrammableDate": "30-09-2025",
-      "programmableDays": ["Martedi", "Giovedi"],
+      "programmableDays": [
+        "Martedi",
+        "Giovedi"
+      ],
       "programmableHour": "09:30",
       "duration": "01:30",
       "bigliettoNecessario": true,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": ["Luca", "Marco"]
+      "volunteers": [
+        "Luca",
+        "Marco"
+      ]
     },
     {
       "placeName": "Parco Ducos",
       "title": "Passeggiata Naturalistica al Parco Ducos",
       "description": "Un tour guidato alla scoperta della flora e fauna del Parco Ducos.",
       "meetingPoint": {
-      "street": "Via Ducos",
-      "city": "Brescia",
-      "state": "Italia",
-      "zipCode": "25123"
+        "street": "Via Ducos",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25123"
       },
       "firstProgrammableDate": "01-05-2025",
       "lastProgrammableDate": "30-09-2025",
       "programmableDays": [
-      "Martedi",
-      "Sabato"
+        "Martedi",
+        "Sabato"
       ],
       "programmableHour": "10:00",
       "duration": "02:00",
@@ -614,566 +670,565 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-      "Marco",
-      "Lucia"
+        "Marco",
+        "Lucia"
       ]
     },
     {
       "placeName": "Piazza del Duomo",
       "title": "Tour della Piazza del Duomo di Brescia",
-      "description": "Scopri la storia e l'architettura della splendida Piazza del Duomo di Brescia.",
+      "description": "Scopri la storia e l\u0027architettura della splendida Piazza del Duomo di Brescia.",
       "meetingPoint": {
         "street": "Piazza Paolo VI",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "01-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Lunedi",
-            "Mercoledi",
-            "Venerdi"
-          ],
-          "programmableHour": "09:00",
-          "duration": "02:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 20,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marco",
-            "Luca"
-          ]
-        },
-        {
-          "placeName": "Piazza della Vittoria",
-          "title": "Visita alla Piazza della Vittoria",
-          "description": "Un viaggio nel cuore del Novecento tra i monumenti e l'architettura fascista della città.",
-          "meetingPoint": {
-            "street": "Piazza della Vittoria",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25122"
-          },
-          "firstProgrammableDate": "02-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Martedi",
-            "Giovedi",
-            "Sabato"
-          ],
-          "programmableHour": "10:30",
-          "duration": "02:00",
-          "bigliettoNecessario": false,
-          "maxPartecipanti": 25,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Lucia",
-            "Marta"
-          ]
-        },
-        {
-          "placeName": "Basilica di San Salvatore",
-          "title": "Visita alla Basilica di San Salvatore",
-          "description": "Visita una delle basiliche più antiche di Brescia, patrimonio UNESCO.",
-          "meetingPoint": {
-            "street": "Via dei Musei, 81/b",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "05-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Lunedi",
-            "Giovedi",
-            "Domenica"
-          ],
-          "programmableHour": "11:00",
-          "duration": "01:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 30,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Lucia",
-            "Marco"
-          ]
-        },
-        {
-          "placeName": "Teatro Sociale",
-          "title": "Tour del Teatro Sociale di Brescia",
-          "description": "Scopri l'incredibile storia di uno dei teatri più importanti della città.",
-          "meetingPoint": {
-            "street": "Piazza della Loggia",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "06-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Martedi",
-            "Giovedi",
-            "Domenica"
-          ],
-          "programmableHour": "12:00",
-          "duration": "02:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 25,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marta",
-            "Lucia"
-          ]
-        },
-        {
-          "placeName": "Castello di Brescia",
-          "title": "Visita al Castello di Brescia",
-          "description": "Un tour esplorativo di uno dei castelli medievali più affascinanti d'Italia.",
-          "meetingPoint": {
-            "street": "Castello di Brescia",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "07-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Lunedi",
-            "Sabato"
-          ],
-          "programmableHour": "14:00",
-          "duration": "03:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 20,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marco",
-            "Lucia"
-          ]
-        },
-        {
-          "placeName": "Museo delle Armi",
-          "title": "Tour del Museo delle Armi",
-          "description": "Scopri la storia delle armi e delle armature antiche, dalla preistoria al Medioevo.",
-          "meetingPoint": {
-            "street": "Piazza del Duomo",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "08-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Mercoledi",
-            "Venerdi"
-          ],
-          "programmableHour": "10:00",
-          "duration": "02:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 15,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marco",
-            "Luca"
-          ]
-        },
-        {
-          "placeName": "Parco dell'Acqua",
-          "title": "Escursione al Parco dell'Acqua",
-          "description": "Passeggiata panoramica nel verde e nelle riserve naturali del parco.",
-          "meetingPoint": {
-            "street": "Via della Valle",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25060"
-          },
-          "firstProgrammableDate": "09-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Domenica",
-            "Giovedi"
-          ],
-          "programmableHour": "08:30",
-          "duration": "03:00",
-          "bigliettoNecessario": false,
-          "maxPartecipanti": 30,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Marta",
-            "Luca"
-          ]
-        },
-        {
-          "placeName": "Teatro Grande",
-          "title": "Spettacolo Teatrale al Teatro Grande",
-          "description": "Un'esperienza immersiva in uno spettacolo teatrale all'interno di uno dei teatri più importanti di Brescia.",
-          "meetingPoint": {
-            "street": "Piazza Cesare Beccaria",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "10-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Venerdi",
-            "Domenica"
-          ],
-          "programmableHour": "20:00",
-          "duration": "02:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 100,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Lucia",
-            "Marta"
-          ]
-        },
-        {
-          "placeName": "Duomo Nuovo",
-          "title": "Visita Guidata al Duomo Nuovo",
-          "description": "Scopri la storia e l'architettura del Duomo Nuovo, una delle chiese più imponenti della città.",
-          "meetingPoint": {
-            "street": "Piazza Paolo VI",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "15-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Martedi",
-            "Giovedi"
-          ],
-          "programmableHour": "09:30",
-          "duration": "01:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 20,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marta",
-            "Luca"
-          ]
-        },
-        {
-          "placeName": "Pinacoteca Tosio Martinengo",
-          "title": "Tour Artistico alla Pinacoteca",
-          "description": "Ammira le opere di grandi maestri del Rinascimento in un tour guidato attraverso la Pinacoteca.",
-          "meetingPoint": {
-            "street": "Piazza Moretto, 4",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "16-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Mercoledi",
-            "Venerdi"
-          ],
-          "programmableHour": "14:00",
-          "duration": "02:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 20,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marco",
-            "Luca"
-          ]
-        },
-        {
-          "placeName": "Tempio Capitolino",
-          "title": "Alla Scoperta del Tempio Capitolino",
-          "description": "Un tour approfondito tra le rovine del Tempio Capitolino, sito UNESCO che racconta la Brescia romana.",
-          "meetingPoint": {
-            "street": "Via dei Musei, 57",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "20-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Lunedi",
-            "Sabato"
-          ],
-          "programmableHour": "11:00",
-          "duration": "01:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 30,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Lucia",
-            "Marco"
-          ]
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "01-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Mercoledi",
+        "Venerdi"
+      ],
+      "programmableHour": "09:00",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Luca"
+      ]
     },
     {
-          "placeName": "Teatro Sociale",
-          "title": "Spettacolo al Teatro Sociale di Brescia",
-          "description": "Vivi l'emozione di uno spettacolo teatrale al Teatro Sociale, un'esperienza unica nel cuore della città.",
-          "meetingPoint": {
-            "street": "Piazza della Loggia",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "10-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Lunedi",
-            "Mercoledi",
-            "Venerdi"
-          ],
-          "programmableHour": "18:30",
-          "duration": "02:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 80,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Marco",
-            "Lucia"
-          ]
-        },
-        {
-          "placeName": "Museo delle Armi",
-          "title": "Visita Serale al Museo delle Armi",
-          "description": "Scopri la storia delle armi antiche durante una visita guidata serale nel Museo delle Armi di Brescia.",
-          "meetingPoint": {
-            "street": "Piazza del Duomo",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "15-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Martedi",
-            "Giovedi",
-            "Sabato"
-          ],
-          "programmableHour": "17:30",
-          "duration": "02:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 20,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marta",
-            "Lucia"
-          ]
-        },
-        {
-          "placeName": "Castello di Brescia",
-          "title": "Visita al Castello di Brescia al Tramonto",
-          "description": "Esplora il Castello di Brescia al tramonto, un'esperienza unica che ti permette di godere di una vista spettacolare sulla città.",
-          "meetingPoint": {
-            "street": "Castello di Brescia",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "20-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Domenica",
-            "Venerdi"
-          ],
-          "programmableHour": "18:00",
-          "duration": "03:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 25,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marco",
-            "Lucia"
-          ]
-        },
-        {
-          "placeName": "Duomo Nuovo",
-          "title": "Visita Serale al Duomo Nuovo",
-          "description": "Scopri la magnificenza del Duomo Nuovo di Brescia con una visita guidata serale.",
-          "meetingPoint": {
-            "street": "Piazza Paolo VI",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "22-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Lunedi",
-            "Giovedi",
-            "Sabato"
-          ],
-          "programmableHour": "17:30",
-          "duration": "02:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 15,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Lucia",
-            "Marta"
-          ]
-        },
-        {
-          "placeName": "Pinacoteca Tosio Martinengo",
-          "title": "Tour Serale alla Pinacoteca Tosio Martinengo",
-          "description": "Ammira le opere di grandi maestri del Rinascimento in un tour serale attraverso la Pinacoteca Tosio Martinengo.",
-          "meetingPoint": {
-            "street": "Piazza Moretto, 4",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "25-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Venerdi",
-            "Sabato"
-          ],
-          "programmableHour": "18:00",
-          "duration": "02:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 20,
-          "minPartecipanti": 5,
-          "volunteers": [
-            "Marco",
-            "Lucia"
-          ]
-        },
-        {
-          "placeName": "Teatro Grande",
-          "title": "Spettacolo Teatrale al Teatro Grande",
-          "description": "Assisti a uno spettacolo teatrale all'interno del magnifico Teatro Grande di Brescia.",
-          "meetingPoint": {
-            "street": "Piazza Cesare Beccaria",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "30-04-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Martedi",
-            "Giovedi",
-            "Domenica"
-          ],
-          "programmableHour": "20:00",
-          "duration": "02:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 100,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Marta",
-            "Luca"
-          ]
-        },
-        {
-          "placeName": "Parco dell'Acqua",
-          "title": "Passeggiata al Parco dell'Acqua al Tramonto",
-          "description": "Goditi una passeggiata al tramonto nel Parco dell'Acqua, immergendoti nella natura.",
-          "meetingPoint": {
-            "street": "Via della Valle",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25060"
-          },
-          "firstProgrammableDate": "01-05-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Sabato",
-            "Domenica"
-          ],
-          "programmableHour": "17:00",
-          "duration": "03:00",
-          "bigliettoNecessario": false,
-          "maxPartecipanti": 25,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Lucia",
-            "Marta"
-          ]
-        },
-        {
-          "placeName": "Castello di Brescia",
-          "title": "Cena al Castello di Brescia",
-          "description": "Partecipa a una cena medievale al Castello di Brescia, con piatti tipici e atmosfera storica.",
-          "meetingPoint": {
-            "street": "Castello di Brescia",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "05-05-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Venerdi",
-            "Sabato"
-          ],
-          "programmableHour": "19:30",
-          "duration": "04:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 30,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Marco",
-            "Lucia"
-          ]
-        },
-        {
-          "placeName": "Teatro Sociale",
-          "title": "Concerto al Teatro Sociale",
-          "description": "Assisti a un concerto dal vivo al Teatro Sociale di Brescia, con musicisti di fama internazionale.",
-          "meetingPoint": {
-            "street": "Piazza della Loggia",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "12-05-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Domenica",
-            "Giovedi"
-          ],
-          "programmableHour": "20:00",
-          "duration": "02:30",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 60,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Marta",
-            "Luca"
-          ]
-        },
-        {
-          "placeName": "Castello di Brescia",
-          "title": "Visita al Castello di Brescia giornata completa",
-          "description": "Partecipa ad una visita medievale al Castello di Brescia",
-          "meetingPoint": {
-            "street": "Castello di Brescia",
-            "city": "Brescia",
-            "state": "Italia",
-            "zipCode": "25121"
-          },
-          "firstProgrammableDate": "05-05-2025",
-          "lastProgrammableDate": "30-09-2025",
-          "programmableDays": [
-            "Venerdi",
-            "Sabato",
-            "Martedi",
-            "Lunedi"
-          ],
-          "programmableHour": "08:30",
-          "duration": "08:00",
-          "bigliettoNecessario": true,
-          "maxPartecipanti": 30,
-          "minPartecipanti": 10,
-          "volunteers": [
-            "Marco",
-            "Lucia"
-          ]
-        }
-
+      "placeName": "Piazza della Vittoria",
+      "title": "Visita alla Piazza della Vittoria",
+      "description": "Un viaggio nel cuore del Novecento tra i monumenti e l\u0027architettura fascista della città.",
+      "meetingPoint": {
+        "street": "Piazza della Vittoria",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25122"
+      },
+      "firstProgrammableDate": "02-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi",
+        "Sabato"
+      ],
+      "programmableHour": "10:30",
+      "duration": "02:00",
+      "bigliettoNecessario": false,
+      "maxPartecipanti": 25,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Basilica di San Salvatore",
+      "title": "Visita alla Basilica di San Salvatore",
+      "description": "Visita una delle basiliche più antiche di Brescia, patrimonio UNESCO.",
+      "meetingPoint": {
+        "street": "Via dei Musei, 81/b",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "05-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Giovedi",
+        "Domenica"
+      ],
+      "programmableHour": "11:00",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 30,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Lucia",
+        "Marco"
+      ]
+    },
+    {
+      "placeName": "Teatro Sociale",
+      "title": "Tour del Teatro Sociale di Brescia",
+      "description": "Scopri l\u0027incredibile storia di uno dei teatri più importanti della città.",
+      "meetingPoint": {
+        "street": "Piazza della Loggia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "06-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi",
+        "Domenica"
+      ],
+      "programmableHour": "12:00",
+      "duration": "02:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 25,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marta",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Castello di Brescia",
+      "title": "Visita al Castello di Brescia",
+      "description": "Un tour esplorativo di uno dei castelli medievali più affascinanti d\u0027Italia.",
+      "meetingPoint": {
+        "street": "Castello di Brescia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "07-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Sabato"
+      ],
+      "programmableHour": "14:00",
+      "duration": "03:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Museo delle Armi",
+      "title": "Tour del Museo delle Armi",
+      "description": "Scopri la storia delle armi e delle armature antiche, dalla preistoria al Medioevo.",
+      "meetingPoint": {
+        "street": "Piazza del Duomo",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "08-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Mercoledi",
+        "Venerdi"
+      ],
+      "programmableHour": "10:00",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 15,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Parco dell\u0027Acqua",
+      "title": "Escursione al Parco dell\u0027Acqua",
+      "description": "Passeggiata panoramica nel verde e nelle riserve naturali del parco.",
+      "meetingPoint": {
+        "street": "Via della Valle",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25060"
+      },
+      "firstProgrammableDate": "09-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Domenica",
+        "Giovedi"
+      ],
+      "programmableHour": "08:30",
+      "duration": "03:00",
+      "bigliettoNecessario": false,
+      "maxPartecipanti": 30,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Marta",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Teatro Grande",
+      "title": "Spettacolo Teatrale al Teatro Grande",
+      "description": "Un\u0027esperienza immersiva in uno spettacolo teatrale all\u0027interno di uno dei teatri più importanti di Brescia.",
+      "meetingPoint": {
+        "street": "Piazza Cesare Beccaria",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "10-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Venerdi",
+        "Domenica"
+      ],
+      "programmableHour": "20:00",
+      "duration": "02:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 100,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Duomo Nuovo",
+      "title": "Visita Guidata al Duomo Nuovo",
+      "description": "Scopri la storia e l\u0027architettura del Duomo Nuovo, una delle chiese più imponenti della città.",
+      "meetingPoint": {
+        "street": "Piazza Paolo VI",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "15-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi"
+      ],
+      "programmableHour": "09:30",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marta",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Pinacoteca Tosio Martinengo",
+      "title": "Tour Artistico alla Pinacoteca",
+      "description": "Ammira le opere di grandi maestri del Rinascimento in un tour guidato attraverso la Pinacoteca.",
+      "meetingPoint": {
+        "street": "Piazza Moretto, 4",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "16-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Mercoledi",
+        "Venerdi"
+      ],
+      "programmableHour": "14:00",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Tempio Capitolino",
+      "title": "Alla Scoperta del Tempio Capitolino",
+      "description": "Un tour approfondito tra le rovine del Tempio Capitolino, sito UNESCO che racconta la Brescia romana.",
+      "meetingPoint": {
+        "street": "Via dei Musei, 57",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "20-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Sabato"
+      ],
+      "programmableHour": "11:00",
+      "duration": "01:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 30,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marco"
+      ]
+    },
+    {
+      "placeName": "Teatro Sociale",
+      "title": "Spettacolo al Teatro Sociale di Brescia",
+      "description": "Vivi l\u0027emozione di uno spettacolo teatrale al Teatro Sociale, un\u0027esperienza unica nel cuore della città.",
+      "meetingPoint": {
+        "street": "Piazza della Loggia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "10-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Mercoledi",
+        "Venerdi"
+      ],
+      "programmableHour": "18:30",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 80,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Museo delle Armi",
+      "title": "Visita Serale al Museo delle Armi",
+      "description": "Scopri la storia delle armi antiche durante una visita guidata serale nel Museo delle Armi di Brescia.",
+      "meetingPoint": {
+        "street": "Piazza del Duomo",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "15-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi",
+        "Sabato"
+      ],
+      "programmableHour": "17:30",
+      "duration": "02:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marta",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Castello di Brescia",
+      "title": "Visita al Castello di Brescia al Tramonto",
+      "description": "Esplora il Castello di Brescia al tramonto, un\u0027esperienza unica che ti permette di godere di una vista spettacolare sulla città.",
+      "meetingPoint": {
+        "street": "Castello di Brescia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "20-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Domenica",
+        "Venerdi"
+      ],
+      "programmableHour": "18:00",
+      "duration": "03:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 25,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Duomo Nuovo",
+      "title": "Visita Serale al Duomo Nuovo",
+      "description": "Scopri la magnificenza del Duomo Nuovo di Brescia con una visita guidata serale.",
+      "meetingPoint": {
+        "street": "Piazza Paolo VI",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "22-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Lunedi",
+        "Giovedi",
+        "Sabato"
+      ],
+      "programmableHour": "17:30",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 15,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Pinacoteca Tosio Martinengo",
+      "title": "Tour Serale alla Pinacoteca Tosio Martinengo",
+      "description": "Ammira le opere di grandi maestri del Rinascimento in un tour serale attraverso la Pinacoteca Tosio Martinengo.",
+      "meetingPoint": {
+        "street": "Piazza Moretto, 4",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "25-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Venerdi",
+        "Sabato"
+      ],
+      "programmableHour": "18:00",
+      "duration": "02:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 20,
+      "minPartecipanti": 5,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Teatro Grande",
+      "title": "Spettacolo Teatrale al Teatro Grande",
+      "description": "Assisti a uno spettacolo teatrale all\u0027interno del magnifico Teatro Grande di Brescia.",
+      "meetingPoint": {
+        "street": "Piazza Cesare Beccaria",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "30-04-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Martedi",
+        "Giovedi",
+        "Domenica"
+      ],
+      "programmableHour": "20:00",
+      "duration": "02:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 100,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Marta",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Parco dell\u0027Acqua",
+      "title": "Passeggiata al Parco dell\u0027Acqua al Tramonto",
+      "description": "Goditi una passeggiata al tramonto nel Parco dell\u0027Acqua, immergendoti nella natura.",
+      "meetingPoint": {
+        "street": "Via della Valle",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25060"
+      },
+      "firstProgrammableDate": "01-05-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Sabato",
+        "Domenica"
+      ],
+      "programmableHour": "17:00",
+      "duration": "03:00",
+      "bigliettoNecessario": false,
+      "maxPartecipanti": 25,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Lucia",
+        "Marta"
+      ]
+    },
+    {
+      "placeName": "Castello di Brescia",
+      "title": "Cena al Castello di Brescia",
+      "description": "Partecipa a una cena medievale al Castello di Brescia, con piatti tipici e atmosfera storica.",
+      "meetingPoint": {
+        "street": "Castello di Brescia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "05-05-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Venerdi",
+        "Sabato"
+      ],
+      "programmableHour": "19:30",
+      "duration": "04:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 30,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    },
+    {
+      "placeName": "Teatro Sociale",
+      "title": "Concerto al Teatro Sociale",
+      "description": "Assisti a un concerto dal vivo al Teatro Sociale di Brescia, con musicisti di fama internazionale.",
+      "meetingPoint": {
+        "street": "Piazza della Loggia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "12-05-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Domenica",
+        "Giovedi"
+      ],
+      "programmableHour": "20:00",
+      "duration": "02:30",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 60,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Marta",
+        "Luca"
+      ]
+    },
+    {
+      "placeName": "Castello di Brescia",
+      "title": "Visita al Castello di Brescia giornata completa",
+      "description": "Partecipa ad una visita medievale al Castello di Brescia",
+      "meetingPoint": {
+        "street": "Castello di Brescia",
+        "city": "Brescia",
+        "state": "Italia",
+        "zipCode": "25121"
+      },
+      "firstProgrammableDate": "05-05-2025",
+      "lastProgrammableDate": "30-09-2025",
+      "programmableDays": [
+        "Venerdi",
+        "Sabato",
+        "Martedi",
+        "Lunedi"
+      ],
+      "programmableHour": "08:30",
+      "duration": "08:00",
+      "bigliettoNecessario": true,
+      "maxPartecipanti": 30,
+      "minPartecipanti": 10,
+      "volunteers": [
+        "Marco",
+        "Lucia"
+      ]
+    }
   ]
 }

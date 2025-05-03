@@ -2,20 +2,21 @@ package server.firstleveldomainservices.secondleveldomainservices.monthlyplanser
 
 import java.time.LocalDate;
 import java.util.List;
-import com.google.gson.Gson;
-
+import com.google.gson.JsonObject;
 import server.DateService;
-import server.GsonFactoryService;
-import server.datalayerservice.ActivityManager;
-import server.datalayerservice.JSONUtil;
-import server.datalayerservice.MonthlyPlanManager;
+import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
+import server.jsonfactoryservice.JsonFactoryService;
 import server.objects.interfaceforservices.IActionDateService;
 
 public class MonthlyPlanService {
-    private static Gson gson = (Gson)GsonFactoryService.Service.GET_GSON.start();
-    private static ActivityManager activityManager = new ActivityManager(gson);
-    
+
+    private static final String ACTIVITY_PATH = "JF/activities.json";
+    private static final String ACTIVITY_MEMBER_NAME = "activities";
+    private static final String MONTHLY_PLAN_PATH = "JF/monthlyPlan.json";
+    private static final String MONTHLY_PLAN_MEMBER_NAME = "monthlyPlan";
+
 
     public enum Service {
         BUILD_PLAN((params) -> MonthlyPlanService.buldMonthlyPlan());
@@ -34,10 +35,20 @@ public class MonthlyPlanService {
     private static boolean buldMonthlyPlan() {
         LocalDate today = (LocalDate) DateService.Service.GET_TODAY_DATE.start();
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
-        List<Activity> activity = activityManager.getAllAsActivities();
+
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(ACTIVITY_PATH);
+        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
+    
+        List<JsonObject> activityJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
+        List<Activity> activity = JsonFactoryService.createObjectList(activityJO, Activity.class);
+
         monthlyPlan.generateMonthlyPlan(activity);
-        MonthlyPlanManager monthlyPlanManager = new MonthlyPlanManager(gson);
-        monthlyPlanManager.add(JSONUtil.createJson(monthlyPlan));
+
+        locInfo.setPath(MONTHLY_PLAN_PATH);
+        locInfo.setMemberName(MONTHLY_PLAN_MEMBER_NAME);
+
+        DataLayerDispatcherService.start(locInfo, layer -> layer.add(JsonFactoryService.createJson(monthlyPlan), locInfo));
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
         //DA FARE
     }

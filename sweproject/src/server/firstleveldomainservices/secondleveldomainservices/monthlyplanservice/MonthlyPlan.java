@@ -6,21 +6,18 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.Gson;
-
-import server.GsonFactoryService;
-import server.datalayerservice.DataContainer;
-import server.datalayerservice.DataLayer;
-import server.datalayerservice.JSONDataManager;
-import server.datalayerservice.JSONUtil;
+import com.google.gson.JsonObject;
+import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
+import server.jsonfactoryservice.JsonFactoryService;
 
 
 
 public class MonthlyPlan{
 
     /*
+     * DA ELIMINARE
      * popolato usando i config
      * 1- si crea la mappa dei piani giornalieri e si mette null nella mappa del giorno
      * relativo ad un giorno precliso
@@ -28,6 +25,10 @@ public class MonthlyPlan{
      * se è null si va avanti, altrimenti si crea un dailyu plan relativo a tale gionro
      */
     
+    private static final String MONTHLY_CONFIG_KEY_DESCRIPTION = "type";
+    private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
+    private static final String MONTHLY_CONFIG_MEMBER_NAME = "mc";
+    private static final String MONTHLY_CONFIGS_PATH = "JF/monthlyConfigs.json";
     private LocalDate date;
     private Map<LocalDate,DailyPlan> monthlyPlan;
    
@@ -46,10 +47,10 @@ public class MonthlyPlan{
 
 
     private Map<LocalDate, DailyPlan> buildMonthlyMap() {
-        DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
+        
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
-        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        MonthlyConfig mc = geMonthlyConfig();
         date = mc.getMonthAndYear();
 
         // Calcola il 16 del mese successivo
@@ -98,26 +99,50 @@ public class MonthlyPlan{
      * clear the preclude dates in the config of the monthly plan
      */
     private void clearPrecludedDates() {
-        DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
-        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        
+        MonthlyConfig mc = geMonthlyConfig();
         mc.setPrecludeDates(new HashSet<>());
 
-        dataLayer.modify(new DataContainer("JF/monthlyConfigs.json", JSONUtil.createJson(mc),"mc", "current", "type"));
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(MONTHLY_CONFIGS_PATH);
+        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
+        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
+
+        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify( JsonFactoryService.createJson(mc), locInfo));
+        
     }
 
     /**
      * change month of plan into monthly configs
      */
     private void incrementMonthOfPlan() {
-        DataLayer dataLayer = new JSONDataManager((Gson) GsonFactoryService.Service.GET_GSON.start());
-        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new DataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        
+        MonthlyConfig mc = geMonthlyConfig();
         LocalDate date = mc.getMonthAndYear();
         LocalDate newDate = date.plusMonths(1);
         mc.setMonthAndYear(newDate);
 
-        dataLayer.modify(new DataContainer("JF/monthlyConfigs.json", JSONUtil.createJson(mc),"mc", "current", "type"));
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(MONTHLY_CONFIGS_PATH);
+        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
+        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
+
+        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify( JsonFactoryService.createJson(mc), locInfo));
     }
 
+
+    private MonthlyConfig geMonthlyConfig(){
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(MONTHLY_CONFIGS_PATH);
+        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
+        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
+
+        JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
+        return JsonFactoryService.createObject(mcJO, MonthlyConfig.class);
+    }
     
 
 

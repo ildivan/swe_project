@@ -1,9 +1,9 @@
 package server.authservice;
+
 import java.io.*;
 import java.net.Socket;
-
 import com.google.gson.Gson;
-
+import com.google.gson.JsonObject;
 import server.objects.*;
 import server.datalayerservice.*;
 import server.ioservice.IOService;
@@ -11,9 +11,13 @@ import server.GsonFactoryService;
 
 public class AuthenticationService extends Service<User> {
     private static final String CLEAR = "CLEAR";
+    private static final String USERS_KEY_DESCRIPTION = "name";
+    private static final String USERS_MEMBER_NAME = "users";
+    private static final String USERS_PATH = "JF/users.json";
+
     private ConnectionType connectionType;
     private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
-    private static DataLayer dataLayer = new JSONDataManager(gson);
+
 
     public AuthenticationService(Socket socket, ConnectionType connectionType) {
         super(socket);
@@ -30,9 +34,14 @@ public class AuthenticationService extends Service<User> {
         
         do{
             username = (String) IOService.Service.READ_STRING.start("Inserisci username:");
+            JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+            locInfo.setPath(USERS_PATH);
+            locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
+            locInfo.setMemberName(USERS_MEMBER_NAME);
+            locInfo.setKey(username);
+            
 
-            DataContainer dataContainer = new DataContainer("JF/users.json", "users", username,"name");
-            if(!dataLayer.exists(dataContainer)){
+            if(!DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo))){
                 //DEBUG write(String.valueOf(dataLayer.exists(dataContainer)), false);
                 riprovare = (String) IOService.Service.READ_STRING.start("Utente inesistente, vuoi riprovare? (y/n):");
                 if(riprovare.equalsIgnoreCase("n")){
@@ -41,7 +50,9 @@ public class AuthenticationService extends Service<User> {
                 }
             }
         }while(riprovare.equals("y"));
-        
+
+        //se esiste ottengo l'utente
+        JsonObject userJO = AuthenticationUtil.getUserJsonObject(username);
         
         if(AuthenticationUtil.checkIfTemp(username)){
             changePassword(username);
@@ -59,8 +70,8 @@ public class AuthenticationService extends Service<User> {
                 return null;
             }
         }
-        DataContainer dataContainer1 = new DataContainer("JF/users.json", "users", username, "name");
-        user = gson.fromJson(dataLayer.get(dataContainer1), User.class);
+
+        user = gson.fromJson(userJO, User.class);
         return user;
     }
             

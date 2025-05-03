@@ -1,48 +1,37 @@
-package server.datalayerservice;
+package server.datalayerservice.datareadwrite;
 
 import com.google.gson.*;
 
 import server.GsonFactoryService;
+import server.authservice.User;
+import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
-import server.objects.interfaceforservices.IActionDateService;
-
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.lang.reflect.Type;
-//DA VERIFICARE SE è DAVVERO UN CONTROLLER
-public class JSONIOService {
+
+public class JsonReadWrite implements IJsonReadWrite {
     
     private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
 
-    public enum Service {
-        READ_FROM_FILE((params) -> JSONIOService.readFromFile((String) params[0], (String) params[1])),
-        WRITE_TO_FILE((params) -> JSONIOService.writeToFile((String) params[0], (List<JsonObject>) params[1], (String) params[2])),
-        CREATE_JSON_EMPTY_FILE((params) -> JSONIOService.createJSONEmptyFile((String) params[0]));
-
-        private IActionDateService<?> service;
-
-        Service(IActionDateService<?> service) {
-            this.service = service;
+    public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
+        Path path = Paths.get(filePath);
+        if (!Files.exists(path)) {
+            return null;
         }
-
-        public Object start(Object... params) {
-            return service.apply(params);
-        }
-    }
-
-
-    private static synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
-        try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
+    
+        try (Reader reader = Files.newBufferedReader(path)) {
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray objectArray = json.getAsJsonArray(memberName);
-            
-            if(objectArray == null){
-                return null;
+    
+            if (objectArray == null) {
+                return new ArrayList<>();
             }
-
+    
             List<JsonObject> list = new ArrayList<>();
             for (JsonElement elem : objectArray) {
                 list.add(elem.getAsJsonObject());
@@ -53,9 +42,10 @@ public class JSONIOService {
             return null;
         }
     }
+    
 
     // Funzione per scrivere la lista degli oggetti serializzati nel file JSON
-    private static synchronized Boolean writeToFile(String filePath, List<JsonObject> list, String memberName) {
+    public synchronized Boolean writeToFile(String filePath, List<JsonObject> list, String memberName) {
         JsonObject json = new JsonObject();
         JsonArray objectArray = new JsonArray();
         for (JsonObject user : list) {
@@ -65,26 +55,25 @@ public class JSONIOService {
 
         try (Writer writer = new FileWriter(filePath)) {
             gson.toJson(json, writer);
+            return true; // Successo
         } catch (IOException e) {
             e.printStackTrace();
-            return null;
+            return false;
         }
-        return null;//fake return
     }
 
-    private static synchronized boolean createJSONEmptyFile(String path) {
-        Object emptyObject = new Object();
-
-        System.out.println("Writing to: " + path);
-
+    public synchronized boolean createJSONEmptyFile(String path) {
+        JsonObject emptyJson = new JsonObject();
+    
         try (FileWriter writer = new FileWriter(path)) {
-            gson.toJson(emptyObject, writer);
+            gson.toJson(emptyJson, writer);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
+    
 
     /**
      * metodo per creare noi un configuratore con utente e password di default e altro
@@ -106,18 +95,27 @@ public class JSONIOService {
                 }
             })
             .create();
-         DataLayer DataLayer = new JSONDataManager(gson);
-
-        // User user = new User("CT3", "temp_p3", "configuratore");
-        MonthlyConfig monthlyConfig = new MonthlyConfig(LocalDate.of(2025, 4, 23), false, new HashSet<LocalDate>());
         
+
+        
+        //riga per creare nuovo utente
+        User user = new User("CT2", "temp_p2", "configuratore");
+
+        //riga per creare monthly config
+        // MonthlyConfig monthlyConfig = new MonthlyConfig(LocalDate.of(2025, 4, 23), false, new HashSet<LocalDate>());
+        
+        //salvare l'oggetto creato
         String StringJO = new String();
-        StringJO = gson.toJson(monthlyConfig);
+        StringJO = gson.toJson(user);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
 
-        DataContainer dataContainer = new DataContainer("sweproject/JF/monthlyConfigs.json", JO, "mc");
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath("JF/users.json");
+        locInfo.setMemberName("users");
+       
+
         
-        DataLayer.add(dataContainer);
+        DataLayerDispatcherService.start(locInfo, layer->layer.add(JO,locInfo));
 
     }
 }

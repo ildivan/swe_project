@@ -5,9 +5,8 @@ import com.google.gson.JsonObject;
 
 import server.authservice.AuthenticationService;
 import server.authservice.User;
-import server.datalayerservice.DataContainer;
-import server.datalayerservice.DataLayer;
-import server.datalayerservice.JSONDataManager;
+import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.JsonDataLocalizationInformation;
 import server.objects.ConfigType;
 import server.objects.Configs;
 import server.objects.ConnectionType;
@@ -15,6 +14,7 @@ import server.objects.ServerConnectionPorts;
 import server.objects.Service;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.ioservice.ReadWrite;
+import server.jsonfactoryservice.JsonFactoryService;
 
 import java.io.*;
 import java.net.*;
@@ -23,6 +23,9 @@ import java.net.*;
 
 public class Server {
 
+    private static final String GENERAL_CONFIGS_KEY_DESCRIPTION = "configType";
+    private static final String GENERAL_CONFIGS_MEMBER_NAME = "configs";
+    private static final String GENERAL_CONFIG_PATH = "JF/configs.json";
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
     private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
@@ -121,20 +124,21 @@ public class Server {
     }
 
     private void firstTimeConfiguration(){
-        DataLayer dl = new JSONDataManager(gson);
-        if(!dl.checkFileExistance(new DataContainer("JF/configs.json"))){
-            dl.createJSONEmptyFile(new DataContainer("JF/configs.json"));
+
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(GENERAL_CONFIG_PATH);
+
+        if(!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.checkFileExistance(locInfo))){
+            DataLayerDispatcherService.start(locInfo, layer->layer.createJSONEmptyFile(locInfo));
         }
 
-        Configs configs = new Configs();
-        
-        String StringJO = new String();
-        StringJO = gson.toJson(configs);
-        JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
-        
-        DataContainer dataContainer = new DataContainer("JF/configs.json", JO, "configs", ConfigType.NORMAL.getValue(), "configType");
-        
-        dl.modify(dataContainer);
+        JsonObject JO = JsonFactoryService.createJson(new Configs());
+
+        locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
+        locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
+        locInfo.setKey(ConfigType.NORMAL.getValue());
+    
+        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(JO, locInfo));
     }
 
     public static void main(String[] args) {

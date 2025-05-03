@@ -1,24 +1,28 @@
 {
-    "volunteers": [
-        {
-            "name": "marco",
-            "nondisponibilityDays": []
-        },
-        {
-            "name": "lucia",
-            "nondisponibilityDays": []
-        },
-        {
-            "name": "marta",
-            "nondisponibilityDays": []
-        },
-        {
-            "name": "luca",
-            "nondisponibilityDays": []
-        },
-        {
-            "name": "riccardo",
-            "nondisponibilityDays": []
-        }
-    ]
+  "volunteers": [
+    {
+      "name": "marco",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "lucia",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "marta",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "luca",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "riccardo",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "nadia",
+      "nondisponibilityDays": []
+    }
+  ]
 }

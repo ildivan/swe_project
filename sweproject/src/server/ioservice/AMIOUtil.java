@@ -1,4 +1,4 @@
-package server.datalayerservice;
+package server.ioservice;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -11,13 +11,17 @@ import com.google.gson.Gson;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
-import server.ioservice.IOService;
 import server.GsonFactoryService;
+import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.JsonDataLocalizationInformation;
 
 
 public class AMIOUtil{
+    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
+    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
+    private static final String VOLUNTEER_KEY_DESC = "name";
+
     private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
-    private static IBasicDLServices volunteerManager = new VolunteerManager(gson);
 
     public static Address getAddress(){
         String street = (String) IOService.Service.READ_STRING.start("Inserire via");
@@ -113,8 +117,8 @@ public class AMIOUtil{
      */
     public static String[] addVolunteersToActivity(){
         ArrayList<String> volunteers = new ArrayList<>();
+      
         do{
-            IOService.Service.WRITE.start(volunteerManager.getAll(),false);
             String vol = (String) IOService.Service.READ_STRING.start("\nInserire volontario da aggiungere all'attività");
             if(checkIfVolunteersExist(vol)){
                volunteers.add(vol);
@@ -133,10 +137,14 @@ public class AMIOUtil{
      * @return true if the volunteer already exists
      */
     private static boolean checkIfVolunteersExist(String name) {
-        if(volunteerManager.exists(name)){
-            return true;
-        }
-        return false;
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(VOLUNTEER_PATH);
+        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
+        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        locInfo.setKey(name);
+    
+        return DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo));
+      
     }
 
     /**
