@@ -158,32 +158,59 @@ public class ConfigService extends Service<Void>{
         
     }
 
-    /**
-     * method to configure the area of intrest
-     * @return  the area of intrest
-     * @throws IOException
+   /**
+     * Chiede all’utente di inserire l’area di interesse e la restituisce.
+     *
+     * @pre Nessuna precondizione. L'input può essere qualsiasi stringa non nulla.
+     * @post Ritorna una stringa non nulla e non vuota rappresentante l'area di interesse.
+     *
+     * @return l'area di interesse inserita dall'utente.
+     * @throws IOException se si verifica un errore nella lettura dell’input.
      */
     private String configureArea() throws IOException{
-        return (String) IOService.Service.READ_STRING.start("Inserire luogo di esercizio");
-      
+        String area = (String) IOService.Service.READ_STRING.start("Inserire luogo di esercizio");
+        
+        assert area != null && !area.trim().isEmpty() : "Area di interesse non valida (nulla o vuota)";
+
+        return area;
     }
     
     /**
-     * method to configure the max number of subscriptions
-     * @return the max number of subscriptions
-     * @throws IOException
+     * Chiede all'utente di inserire il numero massimo di iscrizioni contemporanee
+     * per una singola iniziativa.
+     *
+     * @pre Nessuna precondizione, l’utente deve solo inserire un numero compreso tra 1 e 50.
+     * @post Ritorna un intero maggiore di 0 e minore o uguale a 50.
+     *
+     * @return il numero massimo di iscrizioni contemporanee consentite.
+     * @throws IOException se si verifica un errore nella lettura dell’input.
      */
     private Integer configureMaxSubscriptions() throws IOException{
-        return (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", 1, 50);
+        Integer max = (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", 1, 50);
+        
+        assert max != null : "Il valore restituito non deve essere null";
+        assert max >= 1 && max <= 50 : "Numero massimo di iscrizioni fuori dai limiti (1-50)";
+
+        return max;
+
     }
 
     /**
-     * method to modify the max number of subscriptions
+     * Modifica il numero massimo di iscrizioni contemporanee per una iniziativa.
+     *
+     * @pre Il sistema deve essere correttamente configurato e l’utente deve inserire un numero valido tra 1 e 50.
+     * @post Il nuovo numero massimo è salvato nella configurazione.
      */
     public void modNumMaxSub(){
         IOService.Service.WRITE.start(CLEAR,false);
         Integer n = (Integer) IOService.Service.READ_INTEGER_WITH_BOUNDARIES.start("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
+
+        assert n != null && n >= 1 && n <= 50 : "Valore non valido per il numero massimo di iscrizioni";
+
         Configs configs = getConfig();
+
+        assert configs != null : "Configurazione non trovata";
+
         configs.setMaxSubscriptions(n);
         JsonObject newConfigsJO = JsonFactoryService.createJson(configs);
 
@@ -193,18 +220,25 @@ public class ConfigService extends Service<Void>{
         locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
         locInfo.setKey(configType);
         
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(newConfigsJO, locInfo));
+        boolean modified = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(newConfigsJO, locInfo));
+
+        assert modified : "Modifica configurazione fallita";
+
         IOService.Service.WRITE.start("\nNumero massimo di iscrizioni modificato", false);
     }
 
     /**
-     * method to add a new volunteer, asks the name, then checks if it already exists, if not it adds it to the user and to the voluteer database
-     * in the user database it creates a temporarly password to be changed by the volunteer the first time he logs in
-     * ideally the configurator adds the volunteer and then he tells the volunteer the temporarly password generated
+     * Aggiunge un nuovo volontario al sistema, chiedendo il nome e controllando che non esista già.
+     * Se non esiste, lo aggiunge al database dei volontari con password temporanea.
+     *
+     * @pre L’utente deve inserire un nome non nullo e non vuoto. Il volontario non deve esistere già.
+     * @post Se il volontario non esisteva, viene aggiunto al database. In caso contrario, viene mostrato un messaggio.
      */
     public void addVolunteer() {
         IOService.Service.WRITE.start(CLEAR,false);
         String name = (String) IOService.Service.READ_STRING.start("\nInserire nome del volontario");
+
+        assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
 
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(VOLUNTEER_PATH);
@@ -214,13 +248,21 @@ public class ConfigService extends Service<Void>{
 
         if (!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))) {
             DataLayerDispatcherService.start(locInfo, layer->layer.add(JsonFactoryService.createJson(new Volunteer(name)), locInfo));
+
+            // Post-condizione: ora esiste
+            boolean nowExists = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo));
+            assert nowExists : "Aggiunta volontario fallita";
         } else {
             IOService.Service.WRITE.start("\nVolontario già esistente", false);
         }
     }   
 
     /**
-     * method to add a new place to the database
+     * Aggiunge un nuovo luogo al sistema dopo aver richiesto il nome, la descrizione e l'indirizzo.
+     * Se il luogo non esiste già, viene aggiunto al database.
+     *
+     * @pre Il nome e la descrizione del luogo devono essere non nulli e non vuoti. Il luogo non deve esistere già.
+     * @post Il luogo viene aggiunto al database se non esiste già. In caso contrario, viene mostrato un messaggio.
      */
     public void addPlace(){
         IOService.Service.WRITE.start(CLEAR,false);
@@ -235,6 +277,9 @@ public class ConfigService extends Service<Void>{
         do{
                 String name = (String) IOService.Service.READ_STRING.start("Inserire nome luogo");
                 locInfo.setKey(name);
+
+                assert name != null && !name.trim().isEmpty() : "Il nome del luogo non può essere vuoto";
+
                 if(DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))){
                     IOService.Service.WRITE.start("Luogo già esistente", false);
                     return;
@@ -244,6 +289,10 @@ public class ConfigService extends Service<Void>{
                 Address address = addNewAddress();
 
                 DataLayerDispatcherService.start(locInfo, layer->layer.add((JsonFactoryService.createJson(new Place(name, address, description))),locInfo));
+
+                // Post-condizione: il luogo è stato aggiunto
+        boolean placeAdded = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo));
+        assert placeAdded : "Aggiunta del luogo fallita";
 
             continuare = continueChoice("inserimento luoghi");
         }while(continuare);
@@ -259,7 +308,11 @@ public class ConfigService extends Service<Void>{
     }
 
     /**
-     * method to add a new activity to the database
+     * Aggiunge una nuova attività al sistema, chiedendo di selezionare un luogo esistente
+     * e quindi inserire i dettagli dell'attività.
+     * Se il luogo selezionato non ha già un'attività associata, l'attività viene aggiunta.
+     *
+     * @pre Deve esserci almeno un luogo configurato senza attività. Il luogo selezionato deve esistere.
      */
     public void addActivity() {
         IOService.Service.WRITE.start(CLEAR,false);
@@ -296,7 +349,12 @@ public class ConfigService extends Service<Void>{
                 Place place = JsonFactoryService.createObject(DataLayerDispatcherService.startWithResult(locInfo
                 ,layer->layer.get(locInfo)), Place.class);   
 
+                // Pre-condizione: il luogo selezionato deve esistere
+                assert place != null : "Il luogo selezionato non esiste";
+
                 addActivityWithPlace(place);
+
+    
             }while(continueChoice("aggiunta attività"));
         
 
@@ -329,7 +387,7 @@ public class ConfigService extends Service<Void>{
     }
 
     /**
-     * method to show all volunteers
+     * Mostra tutti i volontari registrati nel sistema.
      */
     public void showVolunteers() {
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
@@ -343,8 +401,6 @@ public class ConfigService extends Service<Void>{
             Volunteer a = JsonFactoryService.createObject(jo, Volunteer.class);
             out = out + a.toString();
         }
-
-        //fine c
 
         IOService.Service.WRITE.start(out, false);
         IOService.Service.WRITE.start(SPACE,false);
