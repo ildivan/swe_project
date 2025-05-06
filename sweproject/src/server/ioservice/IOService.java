@@ -2,41 +2,14 @@ package server.ioservice;
 
 import java.io.IOException;
 
-import server.objects.interfaceforservices.IActionIOService;
-
-public class IOService extends ReadWrite{
+public class IOService extends ReadWrite implements IInputOutput{
 
 	private final static String FORMAT_ERROR = "Attenzione: il dato inserito non e' nel formato corretto";
     
-	/**
-	 * struttura di enum per rendere questa classe un servizio
-	 */
-	public enum Service {
-		READ_INTEGER((message, params) -> IOService.readInteger(message)),
-		READ_INTEGER_WITH_BOUNDARIES((message, params) -> IOService.readIntegerWithMinMax(message, (int) params[0], (int) params[1])),
-		READ_STRING((message, params) -> IOService.readString(message)),
-		READ_BOOLEAN((message, params) -> IOService.readBoolean(message)),
-		WRITE((message,params) -> {
-			IOService.write(message, (Boolean) params[0]);
-			return null;
-		});
-	
-		private final IActionIOService<?> service;
-	
-		Service(IActionIOService<?> service) {
-			this.service = service;
-		}
-	
-		public Object start(String message, Object... params) {
-			return service.apply(message, params);
-		}
-	}
-
-
 	/*
 	 * metodo per leggere un intero dall'utente
 	 */
-    private static int readInteger(String message){
+    public int readInteger(String message){
 	    boolean finito = false;
 	    int valoreLetto = 0;
 	    do
@@ -60,7 +33,7 @@ public class IOService extends ReadWrite{
 	/*
 	 * metodo per leggere un intero con massimo e minimo dall'utente
 	 */
-	private static int readIntegerWithMinMax(String message, int min, int max) {
+	public int readIntegerWithMinMax(String message, int min, int max) {
 		boolean finito = false;
 		int valoreLetto = 0;
 		do {
@@ -80,7 +53,7 @@ public class IOService extends ReadWrite{
 	}
 	
 
-	private static String readString(String message) {
+	public String readString(String message) {
 		write(message, true);
 		try {
 			return read();
@@ -91,7 +64,7 @@ public class IOService extends ReadWrite{
 		}
 	}
 
-	private static boolean readBoolean(String message){
+	public boolean readBoolean(String message){
 		write(message, true);
         try {
 			return Boolean.parseBoolean(read());
@@ -99,6 +72,10 @@ public class IOService extends ReadWrite{
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public void writeMessage(String message, boolean responseRequired){
+		this.write(message, responseRequired);
 	}
 
 	

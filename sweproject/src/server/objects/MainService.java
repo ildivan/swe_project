@@ -1,14 +1,15 @@
 package server.objects;
 
+import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import java.io.*;
 import java.net.Socket;
 
-public abstract class Service <T> {
+public abstract class MainService <T> {
    
     protected final Socket socket;
 
-    public Service(Socket socket) {
+    public MainService(Socket socket) {
         this.socket = socket;
        
     }
@@ -30,7 +31,8 @@ public abstract class Service <T> {
      * @return
      */
     protected static boolean continueChoice(String message) {
-        String choice = (String) IOService.Service.READ_STRING.start(String.format("\nProseguire con %s? (s/n)", message));
+        IInputOutput ioService = new IOService();
+        String choice = ioService.readString(String.format("\nProseguire con %s? (s/n)", message));
        
         if(choice.equals("n")){
             return false;

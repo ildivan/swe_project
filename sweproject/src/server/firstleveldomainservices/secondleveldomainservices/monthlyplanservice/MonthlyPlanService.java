@@ -7,6 +7,7 @@ import server.DateService;
 import server.datalayerservice.DataLayerDispatcherService;
 import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
+import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 import server.objects.interfaceforservices.IActionDateService;
 
@@ -17,22 +18,10 @@ public class MonthlyPlanService {
     private static final String MONTHLY_PLAN_PATH = "JF/monthlyPlan.json";
     private static final String MONTHLY_PLAN_MEMBER_NAME = "monthlyPlan";
 
+    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
 
-    public enum Service {
-        BUILD_PLAN((params) -> MonthlyPlanService.buldMonthlyPlan());
 
-        private IActionDateService<?> service;
-
-        Service(IActionDateService<?> service) {
-            this.service = service;
-        }
-
-        public Object start(Object... params) {
-            return service.apply(params);
-        }
-    }
-
-    private static boolean buldMonthlyPlan() {
+    public boolean buldMonthlyPlan() {
         LocalDate today = (LocalDate) DateService.Service.GET_TODAY_DATE.start();
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
 
@@ -41,14 +30,14 @@ public class MonthlyPlanService {
         locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
     
         List<JsonObject> activityJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
-        List<Activity> activity = JsonFactoryService.createObjectList(activityJO, Activity.class);
+        List<Activity> activity = jsonFactoryService.createObjectList(activityJO, Activity.class);
 
         monthlyPlan.generateMonthlyPlan(activity);
 
         locInfo.setPath(MONTHLY_PLAN_PATH);
         locInfo.setMemberName(MONTHLY_PLAN_MEMBER_NAME);
 
-        DataLayerDispatcherService.start(locInfo, layer -> layer.add(JsonFactoryService.createJson(monthlyPlan), locInfo));
+        DataLayerDispatcherService.start(locInfo, layer -> layer.add(jsonFactoryService.createJson(monthlyPlan), locInfo));
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
         //DA FARE
     }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 
 
@@ -45,6 +47,7 @@ public abstract class MenuManager implements MenuService{
      */
     @Override
     public Runnable startMenu(){
+        IInputOutput ioService = new IOService();
         List<String> menu = buildMenu();
         String Smenu = toString(menu);
         boolean sceltaValida = true;
@@ -52,7 +55,7 @@ public abstract class MenuManager implements MenuService{
         Runnable toReturn = null;
         
         do{
-            choice = (Integer) IOService.Service.READ_INTEGER.start(Smenu + QUESTION);
+            choice = ioService.readInteger(Smenu + QUESTION);
         
             if (choice >= 0 && choice <= menu.size()) {
                 if(choice == 0){
@@ -64,7 +67,7 @@ public abstract class MenuManager implements MenuService{
                 
             } else {
                 sceltaValida = false;
-                IOService.Service.WRITE.start("Scelta non valida, riprovare", false);
+                ioService.writeMessage("Scelta non valida, riprovare", false);
             }
         }while(!sceltaValida);
         return toReturn;

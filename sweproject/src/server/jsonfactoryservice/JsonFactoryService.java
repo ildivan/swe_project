@@ -5,19 +5,20 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import server.GsonFactoryService;
 
-/**
- * STATICO perchè è un servizio che non deve cambiare implementazione
- */
-public class JsonFactoryService {
-    private static Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
+import server.gsonfactoryservice.GsonFactoryService;
+import server.gsonfactoryservice.IGsonFactory;
 
-    public static <T> JsonObject createJson(T object){
+
+public class JsonFactoryService implements IJsonFactoryService{
+    private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private final Gson gson = gsonFactoryService.getGson();
+
+    public <T> JsonObject createJson(T object){
         return gson.toJsonTree(object).getAsJsonObject();
     }
 
-    public static <T> T createObject(JsonObject json, Class<T> c){
+    public <T> T createObject(JsonObject json, Class<T> c){
         try {
             return (T) gson.fromJson(json, c);
         } catch (JsonSyntaxException e) {
@@ -27,7 +28,7 @@ public class JsonFactoryService {
         }
     }
 
-    public static <T> List<T> createObjectList(List<JsonObject> jsonObjects, Class<T> c){
+    public <T> List<T> createObjectList(List<JsonObject> jsonObjects, Class<T> c){
         List<T> result = new ArrayList<>();
 
         for (JsonObject jsonObject : jsonObjects) {

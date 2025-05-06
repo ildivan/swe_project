@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import server.datalayerservice.DataLayerDispatcherService;
 import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
+import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 
@@ -31,6 +32,9 @@ public class MonthlyPlan{
     private static final String MONTHLY_CONFIGS_PATH = "JF/monthlyConfigs.json";
     private LocalDate date;
     private Map<LocalDate,DailyPlan> monthlyPlan;
+
+    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+
    
     public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date) {
         this.monthlyPlan = montlyPlan;
@@ -109,7 +113,7 @@ public class MonthlyPlan{
         locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify( JsonFactoryService.createJson(mc), locInfo));
+        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
         
     }
 
@@ -129,7 +133,7 @@ public class MonthlyPlan{
         locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify( JsonFactoryService.createJson(mc), locInfo));
+        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
     }
 
 
@@ -141,7 +145,7 @@ public class MonthlyPlan{
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
         JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
-        return JsonFactoryService.createObject(mcJO, MonthlyConfig.class);
+        return jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
     }
     
 

@@ -2,11 +2,12 @@ package server.datalayerservice.datareadwrite;
 
 import com.google.gson.*;
 
-import server.GsonFactoryService;
 import server.authservice.User;
 import server.datalayerservice.DataLayerDispatcherService;
 import server.datalayerservice.JsonDataLocalizationInformation;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
+import server.gsonfactoryservice.GsonFactoryService;
+import server.gsonfactoryservice.IGsonFactory;
+
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDate;
@@ -15,7 +16,8 @@ import java.lang.reflect.Type;
 
 public class JsonReadWrite implements IJsonReadWrite {
     
-    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
+    private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private final Gson gson = gsonFactoryService.getGson();
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
 
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {

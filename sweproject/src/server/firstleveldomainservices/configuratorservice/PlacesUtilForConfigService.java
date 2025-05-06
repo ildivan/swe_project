@@ -6,15 +6,19 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import server.GsonFactoryService;
 import server.datalayerservice.DataLayerDispatcherService;
 import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Place;
+import server.gsonfactoryservice.GsonFactoryService;
+import server.gsonfactoryservice.IGsonFactory;
+import server.jsonfactoryservice.IJsonFactoryService;
+import server.jsonfactoryservice.JsonFactoryService;
 
 public class PlacesUtilForConfigService {
     private static final String PLACES_PATH = "JF/places.json";
     private static final String PLACES_MEMBER_NAME = "places";
-    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
+    private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private final Gson gson = gsonFactoryService.getGson();
 
     /**
      * la condizione è che ci sia almeno luogo senza attivita associata se non c'è ritorna vero
@@ -34,7 +38,7 @@ public class PlacesUtilForConfigService {
         }
     }
 
-    public static List<Place> getCustomList(){
+    public List<Place> getCustomList(){
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(PLACES_PATH);
         locInfo.setMemberName(PLACES_MEMBER_NAME);

@@ -11,9 +11,12 @@ import server.objects.ConfigType;
 import server.objects.Configs;
 import server.objects.ConnectionType;
 import server.objects.ServerConnectionPorts;
-import server.objects.Service;
+import server.objects.MainService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
+import server.gsonfactoryservice.GsonFactoryService;
+import server.gsonfactoryservice.IGsonFactory;
 import server.ioservice.ReadWrite;
+import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 import java.io.*;
@@ -28,7 +31,13 @@ public class Server {
     private static final String GENERAL_CONFIG_PATH = "JF/configs.json";
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
-    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
+
+    private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private final Gson gson = gsonFactoryService.getGson();
+
+    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+
+    
     public Server(){
        
        // this.planManager = new PlanManager();
@@ -63,7 +72,7 @@ public class Server {
                             try {
                                 ReadWrite.setConnection(socket);
                                 // Ottieni il servizio associato all'utente e alla connessione
-                                Service<?> s = obtainService(u, socket, configType);
+                                MainService<?> s = obtainService(u, socket, configType);
                                 s.run();  // Esegui il servizio
                             } catch (IOException e) {
                                 // TODO Auto-generated catch block
@@ -107,7 +116,7 @@ public class Server {
         return login.run();
     }
 
-    private Service<?> obtainService(User u, Socket socket, String configType){
+    private MainService<?> obtainService(User u, Socket socket, String configType){
         switch (u.getRole()){
             case "configuratore":
                 return new ConfigService(socket,gson,configType);
@@ -132,7 +141,7 @@ public class Server {
             DataLayerDispatcherService.start(locInfo, layer->layer.createJSONEmptyFile(locInfo));
         }
 
-        JsonObject JO = JsonFactoryService.createJson(new Configs());
+        JsonObject JO = jsonFactoryService.createJson(new Configs());
 
         locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
         locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
