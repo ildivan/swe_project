@@ -46,9 +46,5 @@ public class Place{
         this.atLeastOneActivityRelated = atLeastOneActivityRelated;
     }
 
-    @Override
-    public String toString(){
-        //TODO ADDRESS TO STRING
-        return "------------"+"\nPLACE " + "\nName: " + name +"\nAddress:" + address.toString() + "\nDescription: " + description+  "\n------------";
-    }
+
 }

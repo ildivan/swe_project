@@ -37,26 +37,5 @@ public class User {
         this.role = role;
     }
 
-    
 
-
-/* 
-    public void modify(String nome, String newPassword, String newRuolo) {
-        List<JsonObject> usersList = fileManager.readUsersFromFile(PATH, "users");
-
-        for (JsonObject user : usersList) {
-            if (user.get("nome").getAsString().equals(nome)) {
-                if (newPassword != null && !newPassword.isEmpty()) {
-                    user.addProperty("password", newPassword);  //potremmo cryptarla con la libreiria messa
-                }
-                if (newRuolo != null && !newRuolo.isEmpty()) {
-                    user.addProperty("ruolo", newRuolo);
-                }
-                fileManager.writeUsersToFile(PATH, usersList, "users");
-                return;
-            }
-        }
-        System.out.println("Utente non trovato.");
-    }
-        */
 }

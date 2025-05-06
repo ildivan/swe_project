@@ -18,6 +18,8 @@ import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.ioservice.AMIOUtil;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
+import server.ioservice.objectformatter.IIObjectFormatter;
+import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 import server.objects.Configs;
@@ -55,8 +57,8 @@ public class ConfigService extends MainService<Void>{
     private String configType;
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-
     private IInputOutput ioService = new IOService();
+    private IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     
   
 
@@ -373,7 +375,7 @@ public class ConfigService extends MainService<Void>{
         PlacesUtilForConfigService placesUtilForConfigService = new PlacesUtilForConfigService();
         List<Place> places = placesUtilForConfigService.getCustomList();
         for (Place place : places) {
-            ioService.writeMessage("Inserire attività per il luogo:\n " + place.toString(), false);
+            ioService.writeMessage("Inserire attività per il luogo:\n " + formatter.formatPlace(place), false);
               addActivityWithPlace(place);
         }
     }
@@ -401,15 +403,8 @@ public class ConfigService extends MainService<Void>{
         locInfo.setPath(VOLUNTEER_PATH);
         locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
         List<JsonObject> volunteersJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
-        
-        //DA METTERE IN UNA CLASSE A PARTE CHE FORMATTA LA VIEW PER IL TERMINALE
-        String out = "";
-        for (JsonObject jo : volunteersJO){
-            Volunteer a = jsonFactoryService.createObject(jo, Volunteer.class);
-            out = out + a.toString();
-        }
-
-        ioService.writeMessage(out, false);
+        List<Volunteer> volunteers = jsonFactoryService.createObjectList(volunteersJO, Volunteer.class);
+        ioService.writeMessage(formatter.formatListVolunteer(volunteers), false);
         ioService.writeMessage(SPACE,false);
     }
 
@@ -421,17 +416,9 @@ public class ConfigService extends MainService<Void>{
         locInfo.setPath(PLACES_PATH);
         locInfo.setMemberName(PLACES_MEMBER_NAME);
         List<JsonObject> placesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
-        
-        //DA METTERE IN UNA CLASSE A PARTE CHE FORMATTA LA VIEW PER IL TERMINALE
-        String out = "";
-        for (JsonObject jo : placesJO){
-            Place a = jsonFactoryService.createObject(jo, Place.class);
-            out = out + a.toString();
-        }
+        List<Place> places = jsonFactoryService.createObjectList(placesJO, Place.class);
 
-        //fine c
-
-        ioService.writeMessage(out, false);
+        ioService.writeMessage(formatter.formatListPlace(places), false);
         ioService.writeMessage(SPACE,false);
     }
 
@@ -443,17 +430,9 @@ public class ConfigService extends MainService<Void>{
         locInfo.setPath(ACTIVITY_PATH);
         locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
         List<JsonObject> activitiesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
-        
-        //DA METTERE IN UNA CLASSE A PARTE CHE FORMATTA LA VIEW PER IL TERMINALE
-        String out = "";
-        for (JsonObject jo : activitiesJO){
-            Activity a = jsonFactoryService.createObject(jo, Activity.class);
-            out = out + a.toString();
-        }
+        List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
 
-        //fine c
-
-        ioService.writeMessage(out, false);
+        ioService.writeMessage(formatter.formatListActivity(activities), false);
         ioService.writeMessage(SPACE,false);
     }
 

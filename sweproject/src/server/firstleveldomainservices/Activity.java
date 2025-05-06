@@ -3,7 +3,6 @@ package server.firstleveldomainservices;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 public class Activity {
 
@@ -152,28 +151,28 @@ public class Activity {
         return programmableHour.plus(Duration.between(LocalTime.MIDNIGHT, duration));
     }
 
-    public String toString(){
-        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        StringBuffer out = new StringBuffer();
-        out.append("\n\n----------------\n\n");
-        out.append(String.format("Attività: %s", getTitle()));
-        out.append(String.format("\n\nDescrizione attività: %s", getDescription()));
-        out.append(String.format("\n\nPunto di ritrovo: %s", getMeetingPoint()));
-        out.append(String.format("\n\nMassimo numero partecipanti: %s", getMaxPartecipanti()));
-        out.append(String.format("\nPrima data utile: %s", getFirstProgrammableDate().format(formatterDate)));
-        out.append(String.format("\nUltima data utile: %s", getLastProgrammableDate().format(formatterDate)));
-        out.append(String.format("\nOra di inizio: %s", getProgrammableHour().format(formatter)));
-        out.append(String.format("\nDurata: %s", getDurationAsLocalTime().format(formatter)));
-        out.append(String.format("\nVolontari associati: %s", getVolunteersToString(volunteers)));
-        return out.toString();
-    }
+    // public String toString(){
+    //     DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    //     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+    //     StringBuffer out = new StringBuffer();
+    //     out.append("\n\n----------------\n\n");
+    //     out.append(String.format("Attività: %s", getTitle()));
+    //     out.append(String.format("\n\nDescrizione attività: %s", getDescription()));
+    //     out.append(String.format("\n\nPunto di ritrovo: %s", getMeetingPoint()));
+    //     out.append(String.format("\n\nMassimo numero partecipanti: %s", getMaxPartecipanti()));
+    //     out.append(String.format("\nPrima data utile: %s", getFirstProgrammableDate().format(formatterDate)));
+    //     out.append(String.format("\nUltima data utile: %s", getLastProgrammableDate().format(formatterDate)));
+    //     out.append(String.format("\nOra di inizio: %s", getProgrammableHour().format(formatter)));
+    //     out.append(String.format("\nDurata: %s", getDurationAsLocalTime().format(formatter)));
+    //     out.append(String.format("\nVolontari associati: %s", getVolunteersToString(volunteers)));
+    //     return out.toString();
+    // }
 
-    private String getVolunteersToString(String[] volunteers){
-        String out = "";
-        for(String s :volunteers){
-            out = out + s + ", ";
-        }
-        return out;
-    }
+    // private String getVolunteersToString(String[] volunteers){
+    //     String out = "";
+    //     for(String s :volunteers){
+    //         out = out + s + ", ";
+    //     }
+    //     return out;
+    // }
 }

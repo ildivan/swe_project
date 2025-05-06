@@ -28,20 +28,4 @@ public class Volunteer {
         this.nondisponibilityDays=disponibilityDays;
     }
 
-    public String toString(){
-        StringBuffer s = new StringBuffer();
-        s.append("\n\n------------\n\n");
-        s.append(String.format("Nome volontario: %s", getName()));
-        s.append((String.format("\nGiorni in cui il volontario non è libero: %s", dispDaysToString())));
-        return s.toString();
-    }
-
-    private String dispDaysToString(){
-        String out ="";
-        for(String s : nondisponibilityDays){
-            out = out + s + ", ";
-        }
-
-        return out;
-    }
 }
