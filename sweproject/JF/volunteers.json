@@ -2,7 +2,7 @@
   "volunteers": [
     {
       "name": "Marco",
-      "nondisponibilityDays": ["17-06-2025"]
+      "nondisponibilityDays": []
     },
     {
       "name": "Lucia",
@@ -22,6 +22,22 @@
     },
     {
       "name": "Nadia",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "Erica",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "Corrado",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "Samuele",
+      "nondisponibilityDays": []
+    },
+    {
+      "name": "Elena",
       "nondisponibilityDays": []
     }
   ]

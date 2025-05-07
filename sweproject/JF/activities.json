@@ -3,7 +3,7 @@
     {
       "placeName": "Piazza della Loggia",
       "title": "Tour Completo Piazza delle Loggia",
-      "description": "Un tour che esplora la storia e l\u0027architettura della piazza centrale di Brescia.",
+      "description": "Un tour che esplora la storia e l'architettura della piazza centrale di Brescia.",
       "meetingPoint": {
         "street": "Piazza della Loggia",
         "city": "Brescia",
@@ -22,14 +22,13 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Luca"
+        "Elena"
       ]
     },
     {
       "placeName": "Piazza della Loggia",
-      "title": "Visita Storica alla Torre dell\u0027Orologio",
-      "description": "Scopri la storia della Torre dell\u0027Orologio, una delle principali attrazioni storiche di Brescia.",
+      "title": "Visita Storica alla Torre dell'Orologio",
+      "description": "Scopri la storia della Torre dell'Orologio, una delle principali attrazioni storiche di Brescia.",
       "meetingPoint": {
         "street": "Piazza della Loggia",
         "city": "Brescia",
@@ -48,14 +47,13 @@
       "maxPartecipanti": 15,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marta"
+        "Erica"
       ]
     },
     {
       "placeName": "Castello di Brescia",
       "title": "Visita Guidata al Castello di Brescia",
-      "description": "Esplora il Castello di Brescia, un\u0027antica fortezza con un panorama mozzafiato sulla città.",
+      "description": "Esplora il Castello di Brescia, un'antica fortezza con un panorama mozzafiato sulla città.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -74,14 +72,13 @@
       "maxPartecipanti": 15,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marta",
-        "Luca"
+        "Corrado"
       ]
     },
     {
       "placeName": "Castello di Brescia",
       "title": "Passeggiata al Parco del Castello",
-      "description": "Un\u0027esperienza immersiva nel verde del parco che circonda il Castello di Brescia.",
+      "description": "Un'esperienza immersiva nel verde del parco che circonda il Castello di Brescia.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -100,8 +97,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Lucia"
+        "Samuele"
       ]
     },
     {
@@ -126,14 +122,13 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marta"
+        "Nadia"
       ]
     },
     {
       "placeName": "Museo di Santa Giulia",
       "title": "Visita alla Chiesa di San Salvatore",
-      "description": "Visita la Chiesa di San Salvatore all\u0027interno del Museo di Santa Giulia e scopri la sua storia.",
+      "description": "Visita la Chiesa di San Salvatore all'interno del Museo di Santa Giulia e scopri la sua storia.",
       "meetingPoint": {
         "street": "Via dei Musei, 81/b",
         "city": "Brescia",
@@ -152,14 +147,13 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Lucia"
+        "Marco"
       ]
     },
     {
       "placeName": "Teatro Grande",
       "title": "Visita al Teatro Grande di Brescia",
-      "description": "Un tour guidato all\u0027interno del teatro storico di Brescia, esplorando la sua architettura e la storia culturale.",
+      "description": "Un tour guidato all'interno del teatro storico di Brescia, esplorando la sua architettura e la storia culturale.",
       "meetingPoint": {
         "street": "Piazza Cesare Beccaria",
         "city": "Brescia",
@@ -178,14 +172,13 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 10,
       "volunteers": [
-        "Luca",
-        "Marta"
+        "Corrado"
       ]
     },
     {
       "placeName": "Teatro Grande",
       "title": "Spettacolo Teatrale al Teatro Grande",
-      "description": "Un\u0027esperienza immersiva con uno spettacolo teatrale all\u0027interno del famoso teatro di Brescia.",
+      "description": "Un'esperienza immersiva con uno spettacolo teatrale all'interno del famoso teatro di Brescia.",
       "meetingPoint": {
         "street": "Piazza Cesare Beccaria",
         "city": "Brescia",
@@ -204,7 +197,7 @@
       "maxPartecipanti": 100,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marta"
+        "Riccardo"
       ]
     },
     {
@@ -229,8 +222,7 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 10,
       "volunteers": [
-        "Lucia",
-        "Marco"
+        "Luca"
       ]
     },
     {
@@ -255,13 +247,13 @@
       "maxPartecipanti": 15,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco"
+        "Erica"
       ]
     },
     {
       "placeName": "Duomo Vecchio (Rotonda di San Lorenzo)",
       "title": "Visita Guidata al Duomo Vecchio",
-      "description": "Esplora la storica Rotonda di San Lorenzo, una delle chiese romaniche più affascinanti d\u0027Italia.",
+      "description": "Esplora la storica Rotonda di San Lorenzo, una delle chiese romaniche più affascinanti d'Italia.",
       "meetingPoint": {
         "street": "Piazza Paolo VI",
         "city": "Brescia",
@@ -281,8 +273,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Luca"
+        "Elena"
       ]
     },
     {
@@ -308,8 +299,7 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marta"
+        "Marco"
       ]
     },
     {
@@ -334,8 +324,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Luca"
+        "Nadia"
       ]
     },
     {
@@ -361,8 +350,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marta"
+        "Erica"
       ]
     },
     {
@@ -388,8 +376,7 @@
       "maxPartecipanti": 30,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Luca"
+        "Nadia"
       ]
     },
     {
@@ -414,8 +401,7 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marco"
+        "Marta"
       ]
     },
     {
@@ -465,13 +451,13 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Luca"
+        "Samuele"
       ]
     },
     {
       "placeName": "Piazza del Foro",
       "title": "Passeggiata Archeologica nel Foro Romano",
-      "description": "Un tour tra i resti dell\u0027antico foro romano di Brescia.",
+      "description": "Un tour tra i resti dell'antico foro romano di Brescia.",
       "meetingPoint": {
         "street": "Piazza del Foro",
         "city": "Brescia",
@@ -490,14 +476,13 @@
       "maxPartecipanti": 30,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
         "Marta"
       ]
     },
     {
       "placeName": "Museo di Scienze Naturali",
       "title": "Laboratorio Naturalistico per Famiglie",
-      "description": "Un\u0027attività interattiva pensata per adulti e bambini per esplorare la natura.",
+      "description": "Un'attività interattiva pensata per adulti e bambini per esplorare la natura.",
       "meetingPoint": {
         "street": "Via Ozanam, 4",
         "city": "Brescia",
@@ -516,8 +501,7 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marco"
+        "Lucia"
       ]
     },
     {
@@ -542,8 +526,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marta",
-        "Luca"
+        "Erica"
       ]
     },
     {
@@ -568,7 +551,7 @@
       "maxPartecipanti": 15,
       "minPartecipanti": 3,
       "volunteers": [
-        "Lucia"
+        "Marta"
       ]
     },
     {
@@ -593,13 +576,12 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Marta"
+        "Corrado"
       ]
     },
     {
       "placeName": "Palazzo Martinengo Cesaresco",
-      "title": "Mostra d\u0027Arte a Palazzo Martinengo",
+      "title": "Mostra d'Arte a Palazzo Martinengo",
       "description": "Visita una mostra temporanea all’interno del prestigioso palazzo storico.",
       "meetingPoint": {
         "street": "Via Musei, 30",
@@ -619,12 +601,12 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia"
+        "Corrado"
       ]
     },
     {
       "placeName": "Museo del Risorgimento",
-      "title": "Storia dell\u0027Unità d\u0027Italia a Brescia",
+      "title": "Storia dell'Unità d'Italia a Brescia",
       "description": "Ripercorri gli eventi che hanno reso Brescia protagonista del Risorgimento.",
       "meetingPoint": {
         "street": "Via del Castello, 9",
@@ -644,8 +626,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Luca",
-        "Marco"
+        "Riccardo"
       ]
     },
     {
@@ -670,14 +651,13 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Lucia"
+        "Luca"
       ]
     },
     {
       "placeName": "Piazza del Duomo",
       "title": "Tour della Piazza del Duomo di Brescia",
-      "description": "Scopri la storia e l\u0027architettura della splendida Piazza del Duomo di Brescia.",
+      "description": "Scopri la storia e l'architettura della splendida Piazza del Duomo di Brescia.",
       "meetingPoint": {
         "street": "Piazza Paolo VI",
         "city": "Brescia",
@@ -697,14 +677,13 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Luca"
+        "Riccardo"
       ]
     },
     {
       "placeName": "Piazza della Vittoria",
       "title": "Visita alla Piazza della Vittoria",
-      "description": "Un viaggio nel cuore del Novecento tra i monumenti e l\u0027architettura fascista della città.",
+      "description": "Un viaggio nel cuore del Novecento tra i monumenti e l'architettura fascista della città.",
       "meetingPoint": {
         "street": "Piazza della Vittoria",
         "city": "Brescia",
@@ -724,8 +703,7 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marta"
+        "Nadia"
       ]
     },
     {
@@ -751,14 +729,13 @@
       "maxPartecipanti": 30,
       "minPartecipanti": 10,
       "volunteers": [
-        "Lucia",
         "Marco"
       ]
     },
     {
       "placeName": "Teatro Sociale",
       "title": "Tour del Teatro Sociale di Brescia",
-      "description": "Scopri l\u0027incredibile storia di uno dei teatri più importanti della città.",
+      "description": "Scopri l'incredibile storia di uno dei teatri più importanti della città.",
       "meetingPoint": {
         "street": "Piazza della Loggia",
         "city": "Brescia",
@@ -778,14 +755,13 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marta",
-        "Lucia"
+        "Samuele"
       ]
     },
     {
       "placeName": "Castello di Brescia",
       "title": "Visita al Castello di Brescia",
-      "description": "Un tour esplorativo di uno dei castelli medievali più affascinanti d\u0027Italia.",
+      "description": "Un tour esplorativo di uno dei castelli medievali più affascinanti d'Italia.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -804,7 +780,6 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
         "Lucia"
       ]
     },
@@ -830,13 +805,12 @@
       "maxPartecipanti": 15,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Luca"
+        "Erica"
       ]
     },
     {
-      "placeName": "Parco dell\u0027Acqua",
-      "title": "Escursione al Parco dell\u0027Acqua",
+      "placeName": "Parco dell'Acqua",
+      "title": "Escursione al Parco dell'Acqua",
       "description": "Passeggiata panoramica nel verde e nelle riserve naturali del parco.",
       "meetingPoint": {
         "street": "Via della Valle",
@@ -856,14 +830,13 @@
       "maxPartecipanti": 30,
       "minPartecipanti": 10,
       "volunteers": [
-        "Marta",
-        "Luca"
+        "Marco"
       ]
     },
     {
       "placeName": "Teatro Grande",
       "title": "Spettacolo Teatrale al Teatro Grande",
-      "description": "Un\u0027esperienza immersiva in uno spettacolo teatrale all\u0027interno di uno dei teatri più importanti di Brescia.",
+      "description": "Un'esperienza immersiva in uno spettacolo teatrale all'interno di uno dei teatri più importanti di Brescia.",
       "meetingPoint": {
         "street": "Piazza Cesare Beccaria",
         "city": "Brescia",
@@ -882,14 +855,13 @@
       "maxPartecipanti": 100,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marta"
+        "Nadia"
       ]
     },
     {
       "placeName": "Duomo Nuovo",
       "title": "Visita Guidata al Duomo Nuovo",
-      "description": "Scopri la storia e l\u0027architettura del Duomo Nuovo, una delle chiese più imponenti della città.",
+      "description": "Scopri la storia e l'architettura del Duomo Nuovo, una delle chiese più imponenti della città.",
       "meetingPoint": {
         "street": "Piazza Paolo VI",
         "city": "Brescia",
@@ -908,8 +880,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marta",
-        "Luca"
+        "Riccardo"
       ]
     },
     {
@@ -934,8 +905,7 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Luca"
+        "Erica"
       ]
     },
     {
@@ -960,14 +930,13 @@
       "maxPartecipanti": 30,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marco"
+        "Luca"
       ]
     },
     {
       "placeName": "Teatro Sociale",
       "title": "Spettacolo al Teatro Sociale di Brescia",
-      "description": "Vivi l\u0027emozione di uno spettacolo teatrale al Teatro Sociale, un\u0027esperienza unica nel cuore della città.",
+      "description": "Vivi l'emozione di uno spettacolo teatrale al Teatro Sociale, un'esperienza unica nel cuore della città.",
       "meetingPoint": {
         "street": "Piazza della Loggia",
         "city": "Brescia",
@@ -987,8 +956,7 @@
       "maxPartecipanti": 80,
       "minPartecipanti": 10,
       "volunteers": [
-        "Marco",
-        "Lucia"
+        "Elena"
       ]
     },
     {
@@ -1014,14 +982,13 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marta",
-        "Lucia"
+        "Elena"
       ]
     },
     {
       "placeName": "Castello di Brescia",
       "title": "Visita al Castello di Brescia al Tramonto",
-      "description": "Esplora il Castello di Brescia al tramonto, un\u0027esperienza unica che ti permette di godere di una vista spettacolare sulla città.",
+      "description": "Esplora il Castello di Brescia al tramonto, un'esperienza unica che ti permette di godere di una vista spettacolare sulla città.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -1040,8 +1007,7 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
-        "Lucia"
+        "Corrado"
       ]
     },
     {
@@ -1067,8 +1033,7 @@
       "maxPartecipanti": 15,
       "minPartecipanti": 5,
       "volunteers": [
-        "Lucia",
-        "Marta"
+        "Erica"
       ]
     },
     {
@@ -1093,14 +1058,13 @@
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
       "volunteers": [
-        "Marco",
         "Lucia"
       ]
     },
     {
       "placeName": "Teatro Grande",
       "title": "Spettacolo Teatrale al Teatro Grande",
-      "description": "Assisti a uno spettacolo teatrale all\u0027interno del magnifico Teatro Grande di Brescia.",
+      "description": "Assisti a uno spettacolo teatrale all'interno del magnifico Teatro Grande di Brescia.",
       "meetingPoint": {
         "street": "Piazza Cesare Beccaria",
         "city": "Brescia",
@@ -1120,14 +1084,13 @@
       "maxPartecipanti": 100,
       "minPartecipanti": 10,
       "volunteers": [
-        "Marta",
-        "Luca"
+        "Erica"
       ]
     },
     {
-      "placeName": "Parco dell\u0027Acqua",
-      "title": "Passeggiata al Parco dell\u0027Acqua al Tramonto",
-      "description": "Goditi una passeggiata al tramonto nel Parco dell\u0027Acqua, immergendoti nella natura.",
+      "placeName": "Parco dell'Acqua",
+      "title": "Passeggiata al Parco dell'Acqua al Tramonto",
+      "description": "Goditi una passeggiata al tramonto nel Parco dell'Acqua, immergendoti nella natura.",
       "meetingPoint": {
         "street": "Via della Valle",
         "city": "Brescia",
@@ -1146,7 +1109,6 @@
       "maxPartecipanti": 25,
       "minPartecipanti": 10,
       "volunteers": [
-        "Lucia",
         "Marta"
       ]
     },
@@ -1172,8 +1134,7 @@
       "maxPartecipanti": 30,
       "minPartecipanti": 10,
       "volunteers": [
-        "Marco",
-        "Lucia"
+        "Marco"
       ]
     },
     {
@@ -1198,8 +1159,7 @@
       "maxPartecipanti": 60,
       "minPartecipanti": 10,
       "volunteers": [
-        "Marta",
-        "Luca"
+        "Marta"
       ]
     },
     {
@@ -1226,8 +1186,7 @@
       "maxPartecipanti": 30,
       "minPartecipanti": 10,
       "volunteers": [
-        "Marco",
-        "Lucia"
+        "Riccardo"
       ]
     }
   ]

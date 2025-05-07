@@ -113,55 +113,63 @@ public class DailyPlan {
     /*
      * ottiene tra tutte le combinazioni possibili quella che ha piu ore occupate nella giornata
      */
-    private List<Activity> getBestCombination(List<Activity> act){
+    private List<Activity> getBestCombination(List<Activity> act) {
         act.sort(Comparator.comparing(Activity::getEndTime));
-
+    
         int n = act.size();
         Duration[] dp = new Duration[n];
         int[] previous = new int[n];
-
+    
+        // Tiene traccia se il volontario è già stato usato quel giorno
+        Set<String> usedVolunteers = new HashSet<>();
+    
         for (int i = 0; i < n; i++) {
-            // Durata dell'attività corrente
             dp[i] = act.get(i).getDurationAsDuration();
-
-            // Trova la precedente attività che NON si sovrappone
             previous[i] = -1;
+    
             for (int j = i - 1; j >= 0; j--) {
                 if (!act.get(j).getEndTime().isAfter(act.get(i).getProgrammableHour())) {
                     previous[i] = j;
                     break;
                 }
             }
-
+    
             if (previous[i] != -1) {
-                dp[i] = dp[i].compareTo(dp[previous[i]].plus(act.get(i).getDurationAsDuration())) < 0
-                        ? dp[previous[i]].plus(act.get(i).getDurationAsDuration())
-                        : dp[i];
+                Duration withPrev = dp[previous[i]].plus(act.get(i).getDurationAsDuration());
+                if (withPrev.compareTo(dp[i]) > 0) {
+                    dp[i] = withPrev;
+                }
             }
-
+    
             if (i > 0 && dp[i - 1].compareTo(dp[i]) > 0) {
                 dp[i] = dp[i - 1];
             }
         }
-
-        // Ricostruisci le attività selezionate
+    
+        // Ricostruzione: si evita di selezionare due attività con lo stesso volontario
         List<Activity> result = new ArrayList<>();
         for (int i = n - 1; i >= 0;) {
             boolean include = false;
-            if (i == 0 || dp[i].compareTo(dp[i - 1]) > 0) {
+            List<String> volunteers = Arrays.asList(act.get(i).getVolunteers());
+            String volunteer = volunteers.get(0);
+
+    
+            if ((i == 0 || dp[i].compareTo(dp[i - 1]) > 0) && !usedVolunteers.contains(volunteer)) {
                 include = true;
             }
-
+    
             if (include) {
                 result.add(0, act.get(i));
+                usedVolunteers.add(volunteer);
                 i = previous[i];
             } else {
                 i--;
             }
         }
-
+    
         return result;
     }
+    
 
     public LocalDate getDate() {
         return date;
