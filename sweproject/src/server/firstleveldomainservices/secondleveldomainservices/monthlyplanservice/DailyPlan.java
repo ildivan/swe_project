@@ -48,9 +48,11 @@ public class DailyPlan {
         return this;
     }
     
-    /*
-     * mi genera la lista delle attività possibili nel giorno in cui sto facendo il piano (solo la lista delle attività possibili non il piano)
-     */
+   /**
+    * mi genera la lista delle attività possibili nel giorno in cui sto facendo il piano (solo la lista delle attività possibili non il piano)
+    * @param activities
+    * @return
+    */
     private List<Activity> getPossibleActivities(List<Activity> activities){
         List<Activity> actPossibleToday = new ArrayList<>();
         for (Activity act : activities){
@@ -93,15 +95,19 @@ public class DailyPlan {
         return true;
     }
 
-    /*
+    /**
      * controllo se sono nel periodo di programmazione possibile della visita
+     * @param a
+     * @return
      */
     private boolean isProgrammablePeriodCheck(Activity a){
         return (Boolean) DateService.Service.CHECK_IF_BETWEEN.start(date, a.getFirstProgrammableDate(), a.getLastProgrammableDate());
     }
 
-    /*
+    /**
      * controllo se il giorno della settimana in cui faccio il piano è quello in cui ho possibilità di realizzare la visita
+     * @param a
+     * @return
      */
     private boolean isOnCorrectDay(Activity a){
         String dayOfTheWeekofDate = date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ITALIAN);
@@ -110,8 +116,10 @@ public class DailyPlan {
         return Arrays.asList(a.getProgrammableDays()).contains(dayOfTheWeekofDate); 
     }
 
-    /*
-     * ottiene tra tutte le combinazioni possibili quella che ha piu ore occupate nella giornata
+    /**
+     * metodo per costruire il piano di visite giornaliero
+     * @param act
+     * @return
      */
     private List<Activity> getBestCombination(List<Activity> act) {
         act.sort(Comparator.comparing(Activity::getEndTime));
@@ -120,46 +128,61 @@ public class DailyPlan {
         Duration[] dp = new Duration[n];
         int[] previous = new int[n];
     
-        // Tiene traccia se il volontario è già stato usato quel giorno
-        Set<String> usedVolunteers = new HashSet<>();
-    
         for (int i = 0; i < n; i++) {
             dp[i] = act.get(i).getDurationAsDuration();
             previous[i] = -1;
     
             for (int j = i - 1; j >= 0; j--) {
-                if (!act.get(j).getEndTime().isAfter(act.get(i).getProgrammableHour())) {
-                    previous[i] = j;
-                    break;
-                }
-            }
+                boolean samePlace = act.get(i).getPlaceName().equals(act.get(j).getPlaceName());
+                boolean nonOverlapping = !act.get(j).getEndTime().isAfter(act.get(i).getProgrammableHour());
     
-            if (previous[i] != -1) {
-                Duration withPrev = dp[previous[i]].plus(act.get(i).getDurationAsDuration());
-                if (withPrev.compareTo(dp[i]) > 0) {
-                    dp[i] = withPrev;
+                // Attività compatibili se:
+                // - stesso luogo ma non si sovrappongono
+                // - luoghi diversi (sovrapposizione consentita)
+                if ((samePlace && nonOverlapping) || !samePlace) {
+                    Duration withPrev = dp[j].plus(act.get(i).getDurationAsDuration());
+                    if (withPrev.compareTo(dp[i]) > 0) {
+                        dp[i] = withPrev;
+                        previous[i] = j;
+                    }
                 }
             }
     
             if (i > 0 && dp[i - 1].compareTo(dp[i]) > 0) {
                 dp[i] = dp[i - 1];
+                previous[i] = previous[i - 1];
             }
         }
     
-        // Ricostruzione: si evita di selezionare due attività con lo stesso volontario
+        // Ricostruzione
         List<Activity> result = new ArrayList<>();
+        Set<String> usedVolunteers = new HashSet<>();
+    
         for (int i = n - 1; i >= 0;) {
             boolean include = false;
-            List<String> volunteers = Arrays.asList(act.get(i).getVolunteers());
-            String volunteer = volunteers.get(0);
-
+            Activity current = act.get(i);
+            String volunteer = current.getVolunteers()[0];
     
+            // Check se dp[i] è migliore di dp[i-1] e il volontario non è già stato usato
             if ((i == 0 || dp[i].compareTo(dp[i - 1]) > 0) && !usedVolunteers.contains(volunteer)) {
-                include = true;
+                // Inoltre verifichiamo che non ci siano attività già selezionate nello stesso luogo che si sovrappongono
+                boolean overlapSamePlace = false;
+                for (Activity selected : result) {
+                    if (selected.getPlaceName().equals(current.getPlaceName())) {
+                        if (!(selected.getEndTime().isBefore(current.getProgrammableHour()) || current.getEndTime().isBefore(selected.getProgrammableHour()))) {
+                            overlapSamePlace = true;
+                            break;
+                        }
+                    }
+                }
+    
+                if (!overlapSamePlace) {
+                    include = true;
+                }
             }
     
             if (include) {
-                result.add(0, act.get(i));
+                result.add(0, current);
                 usedVolunteers.add(volunteer);
                 i = previous[i];
             } else {
