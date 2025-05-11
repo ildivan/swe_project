@@ -2,10 +2,10 @@ package server.ioservice.objectformatter;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 public class TerminalObjectFormatter implements IIObjectFormatter<String> {
@@ -122,5 +122,37 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
          }
  
          return out;
+    }
+
+    /**
+     * metodo per formatare una lista di ActivityRecord, dato ottenuto dopo aver
+     * selezionato le visite in base allo stato delle stesse
+     * @param aList
+     * @return
+     */
+    public String formatListActivityRecord(List<ActivityRecord> arList){
+        String out = "";
+         for (ActivityRecord activityRecord : arList) {
+            out = out + formatActivityRecord(activityRecord); 
+         }
+ 
+         return out;
+    }
+
+    /**
+     * metodo per formattare un oggetto activity record
+     * @param activityRecord
+     * @return
+     */
+    private String formatActivityRecord(ActivityRecord record) {
+       if (record == null) return "null";
+
+    return "\n\n----------------\n\n" + 
+            "\n\nVisita:\n\n" +
+            "Data:\n" + record.getDate() +
+            "\n\nNome:\n" + record.getName() +
+            "\n\nNumero di iscritti:\n" + record.getActivity().getNumberOfSub() +
+            "\n\nStato visita:\n" + record.getActivity().getState() +
+            "\n\nOrario della visita:\n'" + record.getActivity().getTime();
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Place;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 public interface IIObjectFormatter <T> {
@@ -13,4 +14,5 @@ public interface IIObjectFormatter <T> {
     public T formatVolunteer(Volunteer v);
     public T formatListPlace(List<Place> pList);
     public T formatPlace(Place p);
+    public T formatListActivityRecord(List<ActivityRecord> arList);
 }

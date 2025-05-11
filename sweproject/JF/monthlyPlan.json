@@ -1,5 +1,1414 @@
 {
   "monthlyPlan": [
-    
+    {
+      "date": "16-05-2025",
+      "monthlyPlan": {
+        "17-05-2025": {
+          "date": "17-05-2025",
+          "plan": {
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:00 - 20:00"
+            },
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "CONFERMATA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "EFFETTUATA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "CANCELLATA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "COMPLETA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            }
+          }
+        },
+        "18-05-2025": {
+          "date": "18-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour della Cattedrale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:30 - 13:30"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Laboratorio Naturalistico per Famiglie": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Visita Storica alla Torre dell\u0027Orologio": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "16:00 - 17:30"
+            },
+            "Visita al Castello di Brescia al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 21:00"
+            }
+          }
+        },
+        "19-05-2025": {
+          "date": "19-05-2025",
+          "plan": {
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Basilica di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Passeggiata Fascista: Architettura e Storia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "20-05-2025": {
+          "date": "20-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Passeggiata Naturalistica al Parco Ducos": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            }
+          }
+        },
+        "21-05-2025": {
+          "date": "21-05-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 11:00"
+            },
+            "Tour del Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "22-05-2025": {
+          "date": "22-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Mostra d\u0027Arte a Palazzo Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:30 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Visita Guidata al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:30 - 11:00"
+            }
+          }
+        },
+        "23-05-2025": {
+          "date": "23-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:00"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            }
+          }
+        },
+        "24-05-2025": {
+          "date": "24-05-2025",
+          "plan": {
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:00 - 20:00"
+            },
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            }
+          }
+        },
+        "25-05-2025": {
+          "date": "25-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour della Cattedrale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:30 - 13:30"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Laboratorio Naturalistico per Famiglie": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Visita Storica alla Torre dell\u0027Orologio": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "16:00 - 17:30"
+            },
+            "Visita al Castello di Brescia al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 21:00"
+            }
+          }
+        },
+        "26-05-2025": {
+          "date": "26-05-2025",
+          "plan": {
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Basilica di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Passeggiata Fascista: Architettura e Storia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "27-05-2025": {
+          "date": "27-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Passeggiata Naturalistica al Parco Ducos": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            }
+          }
+        },
+        "28-05-2025": {
+          "date": "28-05-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 11:00"
+            },
+            "Tour del Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "29-05-2025": {
+          "date": "29-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Mostra d\u0027Arte a Palazzo Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:30 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Visita Guidata al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:30 - 11:00"
+            }
+          }
+        },
+        "30-05-2025": {
+          "date": "30-05-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:00"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            }
+          }
+        },
+        "31-05-2025": {
+          "date": "31-05-2025",
+          "plan": {
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:00 - 20:00"
+            },
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            }
+          }
+        },
+        "01-06-2025": {
+          "date": "01-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour della Cattedrale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:30 - 13:30"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Laboratorio Naturalistico per Famiglie": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Escursione al Lago di Garda": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:00 - 13:00"
+            },
+            "Visita Storica alla Torre dell\u0027Orologio": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "16:00 - 17:30"
+            },
+            "Visita al Castello di Brescia al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 21:00"
+            }
+          }
+        },
+        "02-06-2025": {
+          "date": "02-06-2025",
+          "plan": {
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Basilica di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Passeggiata Fascista: Architettura e Storia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "03-06-2025": {
+          "date": "03-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Passeggiata Naturalistica al Parco Ducos": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            }
+          }
+        },
+        "04-06-2025": {
+          "date": "04-06-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 11:00"
+            },
+            "Tour del Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "05-06-2025": {
+          "date": "05-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Mostra d\u0027Arte a Palazzo Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:30 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Visita Guidata al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:30 - 11:00"
+            }
+          }
+        },
+        "06-06-2025": {
+          "date": "06-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Escursione al Lago di Garda": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:00 - 13:00"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:00"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            }
+          }
+        },
+        "07-06-2025": {
+          "date": "07-06-2025",
+          "plan": {
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:00 - 20:00"
+            },
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            }
+          }
+        },
+        "08-06-2025": {
+          "date": "08-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour della Cattedrale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:30 - 13:30"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Laboratorio Naturalistico per Famiglie": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Escursione al Lago di Garda": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:00 - 13:00"
+            },
+            "Visita Storica alla Torre dell\u0027Orologio": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "16:00 - 17:30"
+            },
+            "Visita al Castello di Brescia al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 21:00"
+            }
+          }
+        },
+        "09-06-2025": {
+          "date": "09-06-2025",
+          "plan": {
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Basilica di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Passeggiata Fascista: Architettura e Storia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "10-06-2025": {
+          "date": "10-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Passeggiata Naturalistica al Parco Ducos": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            }
+          }
+        },
+        "11-06-2025": {
+          "date": "11-06-2025",
+          "plan": {
+            "Tour della Piazza del Duomo di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 11:00"
+            },
+            "Tour del Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 12:00"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        },
+        "12-06-2025": {
+          "date": "12-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Chiesa di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "13:00 - 14:30"
+            },
+            "Mostra d\u0027Arte a Palazzo Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:30 - 16:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Visita Guidata al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:30 - 11:00"
+            }
+          }
+        },
+        "13-06-2025": {
+          "date": "13-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Tesori Nascosti della Biblioteca Queriniana": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "15:00 - 16:30"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Escursione al Lago di Garda": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:00 - 13:00"
+            },
+            "Tour Artistico alla Pinacoteca": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 16:00"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            }
+          }
+        },
+        "14-06-2025": {
+          "date": "14-06-2025",
+          "plan": {
+            "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:00 - 20:00"
+            },
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Tour Serale alla Pinacoteca Tosio Martinengo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 20:00"
+            },
+            "Visita alla Piazza della Vittoria": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Visita Serale al Museo delle Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 20:00"
+            },
+            "Cena al Castello di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "19:30 - 23:30"
+            },
+            "Tour delle Antiche Armi": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 13:00"
+            },
+            "Visita al Teatro Grande di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "14:00 - 15:30"
+            }
+          }
+        },
+        "15-06-2025": {
+          "date": "15-06-2025",
+          "plan": {
+            "Spettacolo Teatrale al Teatro Grande": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Tour della Cattedrale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:30 - 13:30"
+            },
+            "Concerto al Teatro Sociale": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "20:00 - 22:30"
+            },
+            "Laboratorio Naturalistico per Famiglie": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:30 - 12:30"
+            },
+            "Tour del Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "12:00 - 14:30"
+            },
+            "Escursione al Lago di Garda": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:00 - 13:00"
+            },
+            "Visita Storica alla Torre dell\u0027Orologio": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "16:00 - 17:30"
+            },
+            "Visita al Castello di Brescia al Tramonto": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:00 - 21:00"
+            }
+          }
+        },
+        "16-06-2025": {
+          "date": "16-06-2025",
+          "plan": {
+            "Alla Scoperta del Tempio Capitolino": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Visita al Castello di Brescia giornata completa": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "08:30 - 16:30"
+            },
+            "Visita Serale al Duomo Nuovo": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "17:30 - 19:30"
+            },
+            "Escursione al Parco delle Colline": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "10:00 - 13:00"
+            },
+            "Visita alla Basilica di San Salvatore": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Passeggiata Fascista: Architettura e Storia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "11:00 - 12:30"
+            },
+            "Spettacolo al Teatro Sociale di Brescia": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "18:30 - 20:30"
+            },
+            "Passeggiata Guidata al Parco Tarello": {
+              "numberOfSub": 0,
+              "state": "PROPOSTA",
+              "timeOfTheActivity": "09:00 - 10:30"
+            }
+          }
+        }
+      }
+    }
   ]
 }

@@ -21,7 +21,7 @@ public class DailyPlan {
     private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
     private static final String VOLUNTEER_KEY_DESC = "name";
     private LocalDate date;
-    private Map<String, String> plan = new HashMap<>();
+    private Map<String, ActivityInfo> plan = new HashMap<>();
 
     //non deve essere serializzato -> inserisco transient
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
@@ -43,7 +43,8 @@ public class DailyPlan {
         for (Activity a: bestActivities) {
             String title = a.getTitle();
             String orario = a.getProgrammableHour().format(formatter) + " - " + a.getEndTime().format(formatter);
-            plan.put(title, orario);
+            ActivityInfo activityInfo = new ActivityInfo(0, ActivityState.PROPOSTA, orario);
+            plan.put(title, activityInfo);
         }
         return this;
     }
@@ -202,11 +203,11 @@ public class DailyPlan {
         this.date = date;
     }
 
-    public Map<String, String> getPlan() {
+    public Map<String, ActivityInfo> getPlan() {
         return plan;
     }
 
-    public void setPlan(Map<String, String> plan) {
+    public void setPlan(Map<String, ActivityInfo> plan) {
         this.plan = plan;
     }
 

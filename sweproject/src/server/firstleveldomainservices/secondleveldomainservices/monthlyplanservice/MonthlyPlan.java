@@ -140,7 +140,7 @@ public class MonthlyPlan{
     public void setPlanBuildFlagAsTrue() {
         
         MonthlyConfig mc = geMonthlyConfig();
-        Map<LocalDate, Boolean> planConfiguredMap =new HashMap<>();
+        Map<LocalDate, Boolean> planConfiguredMap =new LinkedHashMap<>();
         planConfiguredMap.put(date, true);
         planConfiguredMap.put(date.plusMonths(1),false);
         mc.setPlanConfigured(planConfiguredMap);
