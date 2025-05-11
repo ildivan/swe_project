@@ -7,6 +7,7 @@ import server.authservice.AuthenticationService;
 import server.authservice.User;
 import server.datalayerservice.DataLayerDispatcherService;
 import server.datalayerservice.JsonDataLocalizationInformation;
+import server.demonservices.DemonsService;
 import server.objects.ConfigType;
 import server.objects.Configs;
 import server.objects.ConnectionType;
@@ -36,6 +37,7 @@ public class Server {
     private final Gson gson = gsonFactoryService.getGson();
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    DemonsService demonsService = new DemonsService();
 
     
     public Server(){
@@ -48,6 +50,11 @@ public class Server {
             ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
             System.out.println("Server is listening on port " + CLIENT_PORT);
             System.out.println("Server is listening on port " + SERVER_TERMINA_PORT);
+
+            //avvio i demoni
+            demonsService.run();
+
+
 
             if(configType.equals(ConfigType.NORMAL.getValue())){
                 firstTimeConfiguration();
@@ -159,7 +166,12 @@ public class Server {
         
         String configType = ConfigType.NO_FIRST_CONFIG.getValue();
         Server s = new Server();
+        
         s.startServer(configType);
+       
+        
+
+
     }
 
 }
