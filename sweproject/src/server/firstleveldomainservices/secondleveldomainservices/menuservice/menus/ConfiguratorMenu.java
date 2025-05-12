@@ -1,8 +1,6 @@
 package server.firstleveldomainservices.secondleveldomainservices.menuservice.menus;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
@@ -15,7 +13,6 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
-import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 
 public class ConfiguratorMenu extends MenuManager{
 
@@ -24,6 +21,7 @@ public class ConfiguratorMenu extends MenuManager{
     private static final String MONTHLY_CONFIG_MEMBER_NAME = "mc";
     private static final String MONTHLY_CONFIGS_PATH = "JF/monthlyConfigs.json";
 
+    private transient DateService dateService = new DateService();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
 
 
@@ -63,7 +61,8 @@ public class ConfiguratorMenu extends MenuManager{
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
         MonthlyConfig mc = geMonthlyConfig();
-        if(((LocalDate) DateService.Service.GET_TODAY_DATE.start()).equals(mc.getMonthAndYear()) && checkIfAlredyBuildPlan()){
+        
+        if(dateService.getTodayDate().equals(mc.getMonthAndYear()) && checkIfAlredyBuildPlan()){
             map.put("Genera Piano Mensile", true);
             //fare che se il piano non è stato generato il 16 laprima cosa da fare è quella, vanno osxurate tutte le altre voci
             return map;

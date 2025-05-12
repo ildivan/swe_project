@@ -3,11 +3,16 @@ package server.firstleveldomainservices.volunteerservice;
 import java.io.IOException;
 import java.net.Socket;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import server.DateService;
 import server.datalayerservice.DataLayerDispatcherService;
 import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
@@ -16,6 +21,7 @@ import server.firstleveldomainservices.secondleveldomainservices.menuservice.men
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.ioservice.IInputOutput;
@@ -31,6 +37,9 @@ public class VolunteerService extends MainService<Void>{
     private static final String SPACE = "SPACE";
     private static final String ACTIVITY_PATH = "JF/activities.json";
     private static final String ACTIVITY_MEMBER_NAME = "activities";
+    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
+    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
+    private static final String VOLUNTEER_KEY_DESC = "name";
     
     private Gson gson;
     private String name;
@@ -39,6 +48,8 @@ public class VolunteerService extends MainService<Void>{
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private IInputOutput ioService = new IOService();
     private IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
+    private MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+    private DateService dateService = new DateService();
     
   
 
@@ -120,7 +131,44 @@ public class VolunteerService extends MainService<Void>{
      * solo nei giorni in cui sono presenti sue visite e che non sono preclusi
      */
     public void addPrecludeDate(){
+        
+        MonthlyConfig mc = monthlyPlanService.getMonthlyConfig();
 
+        int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
+        int minNumDay = 1;
+        
+        int day = ioService.readIntegerWithMinMax("\"Inserire giorno in cui non si è disponibili nel prossimo mese", minNumDay, maxNumDay);
+
+        int month = dateService.setMonthOnPrecludeDay(mc, day);
+        int year = dateService.setYearOnPrecludeDay(mc, day);
+
+        LocalDate date = LocalDate.of(year, month, day);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = date.format(formatter);
+
+        addPrecludeDatesForVolunteer(formattedDate);
+
+    }
+
+    /**
+     * metodo per aggiungere la data in cui il volontario on è disponibile al file
+     * @param date
+     */
+    private void addPrecludeDatesForVolunteer(String date){
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(VOLUNTEER_PATH);
+        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
+        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        locInfo.setKey(name);
+        JsonObject volunteerJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
+
+        Set<String> precludeDates = volunteer.getDisponibilityDays();
+        precludeDates.add(date);
+
+        JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);
+
+        DataLayerDispatcherService.start(locInfo, layer->layer.modify(newVolunteerJO, locInfo));
     }
 
     private boolean isMyActivity(String actName, List<Activity> myActivities){

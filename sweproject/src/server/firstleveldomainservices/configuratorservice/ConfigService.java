@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
+import server.DateService;
 import server.datalayerservice.*;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
@@ -499,6 +501,8 @@ public class ConfigService extends MainService<Void>{
      * method to add a non usable date for the next monthly plan
      */
     public void addNonUsableDate(){
+        DateService dateService = new DateService();
+
         ioService.writeMessage(CLEAR,false);
 
         MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
@@ -515,45 +519,14 @@ public class ConfigService extends MainService<Void>{
         
         int day = ioService.readIntegerWithMinMax("Inserire giorno non disponibile", minNumDay, maxNumDay);
 
-        int month = setMonthOnPrecludeDay(mc, day);
-        int year = setYearOnPrecludeDay(mc, day);
+        int month = dateService.setMonthOnPrecludeDay(mc, day);
+        int year = dateService.setYearOnPrecludeDay(mc, day);
 
         mc.getPrecludeDates().add(LocalDate.of(year, month, day));
         JsonObject newConfigsJO = jsonFactoryService.createJson(mc);
 
         DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(newConfigsJO, locInfo));
 
-    }
-
-    /*
-     * setta l'anno in base al giorno
-     */
-    private int setYearOnPrecludeDay(MonthlyConfig mc, int day) {
-        int year = mc.getMonthAndYear().getYear();
-
-        if(day>=17 && day<=31){
-            return year;
-        }else{
-            if( mc.getMonthAndYear().getMonthValue() == 12){
-                return year +1;
-            }
-            return year;
-        }
-    }
-
-    /*
-     * asssegna al giorno il mese,
-     * da 17 a 31 assegna il mese dello sviluppo del piano
-     * da 1 a 16 assegna il mese successivo
-     */
-    private int setMonthOnPrecludeDay(MonthlyConfig mc, int day) {
-        int monthOfPlan = mc.getMonthAndYear().getMonthValue();
-        
-        if(day>=17 && day<=31){
-            return monthOfPlan;
-        }else{
-            return monthOfPlan+1;
-        }
     }
 
     private Configs getConfig(){

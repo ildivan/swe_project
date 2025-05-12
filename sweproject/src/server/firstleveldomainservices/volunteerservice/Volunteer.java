@@ -1,15 +1,15 @@
 package server.firstleveldomainservices.volunteerservice;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Volunteer {
     private String name;
-    private List<String> nondisponibilityDays; //contiene le date in formato standard dd-mm-yyyy delle NON disponibilità dei volontari
+    private Set<String> nondisponibilityDays; //contiene le date in formato standard dd-mm-yyyy delle NON disponibilità dei volontari
 
     public Volunteer(String name){
         this.name = name;
-        this.nondisponibilityDays = new ArrayList<>();
+        this.nondisponibilityDays = new LinkedHashSet<>();
     }
 
     public String getName(){
@@ -20,11 +20,11 @@ public class Volunteer {
         this.name=name;
     }
 
-    public List<String> getDisponibilityDays(){
+    public Set<String> getDisponibilityDays(){
         return nondisponibilityDays;
     }
 
-    public void setDisponibilityDays(List<String> disponibilityDays){
+    public void setDisponibilityDays(Set<String> disponibilityDays){
         this.nondisponibilityDays=disponibilityDays;
     }
 

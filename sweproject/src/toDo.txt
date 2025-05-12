@@ -8,3 +8,6 @@
 
 8- potresti creare un unica classe di accesso alle funcioni del datalayer dove hai gia le informainei 
 di localizzazione, tipo getActivities, che dentro ha gia tutto, jssondatalerfunctions
+
+
+9- togliere i to strign dai menu e metterli nel formatter

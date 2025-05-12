@@ -22,23 +22,24 @@ public class VolunteerMenu extends MenuManager{
     private static final String MONTHLY_CONFIGS_PATH = "JF/monthlyConfigs.json";
 
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-
+    private transient DateService dateService = new DateService();
 
     public VolunteerMenu(VolunteerService volService) {
         super();
         vociVisibili.put("Mostra le mie visite del piano", true);
         vociVisibili.put("Mostra la scheda delle mie visite", true);
-        
+        vociVisibili.put("Aggiungi giorno di non disponobilità", true);
+
         chiamateMetodi.put("Mostra le mie visite del piano", volService::showMyActivities);
         chiamateMetodi.put("Mostra la scheda delle mie visite", volService::showMyActivitiesDescription);
-        
+        chiamateMetodi.put("Aggiungi giorno di non disponobilità", volService::addPrecludeDate);
       
     }
 
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
         MonthlyConfig mc = geMonthlyConfig();
-        if(((LocalDate) DateService.Service.GET_TODAY_DATE.start()).equals(mc.getMonthAndYear()) && checkIfAlredyBuildPlan()){
+        if(dateService.getTodayDate().equals(mc.getMonthAndYear()) && checkIfAlredyBuildPlan()){
             map.put("Genera Piano Mensile", true);
             //fare che se il piano non è stato generato il 16 laprima cosa da fare è quella, vanno osxurate tutte le altre voci
             return map;
@@ -91,9 +92,8 @@ public class VolunteerMenu extends MenuManager{
         menuOut.append("\n\n\n------------------\n\n\n");
         menuOut.append("BENVENUTO NEL MENU VOLONTARIO!");
         menuOut.append("\n\nSelezionare una opzione:\n");
-        menuOut.append(obtainMenuString("\n\nFunzioni di aggiunta:\n\n", "Aggiungi", menu));
         menuOut.append(obtainMenuString("\n\nFunzioni di visualizzazione:\n\n", "Mostra", menu));
-        
+        menuOut.append(obtainMenuString("\n\nFunzioni di aggiunta:\n\n", "Aggiungi", menu));
 
         return menuOut.toString();
     }

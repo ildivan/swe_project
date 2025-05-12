@@ -6,42 +6,27 @@
       "role": "configuratore"
     },
     {
-      "name": "marco",
+      "name": "Marco",
       "password": "$2a$12$vVoK/tcgciRY/vZx2j03d.O/Cfq1IMpfpYhp.0jRXTwevItewGULK",
       "role": "volontario"
     },
     {
-      "name": "lucia",
+      "name": "Lucia",
       "password": "temp0.822318206305791",
       "role": "volontario"
     },
     {
-      "name": "marta",
+      "name": "Marta",
       "password": "temp0.2875994644928289",
       "role": "volontario"
     },
     {
-      "name": "luca",
+      "name": "Luca",
       "password": "temp0.9610413940195237",
       "role": "volontario"
     },
     {
-      "name": "marco",
-      "password": "temp0.7020955586755712",
-      "role": "volontario"
-    },
-    {
-      "name": "luca",
-      "password": "temp0.9579170288159027",
-      "role": "volontario"
-    },
-    {
-      "name": "luca",
-      "password": "temp0.7291923414518343",
-      "role": "volontario"
-    },
-    {
-      "name": "riccardo",
+      "name": "Riccardo",
       "password": "$2a$12$umGPmtxvdADKdnrNPoapK..O0V1sK0dsgxVUzCIYrO50tt7drHjFe",
       "role": "volontario"
     },
@@ -49,6 +34,21 @@
       "name": "CT2",
       "password": "temp_p2",
       "role": "configuratore"
+    },
+    {
+      "name": "Nadia",
+      "password": "temp0.9610413940237",
+      "role": "volontario"
+    },
+    {
+      "name": "Erica",
+      "password": "temp0.9610413232323237",
+      "role": "volontario"
+    },
+    {
+      "name": "Corrado",
+      "password": "temp0.913940195237",
+      "role": "volontario"
     }
   ]
 }

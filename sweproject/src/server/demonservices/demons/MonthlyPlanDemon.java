@@ -64,7 +64,7 @@ public class MonthlyPlanDemon implements IDemon{
                 String activityName = activityEntry.getKey();
                 ActivityInfo activityInfo = activityEntry.getValue();
     
-                if (activityInfo.getState() == ActivityState.EFFETTUATA && !activityArchived(activityName)) {
+                if (activityInfo.getState() == ActivityState.EFFETTUATA && !activityArchived(activityName,date)) {
                     int subs = activityInfo.getNumberOfSub();
                     String time = activityInfo.getTime();
 
@@ -78,14 +78,23 @@ public class MonthlyPlanDemon implements IDemon{
        //le aggiunge
     }
 
-    private boolean activityArchived(String name) {
+    private boolean activityArchived(String name, LocalDate date) {
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(ARCHIVE_PATH);
         locInfo.setMemberName(ARCHIVE_MEMBER_NAME);
         locInfo.setKeyDesc("name");
         locInfo.setKey(name);
 
-        return DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo));
+        JsonObject pfJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        if(pfJO ==null){
+            return false;
+        }
+        PerformedActivity pf = jsonFactoryService.createObject(pfJO, PerformedActivity.class);
+
+        if(pf.getDate().equals(date) && pf.getName().equals(name)){
+            return true;
+        }
+        return false;
     }
 
     private MonthlyPlan getMonthlyPlan(){

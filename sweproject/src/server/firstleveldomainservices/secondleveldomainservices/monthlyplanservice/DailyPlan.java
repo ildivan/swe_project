@@ -25,6 +25,7 @@ public class DailyPlan {
 
     //non deve essere serializzato -> inserisco transient
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private transient DateService dateService = new DateService();
         
     
 
@@ -102,7 +103,7 @@ public class DailyPlan {
      * @return
      */
     private boolean isProgrammablePeriodCheck(Activity a){
-        return (Boolean) DateService.Service.CHECK_IF_BETWEEN.start(date, a.getFirstProgrammableDate(), a.getLastProgrammableDate());
+        return dateService.checkIfIsBetween(date, a.getFirstProgrammableDate(), a.getLastProgrammableDate());
     }
 
     /**

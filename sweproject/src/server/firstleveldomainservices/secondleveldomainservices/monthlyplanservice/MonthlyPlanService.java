@@ -24,10 +24,11 @@ public class MonthlyPlanService {
     private static final String MONTHLY_PLAN_KEY_DESC = "date";
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private transient DateService dateService = new DateService();
 
 
     public boolean buldMonthlyPlan() {
-        LocalDate today = (LocalDate) DateService.Service.GET_TODAY_DATE.start();
+        LocalDate today = dateService.getTodayDate();
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
 
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();

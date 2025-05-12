@@ -8,7 +8,7 @@
           "plan": {
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
-              "state": "PROPOSTA",
+              "state": "EFFETTUATA",
               "timeOfTheActivity": "17:00 - 20:00"
             },
             "Alla Scoperta del Tempio Capitolino": {
@@ -323,7 +323,7 @@
             },
             "Visita al Castello di Brescia al Tramonto": {
               "numberOfSub": 0,
-              "state": "PROPOSTA",
+              "state": "EFFETTUATA",
               "timeOfTheActivity": "18:00 - 21:00"
             }
           }
