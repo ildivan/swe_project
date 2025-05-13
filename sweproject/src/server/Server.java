@@ -83,8 +83,7 @@ public class Server {
                                 MainService<?> s = obtainService(u, socket, configType);
                                 s.run();  // Esegui il servizio
                             } catch (IOException e) {
-                                // TODO Auto-generated catch block
-                                e.printStackTrace();
+                                System.out.println(e.getMessage());
                             } finally {
                                 try {
                                     socket.close();  // Assicurati di chiudere il socket alla fine
