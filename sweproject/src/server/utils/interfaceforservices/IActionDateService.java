@@ -1,4 +1,4 @@
-package server.objects.interfaceforservices;
+package server.utils.interfaceforservices;
 
 @FunctionalInterface
 public interface IActionDateService<R> {

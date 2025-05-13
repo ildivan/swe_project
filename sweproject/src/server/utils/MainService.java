@@ -1,4 +1,4 @@
-package server.objects;
+package server.utils;
 
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;

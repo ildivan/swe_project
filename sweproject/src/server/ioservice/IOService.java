@@ -75,7 +75,7 @@ public class IOService extends ReadWrite implements IInputOutput{
 	}
 
 	public void writeMessage(String message, boolean responseRequired){
-		this.write(message, responseRequired);
+		write(message, responseRequired);
 	}
 
 	

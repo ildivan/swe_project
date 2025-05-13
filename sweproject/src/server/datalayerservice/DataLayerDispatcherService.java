@@ -61,13 +61,17 @@ public class DataLayerDispatcherService {
      * @param <T> Il tipo delle informazioni.
      * @return L'istanza del data layer corrispondente.
      */
-    @SuppressWarnings("unchecked")
     private static <T extends IDataLocalizationInformation> IDataLayer<T> getLayer(T info) {
         if (info instanceof JsonDataLocalizationInformation) {
-            return (IDataLayer<T>) new JsonDataLayer();
+            return createJsonDataLayer();
         }
         // Altri tipi...
         throw new IllegalArgumentException("Tipo non supportato");
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T extends IDataLocalizationInformation> IDataLayer<T> createJsonDataLayer() {
+        return (IDataLayer<T>) new JsonDataLayer();
     }
 }
 

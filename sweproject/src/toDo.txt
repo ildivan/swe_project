@@ -11,3 +11,5 @@ di localizzazione, tipo getActivities, che dentro ha gia tutto, jssondatalerfunc
 
 
 9- togliere i to strign dai menu e metterli nel formatter
+
+10- factory oer i datalayer

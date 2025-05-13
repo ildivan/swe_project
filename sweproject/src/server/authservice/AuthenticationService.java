@@ -4,12 +4,13 @@ import java.io.*;
 import java.net.Socket;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import server.objects.*;
+
 import server.datalayerservice.*;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
+import server.utils.*;
 
 public class AuthenticationService extends MainService<User> {
     private static final String CLEAR = "CLEAR";

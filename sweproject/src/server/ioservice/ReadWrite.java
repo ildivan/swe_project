@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import com.google.gson.Gson;
 
-import server.objects.Message;
+import server.utils.Message;
 
 public abstract class ReadWrite {
 

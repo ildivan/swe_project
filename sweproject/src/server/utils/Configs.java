@@ -1,4 +1,4 @@
-package server.objects;
+package server.utils;
 
 public class Configs {
     private String configType;

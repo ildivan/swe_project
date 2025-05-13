@@ -31,8 +31,8 @@ import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
-import server.objects.Configs;
-import server.objects.MainService;
+import server.utils.Configs;
+import server.utils.MainService;
 
 
 public class ConfigService extends MainService<Void>{

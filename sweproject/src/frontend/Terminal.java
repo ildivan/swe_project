@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import com.google.gson.Gson;
 
-import server.objects.*;
+import server.utils.*;
 
 public class Terminal {
     private static final String CLEAR = "CLEAR";

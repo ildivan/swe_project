@@ -1,4 +1,4 @@
-package server.objects;
+package server.utils;
 
 public enum ConnectionType {
     External,

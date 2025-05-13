@@ -30,7 +30,7 @@ import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
-import server.objects.MainService;
+import server.utils.MainService;
 
 public class VolunteerService extends MainService<Void>{
     private static final String CLEAR = "CLEAR";
