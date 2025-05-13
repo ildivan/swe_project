@@ -14,45 +14,53 @@ public class AuthenticationUtil {
     
     
     public static boolean checkIfTemp(String username) {
-       
         JsonObject userJO = getUserJsonObject(username);
+        assert userJO != null: "user not found";
         
         return userJO.get("password").getAsString().contains("temp");
     }
 
     public static boolean changePassword(String username, String newPassword) {
+        assert !newPassword.trim().isEmpty(): "password is empty";
+        JsonObject userJO = getUserJsonObject(username);
+        assert userJO != null: "user not found";
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(USERS_PATH);
         locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
         locInfo.setMemberName(USERS_MEMBER_NAME);
         locInfo.setKey(username);
-        JsonObject userJO = getUserJsonObject(username);
-        String newPasswordCrypted = cryptPassword(newPassword);
-        userJO.addProperty("password", newPasswordCrypted);
+        String newPasswordEncrypted = cryptPassword(newPassword);
+        userJO.addProperty("password", newPasswordEncrypted);
 
         return DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.modify(userJO, locInfo));
     }
 
     private static String cryptPassword(String password) {
+        assert !password.trim().isEmpty(): "password is empty";
         String salt = BCrypt.gensalt(HASH_ROUNDS);
         // Crea l'hash della password
         return BCrypt.hashpw(password, salt);
     }
 
     public static boolean verifyPassword(String username, String password) {
-        
+        assert !password.trim().isEmpty(): "password is empty";
         JsonObject userJO = getUserJsonObject(username);
+        assert userJO != null: "user not found";
+
         String hashedPassword = userJO.get("password").getAsString();
         return BCrypt.checkpw(password, hashedPassword);
     }
 
     public static JsonObject getUserJsonObject(String username){
+        assert !username.trim().isEmpty(): "username is empty";
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(USERS_PATH);
         locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
         locInfo.setMemberName(USERS_MEMBER_NAME);
         locInfo.setKey(username);
-        return DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
+        JsonObject user =  DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
+        assert user != null: "user not found";
+        return user;
     }
 
     
