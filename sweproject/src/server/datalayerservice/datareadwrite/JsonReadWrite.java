@@ -12,16 +12,18 @@ import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.*;
-import java.lang.reflect.Type;
 
 public class JsonReadWrite implements IJsonReadWrite {
     
-    private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
 
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
         Path path = Paths.get(filePath);
+        assert Files.exists(path): "File path does not exist";
+        assert !memberName.trim().isEmpty();
+
         if (!Files.exists(path)) {
             return null;
         }
@@ -38,9 +40,10 @@ public class JsonReadWrite implements IJsonReadWrite {
             for (JsonElement elem : objectArray) {
                 list.add(elem.getAsJsonObject());
             }
+            assert !list.isEmpty();
             return list;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return null;
         }
     }
@@ -48,6 +51,10 @@ public class JsonReadWrite implements IJsonReadWrite {
 
     // Funzione per scrivere la lista degli oggetti serializzati nel file JSON
     public synchronized Boolean writeToFile(String filePath, List<JsonObject> list, String memberName) {
+        Path path = Paths.get(filePath);
+        assert Files.exists(path): "File path does not exist";
+        assert !memberName.trim().isEmpty();
+
         JsonObject json = new JsonObject();
         JsonArray objectArray = new JsonArray();
         for (JsonObject user : list) {
@@ -59,19 +66,21 @@ public class JsonReadWrite implements IJsonReadWrite {
             gson.toJson(json, writer);
             return true; // Successo
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
     }
 
-    public synchronized boolean createJSONEmptyFile(String path) {
+    public synchronized boolean createJSONEmptyFile(String filePath) {
+        Path path = Paths.get(filePath);
+        assert Files.exists(path): "File path does not exist";
         JsonObject emptyJson = new JsonObject();
     
-        try (FileWriter writer = new FileWriter(path)) {
+        try (FileWriter writer = new FileWriter(filePath)) {
             gson.toJson(emptyJson, writer);
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -84,18 +93,10 @@ public class JsonReadWrite implements IJsonReadWrite {
      */
     public static void main(String[] args){
         Gson gson = new GsonBuilder()
-            .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
-                @Override
-                public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-                    return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
-                }
+            .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (src, typeOfSrc, context) -> {
+                return new JsonPrimitive(src.toString()); // Format: "2025-04-01"
             })
-            .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-                @Override
-                public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return LocalDate.parse(json.getAsString());
-                }
-            })
+            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfT, context) -> LocalDate.parse(json.getAsString()))
             .create();
         
 
@@ -107,7 +108,7 @@ public class JsonReadWrite implements IJsonReadWrite {
         // MonthlyConfig monthlyConfig = new MonthlyConfig(LocalDate.of(2025, 4, 23), false, new HashSet<LocalDate>());
         
         //salvare l'oggetto creato
-        String StringJO = new String();
+        String StringJO;
         StringJO = gson.toJson(user);
         JsonObject JO = gson.fromJson(StringJO, JsonObject.class);
 
