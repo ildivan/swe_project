@@ -91,10 +91,7 @@ public class MonthlyPlanDemon implements IDemon{
         }
         PerformedActivity pf = jsonFactoryService.createObject(pfJO, PerformedActivity.class);
 
-        if(pf.getDate().equals(date) && pf.getName().equals(name)){
-            return true;
-        }
-        return false;
+        return pf.getDate().equals(date) && pf.getName().equals(name);
     }
 
     private MonthlyPlan getMonthlyPlan(){
@@ -125,6 +122,7 @@ public class MonthlyPlanDemon implements IDemon{
 
         JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
         MonthlyConfig mc = jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
+        assert mc != null;
         return mc;
 
     }

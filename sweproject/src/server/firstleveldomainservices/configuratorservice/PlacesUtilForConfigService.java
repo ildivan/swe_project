@@ -45,7 +45,7 @@ public class PlacesUtilForConfigService {
         locInfo.setKeyDesc("atLeastOneActivityRelated");
         locInfo.setKey("false");
         List<JsonObject> pJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getList(locInfo));
-        List<Place> places = new ArrayList<Place>();
+        List<Place> places = new ArrayList<>();
         
         for(JsonObject jo : pJO){
             Place p = gson.fromJson(jo, Place.class);

@@ -16,8 +16,12 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         super();
     }
 
+
     @Override
     public void add(JsonObject jsonObject, JsonDataLocalizationInformation info) {
+        assert info != null;
+        assert jsonObject != null;
+
         if (!checkFileExistance(info)) {
             jsonReadWrite.createJSONEmptyFile(info.getPath());
         }
@@ -31,6 +35,9 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
 
     @Override
     public boolean modify(JsonObject jsonObject, JsonDataLocalizationInformation info) {
+        assert info != null;
+        assert jsonObject != null;
+
         if (!checkFileExistance(info)) {
             jsonReadWrite.createJSONEmptyFile(info.getPath());
         }
@@ -49,6 +56,9 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
 
     @Override
     public void delete(JsonObject jsonObject, JsonDataLocalizationInformation info) {
+        assert info != null;
+        assert jsonObject != null;
+
         if (!checkFileExistance(info)) {
             jsonReadWrite.createJSONEmptyFile(info.getPath());
         }
@@ -60,6 +70,8 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
 
     @Override
     public JsonObject get(JsonDataLocalizationInformation info) {
+        assert info != null;
+
         if (!checkFileExistance(info)) {
             jsonReadWrite.createJSONEmptyFile(info.getPath());
         }
@@ -75,22 +87,27 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
 
     @Override
     public boolean exists(JsonDataLocalizationInformation info) {
+        assert info != null;
         return get(info) != null;
     }
 
     @Override
     public boolean checkFileExistance(JsonDataLocalizationInformation info) {
+        assert info != null;
         File file = new File(info.getPath());
         return file.exists();
     }
 
     @Override
     public void createJSONEmptyFile(JsonDataLocalizationInformation info) {
+        assert info != null;
         jsonReadWrite.createJSONEmptyFile(info.getPath());
     }
 
     @Override
     public List<JsonObject> getList(JsonDataLocalizationInformation info) {
+        assert info != null;
+
         if (!checkFileExistance(info)) {
             jsonReadWrite.createJSONEmptyFile(info.getPath());
         }
@@ -98,21 +115,22 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         List<JsonObject> list = jsonReadWrite.readFromFile(info.getPath(), info.getMemberName());
         if (list == null) return null;
 
-        List<JsonObject> result = new ArrayList<>();
-        for (JsonObject o : list) {
-            if (o.get(info.getKeyDesc()).getAsString().equals(info.getKey())) {
-                result.add(o);
-            }
-        }
+        List<JsonObject> result = (
+            list.stream().filter((o) -> o.get(info.getKeyDesc()).getAsString().equals(info.getKey())).toList()
+        );
 
         return result.isEmpty() ? null : result;
     }
 
     @Override
     public List<JsonObject> getAll(JsonDataLocalizationInformation info) {
+        assert info != null;
+
         if (!checkFileExistance(info)) {
             jsonReadWrite.createJSONEmptyFile(info.getPath());
         }
-        return jsonReadWrite.readFromFile(info.getPath(), info.getMemberName());
+        List<JsonObject> result = jsonReadWrite.readFromFile(info.getPath(), info.getMemberName());
+        assert result != null;
+        return result;
     }
 }
