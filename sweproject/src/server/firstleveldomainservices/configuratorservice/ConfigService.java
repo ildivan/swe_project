@@ -31,6 +31,7 @@ import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
+import server.utils.ConfigType;
 import server.utils.Configs;
 import server.utils.MainService;
 
@@ -59,17 +60,17 @@ public class ConfigService extends MainService<Void>{
     private static final String MONTHLY_CONFIG_MEMEBER_NAME = "mc";
     private static final String MONTHLY_CONFIG_PATH = "JF/monthlyConfigs.json";
 
-    private Gson gson;
-    private MenuService menu = new ConfiguratorMenu(this);
-    private String configType;
+    private final Gson gson;
+    private final MenuService menu = new ConfiguratorMenu(this);
+    private final ConfigType configType;
 
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private IInputOutput ioService = new IOService();
-    private IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
+    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private final IInputOutput ioService = new IOService();
+    private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     
   
 
-    public ConfigService(Socket socket, Gson gson, String configType) {
+    public ConfigService(Socket socket, Gson gson, ConfigType configType) {
         super(socket);
         this.configType = configType;
         this.gson = gson;
@@ -77,25 +78,30 @@ public class ConfigService extends MainService<Void>{
     /**
      * apply the logic of the service
      * @return null
-     * @throws IOException
      */
-    public Void applyLogic() throws IOException {
-        
-        boolean continuare = true;
+    public Void applyLogic() {
         
             /*
              * classe che mi gestisce la valutazione della data odierna qua, in base alla data mi restituisce 
              * la mappa con le varie possibili voci
              */
-            if(configType.equalsIgnoreCase("normalFunctionConfigs")){
+            if(configType == ConfigType.NORMAL){
                 if(firstTimeConfiguration()){
                     ioService.writeMessage("Configurazione base completata", false);
                 }else{
                     ioService.writeMessage("Errore durante la configurazione", false);
                     return null;
                 }
-            };
+            }
 
+        doOperations();
+        ioService.writeMessage("\nArrivederci!\n", false);
+
+        return null;
+    }
+
+    private void doOperations() {
+        boolean continuare;
         do{
             ioService.writeMessage(CLEAR,false);
             Runnable toRun = menu.startMenu();
@@ -106,13 +112,10 @@ public class ConfigService extends MainService<Void>{
                 toRun.run();
                 continuare = continueChoice("scelta operazioni");
             }
-                
-        }while(continuare);
-        ioService.writeMessage("\nArrivederci!\n", false);
 
-        return null;
+        }while(continuare);
     }
-   
+
     /**
      * check if place and max number of subscriptions are configured -> firtst things to configure
      * @return true if the user is already configured
@@ -159,15 +162,13 @@ public class ConfigService extends MainService<Void>{
             locInfo.setPath(GENERAL_CONFIG_PATH);
             locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
             locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
-            locInfo.setKey("normalFunctionConfigs");
-
-            
+            locInfo.setKey(ConfigType.NORMAL.getValue());
             
             return DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(JO, locInfo));
             
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false;
         }
         
@@ -201,9 +202,8 @@ public class ConfigService extends MainService<Void>{
      * @throws IOException se si verifica un errore nella lettura dell’input.
      */
     private Integer configureMaxSubscriptions() throws IOException{
-        Integer max = ioService.readIntegerWithMinMax("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", 1, 50);
+        int max = ioService.readIntegerWithMinMax("Inserire numero massimo di iscrizioni contemporanee ad una iniziativa", 1, 50);
         
-        assert max != null : "Il valore restituito non deve essere null";
         assert max >= 1 && max <= 50 : "Numero massimo di iscrizioni fuori dai limiti (1-50)";
 
         return max;
@@ -218,9 +218,9 @@ public class ConfigService extends MainService<Void>{
      */
     public void modNumMaxSub(){
         ioService.writeMessage(CLEAR,false);
-        Integer n = ioService.readIntegerWithMinMax("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
+        int n = ioService.readIntegerWithMinMax("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
 
-        assert n != null && n >= 1 && n <= 50 : "Valore non valido per il numero massimo di iscrizioni";
+        assert n >= 1 && n <= 50 : "Valore non valido per il numero massimo di iscrizioni";
 
         Configs configs = getConfig();
 
@@ -233,7 +233,7 @@ public class ConfigService extends MainService<Void>{
         locInfo.setPath(GENERAL_CONFIG_PATH);
         locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
         locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
-        locInfo.setKey(configType);
+        locInfo.setKey(configType.getValue());
         
         boolean modified = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(newConfigsJO, locInfo));
 
@@ -281,7 +281,7 @@ public class ConfigService extends MainService<Void>{
      */
     public void addPlace(){
         ioService.writeMessage(CLEAR,false);
-        boolean continuare = false;
+        boolean continuare;
         
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(PLACES_PATH);
@@ -316,7 +316,6 @@ public class ConfigService extends MainService<Void>{
     /**
      * util method for the previous method to add a new address
      * @return the new address
-     * @throws IOException
      */
     private Address addNewAddress() {
         return AMIOUtil.getAddress();
@@ -357,7 +356,7 @@ public class ConfigService extends MainService<Void>{
 
                 while(!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))){
                     ioService.writeMessage("Luogo non esistente, riprovare", false);
-                        placeName = ioService.readString("\nInserire luogo per l'attività");
+                    placeName = ioService.readString("\nInserire luogo per l'attività");
 
                 }
                     
@@ -392,6 +391,7 @@ public class ConfigService extends MainService<Void>{
      * @param place place to relate the activity
      */
     private void addActivityWithPlace(Place place) {
+        assert place != null;
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(ACTIVITY_PATH);
         locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
@@ -534,7 +534,7 @@ public class ConfigService extends MainService<Void>{
         locInfo.setPath(GENERAL_CONFIG_PATH);
         locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
         locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
-        locInfo.setKey(configType);
+        locInfo.setKey(configType.getValue());
 
         JsonObject cJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
         return jsonFactoryService.createObject(cJO, Configs.class);

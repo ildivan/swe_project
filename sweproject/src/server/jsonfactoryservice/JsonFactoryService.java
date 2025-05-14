@@ -1,6 +1,7 @@
 package server.jsonfactoryservice;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -11,7 +12,7 @@ import server.gsonfactoryservice.IGsonFactory;
 
 
 public class JsonFactoryService implements IJsonFactoryService{
-    private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
 
     public <T> JsonObject createJson(T object){
@@ -19,12 +20,14 @@ public class JsonFactoryService implements IJsonFactoryService{
     }
 
     public <T> T createObject(JsonObject json, Class<T> c){
+        assert json != null;
+        assert c != null;
+
         try {
-            return (T) gson.fromJson(json, c);
+            return gson.fromJson(json, c);
         } catch (JsonSyntaxException e) {
-            // Gestire l'errore, ad esempio restituendo null o lanciando una RuntimeException
-            e.printStackTrace();
-        return null;
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 
@@ -35,7 +38,9 @@ public class JsonFactoryService implements IJsonFactoryService{
             T obj = gson.fromJson(jsonObject, c);
             result.add(obj);
         }
-    
+
+        assert (jsonObjects.size() == result.size());
+        assert (jsonObjects.stream().noneMatch(Objects::isNull));
         return result;
     }
 }

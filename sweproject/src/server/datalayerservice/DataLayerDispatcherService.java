@@ -33,7 +33,6 @@ public class DataLayerDispatcherService {
      * @param <T> Il tipo delle informazioni di localizzazione.
      */
     public static <T extends IDataLocalizationInformation> void start(T localizationInfo,IDataLayerOperation<T> operation) {
-        //◊
         IDataLayer<T> layer = getLayer(localizationInfo);
         operation.execute(layer);
     }
@@ -49,7 +48,6 @@ public class DataLayerDispatcherService {
      * @return Il risultato dell'operazione eseguita.
      */
     public static <T extends IDataLocalizationInformation, R> R startWithResult(T localizationInfo,IDataLayerFunction<T, R> operation) {
-        //◊
         IDataLayer<T> layer = getLayer(localizationInfo);
         return operation.apply(layer);
     }

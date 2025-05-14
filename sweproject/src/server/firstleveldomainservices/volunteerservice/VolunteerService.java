@@ -30,6 +30,7 @@ import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
+import server.utils.ConfigType;
 import server.utils.MainService;
 
 public class VolunteerService extends MainService<Void>{
@@ -42,18 +43,18 @@ public class VolunteerService extends MainService<Void>{
     private static final String VOLUNTEER_KEY_DESC = "name";
     
     private Gson gson;
-    private String name;
-    private MenuService menu = new VolunteerMenu(this);
-    private String configType;
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private IInputOutput ioService = new IOService();
-    private IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
-    private MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-    private DateService dateService = new DateService();
+    private final String name;
+    private final MenuService menu = new VolunteerMenu(this);
+    private ConfigType configType;
+    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private final IInputOutput ioService = new IOService();
+    private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
+    private final MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+    private final DateService dateService = new DateService();
     
   
 
-    public VolunteerService(Socket socket, Gson gson, String configType, String name) {
+    public VolunteerService(Socket socket, Gson gson, ConfigType configType, String name) {
         super(socket);
         this.configType = configType;
         this.gson = gson;
@@ -66,20 +67,7 @@ public class VolunteerService extends MainService<Void>{
      */
     public Void applyLogic() throws IOException {
         
-        boolean continuare = true;
-        
-        do{
-            ioService.writeMessage(CLEAR,false);
-            Runnable toRun = menu.startMenu();
-            ioService.writeMessage(SPACE, false);
-            if(toRun==null){
-                continuare = false;
-            }else{
-                toRun.run();
-                continuare = continueChoice("scelta operazioni");
-            }
-                
-        }while(continuare);
+        doOperations();
         ioService.writeMessage("\nArrivederci!\n", false);
 
         return null;
@@ -155,6 +143,7 @@ public class VolunteerService extends MainService<Void>{
      * @param date
      */
     private void addPrecludeDatesForVolunteer(String date){
+        assert date != null && !date.trim().isEmpty();
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(VOLUNTEER_PATH);
         locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
@@ -172,6 +161,7 @@ public class VolunteerService extends MainService<Void>{
     }
 
     private boolean isMyActivity(String actName, List<Activity> myActivities){
+        assert getActivities().stream().map(Activity::getTitle).toList().contains(actName);
 
         for (Activity activity : myActivities) {
             if(activity.getTitle().equalsIgnoreCase(actName)){
@@ -205,5 +195,21 @@ public class VolunteerService extends MainService<Void>{
         List<JsonObject> activitiesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
         List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
         return activities;
+    }
+
+    private void doOperations() {
+        boolean continuare;
+        do{
+            ioService.writeMessage(CLEAR,false);
+            Runnable toRun = menu.startMenu();
+            ioService.writeMessage(SPACE, false);
+            if(toRun==null){
+                continuare = false;
+            }else{
+                toRun.run();
+                continuare = continueChoice("scelta operazioni");
+            }
+
+        }while(continuare);
     }
 }

@@ -34,10 +34,10 @@ public class Server {
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
 
-    private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
 
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     DemonsService demonsService = new DemonsService();
 
     
@@ -46,7 +46,7 @@ public class Server {
        // this.planManager = new PlanManager();
     }
 
-    public void startServer(String configType){
+    public void startServer(ConfigType configType){
         try (ServerSocket clientSS = new ServerSocket(CLIENT_PORT);
             ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
             System.out.println("Server is listening on port " + CLIENT_PORT);
@@ -56,8 +56,7 @@ public class Server {
             demonsService.run();
 
 
-
-            if(configType.equals(ConfigType.NORMAL.getValue())){
+            if(configType == ConfigType.NORMAL){
                 firstTimeConfiguration();
                 System.out.println("First time default configuration completed");
             }
@@ -123,7 +122,11 @@ public class Server {
         return login.run();
     }
 
-    private MainService<?> obtainService(User u, Socket socket, String configType){
+    private MainService<?> obtainService(User u, Socket socket, ConfigType configType){
+        assert u != null;
+        assert socket != null;
+        assert configType != null;
+
         switch (u.getRole()){
             case "configuratore":
                 return new ConfigService(socket,gson,configType);
@@ -132,6 +135,7 @@ public class Server {
             case "fruitore":
                 //return new UserService(socket,gson);
             default:
+                assert false;
                 return null;
         }
     }
@@ -161,10 +165,10 @@ public class Server {
         // String currentDir = System.getProperty("user.dir");
         // System.out.println("La directory di lavoro corrente è: " + currentDir);
 
-        // String configType = ConfigType.NORMAL.getValue();
+        // ConfigType configType = ConfigType.NORMAL;
 
         
-        String configType = ConfigType.NO_FIRST_CONFIG.getValue();
+        ConfigType configType = ConfigType.NO_FIRST_CONFIG;
         Server s = new Server();
         
         s.startServer(configType);
