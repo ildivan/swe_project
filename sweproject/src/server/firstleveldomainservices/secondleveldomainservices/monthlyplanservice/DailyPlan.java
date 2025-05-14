@@ -84,7 +84,7 @@ public class DailyPlan {
             JsonObject volunteerJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
             Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
 
-            for (String d : volunteer.getDisponibilityDays()) {
+            for (String d : volunteer.getNondisponibilityDaysOld()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 String formattedDate = date.format(formatter);
 

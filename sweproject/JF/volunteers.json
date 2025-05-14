@@ -2,44 +2,53 @@
   "volunteers": [
     {
       "name": "Marco",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Lucia",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Marta",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Luca",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Riccardo",
-      "nondisponibilityDays": [
-      ]
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Nadia",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Erica",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Corrado",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Samuele",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     },
     {
       "name": "Elena",
-      "nondisponibilityDays": []
+      "nondisponibilityDaysCurrent": [],
+      "nondisponibilityDaysOld": []
     }
   ]
 }

@@ -88,6 +88,7 @@ public class MonthlyPlan{
         // per ogni giorno del mese
         // se il giorno è precluso non faccio nulla
         // altrimenti creo un daily plan e lo metto nella mappa
+
         for (LocalDate date : monthlyPlan.keySet()) {
             DailyPlan dp = monthlyPlan.get(date);
             if (!(dp == null)) {

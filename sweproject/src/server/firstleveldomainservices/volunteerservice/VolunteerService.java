@@ -139,8 +139,8 @@ public class VolunteerService extends MainService<Void>{
         
         int day = ioService.readIntegerWithMinMax("\"Inserire giorno in cui non si è disponibili nel prossimo mese", minNumDay, maxNumDay);
 
-        int month = dateService.setMonthOnPrecludeDay(mc, day);
-        int year = dateService.setYearOnPrecludeDay(mc, day);
+        int month = dateService.setMonthOnPrecludeDayVolunteer(mc, day);
+        int year = dateService.setYearOnPrecludeDayVolunteer(mc, day);
 
         LocalDate date = LocalDate.of(year, month, day);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -163,7 +163,7 @@ public class VolunteerService extends MainService<Void>{
         JsonObject volunteerJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
         Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
 
-        Set<String> precludeDates = volunteer.getDisponibilityDays();
+        Set<String> precludeDates = volunteer.getNondisponibilityDaysCurrent();
         precludeDates.add(date);
 
         JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);

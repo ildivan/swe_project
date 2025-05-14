@@ -54,7 +54,54 @@ public class DateService {
         if(day>=17 && day<=31){
             return monthOfPlan;
         }else{
+            if(monthOfPlan == 12){
+                return 1;
+            }
             return monthOfPlan+1;
+        }
+    }
+
+    /*
+     * setta l'anno in base al giorno per il volontario
+     */
+    public int setYearOnPrecludeDayVolunteer(MonthlyConfig mc, int day) {
+        int year = mc.getMonthAndYear().getYear();
+        int month = mc.getMonthAndYear().getMonthValue();
+
+        if(day>=17 && day<=31){
+            if(month == 12){
+                return year+1;
+            }
+            return year;
+        }else{
+            if(month == 11 || month == 12){
+                return year +1;
+            }
+            return year;
+        }
+    }
+
+    /*
+     * asssegna al giorno il mese per il volontario
+     * da 17 a 31 assegna il mese dello sviluppo del piano
+     * da 1 a 16 assegna il mese successivo
+     */
+    public int setMonthOnPrecludeDayVolunteer(MonthlyConfig mc, int day) {
+        int monthOfPlan = mc.getMonthAndYear().getMonthValue();
+        
+        if(day>=17 && day<=31){
+            if(monthOfPlan == 12){
+                return 1;
+            }
+            return monthOfPlan+1;
+        }else{
+            if(monthOfPlan == 11){
+                return 1;
+            }
+            if(monthOfPlan == 12){
+                return 2;
+            }
+            return monthOfPlan+2;
         }
     }
 }

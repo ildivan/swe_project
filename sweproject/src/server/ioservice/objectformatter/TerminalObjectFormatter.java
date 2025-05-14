@@ -79,7 +79,7 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
 
     private String dispDaysToString(Volunteer v){
         String out ="";
-        for(String s : v.getDisponibilityDays()){
+        for(String s : v.getNondisponibilityDaysCurrent()){
             out = out + s + ", ";
         }
 

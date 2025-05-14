@@ -33,12 +33,12 @@ public class AuthenticationService extends MainService<User> {
     @Override
     public User applyLogic() {
         User user;
-        String riprovare = "n"; // n no y si
+        
 
         ioService.writeMessage(CLEAR, false);
 
         //se esiste ottengo l'utente
-        JsonObject userJO = getUser(riprovare);
+        JsonObject userJO = getUser();
         if (userJO == null) return null;
 
         String username = userJO.get("name").getAsString();
@@ -68,9 +68,9 @@ public class AuthenticationService extends MainService<User> {
         return user;
     }
 
-    private JsonObject getUser(String riprovare) {
-        assert riprovare.equals("n") || riprovare.equals("y") : "Value not valid for riprovare: " + riprovare;
+    private JsonObject getUser() {
         String username;
+        String riprovare = ""; // n no y si
         do {
             username = ioService.readString("Inserisci username:");
             JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
@@ -79,18 +79,31 @@ public class AuthenticationService extends MainService<User> {
             locInfo.setMemberName(USERS_MEMBER_NAME);
             locInfo.setKey(username);
 
-
-            if (!DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo))) {
+            boolean exist = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo));
+            if(exist){
+                JsonObject userJO = AuthenticationUtil.getUserJsonObject(username);
+                assert userJO != null : "User is null";
+                 assert (
+                    (userJO.get("role").getAsString().equals("configuratore") && connectionType == ConnectionType.Internal) ||
+                    (userJO.get("role").getAsString().equals("volontario") && connectionType == ConnectionType.Internal) ||
+                    (userJO.get("role").getAsString().equals("fruitore") && connectionType == ConnectionType.External)
+                 );
+                return userJO;
+                
+            }
                 //DEBUG write(String.valueOf(dataLayer.exists(dataContainer)), false);
                 riprovare = ioService.readString("Utente inesistente, vuoi riprovare? (y/n):");
+                if (!riprovare.equalsIgnoreCase("y") && !riprovare.equalsIgnoreCase("n")){
+                    riprovare = ioService.readString("\nComando non valido inserire 'n' o 'y'");
+                }
                 if (riprovare.equalsIgnoreCase("n")) {
                     ioService.writeMessage("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
                     return null;
-                } else {
-                    riprovare = ioService.readString("\nComando non valido inserire 'n o 'y'");
                 }
-            }
-        } while (riprovare.equals("y"));
+
+
+            
+        } while (riprovare.equalsIgnoreCase("y"));
 
         JsonObject userJO = AuthenticationUtil.getUserJsonObject(username);
         assert userJO != null : "User is null";
