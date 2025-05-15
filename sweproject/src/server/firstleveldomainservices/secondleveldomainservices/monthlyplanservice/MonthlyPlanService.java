@@ -8,7 +8,8 @@ import java.util.Set;
 
 import com.google.gson.JsonObject;
 import server.DateService;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -24,6 +25,7 @@ public class MonthlyPlanService {
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
     private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
 
     public boolean buldMonthlyPlan() {
@@ -32,14 +34,14 @@ public class MonthlyPlanService {
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
     
-        List<JsonObject> activityJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
+        List<JsonObject> activityJO = dataLayer.getAll(locInfo);
         List<Activity> activity = jsonFactoryService.createObjectList(activityJO, Activity.class);
 
         monthlyPlan.generateMonthlyPlan(activity);
 
         final JsonDataLocalizationInformation monthlyPlanLocInfo = locInfoFactory.getMonthlyPlanLocInfo();
 
-        DataLayerDispatcherService.start(monthlyPlanLocInfo, layer -> layer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo));
+       dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
        
         monthlyPlan.setPlanBuildFlagAsTrue();
         monthlyPlan.incrementMonthOfPlan();
@@ -74,7 +76,7 @@ public class MonthlyPlanService {
         
         locInfo.setKey(volunteer.getName());
 
-        DataLayerDispatcherService.start(locInfo, layer->layer.modify(jsonFactoryService.createJson(volunteer), locInfo));
+        dataLayer.modify(jsonFactoryService.createJson(volunteer), locInfo);
     }
 
     /**
@@ -84,7 +86,7 @@ public class MonthlyPlanService {
     private List<Volunteer> getVolunteers() {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
 
-        List<JsonObject> volunteersJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
+        List<JsonObject> volunteersJO = dataLayer.getAll(locInfo);
         List<Volunteer> volunteers = jsonFactoryService.createObjectList(volunteersJO, Volunteer.class);
         return volunteers;
     }
@@ -99,7 +101,7 @@ public class MonthlyPlanService {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyPlanLocInfo();
     
         locInfo.setKey(getMonthlyPlanDate());
-        JsonObject mpJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        JsonObject mpJO = dataLayer.get(locInfo);
 
         return jsonFactoryService.createObject(mpJO, MonthlyPlan.class);
     }
@@ -116,7 +118,7 @@ public class MonthlyPlanService {
 
         locInfo.setKey(MONTHLY_CONFIG_KEY);
 
-        JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        JsonObject mcJO = dataLayer.get(locInfo);
         MonthlyConfig mc = jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
         return mc;
 

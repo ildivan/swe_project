@@ -5,7 +5,8 @@ import com.google.gson.JsonObject;
 
 import server.authservice.AuthenticationService;
 import server.authservice.User;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -36,9 +37,9 @@ public class Server {
 
     private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
-
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     DemonsService demonsService = new DemonsService();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
     
     public Server(){
@@ -147,15 +148,15 @@ public class Server {
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
 
-        if(!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.checkFileExistance(locInfo))){
-            DataLayerDispatcherService.start(locInfo, layer->layer.createJSONEmptyFile(locInfo));
+        if(!dataLayer.checkFileExistance(locInfo)){
+            dataLayer.createJSONEmptyFile(locInfo);
         }
 
         JsonObject JO = jsonFactoryService.createJson(new Configs());
         
         locInfo.setKey(ConfigType.NORMAL.getValue());
     
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(JO, locInfo));
+        dataLayer.modify(JO, locInfo);
     }
 
     public static void main(String[] args) {

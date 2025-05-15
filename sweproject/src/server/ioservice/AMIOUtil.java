@@ -13,7 +13,8 @@ import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -25,6 +26,7 @@ public class AMIOUtil{
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
     private final static ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final static IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
     public static Address getAddress(){
         IInputOutput ioService = getIOService();
@@ -150,7 +152,7 @@ public class AMIOUtil{
 
         locInfo.setKey(name);
     
-        return DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo));
+        return dataLayer.exists(locInfo);
       
     }
 

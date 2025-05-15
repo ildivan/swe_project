@@ -11,6 +11,8 @@ import com.google.gson.JsonObject;
 
 import server.DateService;
 import server.datalayerservice.*;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -57,6 +59,7 @@ public class ConfigService extends MainService<Void>{
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     
   
 
@@ -152,7 +155,7 @@ public class ConfigService extends MainService<Void>{
     
             locInfo.setKey(ConfigType.NORMAL.getValue());
             
-            return DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(JO, locInfo));
+            return dataLayer.modify(JO, locInfo);
             
 
         } catch (IOException e) {
@@ -220,7 +223,7 @@ public class ConfigService extends MainService<Void>{
         JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
         locInfo.setKey(configType.getValue());
         
-        boolean modified = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(newConfigsJO, locInfo));
+        boolean modified = dataLayer.modify(newConfigsJO, locInfo);
 
         assert modified : "Modifica configurazione fallita";
 
@@ -243,11 +246,11 @@ public class ConfigService extends MainService<Void>{
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
 
-        if (!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))) {
-            DataLayerDispatcherService.start(locInfo, layer->layer.add(jsonFactoryService.createJson(new Volunteer(name)), locInfo));
+        if (!dataLayer.exists(locInfo)) {
+            dataLayer.add(jsonFactoryService.createJson(new Volunteer(name)), locInfo);
 
             // Post-condizione: ora esiste
-            boolean nowExists = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo));
+            boolean nowExists = dataLayer.exists(locInfo);
             assert nowExists : "Aggiunta volontario fallita";
         } else {
             ioService.writeMessage("\nVolontario già esistente", false);
@@ -273,7 +276,7 @@ public class ConfigService extends MainService<Void>{
 
                 assert name != null && !name.trim().isEmpty() : "Il nome del luogo non può essere vuoto";
 
-                if(DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))){
+                if(dataLayer.exists(locInfo)){
                     ioService.writeMessage("Luogo già esistente", false);
                     return;
                 }
@@ -281,10 +284,10 @@ public class ConfigService extends MainService<Void>{
                 ioService.writeMessage("Inserire indirizzo luogo", false);
                 Address address = addNewAddress();
 
-                DataLayerDispatcherService.start(locInfo, layer->layer.add((jsonFactoryService.createJson(new Place(name, address, description))),locInfo));
+                dataLayer.add((jsonFactoryService.createJson(new Place(name, address, description))),locInfo);
 
                 // Post-condizione: il luogo è stato aggiunto
-        boolean placeAdded = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo));
+        boolean placeAdded = dataLayer.exists(locInfo);
         assert placeAdded : "Aggiunta del luogo fallita";
 
             continuare = continueChoice("inserimento luoghi");
@@ -330,14 +333,13 @@ public class ConfigService extends MainService<Void>{
         
                 locInfo.setKey(placeName);
 
-                while(!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))){
+                while(!dataLayer.exists(locInfo)){
                     ioService.writeMessage("Luogo non esistente, riprovare", false);
                     placeName = ioService.readString("\nInserire luogo per l'attività");
 
                 }
                     
-                Place place = jsonFactoryService.createObject(DataLayerDispatcherService.startWithResult(locInfo
-                ,layer->layer.get(locInfo)), Place.class);   
+                Place place = jsonFactoryService.createObject(dataLayer.get(locInfo), Place.class);   
 
                 // Pre-condizione: il luogo selezionato deve esistere
                 assert place != null : "Il luogo selezionato non esiste";
@@ -371,8 +373,8 @@ public class ConfigService extends MainService<Void>{
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
         Activity activity = AMIOUtil.getActivity(place);
 
-        DataLayerDispatcherService.start(locInfo, layer->layer.add(jsonFactoryService.createJson(activity), locInfo));
-        
+        dataLayer.add(jsonFactoryService.createJson(activity), locInfo);
+    
     }
 
     /**
@@ -381,7 +383,7 @@ public class ConfigService extends MainService<Void>{
     public void showVolunteers() {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
 
-        List<JsonObject> volunteersJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
+        List<JsonObject> volunteersJO = dataLayer.getAll(locInfo);
         List<Volunteer> volunteers = jsonFactoryService.createObjectList(volunteersJO, Volunteer.class);
         ioService.writeMessage(formatter.formatListVolunteer(volunteers), false);
         ioService.writeMessage(SPACE,false);
@@ -393,7 +395,7 @@ public class ConfigService extends MainService<Void>{
     public void showPlaces() {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
 
-        List<JsonObject> placesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
+        List<JsonObject> placesJO = dataLayer.getAll(locInfo);
         List<Place> places = jsonFactoryService.createObjectList(placesJO, Place.class);
 
         ioService.writeMessage(formatter.formatListPlace(places), false);
@@ -406,7 +408,7 @@ public class ConfigService extends MainService<Void>{
     public void showActivities() {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
 
-        List<JsonObject> activitiesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
+        List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
         List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
 
         ioService.writeMessage(formatter.formatListActivity(activities), false);
@@ -493,7 +495,7 @@ public class ConfigService extends MainService<Void>{
         mc.getPrecludeDates().add(LocalDate.of(year, month, day));
         JsonObject newConfigsJO = jsonFactoryService.createJson(mc);
 
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(newConfigsJO, locInfo));
+        dataLayer.modify(newConfigsJO, locInfo);
 
     }
 
@@ -502,7 +504,7 @@ public class ConfigService extends MainService<Void>{
 
         locInfo.setKey(configType.getValue());
 
-        JsonObject cJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
+        JsonObject cJO = dataLayer.get(locInfo);
         return jsonFactoryService.createObject(cJO, Configs.class);
     }
     

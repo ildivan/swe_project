@@ -1,7 +1,9 @@
 package server.authservice;
 
 import com.google.gson.JsonObject;
-import server.datalayerservice.DataLayerDispatcherService;
+
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -11,6 +13,7 @@ public class AuthenticationUtil {
 
     private static final ILocInfoFactory locInfoFactory= new JsonLocInfoFactory();
     private static final int HASH_ROUNDS = 12;
+    private static final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     
     
     public static boolean checkIfTemp(String username) {
@@ -30,7 +33,7 @@ public class AuthenticationUtil {
         String newPasswordEncrypted = cryptPassword(newPassword);
         userJO.addProperty("password", newPasswordEncrypted);
 
-        return DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.modify(userJO, locInfo));
+        return dataLayer.modify(userJO, locInfo);
     }
 
     private static String cryptPassword(String password) {
@@ -54,7 +57,7 @@ public class AuthenticationUtil {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
 
         locInfo.setKey(username);
-        JsonObject user =  DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
+        JsonObject user =  dataLayer.get(locInfo);
         assert user != null: "user not found";
         return user;
     }

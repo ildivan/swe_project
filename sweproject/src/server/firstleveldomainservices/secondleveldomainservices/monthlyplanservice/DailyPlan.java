@@ -6,7 +6,8 @@ import java.time.format.TextStyle;
 import java.util.*;
 import com.google.gson.JsonObject;
 import server.DateService;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -24,6 +25,7 @@ public class DailyPlan {
     private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
+    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
         
     
 
@@ -76,7 +78,7 @@ public class DailyPlan {
 
             locInfo.setKey(name);
 
-            JsonObject volunteerJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+            JsonObject volunteerJO = dataLayer.get(locInfo);
             Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
 
             for (String d : volunteer.getNondisponibilityDaysOld()) {

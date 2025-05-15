@@ -7,7 +7,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
-import server.datalayerservice.DataLayerDispatcherService;
+
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -36,6 +38,7 @@ public class MonthlyPlan{
     //questo non deve essere serializzato -> inserisco transient per risolvere il problema
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
    
     public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date) {
         this.monthlyPlan = montlyPlan;
@@ -110,7 +113,7 @@ public class MonthlyPlan{
         
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
+        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
         
     }
 
@@ -128,7 +131,7 @@ public class MonthlyPlan{
         
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
+        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
     }
 
     /**
@@ -146,7 +149,7 @@ public class MonthlyPlan{
         
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
+        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
     }
 
 
@@ -155,7 +158,7 @@ public class MonthlyPlan{
         
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
+        JsonObject mcJO = dataLayer.get(locInfo);
         return jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
     }
     

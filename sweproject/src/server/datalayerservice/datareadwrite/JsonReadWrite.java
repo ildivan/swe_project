@@ -3,7 +3,8 @@ package server.datalayerservice.datareadwrite;
 import com.google.gson.*;
 
 import server.authservice.User;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
@@ -17,6 +18,7 @@ public class JsonReadWrite implements IJsonReadWrite {
     
     private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
 
     public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
@@ -98,7 +100,7 @@ public class JsonReadWrite implements IJsonReadWrite {
             })
             .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfT, context) -> LocalDate.parse(json.getAsString()))
             .create();
-        
+        IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
         
         //riga per creare nuovo utente
@@ -118,7 +120,7 @@ public class JsonReadWrite implements IJsonReadWrite {
        
 
         
-        DataLayerDispatcherService.start(locInfo, layer->layer.add(JO,locInfo));
+        dataLayer.add(JO, locInfo);
 
     }
 }

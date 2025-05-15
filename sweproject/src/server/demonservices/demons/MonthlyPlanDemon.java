@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import com.google.gson.JsonObject;
-import server.datalayerservice.DataLayerDispatcherService;
+
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -23,6 +25,7 @@ public class MonthlyPlanDemon implements IDemon{
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone
     @Override
@@ -63,7 +66,7 @@ public class MonthlyPlanDemon implements IDemon{
 
                     PerformedActivity pf = new PerformedActivity(activityName, date, subs, time);
 
-                    DataLayerDispatcherService.start(locInfo, layer->layer.add(jsonFactoryService.createJson(pf), locInfo));
+                    dataLayer.add(jsonFactoryService.createJson(pf), locInfo);
                 }
             }
         }
@@ -76,7 +79,7 @@ public class MonthlyPlanDemon implements IDemon{
         locInfo.setKeyDesc("name");
         locInfo.setKey(name);
 
-        JsonObject pfJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        JsonObject pfJO = dataLayer.get(locInfo);
         if(pfJO ==null){
             return false;
         }
@@ -88,7 +91,7 @@ public class MonthlyPlanDemon implements IDemon{
     private MonthlyPlan getMonthlyPlan(){
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyPlanLocInfo();
         locInfo.setKey(getMonthlyPlanDate());
-        JsonObject mpJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        JsonObject mpJO = dataLayer.get(locInfo);
 
         return jsonFactoryService.createObject(mpJO, MonthlyPlan.class);
     }
@@ -104,7 +107,7 @@ public class MonthlyPlanDemon implements IDemon{
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
         locInfo.setKey(MONTHLY_CONFIG_KEY);
 
-        JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        JsonObject mcJO = dataLayer.get(locInfo);
         MonthlyConfig mc = jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
         assert mc != null;
         return mc;

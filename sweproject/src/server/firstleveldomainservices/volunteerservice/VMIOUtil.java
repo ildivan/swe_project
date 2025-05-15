@@ -1,7 +1,8 @@
 package server.firstleveldomainservices.volunteerservice;
 
 import server.authservice.User;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -16,6 +17,7 @@ public class VMIOUtil{
  
      private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
      private ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
      /**
      * method to add a new user profile to user database creating a new random password
@@ -29,7 +31,7 @@ public class VMIOUtil{
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
         
-        DataLayerDispatcherService.start(locInfo, layer -> layer.add(jsonFactoryService.createJson(u), locInfo));
+        dataLayer.add(jsonFactoryService.createJson(u), locInfo);
 
     }
 }

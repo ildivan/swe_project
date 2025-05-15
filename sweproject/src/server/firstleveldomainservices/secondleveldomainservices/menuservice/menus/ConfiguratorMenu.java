@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
 import server.DateService;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -24,6 +25,7 @@ public class ConfiguratorMenu extends MenuManager{
     private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private transient DateService dateService = new DateService();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
 
     public ConfiguratorMenu(ConfigService configService) {
@@ -99,7 +101,7 @@ public class ConfiguratorMenu extends MenuManager{
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
+        JsonObject mcJO = dataLayer.get(locInfo);
         return jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
     }
 

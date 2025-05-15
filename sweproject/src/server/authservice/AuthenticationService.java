@@ -4,8 +4,8 @@ import java.net.Socket;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import server.datalayerservice.*;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -23,6 +23,7 @@ public class AuthenticationService extends MainService<User> {
     private final Gson gson = gsonFactoryService.getGson();
     private final ILocInfoFactory locInfoFactory= new JsonLocInfoFactory();
     private final IInputOutput ioService = new IOService();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
 
     public AuthenticationService(Socket socket, ConnectionType connectionType) {
@@ -77,7 +78,7 @@ public class AuthenticationService extends MainService<User> {
             
             locInfo.setKey(username);
 
-            boolean exist = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo));
+            boolean exist = dataLayer.exists(locInfo);
             if(exist){
                 JsonObject userJO = AuthenticationUtil.getUserJsonObject(username);
                 assert userJO != null : "User is null";

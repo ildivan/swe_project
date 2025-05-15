@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import server.DateService;
-import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
@@ -50,6 +49,7 @@ public class VolunteerService extends MainService<Void>{
     private final MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
     private final DateService dateService = new DateService();
     private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     
   
 
@@ -145,7 +145,7 @@ public class VolunteerService extends MainService<Void>{
         assert date != null && !date.trim().isEmpty();
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
-        JsonObject volunteerJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+        JsonObject volunteerJO = dataLayer.get(locInfo);
         Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
 
         Set<String> precludeDates = volunteer.getNondisponibilityDaysCurrent();
@@ -153,7 +153,7 @@ public class VolunteerService extends MainService<Void>{
 
         JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);
 
-        DataLayerDispatcherService.start(locInfo, layer->layer.modify(newVolunteerJO, locInfo));
+        dataLayer.modify(newVolunteerJO, locInfo);
     }
 
     private boolean isMyActivity(String actName, List<Activity> myActivities){
@@ -186,7 +186,7 @@ public class VolunteerService extends MainService<Void>{
 
     private List<Activity> getActivities(){
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-        List<JsonObject> activitiesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
+        List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
         List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
         return activities;
     }
