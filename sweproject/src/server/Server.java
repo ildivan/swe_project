@@ -6,7 +6,9 @@ import com.google.gson.JsonObject;
 import server.authservice.AuthenticationService;
 import server.authservice.User;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.demonservices.DemonsService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
@@ -28,9 +30,7 @@ import java.net.*;
 
 public class Server {
 
-    private static final String GENERAL_CONFIGS_KEY_DESCRIPTION = "configType";
-    private static final String GENERAL_CONFIGS_MEMBER_NAME = "configs";
-    private static final String GENERAL_CONFIG_PATH = "JF/configs.json";
+    private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
 
@@ -145,17 +145,14 @@ public class Server {
 
     private void firstTimeConfiguration(){
 
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(GENERAL_CONFIG_PATH);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
 
         if(!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.checkFileExistance(locInfo))){
             DataLayerDispatcherService.start(locInfo, layer->layer.createJSONEmptyFile(locInfo));
         }
 
         JsonObject JO = jsonFactoryService.createJson(new Configs());
-
-        locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
-        locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
+        
         locInfo.setKey(ConfigType.NORMAL.getValue());
     
         DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(JO, locInfo));

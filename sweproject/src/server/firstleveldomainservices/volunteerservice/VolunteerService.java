@@ -14,7 +14,9 @@ import com.google.gson.JsonObject;
 
 import server.DateService;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.VolunteerMenu;
@@ -36,11 +38,7 @@ import server.utils.MainService;
 public class VolunteerService extends MainService<Void>{
     private static final String CLEAR = "CLEAR";
     private static final String SPACE = "SPACE";
-    private static final String ACTIVITY_PATH = "JF/activities.json";
-    private static final String ACTIVITY_MEMBER_NAME = "activities";
-    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
-    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
-    private static final String VOLUNTEER_KEY_DESC = "name";
+
     
     private Gson gson;
     private final String name;
@@ -51,6 +49,7 @@ public class VolunteerService extends MainService<Void>{
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
     private final MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
     private final DateService dateService = new DateService();
+    private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     
   
 
@@ -144,10 +143,7 @@ public class VolunteerService extends MainService<Void>{
      */
     private void addPrecludeDatesForVolunteer(String date){
         assert date != null && !date.trim().isEmpty();
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
         JsonObject volunteerJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
         Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
@@ -189,9 +185,7 @@ public class VolunteerService extends MainService<Void>{
     }
 
     private List<Activity> getActivities(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(ACTIVITY_PATH);
-        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
         List<JsonObject> activitiesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
         List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
         return activities;

@@ -11,6 +11,9 @@ import com.google.gson.JsonObject;
 
 import server.DateService;
 import server.datalayerservice.*;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -43,27 +46,14 @@ public class ConfigService extends MainService<Void>{
     private static final String CONFIG_ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
     private static final String CLEAR = "CLEAR";
     private static final String SPACE = "SPACE";
-    
-    private static final String ACTIVITY_PATH = "JF/activities.json";
-    private static final String ACTIVITY_MEMBER_NAME = "activities";
-    private static final String PLACES_PATH = "JF/places.json";
-    private static final String PLACES_MEMBER_NAME = "places";
-    private static final String PLACES_KEY_DESC = "name";
-    private static final String GENERAL_CONFIGS_KEY_DESCRIPTION = "configType";
-    private static final String GENERAL_CONFIGS_MEMBER_NAME = "configs";
-    private static final String GENERAL_CONFIG_PATH = "JF/configs.json";
-    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
-    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
-    private static final String VOLUNTEER_KEY_DESC = "name";
-    private static final String MONTHLY_CONFIG_KEY_DESC = "type";
     private static final String MONTHLY_CONFIG_KEY = "current";
-    private static final String MONTHLY_CONFIG_MEMEBER_NAME = "mc";
-    private static final String MONTHLY_CONFIG_PATH = "JF/monthlyConfigs.json";
+
 
     private final Gson gson;
     private final MenuService menu = new ConfiguratorMenu(this);
     private final ConfigType configType;
 
+    private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
@@ -158,10 +148,8 @@ public class ConfigService extends MainService<Void>{
             
             JsonObject JO = jsonFactoryService.createJson(configs);
             
-            JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-            locInfo.setPath(GENERAL_CONFIG_PATH);
-            locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
-            locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
+            JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
+    
             locInfo.setKey(ConfigType.NORMAL.getValue());
             
             return DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(JO, locInfo));
@@ -229,10 +217,7 @@ public class ConfigService extends MainService<Void>{
         configs.setMaxSubscriptions(n);
         JsonObject newConfigsJO = jsonFactoryService.createJson(configs);
 
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(GENERAL_CONFIG_PATH);
-        locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
-        locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
         locInfo.setKey(configType.getValue());
         
         boolean modified = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(newConfigsJO, locInfo));
@@ -255,10 +240,7 @@ public class ConfigService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
 
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
 
         if (!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))) {
@@ -283,11 +265,7 @@ public class ConfigService extends MainService<Void>{
         ioService.writeMessage(CLEAR,false);
         boolean continuare;
         
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(PLACES_PATH);
-        locInfo.setMemberName(PLACES_MEMBER_NAME);
-        locInfo.setKeyDesc(PLACES_KEY_DESC);
-        
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
 
         do{
                 String name = ioService.readString("Inserire nome luogo");
@@ -348,10 +326,8 @@ public class ConfigService extends MainService<Void>{
                 showPlaces();
                 String placeName = ioService.readString("\nInserire luogo per l'attività");
 
-                JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-                locInfo.setPath(PLACES_PATH);
-                locInfo.setMemberName(PLACES_MEMBER_NAME);
-                locInfo.setKeyDesc(PLACES_KEY_DESC);
+                JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        
                 locInfo.setKey(placeName);
 
                 while(!DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo))){
@@ -392,10 +368,7 @@ public class ConfigService extends MainService<Void>{
      */
     private void addActivityWithPlace(Place place) {
         assert place != null;
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(ACTIVITY_PATH);
-        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
-
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
         Activity activity = AMIOUtil.getActivity(place);
 
         DataLayerDispatcherService.start(locInfo, layer->layer.add(jsonFactoryService.createJson(activity), locInfo));
@@ -406,9 +379,8 @@ public class ConfigService extends MainService<Void>{
      * Mostra tutti i volontari registrati nel sistema.
      */
     public void showVolunteers() {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+
         List<JsonObject> volunteersJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
         List<Volunteer> volunteers = jsonFactoryService.createObjectList(volunteersJO, Volunteer.class);
         ioService.writeMessage(formatter.formatListVolunteer(volunteers), false);
@@ -419,9 +391,8 @@ public class ConfigService extends MainService<Void>{
      * method to show all places
      */
     public void showPlaces() {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(PLACES_PATH);
-        locInfo.setMemberName(PLACES_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+
         List<JsonObject> placesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
         List<Place> places = jsonFactoryService.createObjectList(placesJO, Place.class);
 
@@ -433,9 +404,8 @@ public class ConfigService extends MainService<Void>{
      * method to show all activities
      */
     public void showActivities() {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(ACTIVITY_PATH);
-        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+
         List<JsonObject> activitiesJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
         List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
 
@@ -511,10 +481,8 @@ public class ConfigService extends MainService<Void>{
         int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
         int minNumDay = 1;
             
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIG_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMEBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
+
         locInfo.setKey(MONTHLY_CONFIG_KEY);
         
         int day = ioService.readIntegerWithMinMax("Inserire giorno non disponibile", minNumDay, maxNumDay);
@@ -530,10 +498,8 @@ public class ConfigService extends MainService<Void>{
     }
 
     private Configs getConfig(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(GENERAL_CONFIG_PATH);
-        locInfo.setMemberName(GENERAL_CONFIGS_MEMBER_NAME);
-        locInfo.setKeyDesc(GENERAL_CONFIGS_KEY_DESCRIPTION);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
+
         locInfo.setKey(configType.getValue());
 
         JsonObject cJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));

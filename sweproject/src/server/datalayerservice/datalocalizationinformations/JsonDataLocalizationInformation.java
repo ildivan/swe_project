@@ -1,6 +1,4 @@
-package server.datalayerservice;
-
-import server.datalayerservice.interfaces.IDataLocalizationInformation;
+package server.datalayerservice.datalocalizationinformations;
 
 public class JsonDataLocalizationInformation implements IDataLocalizationInformation {
     // informazioni per la localizzazione e la connessione al file JSON

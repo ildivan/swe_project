@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
@@ -25,17 +27,15 @@ public class MonthlyPlan{
      * 2- per creare il monthly plan si controlla per ogni gionro se c'è gia null 
      * se è null si va avanti, altrimenti si crea un dailyu plan relativo a tale gionro
      */
-    
-    private static final String MONTHLY_CONFIG_KEY_DESCRIPTION = "type";
+
     private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
-    private static final String MONTHLY_CONFIG_MEMBER_NAME = "mc";
-    private static final String MONTHLY_CONFIGS_PATH = "JF/monthlyConfigs.json";
+
     private LocalDate date;
     private Map<LocalDate,DailyPlan> monthlyPlan;
 
     //questo non deve essere serializzato -> inserisco transient per risolvere il problema
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-
+    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
    
     public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date) {
         this.monthlyPlan = montlyPlan;
@@ -106,10 +106,8 @@ public class MonthlyPlan{
         MonthlyConfig mc = geMonthlyConfig();
         mc.setPrecludeDates(new HashSet<>());
 
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIGS_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
+        
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
         DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
@@ -126,10 +124,8 @@ public class MonthlyPlan{
         LocalDate newDate = date.plusMonths(1);
         mc.setMonthAndYear(newDate);
 
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIGS_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
+        
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
         DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
@@ -146,10 +142,8 @@ public class MonthlyPlan{
         planConfiguredMap.put(date.plusMonths(1),false);
         mc.setPlanConfigured(planConfiguredMap);
 
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIGS_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
+        
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
         DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
@@ -157,10 +151,8 @@ public class MonthlyPlan{
 
 
     private MonthlyConfig geMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIGS_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
+        
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
         JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));

@@ -6,6 +6,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import server.datalayerservice.*;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 import server.ioservice.IInputOutput;
@@ -14,14 +17,11 @@ import server.utils.*;
 
 public class AuthenticationService extends MainService<User> {
     private static final String CLEAR = "CLEAR";
-    private static final String USERS_KEY_DESCRIPTION = "name";
-    private static final String USERS_MEMBER_NAME = "users";
-    private static final String USERS_PATH = "JF/users.json";
 
     private final ConnectionType connectionType;
     private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
-
+    private final ILocInfoFactory locInfoFactory= new JsonLocInfoFactory();
     private final IInputOutput ioService = new IOService();
 
 
@@ -73,10 +73,8 @@ public class AuthenticationService extends MainService<User> {
         String riprovare = ""; // n no y si
         do {
             username = ioService.readString("Inserisci username:");
-            JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-            locInfo.setPath(USERS_PATH);
-            locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
-            locInfo.setMemberName(USERS_MEMBER_NAME);
+            JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
+            
             locInfo.setKey(username);
 
             boolean exist = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.exists(locInfo));

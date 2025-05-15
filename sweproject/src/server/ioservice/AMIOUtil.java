@@ -14,16 +14,17 @@ import server.firstleveldomainservices.Place;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 
 
 public class AMIOUtil{
-    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
-    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
-    private static final String VOLUNTEER_KEY_DESC = "name";
+   
 
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
+    private final static ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
 
     public static Address getAddress(){
         IInputOutput ioService = getIOService();
@@ -145,10 +146,8 @@ public class AMIOUtil{
      * @return true if the volunteer already exists
      */
     private static boolean checkIfVolunteersExist(String name) {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+
         locInfo.setKey(name);
     
         return DataLayerDispatcherService.startWithResult(locInfo, layer->layer.exists(locInfo));

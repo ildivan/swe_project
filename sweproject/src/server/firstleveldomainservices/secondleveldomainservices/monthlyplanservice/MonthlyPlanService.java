@@ -9,7 +9,9 @@ import java.util.Set;
 import com.google.gson.JsonObject;
 import server.DateService;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
@@ -17,40 +19,27 @@ import server.jsonfactoryservice.JsonFactoryService;
 
 public class MonthlyPlanService {
 
-    private static final String ACTIVITY_PATH = "JF/activities.json";
-    private static final String ACTIVITY_MEMBER_NAME = "activities";
-    private static final String MONTHLY_PLAN_PATH = "JF/monthlyPlan.json";
-    private static final String MONTHLY_PLAN_MEMBER_NAME = "monthlyPlan";
-    private static final String MONTHLY_CONFIG_KEY_DESC = "type";
     private static final String MONTHLY_CONFIG_KEY = "current";
-    private static final String MONTHLY_CONFIG_MEMEBER_NAME = "mc";
-    private static final String MONTHLY_CONFIG_PATH = "JF/monthlyConfigs.json";
-    private static final String MONTHLY_PLAN_KEY_DESC = "date";
-    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
-    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
-    private static final String VOLUNTEER_KEY_DESC = "name";
-
+  
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
+    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
 
 
     public boolean buldMonthlyPlan() {
         LocalDate today = dateService.getTodayDate();
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
 
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(ACTIVITY_PATH);
-        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
     
         List<JsonObject> activityJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
         List<Activity> activity = jsonFactoryService.createObjectList(activityJO, Activity.class);
 
         monthlyPlan.generateMonthlyPlan(activity);
 
-        locInfo.setPath(MONTHLY_PLAN_PATH);
-        locInfo.setMemberName(MONTHLY_PLAN_MEMBER_NAME);
+        final JsonDataLocalizationInformation monthlyPlanLocInfo = locInfoFactory.getMonthlyPlanLocInfo();
 
-        DataLayerDispatcherService.start(locInfo, layer -> layer.add(jsonFactoryService.createJson(monthlyPlan), locInfo));
+        DataLayerDispatcherService.start(monthlyPlanLocInfo, layer -> layer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo));
        
         monthlyPlan.setPlanBuildFlagAsTrue();
         monthlyPlan.incrementMonthOfPlan();
@@ -81,10 +70,8 @@ public class MonthlyPlanService {
     }
 
     private void saveVolunteer(Volunteer volunteer) {
-         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        
         locInfo.setKey(volunteer.getName());
 
         DataLayerDispatcherService.start(locInfo, layer->layer.modify(jsonFactoryService.createJson(volunteer), locInfo));
@@ -95,10 +82,7 @@ public class MonthlyPlanService {
      * @param locInfo
      */
     private List<Volunteer> getVolunteers() {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
 
         List<JsonObject> volunteersJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getAll(locInfo));
         List<Volunteer> volunteers = jsonFactoryService.createObjectList(volunteersJO, Volunteer.class);
@@ -112,11 +96,8 @@ public class MonthlyPlanService {
      * @return
      */
     public MonthlyPlan getMonthlyPlan(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_PLAN_PATH);
-        locInfo.setMemberName(MONTHLY_PLAN_MEMBER_NAME);
-        //poiche uso il metodo get devo aver sia la key che la keydesc settate nelle localization info
-        locInfo.setKeyDesc(MONTHLY_PLAN_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyPlanLocInfo();
+    
         locInfo.setKey(getMonthlyPlanDate());
         JsonObject mpJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
 
@@ -131,10 +112,8 @@ public class MonthlyPlanService {
     }
 
     public MonthlyConfig getMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIG_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMEBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESC);
+        JsonDataLocalizationInformation locInfo =locInfoFactory.getMonthlyConfigLocInfo();
+
         locInfo.setKey(MONTHLY_CONFIG_KEY);
 
         JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));

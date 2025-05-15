@@ -1,6 +1,4 @@
-package server.datalayerservice.interfaces;
-
-import server.datalayerservice.JsonDataLocalizationInformation;
+package server.datalayerservice.datalocalizationinformations;
 
 public interface IDataLocalizationInformation {
     public JsonDataLocalizationInformation getDataLocalizationInformation();

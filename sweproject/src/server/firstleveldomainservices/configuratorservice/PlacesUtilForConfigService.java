@@ -7,7 +7,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Place;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
@@ -15,9 +17,9 @@ import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 public class PlacesUtilForConfigService {
-    private static final String PLACES_PATH = "JF/places.json";
-    private static final String PLACES_MEMBER_NAME = "places";
+
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
+    private static final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private final Gson gson = gsonFactoryService.getGson();
 
     /**
@@ -25,9 +27,8 @@ public class PlacesUtilForConfigService {
      * @return
      */
     public static boolean existPlaceWithNoActivity(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(PLACES_PATH);
-        locInfo.setMemberName(PLACES_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+
         locInfo.setKeyDesc("atLeastOneActivityRelated");
         locInfo.setKey("false");
 
@@ -39,9 +40,8 @@ public class PlacesUtilForConfigService {
     }
 
     public List<Place> getCustomList(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(PLACES_PATH);
-        locInfo.setMemberName(PLACES_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+
         locInfo.setKeyDesc("atLeastOneActivityRelated");
         locInfo.setKey("false");
         List<JsonObject> pJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.getList(locInfo));

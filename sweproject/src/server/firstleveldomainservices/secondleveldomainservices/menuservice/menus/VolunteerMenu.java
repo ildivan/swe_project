@@ -6,7 +6,9 @@ import java.util.Map;
 import com.google.gson.JsonObject;
 import server.DateService;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
@@ -16,11 +18,9 @@ import server.jsonfactoryservice.JsonFactoryService;
 
 public class VolunteerMenu extends MenuManager{
 
-    private static final String MONTHLY_CONFIG_KEY_DESCRIPTION = "type";
     private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
-    private static final String MONTHLY_CONFIG_MEMBER_NAME = "mc";
-    private static final String MONTHLY_CONFIGS_PATH = "JF/monthlyConfigs.json";
 
+    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
 
@@ -72,10 +72,7 @@ public class VolunteerMenu extends MenuManager{
     }
 
     private MonthlyConfig geMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIGS_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
         locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
         JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));

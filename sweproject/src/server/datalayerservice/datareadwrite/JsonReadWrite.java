@@ -4,7 +4,7 @@ import com.google.gson.*;
 
 import server.authservice.User;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 

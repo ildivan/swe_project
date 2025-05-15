@@ -5,7 +5,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import com.google.gson.JsonObject;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.demonservices.IDemon;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
@@ -17,17 +19,10 @@ import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 public class MonthlyPlanDemon implements IDemon{
-    private static final String ARCHIVE_PATH = "JF/archive.json";
-    private static final String ARCHIVE_MEMBER_NAME = "activityArchive";
-    private static final String MONTHLY_CONFIG_KEY_DESC = "type";
     private static final String MONTHLY_CONFIG_KEY = "current";
-    private static final String MONTHLY_CONFIG_MEMEBER_NAME = "mc";
-    private static final String MONTHLY_CONFIG_PATH = "JF/monthlyConfigs.json";
-    private static final String MONTHLY_PLAN_PATH = "JF/monthlyPlan.json";
-    private static final String MONTHLY_PLAN_MEMBER_NAME = "monthlyPlan";
-    private static final String MONTHLY_PLAN_KEY_DESC = "date";
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
 
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone
     @Override
@@ -50,9 +45,7 @@ public class MonthlyPlanDemon implements IDemon{
        if(monthlyPlan == null){
         return;
        }
-       JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(ARCHIVE_PATH);
-        locInfo.setMemberName(ARCHIVE_MEMBER_NAME);
+       JsonDataLocalizationInformation locInfo = locInfoFactory.getArchiveLocInfo();
        
        //ottengo la lista di attività da aggiungere e le aggiungo al file di archivio
        
@@ -79,9 +72,7 @@ public class MonthlyPlanDemon implements IDemon{
     }
 
     private boolean activityArchived(String name, LocalDate date) {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(ARCHIVE_PATH);
-        locInfo.setMemberName(ARCHIVE_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getArchiveLocInfo();
         locInfo.setKeyDesc("name");
         locInfo.setKey(name);
 
@@ -95,11 +86,7 @@ public class MonthlyPlanDemon implements IDemon{
     }
 
     private MonthlyPlan getMonthlyPlan(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_PLAN_PATH);
-        locInfo.setMemberName(MONTHLY_PLAN_MEMBER_NAME);
-        //poiche uso il metodo get devo aver sia la key che la keydesc settate nelle localization info
-        locInfo.setKeyDesc(MONTHLY_PLAN_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyPlanLocInfo();
         locInfo.setKey(getMonthlyPlanDate());
         JsonObject mpJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
 
@@ -114,10 +101,7 @@ public class MonthlyPlanDemon implements IDemon{
     }
 
     private MonthlyConfig getMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIG_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMEBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
         locInfo.setKey(MONTHLY_CONFIG_KEY);
 
         JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));

@@ -1,29 +1,27 @@
 package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
-
 import com.google.gson.JsonObject;
-
 import server.DateService;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 public class DailyPlan {
-    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
-    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
-    private static final String VOLUNTEER_KEY_DESC = "name";
+  
     private LocalDate date;
     private Map<String, ActivityInfo> plan = new HashMap<>();
 
     //non deve essere serializzato -> inserisco transient
+    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
         
@@ -72,10 +70,7 @@ public class DailyPlan {
     private boolean checkIfVolunteersAreFree(Activity activity){
         String [] volunteers = activity.getVolunteers();
        
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         
         for (String name : volunteers) {
 

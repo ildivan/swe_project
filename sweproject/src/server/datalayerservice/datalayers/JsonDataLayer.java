@@ -1,10 +1,10 @@
-package server.datalayerservice;
+package server.datalayerservice.datalayers;
 
 import com.google.gson.JsonObject;
 
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datareadwrite.IJsonReadWrite;
 import server.datalayerservice.datareadwrite.JsonReadWrite;
-import server.datalayerservice.interfaces.IDataLayer;
 
 import java.io.File;
 import java.util.*;

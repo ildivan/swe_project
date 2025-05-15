@@ -2,14 +2,14 @@ package server.authservice;
 
 import com.google.gson.JsonObject;
 import server.datalayerservice.DataLayerDispatcherService;
-import server.datalayerservice.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import org.mindrot.jbcrypt.*;
 
 public class AuthenticationUtil {
 
-    private static final String USERS_KEY_DESCRIPTION = "name";
-    private static final String USERS_MEMBER_NAME = "users";
-    private static final String USERS_PATH = "JF/users.json";
+    private static final ILocInfoFactory locInfoFactory= new JsonLocInfoFactory();
     private static final int HASH_ROUNDS = 12;
     
     
@@ -24,10 +24,8 @@ public class AuthenticationUtil {
         assert !newPassword.trim().isEmpty(): "password is empty";
         JsonObject userJO = getUserJsonObject(username);
         assert userJO != null: "user not found";
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(USERS_PATH);
-        locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
-        locInfo.setMemberName(USERS_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
+
         locInfo.setKey(username);
         String newPasswordEncrypted = cryptPassword(newPassword);
         userJO.addProperty("password", newPasswordEncrypted);
@@ -53,10 +51,8 @@ public class AuthenticationUtil {
 
     public static JsonObject getUserJsonObject(String username){
         assert !username.trim().isEmpty(): "username is empty";
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(USERS_PATH);
-        locInfo.setKeyDesc(USERS_KEY_DESCRIPTION);
-        locInfo.setMemberName(USERS_MEMBER_NAME);
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
+
         locInfo.setKey(username);
         JsonObject user =  DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
         assert user != null: "user not found";

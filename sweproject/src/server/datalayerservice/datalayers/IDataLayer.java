@@ -1,8 +1,10 @@
-package server.datalayerservice.interfaces;
+package server.datalayerservice.datalayers;
 
 import java.util.List;
 
 import com.google.gson.JsonObject;
+
+import server.datalayerservice.datalocalizationinformations.IDataLocalizationInformation;
 
 public interface IDataLayer<T extends IDataLocalizationInformation> {
 

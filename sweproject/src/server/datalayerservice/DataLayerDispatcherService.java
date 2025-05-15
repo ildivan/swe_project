@@ -2,8 +2,10 @@ package server.datalayerservice;
 
 import server.datalayerservice.interfaces.IDataLayerFunction;
 import server.datalayerservice.interfaces.IDataLayerOperation;
-import server.datalayerservice.interfaces.IDataLayer;
-import server.datalayerservice.interfaces.IDataLocalizationInformation;
+import server.datalayerservice.datalayers.IDataLayer;
+import server.datalayerservice.datalayers.JsonDataLayer;
+import server.datalayerservice.datalocalizationinformations.IDataLocalizationInformation;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 
 /**
  * classe che si occupa di gestire le operazioni sul datalayer capendo prima
