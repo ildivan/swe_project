@@ -4,6 +4,6 @@ import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.IDataLocalizationInformation;
 
 @FunctionalInterface
-public interface IDataLayerOperation<T extends IDataLocalizationInformation> {
+public interface IDataLayerVoidFunction<T extends IDataLocalizationInformation> {
     void execute(IDataLayer<T> dataLayer);
 }
