@@ -33,7 +33,8 @@ public class MonthlyPlan{
     private LocalDate date;
     private Map<LocalDate,DailyPlan> monthlyPlan;
 
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    //questo non deve essere serializzato -> inserisco transient per risolvere il problema
+    private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
 
    
     public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date) {
@@ -94,15 +95,12 @@ public class MonthlyPlan{
                 monthlyPlan.put(date, dp);
             }
         }
-
-        incrementMonthOfPlan();
-        clearPrecludedDates();
     }
 
     /**
      * clear the preclude dates in the config of the monthly plan
      */
-    private void clearPrecludedDates() {
+    public void clearPrecludedDates() {
         
         MonthlyConfig mc = geMonthlyConfig();
         mc.setPrecludeDates(new HashSet<>());
@@ -120,7 +118,7 @@ public class MonthlyPlan{
     /**
      * change month of plan into monthly configs
      */
-    private void incrementMonthOfPlan() {
+    public void incrementMonthOfPlan() {
         
         MonthlyConfig mc = geMonthlyConfig();
         LocalDate date = mc.getMonthAndYear();

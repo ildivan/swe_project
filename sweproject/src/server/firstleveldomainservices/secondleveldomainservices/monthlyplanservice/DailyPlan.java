@@ -5,12 +5,28 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
+
+import com.google.gson.JsonObject;
+
 import server.DateService;
+import server.datalayerservice.DataLayerDispatcherService;
+import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
+import server.firstleveldomainservices.volunteerservice.Volunteer;
+import server.jsonfactoryservice.IJsonFactoryService;
+import server.jsonfactoryservice.JsonFactoryService;
 
 public class DailyPlan {
+    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
+    private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
+    private static final String VOLUNTEER_KEY_DESC = "name";
     private LocalDate date;
     private Map<String, String> plan = new HashMap<>();
+
+    //non deve essere serializzato -> inserisco transient
+    private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+        
+    
 
     public DailyPlan(LocalDate date) {
         this.date = date;
@@ -41,12 +57,40 @@ public class DailyPlan {
             //controllo se il gionro in cui sto facendo il piano (attributo date) è compreso nel periodo di esecuzione della visita
             //controllo se il giorno della settimana della visita è quello in cui sto facendo il piano
             //aggiiungo l'attivita alle visite possibili
-            if(isProgrammablePeriodCheck(act) && isOnCorrectDay(act)){
+            if(isProgrammablePeriodCheck(act) && isOnCorrectDay(act) && checkIfVolunteersAreFree(act)){
                 actPossibleToday.add(act);
             }
         }
 
         return actPossibleToday;
+    }
+
+    private boolean checkIfVolunteersAreFree(Activity activity){
+        String [] volunteers = activity.getVolunteers();
+       
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(VOLUNTEER_PATH);
+        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
+        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        
+        for (String name : volunteers) {
+
+            locInfo.setKey(name);
+
+            JsonObject volunteerJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
+            Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
+
+            for (String d : volunteer.getDisponibilityDays()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String formattedDate = date.format(formatter);
+
+                if(d.equalsIgnoreCase(formattedDate.toString())){
+                    return false;
+                }
+            }
+
+        }
+        return true;
     }
 
     /*

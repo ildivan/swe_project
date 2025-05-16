@@ -177,6 +177,7 @@ public class AMIOUtil{
         while (cont) {
           
             String day = ioService.readString("Inserisci un giorno della settimana in cui la visita si può programmare (es Lunedi): ");
+            day = day.replace('ì', 'i');
             days.add(day);
             String answer = ioService.readString("Vuoi inserire un altro giorno? (s/n): ");
             if (!answer.equalsIgnoreCase("s")) {

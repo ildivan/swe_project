@@ -38,6 +38,10 @@ public class MonthlyPlanService {
         locInfo.setMemberName(MONTHLY_PLAN_MEMBER_NAME);
 
         DataLayerDispatcherService.start(locInfo, layer -> layer.add(jsonFactoryService.createJson(monthlyPlan), locInfo));
+
+        monthlyPlan.incrementMonthOfPlan();
+        monthlyPlan.clearPrecludedDates();
+
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
         //DA FARE
     }

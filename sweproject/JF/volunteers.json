@@ -1,27 +1,27 @@
 {
   "volunteers": [
     {
-      "name": "marco",
+      "name": "Marco",
+      "nondisponibilityDays": ["17-06-2025"]
+    },
+    {
+      "name": "Lucia",
       "nondisponibilityDays": []
     },
     {
-      "name": "lucia",
+      "name": "Marta",
       "nondisponibilityDays": []
     },
     {
-      "name": "marta",
+      "name": "Luca",
       "nondisponibilityDays": []
     },
     {
-      "name": "luca",
+      "name": "Riccardo",
       "nondisponibilityDays": []
     },
     {
-      "name": "riccardo",
-      "nondisponibilityDays": []
-    },
-    {
-      "name": "nadia",
+      "name": "Nadia",
       "nondisponibilityDays": []
     }
   ]

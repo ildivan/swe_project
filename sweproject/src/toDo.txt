@@ -1,26 +1,7 @@
-1- potrei trasformare tutti i dati tipo visite volontari etc in un set piuttosto che una list, per evitare dupicati, oppure fare dei controlli
-sull'esistenza
-2- inserire i dati del giorno della settimana 
-disponibile come giorno possibile della visita 
-va messo fatto un controllo che se trova una 'ì' 
-la mette 'i', vedi nella classe dailuy plan che c'è il metodo
+
 3- fare visualizzazione del monthly plan
 4- fare diventare errori delle eccezioni cosi da gestirle al meglio
 5- capire come non mostrare la possibilità di creare il piano se è gia stato fatto per quel mese, da modificare i config
-
-
-
-
-
-SERVICE LEVEL ARCHITECTURE
-serivizi che chiamerei con run in un'altro thread: creazione piano
-gli altri no perche comunque dovrei attendere la loro conclusione per 
-avere i dati
-
-NON SERVE CHIAMARE NUOVI THREAD! GIA LAVORO CONN UN THREAD PER CLIENT
-
-quando chiamo un servizio che ha piu metodi possibili devo indicare che metodo devo eseguire
-
-6- mettere che se un user è gia connesso non puo ri connettersi
+6- per il piano controllare che i volontari abbiano libero quel giorno
 
 7- se vuoi cercare di avere in un posto unico i path e i member name dei json

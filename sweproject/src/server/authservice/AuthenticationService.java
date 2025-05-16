@@ -52,6 +52,8 @@ public class AuthenticationService extends MainService<User> {
                 if(riprovare.equalsIgnoreCase("n")){
                     ioService.writeMessage("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
                     return null;
+                }else{
+                    riprovare = ioService.readString("\nComando non valido inserire 'n o 'y'");
                 }
             }
         }while(riprovare.equals("y"));
