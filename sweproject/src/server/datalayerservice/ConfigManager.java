@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import server.firstleveldomainservices.Manager;
 
 public class ConfigManager implements Manager{
     private static final String PATH = "JF/configs.json";

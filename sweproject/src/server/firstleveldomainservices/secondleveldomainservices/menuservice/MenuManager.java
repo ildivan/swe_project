@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import server.ioservice.IOService;
 
-import server.objects.*;
-import server.IOService;
 
-public abstract class MenuManager extends ReadWrite implements MenuService{
+
+public abstract class MenuManager implements MenuService{
     static final String QUESTION = "\n\nInserire scelta: (0 per uscire)";
     protected Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
     protected Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
@@ -52,7 +52,7 @@ public abstract class MenuManager extends ReadWrite implements MenuService{
         Runnable toReturn = null;
         
         do{
-            choice = IOService.readInteger(Smenu + QUESTION);
+            choice = (Integer) IOService.Service.READ_INTEGER.start(Smenu + QUESTION);
         
             if (choice >= 0 && choice <= menu.size()) {
                 if(choice == 0){
@@ -64,7 +64,7 @@ public abstract class MenuManager extends ReadWrite implements MenuService{
                 
             } else {
                 sceltaValida = false;
-                write("Scelta non valida, riprovare", false);
+                IOService.Service.WRITE.start("Scelta non valida, riprovare", false);
             }
         }while(!sceltaValida);
         return toReturn;

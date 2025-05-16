@@ -14,6 +14,8 @@ import server.objects.ConnectionType;
 import server.objects.ServerConnectionPorts;
 import server.objects.Service;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
+import server.ioservice.ReadWrite;
+
 import java.io.*;
 import java.net.*;
 
@@ -44,6 +46,7 @@ public class Server {
                 try {
                     while(true) {
                         Socket socket = serverTerminalSS.accept();
+                        ReadWrite.setConnection(socket);
                         System.out.println("Internal Connection");
                         User u = authenticate(socket,ConnectionType.Internal);
                         if(u == null){
@@ -55,9 +58,13 @@ public class Server {
                         //il codice se aggiungo unnuovo tipo di utente 
                         Thread serviceThread = new Thread(() -> {
                             try {
+                                ReadWrite.setConnection(socket);
                                 // Ottieni il servizio associato all'utente e alla connessione
                                 Service<?> s = obtainService(u, socket, configType);
                                 s.run();  // Esegui il servizio
+                            } catch (IOException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
                             } finally {
                                 try {
                                     socket.close();  // Assicurati di chiudere il socket alla fine

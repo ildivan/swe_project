@@ -3,7 +3,7 @@ package server.datalayerservice;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import server.firstleveldomainservices.Manager;
+
 import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 

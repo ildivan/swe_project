@@ -5,9 +5,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
-
 import server.DateService;
 import server.firstleveldomainservices.Activity;
+
 public class DailyPlan {
     private LocalDate date;
     private Map<String, String> plan = new HashMap<>();

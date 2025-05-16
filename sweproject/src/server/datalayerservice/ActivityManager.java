@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Manager;
 import server.firstleveldomainservices.Place;
 
 

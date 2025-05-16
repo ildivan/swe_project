@@ -20,3 +20,5 @@ avere i dati
 NON SERVE CHIAMARE NUOVI THREAD! GIA LAVORO CONN UN THREAD PER CLIENT
 
 quando chiamo un servizio che ha piu metodi possibili devo indicare che metodo devo eseguire
+
+6- mettere che se un user è gia connesso non puo ri connettersi

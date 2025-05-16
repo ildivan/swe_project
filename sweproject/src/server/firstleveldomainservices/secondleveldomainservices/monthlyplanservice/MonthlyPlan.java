@@ -12,10 +12,10 @@ import server.datalayerservice.DataLayer;
 import server.datalayerservice.JSONDataManager;
 import server.datalayerservice.JSONUtil;
 import server.firstleveldomainservices.Activity;
-import server.objects.ReadWrite;
 
 
-public class MonthlyPlan extends ReadWrite {
+
+public class MonthlyPlan{
 
     /*
      * popolato usando i config

@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import server.DateService;
 import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Manager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 
 public class MonthlyPlanManager implements Manager{

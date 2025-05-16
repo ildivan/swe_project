@@ -1,8 +1,6 @@
-package server.firstleveldomainservices;
+package server.datalayerservice;
 
 import java.util.List;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public interface Manager {
