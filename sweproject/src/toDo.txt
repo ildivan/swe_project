@@ -7,3 +7,16 @@ la mette 'i', vedi nella classe dailuy plan che c'è il metodo
 3- fare visualizzazione del monthly plan
 4- fare diventare errori delle eccezioni cosi da gestirle al meglio
 5- capire come non mostrare la possibilità di creare il piano se è gia stato fatto per quel mese, da modificare i config
+
+
+
+
+
+SERVICE LEVEL ARCHITECTURE
+serivizi che chiamerei con run in un'altro thread: creazione piano
+gli altri no perche comunque dovrei attendere la loro conclusione per 
+avere i dati
+
+NON SERVE CHIAMARE NUOVI THREAD! GIA LAVORO CONN UN THREAD PER CLIENT
+
+quando chiamo un servizio che ha piu metodi possibili devo indicare che metodo devo eseguire

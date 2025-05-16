@@ -4,7 +4,8 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import com.google.gson.Gson;
-import backend.server.genericservices.Message;
+
+import server.objects.*;
 
 public class Terminal {
     private static final String CLEAR = "CLEAR";
