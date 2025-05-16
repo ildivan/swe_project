@@ -19,7 +19,7 @@ public abstract class MenuManager implements MenuService{
      * build the menu based on the visibility of the options
      * @return
      */
-    private List<String> buildMenu(){
+    protected List<String> buildMenu(){
         Map<String,Boolean> showableMap = buildMenuVisibility(this.vociVisibili);
         List<String> showableList = new ArrayList<>();
 
@@ -76,7 +76,7 @@ public abstract class MenuManager implements MenuService{
     /*
      * toString method to print the menu
      */
-    abstract String toString(List<String> menu);
+    protected abstract String toString(List<String> menu);
 
     
 }

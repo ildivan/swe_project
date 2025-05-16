@@ -14,6 +14,7 @@ import server.objects.ConnectionType;
 import server.objects.ServerConnectionPorts;
 import server.objects.MainService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
+import server.firstleveldomainservices.volunteerservice.VolunteerService;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 import server.ioservice.ReadWrite;
@@ -128,7 +129,7 @@ public class Server {
             case "configuratore":
                 return new ConfigService(socket,gson,configType);
             case "volontario":
-                //return new VolunteerService(socket,gson);
+                return new VolunteerService(socket,gson,configType,u.getName());
             case "fruitore":
                 //return new UserService(socket,gson);
             default:

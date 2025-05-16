@@ -3,19 +3,17 @@ package server.firstleveldomainservices.configuratorservice;
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import server.datalayerservice.*;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
-import server.firstleveldomainservices.secondleveldomainservices.menuservice.ConfiguratorMenu;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
+import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.ConfiguratorMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
@@ -45,9 +43,6 @@ public class ConfigService extends MainService<Void>{
     
     private static final String ACTIVITY_PATH = "JF/activities.json";
     private static final String ACTIVITY_MEMBER_NAME = "activities";
-    private static final String MONTHLY_PLAN_PATH = "JF/monthlyPlan.json";
-    private static final String MONTHLY_PLAN_MEMBER_NAME = "monthlyPlan";
-    private static final String MONTHLY_PLAN_KEY_DESC = "date";
     private static final String PLACES_PATH = "JF/places.json";
     private static final String PLACES_MEMBER_NAME = "places";
     private static final String PLACES_KEY_DESC = "name";
@@ -451,7 +446,16 @@ public class ConfigService extends MainService<Void>{
      * @param desiredState stato delle visite che vuoi visualizzare
      */
     public void showActivitiesWithCondition(ActivityState desiredState) {
-        MonthlyPlan monthlyPlan = getMonthlyPlan();
+        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+
+        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+
+        if( monthlyPlan == null){
+            ioService.writeMessage("Piano Mensile non ancora generato", false);
+            return;
+        }
+
+
         List<ActivityRecord> result = new ArrayList<>();
 
         for (Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlan.getMonthlyPlan().entrySet()) {
@@ -470,53 +474,6 @@ public class ConfigService extends MainService<Void>{
     
         ioService.writeMessage(formatter.formatListActivityRecord(result), false);
         ioService.writeMessage(SPACE,false);
-    }
-
-    /**
-     * method to show all activities
-     */
-    public void showActivitiesConfermate() {
-        
-    }
-
-    /**
-     * method to show all activities
-     */
-    public void showActivitiesCancellate() {
-        
-    }
-
-    /**
-     * method to show all activities
-     */
-    public void showActivitiesEffettuate() {
-        
-    }
-
-    /**
-     * method to show all activities
-     */
-    public void showActivitiesComplete() {
-        
-    }
-
-    private MonthlyPlan getMonthlyPlan(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_PLAN_PATH);
-        locInfo.setMemberName(MONTHLY_PLAN_MEMBER_NAME);
-        //poiche uso il metodo get devo aver sia la key che la keydesc settate nelle localization info
-        locInfo.setKeyDesc(MONTHLY_PLAN_KEY_DESC);
-        locInfo.setKey(getMonthlyPlanDate());
-        JsonObject mpJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
-
-        return jsonFactoryService.createObject(mpJO, MonthlyPlan.class);
-    }
-
-    private String getMonthlyPlanDate(){
-        MonthlyConfig mc = getMonthlyConfig();
-        LocalDate date = mc.isPlanConfigured().keySet().iterator().next();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return date.format(formatter);
     }
 
     /**
@@ -544,7 +501,8 @@ public class ConfigService extends MainService<Void>{
     public void addNonUsableDate(){
         ioService.writeMessage(CLEAR,false);
 
-        MonthlyConfig mc = getMonthlyConfig();
+        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+        MonthlyConfig mc = monthlyPlanService.getMonthlyConfig();
 
         int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
         int minNumDay = 1;
@@ -607,19 +565,6 @@ public class ConfigService extends MainService<Void>{
 
         JsonObject cJO = DataLayerDispatcherService.startWithResult(locInfo, layer -> layer.get(locInfo));
         return jsonFactoryService.createObject(cJO, Configs.class);
-    }
-
-    private MonthlyConfig getMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(MONTHLY_CONFIG_PATH);
-        locInfo.setMemberName(MONTHLY_CONFIG_MEMEBER_NAME);
-        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESC);
-        locInfo.setKey(MONTHLY_CONFIG_KEY);
-
-        JsonObject mcJO = DataLayerDispatcherService.startWithResult(locInfo, layer->layer.get(locInfo));
-        MonthlyConfig mc = jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
-        return mc;
-
     }
     
 }

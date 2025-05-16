@@ -119,80 +119,50 @@ public class DailyPlan {
 
     /**
      * metodo per costruire il piano di visite giornaliero
+     * sfrutta un algoritmo greedy che mette in ordine crescente di orario fine attività
      * @param act
      * @return
      */
-    private List<Activity> getBestCombination(List<Activity> act) {
-        act.sort(Comparator.comparing(Activity::getEndTime));
-    
-        int n = act.size();
-        Duration[] dp = new Duration[n];
-        int[] previous = new int[n];
-    
-        for (int i = 0; i < n; i++) {
-            dp[i] = act.get(i).getDurationAsDuration();
-            previous[i] = -1;
-    
-            for (int j = i - 1; j >= 0; j--) {
-                boolean samePlace = act.get(i).getPlaceName().equals(act.get(j).getPlaceName());
-                boolean nonOverlapping = !act.get(j).getEndTime().isAfter(act.get(i).getProgrammableHour());
-    
-                // Attività compatibili se:
-                // - stesso luogo ma non si sovrappongono
-                // - luoghi diversi (sovrapposizione consentita)
-                if ((samePlace && nonOverlapping) || !samePlace) {
-                    Duration withPrev = dp[j].plus(act.get(i).getDurationAsDuration());
-                    if (withPrev.compareTo(dp[i]) > 0) {
-                        dp[i] = withPrev;
-                        previous[i] = j;
-                    }
-                }
-            }
-    
-            if (i > 0 && dp[i - 1].compareTo(dp[i]) > 0) {
-                dp[i] = dp[i - 1];
-                previous[i] = previous[i - 1];
+ private List<Activity> getBestCombination(List<Activity> activities) {
+    // Ordina per orario di fine (attività più "presto" finiscono prima)
+    activities.sort(Comparator.comparing(Activity::getEndTime));
+
+    List<Activity> result = new ArrayList<>();
+    Set<String> usedVolunteers = new HashSet<>();
+    Map<String, List<Activity>> activitiesByPlace = new HashMap<>();
+
+    for (Activity activity : activities) {
+        String volunteer = activity.getVolunteers()[0];
+        String place = activity.getPlaceName();
+
+        if (usedVolunteers.contains(volunteer)) {
+            continue; // già usato
+        }
+
+        boolean overlap = false;
+        List<Activity> samePlace = activitiesByPlace.getOrDefault(place, new ArrayList<>());
+
+        for (Activity existing : samePlace) {
+            // Se si sovrappongono temporalmente nel luogo
+            if (!(existing.getEndTime().isBefore(activity.getProgrammableHour())
+               || activity.getEndTime().isBefore(existing.getProgrammableHour()))) {
+                overlap = true;
+                break;
             }
         }
-    
-        // Ricostruzione
-        List<Activity> result = new ArrayList<>();
-        Set<String> usedVolunteers = new HashSet<>();
-    
-        for (int i = n - 1; i >= 0;) {
-            boolean include = false;
-            Activity current = act.get(i);
-            String volunteer = current.getVolunteers()[0];
-    
-            // Check se dp[i] è migliore di dp[i-1] e il volontario non è già stato usato
-            if ((i == 0 || dp[i].compareTo(dp[i - 1]) > 0) && !usedVolunteers.contains(volunteer)) {
-                // Inoltre verifichiamo che non ci siano attività già selezionate nello stesso luogo che si sovrappongono
-                boolean overlapSamePlace = false;
-                for (Activity selected : result) {
-                    if (selected.getPlaceName().equals(current.getPlaceName())) {
-                        if (!(selected.getEndTime().isBefore(current.getProgrammableHour()) || current.getEndTime().isBefore(selected.getProgrammableHour()))) {
-                            overlapSamePlace = true;
-                            break;
-                        }
-                    }
-                }
-    
-                if (!overlapSamePlace) {
-                    include = true;
-                }
-            }
-    
-            if (include) {
-                result.add(0, current);
-                usedVolunteers.add(volunteer);
-                i = previous[i];
-            } else {
-                i--;
-            }
+
+        if (!overlap) {
+            result.add(activity);
+            usedVolunteers.add(volunteer);
+            samePlace.add(activity);
+            activitiesByPlace.put(place, samePlace);
         }
-    
-        return result;
     }
+
+    return result;
+}
+
+
     
 
     public LocalDate getDate() {

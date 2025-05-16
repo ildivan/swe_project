@@ -6,6 +6,5 @@
 7- se vuoi cercare di avere in un posto unico i path e i member name dei json
 
 
-8- mettere gli stati delle visite nel monthly plan, oltre che le persone iscrite
-   e una funzione che ogni volta che cambiano le persone iscrtitte mi verifica 
-   se è cambiato lo stato della visita
+8- potresti creare un unica classe di accesso alle funcioni del datalayer dove hai gia le informainei 
+di localizzazione, tipo getActivities, che dentro ha gia tutto, jssondatalerfunctions

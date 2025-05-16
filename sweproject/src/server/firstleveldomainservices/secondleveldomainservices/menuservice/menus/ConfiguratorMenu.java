@@ -1,21 +1,22 @@
-package server.firstleveldomainservices.secondleveldomainservices.menuservice;
+package server.firstleveldomainservices.secondleveldomainservices.menuservice.menus;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.google.gson.JsonObject;
-
 import server.DateService;
 import server.datalayerservice.DataLayerDispatcherService;
 import server.datalayerservice.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
+import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
+import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
+
 public class ConfiguratorMenu extends MenuManager{
 
     private static final String MONTHLY_CONFIG_KEY_DESCRIPTION = "type";
@@ -113,7 +114,7 @@ public class ConfiguratorMenu extends MenuManager{
     public String toString(List<String> menu) {
         StringBuffer menuOut = new StringBuffer();
         menuOut.append("\n\n\n------------------\n\n\n");
-        menuOut.append("BENVENUTO NEL MENU!");
+        menuOut.append("BENVENUTO NEL MENU CONFIGURATORE!");
         menuOut.append("\n\nSelezionare una opzione:\n");
         menuOut.append(obtainMenuString("\n\nFunzioni di aggiunta:\n\n", "Aggiungi", menu));
         menuOut.append(obtainMenuString("\n\nFunzioni di visualizzazione:\n\n", "Mostra", menu));

@@ -46,6 +46,10 @@ public class MonthlyPlanDemon implements IDemon{
     @Override
     public void tick() {
        MonthlyPlan monthlyPlan = getMonthlyPlan();
+
+       if(monthlyPlan == null){
+        return;
+       }
        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(ARCHIVE_PATH);
         locInfo.setMemberName(ARCHIVE_MEMBER_NAME);
