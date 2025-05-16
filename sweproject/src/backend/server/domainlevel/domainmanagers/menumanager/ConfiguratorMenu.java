@@ -3,7 +3,7 @@ package backend.server.domainlevel.domainmanagers.menumanager;
 import java.util.Map;
 
 import backend.server.domainlevel.domainservices.ConfigService;
-import backend.server.genericservices.DateUtil;
+import backend.server.utils.DateUtil;
 
 public class ConfiguratorMenu extends MenuManager{
 

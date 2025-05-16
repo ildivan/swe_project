@@ -6,10 +6,10 @@ import com.google.gson.JsonObject;
 import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.monthlydomain.MonthlyPlan;
-import backend.server.genericservices.DateUtil;
 import backend.server.genericservices.datalayer.DataLayer;
 import backend.server.genericservices.datalayer.JSONDataContainer;
 import backend.server.genericservices.datalayer.JSONDataManager;
+import backend.server.utils.DateUtil;
 
 public class MonthlyPlanManager implements Manager{
     private MonthlyPlan monthlyPlan;

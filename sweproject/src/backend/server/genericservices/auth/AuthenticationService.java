@@ -10,6 +10,7 @@ import java.io.*;
 import java.net.Socket;
 
 public class AuthenticationService extends Service<User> {
+    private static final String CLEAR = "CLEAR";
     private ConnectionType connectionType;
     private static DataLayer dataLayer = new JSONDataManager(GsonFactory.getGson());
 
@@ -23,6 +24,7 @@ public class AuthenticationService extends Service<User> {
         String username;
         User user = null;
         
+        write(CLEAR, false);
         write("Inserisci username:", true);
         username = read();
 

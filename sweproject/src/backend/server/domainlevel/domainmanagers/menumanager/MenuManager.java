@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import backend.server.genericservices.IOUtil;
 import backend.server.genericservices.ReadWrite;
+import backend.server.utils.IOUtil;
 
 public abstract class MenuManager extends ReadWrite implements IMenuManager{
     static final String QUESTION = "\n\nInserire scelta: (0 per uscire)";

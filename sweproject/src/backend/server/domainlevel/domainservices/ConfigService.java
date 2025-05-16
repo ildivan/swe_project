@@ -15,11 +15,14 @@ import backend.server.domainlevel.domainmanagers.menumanager.IMenuManager;
 import backend.server.domainlevel.monthlydomain.MonthlyConfig;
 import backend.server.genericservices.*;
 import backend.server.genericservices.datalayer.*;
+import backend.server.utils.IOUtil;
 
 public class ConfigService extends Service<Void>{
    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
+    private static final String CLEAR = "CLEAR";
+    private static final String SPACE = "SPACE";
     private Gson gson;
     private DataLayer dataLayer; 
     private Manager placesManager; 
@@ -67,7 +70,9 @@ public class ConfigService extends Service<Void>{
             };
 
         do{
+            write(CLEAR,false);
             Runnable toRun = menu.startMenu();
+            write(SPACE, false);
             if(toRun==null){
                 continuare = false;
             }else{
@@ -160,6 +165,7 @@ public class ConfigService extends Service<Void>{
      * method to modify the max number of subscriptions
      */
     public void modNumMaxSub(){
+        write(CLEAR,false);
         Integer n = IOUtil.readInteger("\nInserire nuovo numero di iscrizioni massime");
         Configs configs = JSONUtil.createObject(configManager.get(configType), Configs.class);
         configs.setMaxSubscriptions(n);
@@ -173,6 +179,7 @@ public class ConfigService extends Service<Void>{
      * ideally the configurator adds the volunteer and then he tells the volunteer the temporarly password generated
      */
     public void addVolunteer() {
+        write(CLEAR,false);
         String name = IOUtil.readString("\nInserire nome del volontario");
         if (!volunteerManager.exists(name)) {
             volunteerManager.add(JSONUtil.createJson(new Volunteer(name)));
@@ -185,6 +192,7 @@ public class ConfigService extends Service<Void>{
      * method to add a new place to the database
      */
     public void addPlace(){
+        write(CLEAR,false);
         boolean continuare = false;
         
         do{
@@ -214,6 +222,7 @@ public class ConfigService extends Service<Void>{
      * method to add a new activity to the database
      */
     public void addActivity() {
+        write(CLEAR,false);
         boolean jump = false;
         if(placesManager.checkIfThereIsSomethingWithCondition()){
             write("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
@@ -265,6 +274,7 @@ public class ConfigService extends Service<Void>{
      */
     public void showVolunteers() {
         write(volunteerManager.getAll(), false);
+        write(SPACE,false);
     }
 
     /**
@@ -272,6 +282,7 @@ public class ConfigService extends Service<Void>{
      */
     public void showPlaces() {
         write(placesManager.getAll(), false);
+        write(SPACE,false);
     }
 
     /**
@@ -279,6 +290,7 @@ public class ConfigService extends Service<Void>{
      */
     public void showActivities() {
         write(activityManager.getAll(), false);
+        write(SPACE,false);
     }
 
     /**
@@ -288,26 +300,60 @@ public class ConfigService extends Service<Void>{
 
     public void generateMonthlyPlan() {
         monthlyManager.add(new JsonObject());
-        
+        /*
+         * da fara visualizzazione
+         */
     }
 
     public void addNonUsableDate(){
-
-        /*
-        TODO
-         * potrei fare che in base al numero del mese prende questo mese o il prossimo,
-         * per l'anno usa questo a meno che il mese iniziale sia dicembre, li va cambaito 
-         */
-
-        int day = IOUtil.readInteger("Inserire giorno non disponibile");
-        int month = IOUtil.readInteger("Inserire mese relativo");
-        int year = IOUtil.readInteger("Inserire anno relativo");
-
+        write(CLEAR,false);
         MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current","type")), MonthlyConfig.class);
+
+        int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
+        int minNumDay = 1;
+            
+
+        
+        int day = IOUtil.readInteger("Inserire giorno non disponibile", minNumDay, maxNumDay);
+
+        int month = setMonthOnPrecludeDay(mc, day);
+        int year = setYearOnPrecludeDay(mc, day);
+
         mc.getPrecludeDates().add(LocalDate.of(year, month, day));
         JsonObject newConfigsJO = JSONUtil.createJson(mc);
         dataLayer.modify(new JSONDataContainer("JF/monthlyConfigs.json", newConfigsJO, "mc", "current", "type"));
 
+    }
+
+    /*
+     * setta l'anno in base al giorno
+     */
+    private int setYearOnPrecludeDay(MonthlyConfig mc, int day) {
+        int year = mc.getMonthAndYear().getYear();
+
+        if(day>=17 && day<=31){
+            return year;
+        }else{
+            if( mc.getMonthAndYear().getMonthValue() == 12){
+                return year +1;
+            }
+            return year;
+        }
+    }
+
+    /*
+     * asssegna al giorno il mese,
+     * da 17 a 31 assegna il mese dello sviluppo del piano
+     * da 1 a 16 assegna il mese successivo
+     */
+    private int setMonthOnPrecludeDay(MonthlyConfig mc, int day) {
+        int monthOfPlan = mc.getMonthAndYear().getMonthValue();
+        
+        if(day>=17 && day<=31){
+            return monthOfPlan;
+        }else{
+            return monthOfPlan+1;
+        }
     }
     
 }

@@ -1,4 +1,4 @@
-package backend.server.genericservices;
+package backend.server.utils;
 
 import java.time.*;
 

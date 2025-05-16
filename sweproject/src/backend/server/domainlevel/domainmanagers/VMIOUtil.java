@@ -1,11 +1,12 @@
 package backend.server.domainlevel.domainmanagers;
 import backend.server.domainlevel.User;
-import backend.server.genericservices.IOUtil;
 import backend.server.genericservices.datalayer.DataLayer;
 import backend.server.genericservices.datalayer.JSONDataContainer;
 import backend.server.genericservices.datalayer.JSONDataManager;
 import backend.server.genericservices.datalayer.JSONUtil;
 import backend.server.genericservices.gson.GsonFactory;
+import backend.server.utils.IOUtil;
+
 import com.google.gson.Gson;
 
 public class VMIOUtil extends IOUtil{

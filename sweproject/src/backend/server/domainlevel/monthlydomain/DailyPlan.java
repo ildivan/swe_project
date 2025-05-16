@@ -6,7 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 import backend.server.domainlevel.Activity;
-import backend.server.genericservices.DateUtil;
+import backend.server.utils.DateUtil;
 
 public class DailyPlan {
     private LocalDate date;

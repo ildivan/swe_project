@@ -10,8 +10,8 @@ import backend.server.domainlevel.Activity;
 import backend.server.domainlevel.Address;
 import backend.server.domainlevel.Manager;
 import backend.server.domainlevel.Place;
-import backend.server.genericservices.IOUtil;
 import backend.server.genericservices.gson.GsonFactory;
+import backend.server.utils.IOUtil;
 
 public class AMIOUtil extends IOUtil {
     private static final Gson gson = GsonFactory.getGson();

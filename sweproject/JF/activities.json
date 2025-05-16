@@ -1145,6 +1145,34 @@
             "Marta",
             "Luca"
           ]
+        },
+        {
+          "placeName": "Castello di Brescia",
+          "title": "Visita al Castello di Brescia giornata completa",
+          "description": "Partecipa ad una visita medievale al Castello di Brescia",
+          "meetingPoint": {
+            "street": "Castello di Brescia",
+            "city": "Brescia",
+            "state": "Italia",
+            "zipCode": "25121"
+          },
+          "firstProgrammableDate": "05-05-2025",
+          "lastProgrammableDate": "30-09-2025",
+          "programmableDays": [
+            "Venerdi",
+            "Sabato",
+            "Martedi",
+            "Lunedi"
+          ],
+          "programmableHour": "08:30",
+          "duration": "08:00",
+          "bigliettoNecessario": true,
+          "maxPartecipanti": 30,
+          "minPartecipanti": 10,
+          "volunteers": [
+            "Marco",
+            "Lucia"
+          ]
         }
 
   ]

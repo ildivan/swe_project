@@ -158,9 +158,9 @@ public class Activity {
         StringBuffer out = new StringBuffer();
         out.append("\n\n----------------\n\n");
         out.append(String.format("Attività: %s", getTitle()));
-        out.append(String.format("\nDescrizione attività: %s", getDescription()));
-        out.append(String.format("\nPunto di ritrovo: %s", getMeetingPoint()));
-        out.append(String.format("\nMassimo numero partecipanti: %s", getMaxPartecipanti()));
+        out.append(String.format("\n\nDescrizione attività: %s", getDescription()));
+        out.append(String.format("\n\nPunto di ritrovo: %s", getMeetingPoint()));
+        out.append(String.format("\n\nMassimo numero partecipanti: %s", getMaxPartecipanti()));
         out.append(String.format("\nPrima data utile: %s", getFirstProgrammableDate().format(formatterDate)));
         out.append(String.format("\nUltima data utile: %s", getLastProgrammableDate().format(formatterDate)));
         out.append(String.format("\nOra di inizio: %s", getProgrammableHour().format(formatter)));
