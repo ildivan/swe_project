@@ -61,6 +61,7 @@ public class Terminal {
 
         BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
         try {
+            FrontEndUtils.clearConsole();
             System.out.println("Port: ");
             int port = Integer.parseInt(consoleReader.readLine());
            

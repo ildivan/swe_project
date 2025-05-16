@@ -1,7 +1,7 @@
 package backend.server.domainlevel.domainmanagers.menumanager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,8 +10,8 @@ import backend.server.utils.IOUtil;
 
 public abstract class MenuManager extends ReadWrite implements IMenuManager{
     static final String QUESTION = "\n\nInserire scelta: (0 per uscire)";
-    protected Map<String, Boolean> vociVisibili = new HashMap<>();
-    protected Map<String, Runnable> chiamateMetodi = new HashMap<>();
+    protected Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
+    protected Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
 
      /**
      * build the menu based on the visibility of the options
@@ -32,19 +32,6 @@ public abstract class MenuManager extends ReadWrite implements IMenuManager{
     }
 
     /**
-     * convert the menu to a string
-     * @param menu recive the list of the menu option to print on the terminal for the user
-     * @return
-     */
-    private String menuToString(List<String> menu) {
-        String menuOut = "";
-        for (int i = 0; i < menu.size(); i++) {
-            menuOut += ((i + 1) + ") " + menu.get(i)+"\n");
-        }
-        return menuOut;
-    }
-
-    /**
      * decide witch menu voice to show based on the date
      * @param map
      * @return
@@ -59,7 +46,7 @@ public abstract class MenuManager extends ReadWrite implements IMenuManager{
     @Override
     public Runnable startMenu(){
         List<String> menu = buildMenu();
-        String Smenu = menuToString(menu);
+        String Smenu = toString(menu);
         boolean sceltaValida = true;
         int choice = 1000;
         Runnable toReturn = null;
@@ -82,6 +69,11 @@ public abstract class MenuManager extends ReadWrite implements IMenuManager{
         }while(!sceltaValida);
         return toReturn;
     }
+
+    /*
+     * toString method to print the menu
+     */
+    abstract String toString(List<String> menu);
 
     
 }
