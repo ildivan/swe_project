@@ -13,6 +13,7 @@ import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.ConfiguratorMenu;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.ioservice.IOService;
 import server.objects.Configs;
@@ -299,11 +300,11 @@ public class ConfigService extends Service<Void>{
 
     /**
      * method to generate a monthly plan
-     * UNIMPLEMENTED
+     * 
      */
 
     public void generateMonthlyPlan() {
-        monthlyManager.add(new JsonObject());
+        MonthlyPlanService.Service.BUILD_PLAN.start();
         IOService.Service.WRITE.start("Piano mensile generato", false);
         showMonthlyPlan();
     }

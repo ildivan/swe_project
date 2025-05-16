@@ -1,0 +1,3 @@
+per convertire i servizi in oggetti creo una unterfaccia service che ha il metodo che fa tutto quello ceh serve per
+selezionare il servizio (come ho in tutti i service) e quando costruisco un servizio passo l'enum con le varie funzioni
+che il servizio puo svolgere, cosi posso semplicemente cambiare la loro itrpretazione passandp un'altro oggetto e basta
