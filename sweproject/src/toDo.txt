@@ -6,3 +6,4 @@ va messo fatto un controllo che se trova una 'ì'
 la mette 'i', vedi nella classe dailuy plan che c'è il metodo
 3- fare visualizzazione del monthly plan
 4- fare diventare errori delle eccezioni cosi da gestirle al meglio
+5- capire come non mostrare la possibilità di creare il piano se è gia stato fatto per quel mese, da modificare i config

@@ -1,27 +1,17 @@
 package backend.server.domainlevel.monthlydomain;
 
-import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import java.util.Set;
 
 import backend.server.domainlevel.Activity;
 import backend.server.genericservices.ReadWrite;
 import backend.server.genericservices.datalayer.*;
+import backend.server.genericservices.gson.GsonFactory;
 
 public class MonthlyPlan extends ReadWrite {
 
@@ -51,7 +41,7 @@ public class MonthlyPlan extends ReadWrite {
 
 
     private Map<LocalDate, DailyPlan> buildMonthlyMap() {
-        DataLayer dataLayer = new JSONDataManager(this.getGson());
+        DataLayer dataLayer = new JSONDataManager(GsonFactory.getGson());
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
         MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
@@ -95,45 +85,32 @@ public class MonthlyPlan extends ReadWrite {
             }
         }
 
+        incrementMonthOfPlan();
+        clearPrecludedDates();
     }
 
-    private Gson getGson(){
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        Gson gson = new GsonBuilder()
-        .setPrettyPrinting()
+    /**
+     * clear the preclude dates in the config of the monthly plan
+     */
+    private void clearPrecludedDates() {
+        DataLayer dataLayer = new JSONDataManager(GsonFactory.getGson());
+        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        mc.setPrecludeDates(new HashSet<>());
 
-        // LocalDate
-        .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
-            @Override
-            public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.format(dateFormatter)); // Format: dd-mm-yyyy
-            }
-        })
-        .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-            @Override
-            public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return LocalDate.parse(json.getAsString(), dateFormatter);
-            }
-        })
+        dataLayer.modify(new JSONDataContainer("JF/monthlyConfigs.json", JSONUtil.createJson(mc),"mc", "current", "type"));
+    }
 
-        // LocalTime
-        .registerTypeAdapter(LocalTime.class, new JsonSerializer<LocalTime>() {
-            @Override
-            public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.format(timeFormatter)); // Format: HH:mm
-            }
-        })
-        .registerTypeAdapter(LocalTime.class, new JsonDeserializer<LocalTime>() {
-            @Override
-            public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return LocalTime.parse(json.getAsString(), timeFormatter);
-            }
-        })
+    /**
+     * change month of plan into monthly configs
+     */
+    private void incrementMonthOfPlan() {
+        DataLayer dataLayer = new JSONDataManager(GsonFactory.getGson());
+        MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), MonthlyConfig.class);
+        LocalDate date = mc.getMonthAndYear();
+        LocalDate newDate = date.plusMonths(1);
+        mc.setMonthAndYear(newDate);
 
-        .create();
-
-        return gson;
+        dataLayer.modify(new JSONDataContainer("JF/monthlyConfigs.json", JSONUtil.createJson(mc),"mc", "current", "type"));
     }
 
     

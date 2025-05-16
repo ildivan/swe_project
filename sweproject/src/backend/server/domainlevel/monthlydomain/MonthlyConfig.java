@@ -8,7 +8,7 @@ public class MonthlyConfig {
     //le date disponibili dei volontari di giugno e le date non utilizzabili di luglio
     private boolean planConfigured;
     private Set<LocalDate> precludeDates;
-    private String type = "old"; //old or current depends if is the current or not
+    private String type = "current"; //old or current depends if is the current or not
 
     public MonthlyConfig(LocalDate date, boolean planConfigured, Set<LocalDate> precludeDates) {
         this.monthAndYear = date;

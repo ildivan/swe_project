@@ -300,11 +300,21 @@ public class ConfigService extends Service<Void>{
 
     public void generateMonthlyPlan() {
         monthlyManager.add(new JsonObject());
-        /*
-         * da fara visualizzazione
-         */
+        write("Piano mensile generato", false);
+        showMonthlyPlan();
     }
 
+    /**
+     * method to show monthly plan
+     * UNIMPLEMENTED
+     */
+    private void showMonthlyPlan() {
+       
+    }
+
+    /**
+     * method to add a non usable date for the next monthly plan
+     */
     public void addNonUsableDate(){
         write(CLEAR,false);
         MonthlyConfig mc = JSONUtil.createObject(dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current","type")), MonthlyConfig.class);

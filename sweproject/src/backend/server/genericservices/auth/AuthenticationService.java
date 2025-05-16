@@ -36,7 +36,7 @@ public class AuthenticationService extends Service<User> {
             if(!dataLayer.exists(dataContainer)){
                 //DEBUG write(String.valueOf(dataLayer.exists(dataContainer)), false);
                 riprovare = IOUtil.readString("Utente inesistente, vuoi riprovare? (y/n):");
-                if(riprovare.equals("n")){
+                if(riprovare.equalsIgnoreCase("n")){
                     write("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
                     return null;
                 }
