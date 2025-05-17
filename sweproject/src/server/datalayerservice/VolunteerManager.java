@@ -8,7 +8,7 @@ import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 
-public class VolunteerManager implements Manager{
+public class VolunteerManager implements IBasicDLServices{
     private static final String PATH = "JF/volunteers.json";
     private static final String MEMBER_NAME = "volunteers";
     private static final String KEY_DESC = "name";

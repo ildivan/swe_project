@@ -7,7 +7,7 @@ import java.util.*;
 
 public class JSONDataManager implements DataLayer {
     //private static final String PATH = "sweproject/jsonFiles/users.json";
-    private static JSONIOController fileManager = new JSONIOController();
+
     private static Gson gson;
         
     
@@ -27,16 +27,16 @@ public class JSONDataManager implements DataLayer {
 
 
         if(!checkFileExistance(dataContainer)){
-            fileManager.createJSONEmptyFile(dataContainer.getPath());};
+            JSONIOService.Service.CREATE_JSON_EMPTY_FILE.start(dataContainer.getPath());};
             
-        List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+        List<JsonObject> list = (List<JsonObject>) JSONIOService.Service.READ_FROM_FILE.start(dataContainer.getPath(), dataContainer.getMemberName());
         
         if(list == null){
             list = new ArrayList<>();
         }
         // Aggiungi l'utente alla lista e salva
         list.add(dataContainer.getJO());
-        fileManager.writeToFile(dataContainer.getPath(), list, dataContainer.getMemberName());
+        JSONIOService.Service.WRITE_TO_FILE.start(dataContainer.getPath(), list, dataContainer.getMemberName());
     }
 
     /**
@@ -67,14 +67,14 @@ public class JSONDataManager implements DataLayer {
     public boolean modify(DataContainer dataContainer) {
         
         if(!checkFileExistance(dataContainer)){
-            fileManager.createJSONEmptyFile(dataContainer.getPath());};
+            JSONIOService.Service.CREATE_JSON_EMPTY_FILE.start(dataContainer.getPath());};
 
-        List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+        List<JsonObject> list = (List<JsonObject>)JSONIOService.Service.READ_FROM_FILE.start(dataContainer.getPath(), dataContainer.getMemberName());
 
         for (JsonObject o : list) {
             if (o.get(dataContainer.getKeyDesc()).getAsString().equals(dataContainer.getKey())) {
                 list.set(list.indexOf(o), dataContainer.getJO());
-                fileManager.writeToFile(dataContainer.getPath(), list, dataContainer.getMemberName());
+                JSONIOService.Service.WRITE_TO_FILE.start(dataContainer.getPath(), list, dataContainer.getMemberName());
                 return true;
             }
         }
@@ -86,14 +86,14 @@ public class JSONDataManager implements DataLayer {
     public void delete(DataContainer dataContainer) {
         
         if(!checkFileExistance(dataContainer)){
-            fileManager.createJSONEmptyFile(dataContainer.getPath());};
+            JSONIOService.Service.CREATE_JSON_EMPTY_FILE.start(dataContainer.getPath());};
 
-        List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+        List<JsonObject> list = (List<JsonObject>)JSONIOService.Service.READ_FROM_FILE.start(dataContainer.getPath(), dataContainer.getMemberName());
 
         for (JsonObject o : list) {
             if (o.get(dataContainer.getKeyDesc()).getAsString().equals(dataContainer.getKey())) {
                 list.remove(o);
-                fileManager.writeToFile(dataContainer.getPath(), list, dataContainer.getMemberName());
+                JSONIOService.Service.WRITE_TO_FILE.start(dataContainer.getPath(), list, dataContainer.getMemberName());
                 return;
             }
         }
@@ -107,9 +107,9 @@ public class JSONDataManager implements DataLayer {
     public JsonObject get(DataContainer dataContainer) {
         
         if(!checkFileExistance(dataContainer)){
-            fileManager.createJSONEmptyFile(dataContainer.getPath());};
+            JSONIOService.Service.CREATE_JSON_EMPTY_FILE.start(dataContainer.getPath());};
 
-        List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+        List<JsonObject> list = (List<JsonObject>)JSONIOService.Service.READ_FROM_FILE.start(dataContainer.getPath(), dataContainer.getMemberName());
 
         for (JsonObject o : list) {
             if(o.get(dataContainer.getKeyDesc()) == null){
@@ -129,7 +129,7 @@ public class JSONDataManager implements DataLayer {
     public boolean exists(DataContainer dataContainer) {
         
         if(!checkFileExistance(dataContainer)){
-            fileManager.createJSONEmptyFile(dataContainer.getPath());};
+            JSONIOService.Service.CREATE_JSON_EMPTY_FILE.start(dataContainer.getPath());};
         
         DataContainer DC = new DataContainer(dataContainer.getPath(), dataContainer.getMemberName(), dataContainer.getKey(), dataContainer.getKeyDesc());
         JsonObject o = get(DC);
@@ -139,16 +139,16 @@ public class JSONDataManager implements DataLayer {
 
     @Override
     public void createJSONEmptyFile(DataContainer dataContainer) {
-        fileManager.createJSONEmptyFile(dataContainer.getPath());
+        JSONIOService.Service.CREATE_JSON_EMPTY_FILE.start(dataContainer.getPath());
     }
 
     public List<JsonObject> getList(DataContainer dataContainer) {
 
         if (!checkFileExistance(dataContainer)) {
-            fileManager.createJSONEmptyFile(dataContainer.getPath());
+            JSONIOService.Service.CREATE_JSON_EMPTY_FILE.start(dataContainer.getPath());
         }
     
-        List<JsonObject> list = fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+        List<JsonObject> list = (List<JsonObject>)JSONIOService.Service.READ_FROM_FILE.start(dataContainer.getPath(), dataContainer.getMemberName());
         List<JsonObject> result = new ArrayList<>();
     
         for (JsonObject o : list) {
@@ -168,7 +168,7 @@ public class JSONDataManager implements DataLayer {
      */
     @Override
     public List<JsonObject> getAll(DataContainer dataContainer){
-        return fileManager.readFromFile(dataContainer.getPath(), dataContainer.getMemberName());
+        return (List<JsonObject>)JSONIOService.Service.READ_FROM_FILE.start(dataContainer.getPath(), dataContainer.getMemberName());
     }
 
 }

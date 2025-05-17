@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import server.DateService;
 
 
-public class MonthlyPlanManager implements Manager{
+public class MonthlyPlanManager implements IBasicDLServices{
     ActivityManager activityManager; 
     DataLayer dataLayer;
     Gson gson;

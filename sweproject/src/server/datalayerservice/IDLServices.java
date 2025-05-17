@@ -3,7 +3,7 @@ package server.datalayerservice;
 import java.util.List;
 import com.google.gson.JsonObject;
 
-public interface Manager {
+public interface IDLServices {
     public void add(JsonObject data);
     public void remove(JsonObject data, String key);
     public void update(JsonObject data, String key);

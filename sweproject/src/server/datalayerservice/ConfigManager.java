@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class ConfigManager implements Manager{
+public class ConfigManager implements IBasicDLServices{
     private static final String PATH = "JF/configs.json";
     private static final String MEMBER_NAME = "configs";
     private static final String KEY_DESC = "configType";
@@ -21,7 +21,7 @@ public class ConfigManager implements Manager{
     @Override
     public void add(JsonObject data) {
         dataLayer.add(new DataContainer(PATH, data, MEMBER_NAME));
-        //UNIMPLEMENTED
+
     }
 
     @Override

@@ -8,7 +8,7 @@ import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Place;
 
 
-public class ActivityManager implements Manager{
+public class ActivityManager implements IBasicDLServices{
     
     
     private static final String PATH = "JF/activities.json";

@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import server.firstleveldomainservices.Place;
 
 
-public class PlacesManager implements Manager {
+public class PlacesManager implements IBasicDLServices {
     private static final String PATH = "JF/places.json";
     private static final String MEMBER_NAME = "places";
     private static final String KEY_DESC = "name";

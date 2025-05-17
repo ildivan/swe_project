@@ -2,54 +2,39 @@ package server.datalayerservice;
 
 import com.google.gson.*;
 
+import server.GsonFactoryService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
+import server.objects.interfaceforservices.IActionDateService;
 
 import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.lang.reflect.Type;
 //DA VERIFICARE SE è DAVVERO UN CONTROLLER
-public class JSONIOController {
-    private static final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
-    private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    private static final Gson gson = new GsonBuilder()
-        .setPrettyPrinting()
-
-        // LocalDate
-        .registerTypeAdapter(LocalDate.class, new JsonSerializer<LocalDate>() {
-            @Override
-            public JsonElement serialize(LocalDate src, Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.format(dateFormatter)); // Format: dd-mm-yyyy
-            }
-        })
-        .registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
-            @Override
-            public LocalDate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return LocalDate.parse(json.getAsString(), dateFormatter);
-            }
-        })
-
-        // LocalTime
-        .registerTypeAdapter(LocalTime.class, new JsonSerializer<LocalTime>() {
-            @Override
-            public JsonElement serialize(LocalTime src, Type typeOfSrc, JsonSerializationContext context) {
-                return new JsonPrimitive(src.format(timeFormatter)); // Format: HH:mm
-            }
-        })
-        .registerTypeAdapter(LocalTime.class, new JsonDeserializer<LocalTime>() {
-            @Override
-            public LocalTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return LocalTime.parse(json.getAsString(), timeFormatter);
-            }
-        })
-
-        .create();
-
+public class JSONIOService {
+    
+    private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
     // Funzione per leggere il file JSON e ottenere la lista degli oggetti serializzati
-    public synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
+
+    public enum Service {
+        READ_FROM_FILE((params) -> JSONIOService.readFromFile((String) params[0], (String) params[1])),
+        WRITE_TO_FILE((params) -> JSONIOService.writeToFile((String) params[0], (List<JsonObject>) params[1], (String) params[2])),
+        CREATE_JSON_EMPTY_FILE((params) -> JSONIOService.createJSONEmptyFile((String) params[0]));
+
+        private IActionDateService<?> service;
+
+        Service(IActionDateService<?> service) {
+            this.service = service;
+        }
+
+        public Object start(Object... params) {
+            return service.apply(params);
+        }
+    }
+
+
+    private static synchronized List<JsonObject> readFromFile(String filePath, String memberName) {
         try (Reader reader = Files.newBufferedReader(Paths.get(filePath))) {
             JsonObject json = gson.fromJson(reader, JsonObject.class);
             JsonArray objectArray = json.getAsJsonArray(memberName);
@@ -70,7 +55,7 @@ public class JSONIOController {
     }
 
     // Funzione per scrivere la lista degli oggetti serializzati nel file JSON
-    public synchronized void writeToFile(String filePath, List<JsonObject> list, String memberName) {
+    private static synchronized Boolean writeToFile(String filePath, List<JsonObject> list, String memberName) {
         JsonObject json = new JsonObject();
         JsonArray objectArray = new JsonArray();
         for (JsonObject user : list) {
@@ -82,10 +67,12 @@ public class JSONIOController {
             gson.toJson(json, writer);
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
+        return null;//fake return
     }
 
-    public synchronized boolean createJSONEmptyFile(String path) {
+    private static synchronized boolean createJSONEmptyFile(String path) {
         Object emptyObject = new Object();
 
         System.out.println("Writing to: " + path);
@@ -101,6 +88,7 @@ public class JSONIOController {
 
     /**
      * metodo per creare noi un configuratore con utente e password di default e altro
+     * SOLO PER TEST E CREAZOINE DEGLI UTENTI, NON VIENE UTILIZZATO DALL'APPLICAIZONE
      * @param args
      */
     public static void main(String[] args){

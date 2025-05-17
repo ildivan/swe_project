@@ -17,7 +17,7 @@ import server.GsonFactoryService;
 
 public class AMIOUtil{
     private static final Gson gson = (Gson) GsonFactoryService.Service.GET_GSON.start();
-    private static Manager volunteerManager = new VolunteerManager(gson);
+    private static IBasicDLServices volunteerManager = new VolunteerManager(gson);
 
     public static Address getAddress(){
         String street = (String) IOService.Service.READ_STRING.start("Inserire via");

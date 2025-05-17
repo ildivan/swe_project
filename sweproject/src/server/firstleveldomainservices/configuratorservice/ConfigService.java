@@ -28,11 +28,11 @@ public class ConfigService extends Service<Void>{
     private static final String SPACE = "SPACE";
     private Gson gson;
     private DataLayer dataLayer; 
-    private Manager placesManager; 
-    private Manager volunteerManager; 
-    private Manager activityManager; 
-    private Manager configManager;
-    private Manager monthlyManager;
+    private IBasicDLServices placesManager; 
+    private IBasicDLServices volunteerManager; 
+    private IBasicDLServices activityManager; 
+    private IBasicDLServices configManager;
+    private IBasicDLServices monthlyManager;
 
     private MenuService menu = new ConfiguratorMenu(this);
     private String configType;
