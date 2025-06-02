@@ -10,10 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import server.DateService;
-import server.datalayerservice.*;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
@@ -55,7 +53,7 @@ public class ConfigService extends MainService<Void>{
     private final MenuService menu = new ConfiguratorMenu(this);
     private final ConfigType configType;
 
-    private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final JsonLocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();

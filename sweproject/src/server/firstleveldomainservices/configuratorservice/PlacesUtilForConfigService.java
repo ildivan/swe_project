@@ -19,7 +19,7 @@ import server.jsonfactoryservice.JsonFactoryService;
 public class PlacesUtilForConfigService {
 
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
-    private static final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private static final JsonLocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private final Gson gson = gsonFactoryService.getGson();
     private static final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
