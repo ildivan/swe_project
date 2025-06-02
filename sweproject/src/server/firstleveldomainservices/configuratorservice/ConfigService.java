@@ -3,10 +3,10 @@ package server.firstleveldomainservices.configuratorservice;
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import server.DateService;
@@ -292,6 +292,66 @@ public class ConfigService extends MainService<Void>{
         }while(continuare);
     }
 
+    public void removePlaces() {
+        ioService.writeMessage(CLEAR,false);
+        boolean continuare;
+
+        try{
+            do{
+                removePlace();
+                continuare = continueChoice("inserimento luoghi");
+            }while(continuare);
+        }catch(Exception ignored){}
+    }
+
+    private void removePlace() {
+        JsonDataLocalizationInformation placesLocInfo = locInfoFactory.getPlaceLocInfo();
+        JsonDataLocalizationInformation activitiesLocInfo = locInfoFactory.getActivityLocInfo();
+        String name = ioService.readString("Inserire nome luogo");
+        placesLocInfo.setKey(name);
+
+        if(!dataLayer.exists(placesLocInfo)){
+            ioService.writeMessage("Luogo non esistente", false);
+            throw new RuntimeException("Luogo non esistente");
+        }
+
+        deleteActivitiesAtPlace(activitiesLocInfo, name);
+        deleteVolunteersWithoutActivities();
+
+        dataLayer.delete(dataLayer.get(placesLocInfo), placesLocInfo);
+
+        // Post-condizione: il luogo è stato aggiunto
+        boolean placeRemoved = !dataLayer.exists(placesLocInfo);
+        assert placeRemoved : "Aggiunta del luogo fallita";
+    }
+
+    private void deleteVolunteersWithoutActivities() {
+        JsonDataLocalizationInformation volunteersLocInfo = locInfoFactory.getVolunteerLocInfo();
+        List<JsonObject> volunteersJsonObjects = (dataLayer.getAll(volunteersLocInfo));
+
+        JsonDataLocalizationInformation activitiesLocInfo = locInfoFactory.getActivityLocInfo();
+        activitiesLocInfo.setKey("volunteers");
+        List<JsonObject> volunteersForActivityJson = dataLayer.getAll(activitiesLocInfo);
+        Set<String> volunteerWithActivitiesNames = new HashSet<>();
+        for (var jo : volunteersForActivityJson) {
+            volunteerWithActivitiesNames.addAll(jo.getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList());
+        }
+        for (JsonObject volunteer : volunteersJsonObjects) {
+            if (!volunteerWithActivitiesNames.contains(volunteer.getAsString())) {
+                dataLayer.delete(volunteer, volunteersLocInfo);
+            }
+        }
+
+    }
+
+    private void deleteActivitiesAtPlace(JsonDataLocalizationInformation activitiesLocInfo, String place) {
+        activitiesLocInfo.setKey("placeName");
+        activitiesLocInfo.setKeyDesc(place);
+        List<JsonObject> activitiesToDelete = dataLayer.getAll(activitiesLocInfo);
+        for (JsonObject a : activitiesToDelete)
+            dataLayer.delete(a, locInfoFactory.getActivityLocInfo());
+    }
+
     /**
      * util method for the previous method to add a new address
      * @return the new address
@@ -468,7 +528,7 @@ public class ConfigService extends MainService<Void>{
     }
 
     /**
-     * method to add a non usable date for the next monthly plan
+     * method to add a non-usable date for the next monthly plan
      */
     public void addNonUsableDate(){
         DateService dateService = new DateService();
@@ -496,6 +556,7 @@ public class ConfigService extends MainService<Void>{
         dataLayer.modify(newConfigsJO, locInfo);
 
     }
+
 
     private Configs getConfig(){
         JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
