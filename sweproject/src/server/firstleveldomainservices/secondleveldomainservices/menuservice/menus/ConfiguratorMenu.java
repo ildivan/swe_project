@@ -30,35 +30,20 @@ public class ConfiguratorMenu extends MenuManager{
 
     public ConfiguratorMenu(ConfigService configService) {
         super();
-        vociVisibili.put("Aggiungi Volontario", true);
-        vociVisibili.put("Aggiungi Luogo", true);
-        vociVisibili.put("Aggiungi Attività", true);
-        vociVisibili.put("Aggiungi data preclusa", true);
-        vociVisibili.put("Mostra Volontari", true);
-        vociVisibili.put("Mostra Luoghi", true);
-        vociVisibili.put("Mostra Bozza delle Attività", true);
-        vociVisibili.put("Mostra Attività Proposte", true);
-        vociVisibili.put("Mostra Attività Confermata", true);
-        vociVisibili.put("Mostra Attività Completa", true);
-        vociVisibili.put("Mostra Attività Cancellata", true);
-        vociVisibili.put("Mostra Attività Effettuata", true);
-        vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
-        vociVisibili.put("Genera Piano Mensile", true);
-        
-        chiamateMetodi.put("Aggiungi Volontario", configService::addVolunteer);
-        chiamateMetodi.put("Aggiungi Luogo", configService::addPlace);
-        chiamateMetodi.put("Aggiungi Attività", configService::addActivity);
-        chiamateMetodi.put("Aggiungi data preclusa", configService::addNonUsableDate);
-        chiamateMetodi.put("Mostra Volontari", configService::showVolunteers);
-        chiamateMetodi.put("Mostra Luoghi", configService::showPlaces);
-        chiamateMetodi.put("Mostra Bozza delle Attività", configService::showActivities);
-        chiamateMetodi.put("Mostra Attività Proposte", () -> configService.showActivitiesWithCondition(ActivityState.PROPOSTA));
-        chiamateMetodi.put("Mostra Attività Confermata", () -> configService.showActivitiesWithCondition(ActivityState.CONFERMATA));
-        chiamateMetodi.put("Mostra Attività Completa", () -> configService.showActivitiesWithCondition(ActivityState.COMPLETA));
-        chiamateMetodi.put("Mostra Attività Cancellata", () -> configService.showActivitiesWithCondition(ActivityState.CANCELLATA));
-        chiamateMetodi.put("Mostra Attività Effettuata", () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
-        chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", configService::modNumMaxSub);
-        chiamateMetodi.put("Genera Piano Mensile", configService::generateMonthlyPlan);
+        add_to_menu("Aggiungi Volontario", configService::addVolunteer);
+        add_to_menu("Aggiungi Luogo", configService::addPlace);
+        add_to_menu("Aggiungi Attività", configService::addActivity);
+        add_to_menu("Aggiungi data preclusa", configService::addNonUsableDate);
+        add_to_menu("Mostra Volontari", configService::showVolunteers);
+        add_to_menu("Mostra Luoghi", configService::showPlaces);
+        add_to_menu("Mostra Bozza delle Attività", configService::showActivities);
+        add_to_menu("Mostra Attività Proposte", () -> configService.showActivitiesWithCondition(ActivityState.PROPOSTA));
+        add_to_menu("Mostra Attività Confermata", () -> configService.showActivitiesWithCondition(ActivityState.CONFERMATA));
+        add_to_menu("Mostra Attività Completa", () -> configService.showActivitiesWithCondition(ActivityState.COMPLETA));
+        add_to_menu("Mostra Attività Cancellata", () -> configService.showActivitiesWithCondition(ActivityState.CANCELLATA));
+        add_to_menu("Mostra Attività Effettuata", () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
+        add_to_menu("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", configService::modNumMaxSub);
+        add_to_menu("Genera Piano Mensile", configService::generateMonthlyPlan);
     }
 
     @Override

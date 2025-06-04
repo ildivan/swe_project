@@ -10,14 +10,9 @@ public class VolunteerMenu extends MenuManager{
 
     public VolunteerMenu(VolunteerService volService) {
         super();
-        vociVisibili.put("Mostra le mie visite del piano", true);
-        vociVisibili.put("Mostra la scheda delle mie visite", true);
-        vociVisibili.put("Aggiungi giorno di non disponobilità", true);
-
-        chiamateMetodi.put("Mostra le mie visite del piano", volService::showMyActivities);
-        chiamateMetodi.put("Mostra la scheda delle mie visite", volService::showMyActivitiesDescription);
-        chiamateMetodi.put("Aggiungi giorno di non disponobilità", volService::addPrecludeDate);
-      
+        add_to_menu("Mostra le mie visite del piano", volService::showMyActivities);
+        add_to_menu("Mostra la scheda delle mie visite", volService::showMyActivitiesDescription);
+        add_to_menu("Aggiungi giorno di non disponobilità", volService::addPrecludeDate);
     }
 
     @Override

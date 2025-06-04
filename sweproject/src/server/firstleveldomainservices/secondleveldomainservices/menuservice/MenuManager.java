@@ -15,6 +15,12 @@ public abstract class MenuManager implements MenuService{
     protected Map<String, Boolean> vociVisibili = new LinkedHashMap<>();
     protected Map<String, Runnable> chiamateMetodi = new LinkedHashMap<>();
 
+
+    protected void add_to_menu(String menuVoiceText, Runnable callback) {
+        vociVisibili.put(menuVoiceText, true);
+        chiamateMetodi.put(menuVoiceText, callback);
+    }
+
      /**
      * build the menu based on the visibility of the options
      * @return
