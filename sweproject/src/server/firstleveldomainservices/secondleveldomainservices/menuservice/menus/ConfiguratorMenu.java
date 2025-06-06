@@ -37,12 +37,27 @@ public class ConfiguratorMenu extends MenuManager{
         add_to_menu("Mostra Volontari", configService::showVolunteers);
         add_to_menu("Mostra Luoghi", configService::showPlaces);
         add_to_menu("Mostra Bozza delle Attività", configService::showActivities);
-        add_to_menu("Mostra Attività Proposte", () -> configService.showActivitiesWithCondition(ActivityState.PROPOSTA));
-        add_to_menu("Mostra Attività Confermata", () -> configService.showActivitiesWithCondition(ActivityState.CONFERMATA));
-        add_to_menu("Mostra Attività Completa", () -> configService.showActivitiesWithCondition(ActivityState.COMPLETA));
-        add_to_menu("Mostra Attività Cancellata", () -> configService.showActivitiesWithCondition(ActivityState.CANCELLATA));
-        add_to_menu("Mostra Attività Effettuata", () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
-        add_to_menu("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", configService::modNumMaxSub);
+        add_to_menu(
+                "Mostra Attività Proposte",
+                () -> configService.showActivitiesWithCondition(ActivityState.PROPOSTA));
+        add_to_menu(
+                "Mostra Attività Confermata",
+                () -> configService.showActivitiesWithCondition(ActivityState.CONFERMATA));
+        add_to_menu(
+                "Mostra Attività Completa",
+                () -> configService.showActivitiesWithCondition(ActivityState.COMPLETA));
+        add_to_menu(
+                "Mostra Attività Cancellata",
+                () -> configService.showActivitiesWithCondition(ActivityState.CANCELLATA));
+        add_to_menu(
+                "Mostra Attività Effettuata",
+                () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
+        add_to_menu(
+                "Modifica numero massimo di persone iscrivibili mediante una singola iscrizione",
+                configService::modNumMaxSub);
+        add_to_menu(
+                "Rimuovi un luogo dalla lista dei luoghi visitabili",
+                configService::removePlaces);
         add_to_menu("Genera Piano Mensile", configService::generateMonthlyPlan);
     }
 

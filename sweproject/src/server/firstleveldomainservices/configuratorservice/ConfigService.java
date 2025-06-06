@@ -347,8 +347,7 @@ public class ConfigService extends MainService<Void>{
     private void deleteActivitiesAtPlace(JsonDataLocalizationInformation activitiesLocInfo, String place) {
         activitiesLocInfo.setKey("placeName");
         activitiesLocInfo.setKeyDesc(place);
-        List<JsonObject> activitiesToDelete = dataLayer.getAll(activitiesLocInfo);
-        for (JsonObject a : activitiesToDelete)
+        for (JsonObject a : dataLayer.getAll(activitiesLocInfo))
             dataLayer.delete(a, locInfoFactory.getActivityLocInfo());
     }
 
