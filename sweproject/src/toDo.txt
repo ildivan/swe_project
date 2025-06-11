@@ -1,15 +1,5 @@
 
 3- fare visualizzazione del monthly plan
 4- fare diventare errori delle eccezioni cosi da gestirle al meglio
-5- capire come non mostrare la possibilità di creare il piano se è gia stato fatto per quel mese, da modificare i config
+5- finire che se elimino un luogo elimino anche tutte le attività associate
 
-7- se vuoi cercare di avere in un posto unico i path e i member name dei json
-
-
-8- potresti creare un unica classe di accesso alle funcioni del datalayer dove hai gia le informainei 
-di localizzazione, tipo getActivities, che dentro ha gia tutto, jssondatalerfunctions
-
-
-9- togliere i to strign dai menu e metterli nel formatter
-
-10- factory oer i datalayer

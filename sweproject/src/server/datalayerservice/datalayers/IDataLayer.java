@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 
 import server.datalayerservice.datalocalizationinformations.IDataLocalizationInformation;
 
-public interface IDataLayer<T extends IDataLocalizationInformation> {
+public interface IDataLayer<T extends IDataLocalizationInformation<T>> {
 
 /**
  * Adds a new JSON object to the data layer with the specified localization information.
@@ -31,7 +31,7 @@ boolean modify(JsonObject jsonObject, T localizationInformation);
  * @param jsonObject The JSON object to be deleted.
  * @param localizationInformation The localization information associated with the JSON object.
  */
-void delete(JsonObject jsonObject, T localizationInformation);
+void delete(T localizationInformation);
 
 /**
  * Retrieves a JSON object from the data layer with the specified localization information.

@@ -507,5 +507,94 @@ public class ConfigService extends MainService<Void>{
         JsonObject cJO = dataLayer.get(locInfo);
         return jsonFactoryService.createObject(cJO, Configs.class);
     }
+
+    /**
+/**
+ * Metodo per eliminare un volontario e le attività in cui è coinvolto.
+ *
+ * @pre Il nome inserito deve essere non nullo e non vuoto.
+ * 
+ * @post
+ *Il volontario, se presente, viene eliminato.
+ *Tutte le attività a cui partecipava vengono eliminate dal sistema.
+ */
+public void deleteVolunteer() {
+    ioService.writeMessage(CLEAR, false);
+    String name = ioService.readString("\nInserire nome del volontario da eliminare");
+
+    assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
+
+    JsonDataLocalizationInformation volunteerLoc = locInfoFactory.getVolunteerLocInfo();
+    volunteerLoc.setKey(name);
+
+    if (dataLayer.exists(volunteerLoc)) {
+        
+        JsonDataLocalizationInformation activityLoc = locInfoFactory.getActivityLocInfo();
+        List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
+        JsonDataLocalizationInformation singleActLoc = locInfoFactory.getActivityLocInfo();
+
+        for (JsonObject activity : allActivities) {
+            if (activity.has("volunteers")) {
+                var volunteers = activity.getAsJsonArray("volunteers");
+                for (int i = 0; i < volunteers.size(); i++) {
+                    if (volunteers.get(i).getAsString().equalsIgnoreCase(name)) {
+                        String activityName = activity.get("title").getAsString();
+                        singleActLoc.setKey(activityName);
+                        dataLayer.delete(singleActLoc);
+                    }
+                }
+            }
+        }
+
+        
+        dataLayer.delete(volunteerLoc);
+        ioService.writeMessage("\nVolontario e attività associate eliminati", false);
+    } else {
+        ioService.writeMessage("\nVolontario non esistente", false);
+    }
+}
+
+
+    /**
+     * metodo per eliminare un luogo dal sistema
+     * AGGIUNGERE PRE E POST CONDIZIONI
+     */
+    public void deletePlace() {
+        ioService.writeMessage(CLEAR,false);
+        String name = ioService.readString("\nInserire nome del luogo da eliminare");
+
+        assert name != null && !name.trim().isEmpty() : "Nome luogo non valido";
+
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        locInfo.setKey(name);
+
+        if (dataLayer.exists(locInfo)) {
+            dataLayer.delete(locInfo);
+            ioService.writeMessage("\nLuogo eliminato", false);
+        } else {
+            ioService.writeMessage("\nLuogo non esistente", false);
+        }
+    }
+
+    /**
+     * metodo per eliminare un'attività dal sistema
+     * AGGIUNGERE PRE E POST CONDIZIONI
+     */
+    public void deleteActivity() {
+        ioService.writeMessage(CLEAR,false);
+        String name = ioService.readString("\nInserire nome dell'attività da eliminare");
+
+        assert name != null && !name.trim().isEmpty() : "Nome attività non valido";
+
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        locInfo.setKey(name);
+
+        if (dataLayer.exists(locInfo)) {
+            dataLayer.delete(locInfo);
+            ioService.writeMessage("\nAttività eliminata", false);
+        } else {
+            ioService.writeMessage("\nAttività non esistente", false);
+        }
+    }
     
 }

@@ -55,9 +55,8 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
     }
 
     @Override
-    public void delete(JsonObject jsonObject, JsonDataLocalizationInformation info) {
+    public void delete(JsonDataLocalizationInformation info) {
         assert info != null;
-        assert jsonObject != null;
 
         if (!checkFileExistance(info)) {
             jsonReadWrite.createJSONEmptyFile(info.getPath());

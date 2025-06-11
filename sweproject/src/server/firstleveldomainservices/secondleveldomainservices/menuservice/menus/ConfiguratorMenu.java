@@ -44,6 +44,9 @@ public class ConfiguratorMenu extends MenuManager{
         vociVisibili.put("Mostra Attività Effettuata", true);
         vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
         vociVisibili.put("Genera Piano Mensile", true);
+        vociVisibili.put("Elimina Volontario", true);
+        vociVisibili.put("Elimina Luogo", true);
+        vociVisibili.put("Elimina Attività", true);
         
         chiamateMetodi.put("Aggiungi Volontario", configService::addVolunteer);
         chiamateMetodi.put("Aggiungi Luogo", configService::addPlace);
@@ -59,6 +62,9 @@ public class ConfiguratorMenu extends MenuManager{
         chiamateMetodi.put("Mostra Attività Effettuata", () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
         chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", configService::modNumMaxSub);
         chiamateMetodi.put("Genera Piano Mensile", configService::generateMonthlyPlan);
+        chiamateMetodi.put("Elimina Volontario", configService::deleteVolunteer);
+        chiamateMetodi.put("Elimina Luogo", configService::deletePlace);
+        chiamateMetodi.put("Elimina Attività", configService::deleteActivity);
     }
 
     @Override
@@ -119,6 +125,7 @@ public class ConfiguratorMenu extends MenuManager{
         menuOut.append(obtainMenuString("\n\nFunzioni di visualizzazione:\n\n", "Mostra", menu));
         menuOut.append(obtainMenuString("\n\nFunzioni di modifica:\n\n", "Modifica", menu));
         menuOut.append(obtainMenuString("\n\nFunzioni di generazione:\n\n", "Genera", menu));
+        menuOut.append(obtainMenuString("\n\nFunzioni di eliminazione:\n\n", "Elimina", menu));
 
         return menuOut.toString();
     }
