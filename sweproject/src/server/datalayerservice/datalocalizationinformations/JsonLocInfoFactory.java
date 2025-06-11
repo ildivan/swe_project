@@ -2,28 +2,28 @@ package server.datalayerservice.datalocalizationinformations;
 
 public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationInformation> {
 
-    private static final String ACTIVITY_PATH = "JF/activities.json";
+    private static final String ACTIVITY_PATH = "sweproject/JF/activities.json";
     private static final String ACTIVITY_MEMBER_NAME = "activities";
     private static final String ACTIVITY_KEY_DESC = "title";
-    private static final String PLACES_PATH = "JF/places.json";
+    private static final String PLACES_PATH = "sweproject/JF/places.json";
     private static final String PLACES_MEMBER_NAME = "places";
     private static final String PLACES_KEY_DESC = "name";
     private static final String GENERAL_CONFIGS_KEY_DESCRIPTION = "configType";
     private static final String GENERAL_CONFIGS_MEMBER_NAME = "configs";
-    private static final String GENERAL_CONFIG_PATH = "JF/configs.json";
-    private static final String VOLUNTEER_PATH = "JF/volunteers.json";
+    private static final String GENERAL_CONFIG_PATH = "sweproject/JF/configs.json";
+    private static final String VOLUNTEER_PATH = "sweproject/JF/volunteers.json";
     private static final String VOLUNTEER_MEMBER_NAME = "volunteers";
     private static final String VOLUNTEER_KEY_DESC = "name";
     private static final String MONTHLY_CONFIG_KEY_DESC = "type";
     private static final String MONTHLY_CONFIG_MEMEBER_NAME = "mc";
-    private static final String MONTHLY_CONFIG_PATH = "JF/monthlyConfigs.json";
-    private static final String MONTHLY_PLAN_PATH = "JF/monthlyPlan.json";
+    private static final String MONTHLY_CONFIG_PATH = "sweproject/JF/monthlyConfigs.json";
+    private static final String MONTHLY_PLAN_PATH = "sweproject/JF/monthlyPlan.json";
     private static final String MONTHLY_PLAN_MEMBER_NAME = "monthlyPlan";
     private static final String MONTHLY_PLAN_KEY_DESC = "date";
     private static final String USERS_KEY_DESCRIPTION = "name";
     private static final String USERS_MEMBER_NAME = "users";
-    private static final String USERS_PATH = "JF/users.json";
-    private static final String ARCHIVE_PATH = "JF/archive.json";
+    private static final String USERS_PATH = "sweproject/JF/users.json";
+    private static final String ARCHIVE_PATH = "sweproject/JF/archive.json";
     private static final String ARCHIVE_MEMBER_NAME = "activityArchive";
 
     /**
