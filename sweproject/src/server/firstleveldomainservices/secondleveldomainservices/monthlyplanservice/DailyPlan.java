@@ -22,7 +22,7 @@ public class DailyPlan {
     private Map<String, ActivityInfo> plan = new HashMap<>();
 
     //non deve essere serializzato -> inserisco transient
-    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private transient JsonLocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
@@ -118,7 +118,7 @@ public class DailyPlan {
     /**
      * metodo per costruire il piano di visite giornaliero
      * sfrutta un algoritmo greedy che mette in ordine crescente di orario fine attività
-     * @param act
+     * @param
      * @return
      */
  private List<Activity> getBestCombination(List<Activity> activities) {

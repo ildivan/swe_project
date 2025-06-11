@@ -25,7 +25,7 @@ public class AMIOUtil{
 
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
-    private final static ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final static JsonLocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private final static IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
     public static Address getAddress(){
@@ -166,7 +166,6 @@ public class AMIOUtil{
 
     /**
      * method to read a day from the user, until he stops
-     * @param message
      * @return
      */
     public static String[] insertDays() {

@@ -88,7 +88,7 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
 
     /**
      * metodo per formatare una lista di volontari
-     * @param aList
+     * @param
      * @return
      */
     public String formatListVolunteer(List<Volunteer> vList){
@@ -112,7 +112,7 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
 
     /**
      * metodo per formatare una lista di place
-     * @param aList
+     * @param
      * @return
      */
     public String formatListPlace(List<Place> pList){
@@ -127,7 +127,7 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
     /**
      * metodo per formatare una lista di ActivityRecord, dato ottenuto dopo aver
      * selezionato le visite in base allo stato delle stesse
-     * @param aList
+     * @param
      * @return
      */
     public String formatListActivityRecord(List<ActivityRecord> arList){
@@ -141,7 +141,7 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
 
     /**
      * metodo per formattare un oggetto activity record
-     * @param activityRecord
+     * @param
      * @return
      */
     private String formatActivityRecord(ActivityRecord record) {

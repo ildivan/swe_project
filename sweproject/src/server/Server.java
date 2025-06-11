@@ -31,13 +31,13 @@ import java.net.*;
 
 public class Server {
 
-    private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final JsonLocInfoFactory locInfoFactory = new JsonLocInfoFactory();
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
 
     private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
-    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private final JsonFactoryService jsonFactoryService = new JsonFactoryService();
     DemonsService demonsService = new DemonsService();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
@@ -81,6 +81,7 @@ public class Server {
                                 ReadWrite.setConnection(socket);
                                 // Ottieni il servizio associato all'utente e alla connessione
                                 MainService<?> s = obtainService(u, socket, configType);
+                                assert s != null;
                                 s.run();  // Esegui il servizio
                             } catch (IOException e) {
                                 System.out.println(e.getMessage());

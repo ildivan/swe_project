@@ -319,13 +319,19 @@ public class ConfigService extends MainService<Void>{
         deleteVolunteersWithoutActivities();
 
         dataLayer.delete(dataLayer.get(placesLocInfo), placesLocInfo);
-
-        // Post-condizione: il luogo è stato aggiunto
-        boolean placeRemoved = !dataLayer.exists(placesLocInfo);
-        assert placeRemoved : "Aggiunta del luogo fallita";
     }
 
     private void deleteVolunteersWithoutActivities() {
+        JsonDataLocalizationInformation volunteersLocInfo = locInfoFactory.getVolunteerLocInfo();
+
+        for (JsonObject volunteer : getVolunteersWithoutActivities()) {
+            //TODO Delete volunteer from all activities
+            dataLayer.delete(volunteer, volunteersLocInfo);
+        }
+
+    }
+
+    private List<JsonObject> getVolunteersWithoutActivities() {
         JsonDataLocalizationInformation volunteersLocInfo = locInfoFactory.getVolunteerLocInfo();
         List<JsonObject> volunteersJsonObjects = (dataLayer.getAll(volunteersLocInfo));
 
@@ -336,12 +342,7 @@ public class ConfigService extends MainService<Void>{
         for (var jo : volunteersForActivityJson) {
             volunteerWithActivitiesNames.addAll(jo.getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList());
         }
-        for (JsonObject volunteer : volunteersJsonObjects) {
-            if (!volunteerWithActivitiesNames.contains(volunteer.getAsString())) {
-                dataLayer.delete(volunteer, volunteersLocInfo);
-            }
-        }
-
+        return volunteersJsonObjects.stream().filter((v) -> !volunteerWithActivitiesNames.contains(v.getAsString())).toList();
     }
 
     private void deleteActivitiesAtPlace(JsonDataLocalizationInformation activitiesLocInfo, String place) {
@@ -380,9 +381,6 @@ public class ConfigService extends MainService<Void>{
         }
        
             do{
-                if(jump){
-                    continue;
-                }
                 showPlaces();
                 String placeName = ioService.readString("\nInserire luogo per l'attività");
 
