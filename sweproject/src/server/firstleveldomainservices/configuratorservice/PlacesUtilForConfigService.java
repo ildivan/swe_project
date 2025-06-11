@@ -13,13 +13,11 @@ import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Place;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 
 public class PlacesUtilForConfigService {
 
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
-    private static final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private static final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private final Gson gson = gsonFactoryService.getGson();
     private static final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 

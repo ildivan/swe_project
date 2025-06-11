@@ -1,6 +1,6 @@
 package server.datalayerservice.datalocalizationinformations;
 
-public class JsonDataLocalizationInformation implements IDataLocalizationInformation {
+public class JsonDataLocalizationInformation implements IDataLocalizationInformation<JsonDataLocalizationInformation> {
     // informazioni per la localizzazione e la connessione al file JSON
     private String path;
     private String memberName;
@@ -18,7 +18,6 @@ public class JsonDataLocalizationInformation implements IDataLocalizationInforma
      * method to get localization information
      * @return
      */
-    @Override
     public JsonDataLocalizationInformation getDataLocalizationInformation(){
         return this;
     }

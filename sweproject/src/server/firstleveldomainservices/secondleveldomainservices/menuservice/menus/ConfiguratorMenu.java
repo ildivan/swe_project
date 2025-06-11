@@ -22,7 +22,7 @@ public class ConfiguratorMenu extends MenuManager{
     
     private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
 
-    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private transient DateService dateService = new DateService();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();

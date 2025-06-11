@@ -24,7 +24,7 @@ public class MonthlyPlanService {
   
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
-    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
 

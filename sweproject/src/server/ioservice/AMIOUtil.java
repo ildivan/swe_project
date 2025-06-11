@@ -25,7 +25,7 @@ public class AMIOUtil{
 
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
-    private final static ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final static ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private final static IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
     public static Address getAddress(){

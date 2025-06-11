@@ -31,7 +31,7 @@ import java.net.*;
 
 public class Server {
 
-    private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
 

@@ -11,7 +11,7 @@ import org.mindrot.jbcrypt.*;
 
 public class AuthenticationUtil {
 
-    private static final ILocInfoFactory locInfoFactory= new JsonLocInfoFactory();
+    private static final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory= new JsonLocInfoFactory();
     private static final int HASH_ROUNDS = 12;
     private static final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     

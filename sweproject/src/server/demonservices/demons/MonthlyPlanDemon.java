@@ -24,7 +24,7 @@ public class MonthlyPlanDemon implements IDemon{
     private static final String MONTHLY_CONFIG_KEY = "current";
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone

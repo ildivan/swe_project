@@ -1,6 +1,6 @@
 package server.datalayerservice.datalocalizationinformations;
 
-public class JsonLocInfoFactory implements ILocInfoFactory{
+public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationInformation> {
 
     private static final String ACTIVITY_PATH = "JF/activities.json";
     private static final String ACTIVITY_MEMBER_NAME = "activities";

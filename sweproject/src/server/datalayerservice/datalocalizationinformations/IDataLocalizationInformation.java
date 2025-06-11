@@ -1,5 +1,5 @@
 package server.datalayerservice.datalocalizationinformations;
 
-public interface IDataLocalizationInformation {
-    public JsonDataLocalizationInformation getDataLocalizationInformation();
+public interface IDataLocalizationInformation<T extends IDataLocalizationInformation<T>> {
+    T getDataLocalizationInformation();
 }

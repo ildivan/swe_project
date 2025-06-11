@@ -48,7 +48,7 @@ public class VolunteerService extends MainService<Void>{
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
     private final MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
     private final DateService dateService = new DateService();
-    private final ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     
   

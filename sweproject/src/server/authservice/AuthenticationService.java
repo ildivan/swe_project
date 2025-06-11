@@ -21,7 +21,8 @@ public class AuthenticationService extends MainService<User> {
     private final ConnectionType connectionType;
     private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
-    private final ILocInfoFactory locInfoFactory= new JsonLocInfoFactory();
+    //qua posso modificare il tipo di factory per polimorfismo
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory= new JsonLocInfoFactory();
     private final IInputOutput ioService = new IOService();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 

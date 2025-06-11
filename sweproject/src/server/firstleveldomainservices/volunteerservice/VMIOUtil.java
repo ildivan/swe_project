@@ -16,7 +16,7 @@ public class VMIOUtil{
      private static final String ROLE = "volontario";
  
      private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-     private ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+     private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
      private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
      /**

@@ -37,7 +37,7 @@ public class MonthlyPlan{
 
     //questo non deve essere serializzato -> inserisco transient per risolvere il problema
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private transient ILocInfoFactory locInfoFactory = new JsonLocInfoFactory();
+    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
    
     public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date) {
