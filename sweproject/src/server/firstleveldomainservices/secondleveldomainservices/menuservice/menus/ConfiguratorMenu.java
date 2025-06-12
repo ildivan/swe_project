@@ -47,6 +47,7 @@ public class ConfiguratorMenu extends MenuManager{
         vociVisibili.put("Elimina Volontario", true);
         vociVisibili.put("Elimina Luogo", true);
         vociVisibili.put("Elimina Attività", true);
+        vociVisibili.put("Mostra Piano Mensile", true);
         
         chiamateMetodi.put("Aggiungi Volontario", configService::addVolunteer);
         chiamateMetodi.put("Aggiungi Luogo", configService::addPlace);
@@ -65,6 +66,7 @@ public class ConfiguratorMenu extends MenuManager{
         chiamateMetodi.put("Elimina Volontario", configService::deleteVolunteer);
         chiamateMetodi.put("Elimina Luogo", configService::deletePlace);
         chiamateMetodi.put("Elimina Attività", configService::deleteActivity);
+        chiamateMetodi.put("Mostra Piano Mensile", configService::showMonthlyPlan);
     }
 
     @Override

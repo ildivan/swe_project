@@ -463,10 +463,20 @@ public class ConfigService extends MainService<Void>{
 
     /**
      * method to show monthly plan
-     * UNIMPLEMENTED
+     *
      */
-    private void showMonthlyPlan() {
-       
+    public void showMonthlyPlan() {
+        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+
+        if(monthlyPlan == null){
+            ioService.writeMessage("Piano Mensile non ancora generato", false);
+            return;
+        }
+
+        ioService.writeMessage(CLEAR,false);
+    
+        ioService.writeMessage(formatter.formatMonthlyPlan(monthlyPlan), false);
     }
 
     /**

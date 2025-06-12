@@ -1,10 +1,12 @@
 package server.ioservice.objectformatter;
 
 import java.util.List;
+import java.util.Map;
 
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 public interface IIObjectFormatter <T> {
@@ -15,4 +17,5 @@ public interface IIObjectFormatter <T> {
     public T formatListPlace(List<Place> pList);
     public T formatPlace(Place p);
     public T formatListActivityRecord(List<ActivityRecord> arList);
+    public T formatMonthlyPlan(MonthlyPlan monthlyPlanData);
 }

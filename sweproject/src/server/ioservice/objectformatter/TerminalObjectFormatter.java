@@ -1,11 +1,17 @@
 package server.ioservice.objectformatter;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
+
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 public class TerminalObjectFormatter implements IIObjectFormatter<String> {
@@ -155,4 +161,57 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
             "\n\nStato visita:\n" + record.getActivity().getState() +
             "\n\nOrario della visita:\n'" + record.getActivity().getTime();
     }
+
+    /**
+     * fromatter per il piano mensile
+     */
+    @Override
+    public String formatMonthlyPlan(MonthlyPlan monthlyPlanData) {
+       
+        StringBuffer output = new StringBuffer();
+
+        LocalDate date = monthlyPlanData.getDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String dayOfPlan = date.format(formatter);
+
+        output.append("Piano mensile generato: ").append(dayOfPlan).append("\n\n\n");
+        output.append("Piano giorno per giorno:\n\n\n");
+
+        Map<LocalDate, DailyPlan> monthlyPlan = monthlyPlanData.getMonthlyPlan();
+
+        for (Map.Entry<LocalDate, DailyPlan> entry : monthlyPlan.entrySet()) {
+        
+            output.append(formatDailyPlan(entry.getValue()));
+
+        }
+
+        return output.toString();
+    }
+    
+    private String formatDailyPlan(DailyPlan dailyPlan){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        StringBuffer output = new StringBuffer();
+        
+        LocalDate dateOfDailyPlan = dailyPlan.getDate();
+        String dateOfDailyPlanString = dateOfDailyPlan.format(formatter);
+        output.append("\n\n----\n\n");
+        output.append("Data: ").append(dateOfDailyPlanString).append("\n\n");
+
+        Map<String, ActivityInfo> plan = dailyPlan.getPlan();
+
+        for (Map.Entry<String, ActivityInfo> entry : plan.entrySet()) {
+            String activityName = entry.getKey();
+            ActivityInfo info = entry.getValue();
+
+            output.append("  • ").append(activityName).append("\n")
+            .append("    ↳ Stato: ").append(info.getState()).append("\n")
+            .append("    ↳ Orario: ").append(info.getTime()).append("\n")
+            .append("    ↳ Iscritti: ").append(info.getNumberOfSub()).append("\n\n");
+        }
+
+        return output.toString();
+    }
+
+
 }

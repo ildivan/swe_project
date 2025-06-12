@@ -161,6 +161,18 @@ public class MonthlyPlan{
         JsonObject mcJO = dataLayer.get(locInfo);
         return jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
     }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Map<LocalDate, DailyPlan> getMonthlyPlanMap() {
+        return monthlyPlan;
+    }
     
 
 
