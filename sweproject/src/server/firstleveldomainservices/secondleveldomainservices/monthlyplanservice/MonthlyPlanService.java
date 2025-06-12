@@ -30,6 +30,14 @@ public class MonthlyPlanService {
 
     public boolean buldMonthlyPlan() {
         LocalDate today = dateService.getTodayDate();
+
+        //flag per evitare race conditions
+
+         //permette di evitare race conditions durante la configurazione del piano mensile
+        MonthlyConfig mc = getMonthlyConfig();
+        setIsBeingConfigured(mc,true);
+
+        
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
@@ -41,7 +49,7 @@ public class MonthlyPlanService {
 
         final JsonDataLocalizationInformation monthlyPlanLocInfo = locInfoFactory.getMonthlyPlanLocInfo();
 
-       dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
+        dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
        
         monthlyPlan.setPlanBuildFlagAsTrue();
         monthlyPlan.incrementMonthOfPlan();
@@ -49,8 +57,26 @@ public class MonthlyPlanService {
             
         refreshVolunteers();
 
+        //conclusione della generazine del piano, esco dalla sezione critica
+        setIsBeingConfigured(mc, false);
+
+
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
         //DA FARE
+    }
+
+    /**
+     * metodo epr modificare il fatto che si sta iniziando a configurare il piano mensile
+     * @param mc
+     * @param isBeingConfigured
+     */
+    private void setIsBeingConfigured(MonthlyConfig mc, boolean isBeingConfigured) {
+        mc.setBeingConfigured(isBeingConfigured);
+        
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
+        locInfo.setKey(MONTHLY_CONFIG_KEY);
+        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
+
     }
 
     /**

@@ -10,6 +10,7 @@ public class MonthlyConfig {
     private Map<LocalDate, Boolean> previousPlanlanConfigured;
     private Set<LocalDate> precludeDates;
     private String type = "current"; //old or current depends if is the current or not
+    private boolean isBeingConfigured = false; //used to check if the plan is being configured
 
     public MonthlyConfig(LocalDate date, Map<LocalDate, Boolean> planConfigured, Set<LocalDate> precludeDates) {
         this.monthAndYear = date;
@@ -52,4 +53,13 @@ public class MonthlyConfig {
     public void setType(String type) {
         this.type = type;
     }
+
+    public boolean isBeingConfigured() {
+        return isBeingConfigured;
+    }
+
+    public void setBeingConfigured(boolean beingConfigured) {
+        isBeingConfigured = beingConfigured;
+    }
+    
 }

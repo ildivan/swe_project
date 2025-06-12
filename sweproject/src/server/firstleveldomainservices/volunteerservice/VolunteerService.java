@@ -121,11 +121,19 @@ public class VolunteerService extends MainService<Void>{
         
         MonthlyConfig mc = monthlyPlanService.getMonthlyConfig();
 
+        if(mc.isBeingConfigured()){
+            ioService.writeMessage("Il piano mensile è in fase di configurazione, non puoi aggiungere date precluse", false);
+            return;
+        }
+
         int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
         int minNumDay = 1;
         
         int day = ioService.readIntegerWithMinMax("\"Inserire giorno in cui non si è disponibili nel prossimo mese", minNumDay, maxNumDay);
 
+        /*
+         * prendere il mese e l'anno cosi permette di evitare race conditions
+         */
         int month = dateService.setMonthOnPrecludeDayVolunteer(mc, day);
         int year = dateService.setYearOnPrecludeDayVolunteer(mc, day);
 

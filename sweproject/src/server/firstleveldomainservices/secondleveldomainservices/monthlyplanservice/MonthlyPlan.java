@@ -21,15 +21,6 @@ import server.jsonfactoryservice.JsonFactoryService;
 
 public class MonthlyPlan{
 
-    /*
-     * DA ELIMINARE
-     * popolato usando i config
-     * 1- si crea la mappa dei piani giornalieri e si mette null nella mappa del giorno
-     * relativo ad un giorno precliso
-     * 2- per creare il monthly plan si controlla per ogni gionro se c'è gia null 
-     * se è null si va avanti, altrimenti si crea un dailyu plan relativo a tale gionro
-     */
-
     private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
 
     private LocalDate date;
@@ -59,6 +50,7 @@ public class MonthlyPlan{
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
         MonthlyConfig mc = geMonthlyConfig();
+ 
         date = mc.getMonthAndYear();
 
         // Calcola il 16 del mese successivo
