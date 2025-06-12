@@ -162,6 +162,10 @@ public class MonthlyPlan{
         return jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
     }
 
+    public DailyPlan getDailyPlan(LocalDate date) {
+        return monthlyPlan.get(date);
+    }
+
     public LocalDate getDate() {
         return date;
     }

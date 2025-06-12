@@ -130,10 +130,9 @@ public class VolunteerService extends MainService<Void>{
         int year = dateService.setYearOnPrecludeDayVolunteer(mc, day);
 
         LocalDate date = LocalDate.of(year, month, day);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String formattedDate = date.format(formatter);
 
-        addPrecludeDatesForVolunteer(formattedDate);
+
+        addPrecludeDatesForVolunteer(date);
 
     }
 
@@ -141,19 +140,31 @@ public class VolunteerService extends MainService<Void>{
      * metodo per aggiungere la data in cui il volontario on è disponibile al file
      * @param date
      */
-    private void addPrecludeDatesForVolunteer(String date){
-        assert date != null && !date.trim().isEmpty();
+    private void addPrecludeDatesForVolunteer(LocalDate date){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = date.format(formatter);
+
+        assert formattedDate != null && !formattedDate.trim().isEmpty();
+
+        if(!dateContainsVolunteerActivity(date, getMyActivities())){
+            ioService.writeMessage("Non hai attività programmate per questa data, non puoi aggiungerla come preclusa", false);
+            return;
+        }
+
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
         JsonObject volunteerJO = dataLayer.get(locInfo);
         Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
 
         Set<String> precludeDates = volunteer.getNondisponibilityDaysCurrent();
-        precludeDates.add(date);
+        precludeDates.add(formattedDate);
 
         JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);
 
         dataLayer.modify(newVolunteerJO, locInfo);
+
+        ioService.writeMessage("Data " + formattedDate + " aggiunta con successo come preclusa", false);
     }
 
     private boolean isMyActivity(String actName, List<Activity> myActivities){
@@ -206,4 +217,33 @@ public class VolunteerService extends MainService<Void>{
 
         }while(continuare);
     }
+
+    /**
+     * Metodo che verifica se il volontario ha un'attività programmata per una data specifica
+     * @param data
+     * @param attivitaVolontario
+     * @param monthlyPlan
+     * @return
+     */
+    public boolean dateContainsVolunteerActivity(LocalDate data, List<Activity> myActivities) {
+        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+
+
+        DailyPlan dailyPlan = monthlyPlan.getDailyPlan(data);
+        if (dailyPlan == null || dailyPlan.getPlan().isEmpty()) {
+            return false;
+        }
+
+        Set<String> dailyActivity = dailyPlan.getPlan().keySet();
+
+        for (Activity a : myActivities) {
+            if (dailyActivity.contains(a.getTitle())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
