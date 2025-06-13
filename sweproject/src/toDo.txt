@@ -1,5 +1,3 @@
 
-3- fare visualizzazione del monthly plan
-4- fare diventare errori delle eccezioni cosi da gestirle al meglio
-5- finire che se elimino un luogo elimino anche tutte le attività associate
+- fare diventare errori delle eccezioni cosi da gestirle al meglio
 

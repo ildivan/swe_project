@@ -1,6 +1,7 @@
 package server.firstleveldomainservices.configuratorservice;
 
 import java.io.*;
+import java.io.ObjectInputFilter.Config;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,9 +9,7 @@ import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import server.DateService;
-import server.datalayerservice.*;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
@@ -25,9 +24,9 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.ioservice.AMIOUtil;
 import server.ioservice.IInputOutput;
@@ -52,9 +51,9 @@ public class ConfigService extends MainService<Void>{
 
 
     private final Gson gson;
-    private final MenuService menu = new ConfiguratorMenu(this);
     private final ConfigType configType;
 
+    private final MenuService menu; 
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
@@ -67,6 +66,7 @@ public class ConfigService extends MainService<Void>{
         super(socket);
         this.configType = configType;
         this.gson = gson;
+        this.menu = new ConfiguratorMenu(this, configType);
     }
     /**
      * apply the logic of the service
@@ -199,35 +199,6 @@ public class ConfigService extends MainService<Void>{
 
         return max;
 
-    }
-
-    /**
-     * Modifica il numero massimo di iscrizioni contemporanee per una iniziativa.
-     *
-     * @pre Il sistema deve essere correttamente configurato e l’utente deve inserire un numero valido tra 1 e 50.
-     * @post Il nuovo numero massimo è salvato nella configurazione.
-     */
-    public void modNumMaxSub(){
-        ioService.writeMessage(CLEAR,false);
-        int n = ioService.readIntegerWithMinMax("\nInserire nuovo numero di iscrizioni massime (massimo numero 50)",1,50);
-
-        assert n >= 1 && n <= 50 : "Valore non valido per il numero massimo di iscrizioni";
-
-        Configs configs = getConfig();
-
-        assert configs != null : "Configurazione non trovata";
-
-        configs.setMaxSubscriptions(n);
-        JsonObject newConfigsJO = jsonFactoryService.createJson(configs);
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-        locInfo.setKey(configType.getValue());
-        
-        boolean modified = dataLayer.modify(newConfigsJO, locInfo);
-
-        assert modified : "Modifica configurazione fallita";
-
-        ioService.writeMessage("\nNumero massimo di iscrizioni modificato", false);
     }
 
     /**
@@ -456,7 +427,10 @@ public class ConfigService extends MainService<Void>{
      */
     public void generateMonthlyPlan() {
         MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-        monthlyPlanService.buldMonthlyPlan();
+        if(!monthlyPlanService.buldMonthlyPlan()){
+            ioService.writeMessage("Piano mensile non generato, volontari stanno modificando", false);
+            return;
+        };
         ioService.writeMessage("Piano mensile generato", false);
         showMonthlyPlan();
     }
@@ -605,6 +579,15 @@ public void deleteVolunteer() {
         } else {
             ioService.writeMessage("\nAttività non esistente", false);
         }
+    }
+
+    public void modifyData(ConfigType configType) {
+        //creare il menu che mostra le varie opzioni di modifica, usando i servizi di menu che gia hai presenti
+        /*
+         * pensavo di fare oer ogni mofica e oer ogni attributo di scegliere se vuoi modificarlo o no(tenere quello presente) cosi ci sta
+         * poi alla fine se esci dal menu (non vuoi fare piu nulla prima del return fai che metti true alla modifica delle disponibilità dei volontari)
+         * e false a questa
+         */
     }
     
 }

@@ -8,7 +8,11 @@
       },
       "precludeDates": [],
       "type": "current",
-      "isBeingConfigured": false
+      "planStateMap": {
+      "DISPONIBILITA_APERTE": true,
+      "GENERAZIONE_PIANO": false,
+      "MODIFICHE_APERTE": false
+     }
     }
   ]
 }

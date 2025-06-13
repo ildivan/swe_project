@@ -2,7 +2,7 @@ package server;
 
 import java.time.*;
 
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 
 
 public class DateService {

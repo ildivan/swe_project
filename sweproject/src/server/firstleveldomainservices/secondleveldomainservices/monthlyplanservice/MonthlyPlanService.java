@@ -14,6 +14,8 @@ import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.PlanState;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
@@ -31,12 +33,12 @@ public class MonthlyPlanService {
     public boolean buldMonthlyPlan() {
         LocalDate today = dateService.getTodayDate();
 
-        //flag per evitare race conditions
-
-         //permette di evitare race conditions durante la configurazione del piano mensile
+        //permette di evitare race conditions durante la configurazione del piano mensile
         MonthlyConfig mc = getMonthlyConfig();
-        setIsBeingConfigured(mc,true);
 
+
+        setIsBeingConfigured(mc, PlanState.DISPONIBILITA_APERTE, false);
+        setIsBeingConfigured(mc,PlanState.GENERAZIONE_PIANO, true);
         
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
 
@@ -58,7 +60,8 @@ public class MonthlyPlanService {
         refreshVolunteers();
 
         //conclusione della generazine del piano, esco dalla sezione critica
-        setIsBeingConfigured(mc, false);
+        setIsBeingConfigured(mc, PlanState.GENERAZIONE_PIANO, false);
+        setIsBeingConfigured(mc, PlanState.MODIFICHE_APERTE, true); //una volta generato il piano posso modificare le attività, entreranno in vigore dal mese successivo
 
 
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
@@ -70,9 +73,9 @@ public class MonthlyPlanService {
      * @param mc
      * @param isBeingConfigured
      */
-    private void setIsBeingConfigured(MonthlyConfig mc, boolean isBeingConfigured) {
-        mc.setBeingConfigured(isBeingConfigured);
-        
+    private void setIsBeingConfigured(MonthlyConfig mc, PlanState isBeingConfigured, Boolean value) {
+
+        mc.getPlanStateMap().put(isBeingConfigured, value);
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
         locInfo.setKey(MONTHLY_CONFIG_KEY);
         dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);

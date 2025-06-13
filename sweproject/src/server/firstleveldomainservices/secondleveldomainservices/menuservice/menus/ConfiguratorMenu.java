@@ -13,9 +13,10 @@ import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
+import server.utils.ConfigType;
 
 public class ConfiguratorMenu extends MenuManager{
 
@@ -26,10 +27,14 @@ public class ConfiguratorMenu extends MenuManager{
     private transient DateService dateService = new DateService();
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private transient ConfigType configType;
 
 
-    public ConfiguratorMenu(ConfigService configService) {
+    public ConfiguratorMenu(ConfigService configService, ConfigType configType) {
         super();
+
+        this.configType = configType;
+
         vociVisibili.put("Aggiungi Volontario", true);
         vociVisibili.put("Aggiungi Luogo", true);
         vociVisibili.put("Aggiungi Attività", true);
@@ -48,6 +53,7 @@ public class ConfiguratorMenu extends MenuManager{
         vociVisibili.put("Elimina Luogo", true);
         vociVisibili.put("Elimina Attività", true);
         vociVisibili.put("Mostra Piano Mensile", true);
+        vociVisibili.put("Modifica dati", true);
         
         chiamateMetodi.put("Aggiungi Volontario", configService::addVolunteer);
         chiamateMetodi.put("Aggiungi Luogo", configService::addPlace);
@@ -61,12 +67,12 @@ public class ConfiguratorMenu extends MenuManager{
         chiamateMetodi.put("Mostra Attività Completa", () -> configService.showActivitiesWithCondition(ActivityState.COMPLETA));
         chiamateMetodi.put("Mostra Attività Cancellata", () -> configService.showActivitiesWithCondition(ActivityState.CANCELLATA));
         chiamateMetodi.put("Mostra Attività Effettuata", () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
-        chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", configService::modNumMaxSub);
         chiamateMetodi.put("Genera Piano Mensile", configService::generateMonthlyPlan);
         chiamateMetodi.put("Elimina Volontario", configService::deleteVolunteer);
         chiamateMetodi.put("Elimina Luogo", configService::deletePlace);
         chiamateMetodi.put("Elimina Attività", configService::deleteActivity);
         chiamateMetodi.put("Mostra Piano Mensile", configService::showMonthlyPlan);
+        chiamateMetodi.put("Modifica dati", () -> configService.modifyData(configType));
     }
 
     @Override

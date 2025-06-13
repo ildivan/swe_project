@@ -14,9 +14,9 @@ import server.demonservices.IDemon;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.PerformedActivity;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 

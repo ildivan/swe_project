@@ -22,9 +22,10 @@ import server.firstleveldomainservices.secondleveldomainservices.menuservice.men
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.PlanState;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
@@ -121,10 +122,11 @@ public class VolunteerService extends MainService<Void>{
         
         MonthlyConfig mc = monthlyPlanService.getMonthlyConfig();
 
-        if(mc.isBeingConfigured()){
-            ioService.writeMessage("Il piano mensile è in fase di configurazione, non puoi aggiungere date precluse", false);
+        if(!mc.getPlanStateMap().get(PlanState.DISPONIBILITA_APERTE)){
+            ioService.writeMessage("Piano mensile o modifica attivita in corso, non puoi aggiungere date precluse", false);
             return;
         }
+        
 
         int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
         int minNumDay = 1;

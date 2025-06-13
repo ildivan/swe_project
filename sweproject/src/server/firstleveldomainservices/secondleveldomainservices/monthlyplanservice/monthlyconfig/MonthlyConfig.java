@@ -1,6 +1,7 @@
-package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice;
+package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,12 +11,19 @@ public class MonthlyConfig {
     private Map<LocalDate, Boolean> previousPlanlanConfigured;
     private Set<LocalDate> precludeDates;
     private String type = "current"; //old or current depends if is the current or not
-    private boolean isBeingConfigured = false; //used to check if the plan is being configured
+    private Map<PlanState, Boolean> planStateMap; //permette di ottenere sequenzialita
 
     public MonthlyConfig(LocalDate date, Map<LocalDate, Boolean> planConfigured, Set<LocalDate> precludeDates) {
         this.monthAndYear = date;
         this.previousPlanlanConfigured = planConfigured;
         this.precludeDates = precludeDates;
+        this.planStateMap = new HashMap<>(Map.of(
+        PlanState.GENERAZIONE_PIANO, true,
+        PlanState.MODIFICHE_APERTE, false,
+        PlanState.DISPONIBILITA_APERTE, false
+));
+
+
     }
 
     public MonthlyConfig(){
@@ -54,12 +62,12 @@ public class MonthlyConfig {
         this.type = type;
     }
 
-    public boolean isBeingConfigured() {
-        return isBeingConfigured;
+    public Map<PlanState, Boolean> getPlanStateMap() {
+        return planStateMap;
     }
 
-    public void setBeingConfigured(boolean beingConfigured) {
-        isBeingConfigured = beingConfigured;
+    public void setPlanStateMap(Map<PlanState, Boolean> planStateMap) {
+        this.planStateMap = planStateMap;
     }
-    
+
 }
