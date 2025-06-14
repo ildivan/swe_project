@@ -1,18 +1,18 @@
 {
   "mc": [
     {
-      "monthAndYear": "16-07-2025",
+      "monthAndYear": "16-08-2025",
       "previousPlanlanConfigured": {
-        "16-06-2025": true,
-        "16-07-2025": false
+        "16-07-2025": true,
+        "16-08-2025": false
       },
       "precludeDates": [],
       "type": "current",
       "planStateMap": {
-      "DISPONIBILITA_APERTE": true,
-      "GENERAZIONE_PIANO": false,
-      "MODIFICHE_APERTE": false
-     }
+        "DISPONIBILITA_APERTE": true,
+        "GENERAZIONE_PIANO": false,
+        "MODIFICHE_APERTE": false
+      }
     }
   ]
 }

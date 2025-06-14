@@ -1,3 +1,2 @@
-
-- fare diventare errori delle eccezioni cosi da gestirle al meglio
-
+modifica attivitò
+mdofica place

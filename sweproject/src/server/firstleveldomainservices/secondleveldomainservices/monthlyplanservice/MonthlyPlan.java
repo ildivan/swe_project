@@ -2,7 +2,6 @@ package server.firstleveldomainservices.secondleveldomainservices.monthlyplanser
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,57 +91,6 @@ public class MonthlyPlan{
                 monthlyPlan.put(date, dp);
             }
         }
-    }
-
-    /**
-     * clear the preclude dates in the config of the monthly plan
-     */
-    public void clearPrecludedDates() {
-        
-        MonthlyConfig mc = geMonthlyConfig();
-        mc.setPrecludeDates(new HashSet<>());
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
-
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
-        
-    }
-
-    /**
-     * change month of plan into monthly configs
-     */
-    public void incrementMonthOfPlan() {
-        
-        MonthlyConfig mc = geMonthlyConfig();
-        LocalDate date = mc.getMonthAndYear();
-        LocalDate newDate = date.plusMonths(1);
-        mc.setMonthAndYear(newDate);
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
-
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
-    }
-
-    /**
-     * set as true the monthly plan build flag in monthly config
-     */
-    public void setPlanBuildFlagAsTrue() {
-        
-        MonthlyConfig mc = geMonthlyConfig();
-        Map<LocalDate, Boolean> planConfiguredMap =new LinkedHashMap<>();
-        planConfiguredMap.put(date, true);
-        planConfiguredMap.put(date.plusMonths(1),false);
-        mc.setPlanConfigured(planConfiguredMap);
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
-
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
     }
 
 

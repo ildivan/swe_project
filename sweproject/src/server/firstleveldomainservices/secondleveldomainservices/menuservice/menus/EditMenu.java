@@ -16,8 +16,8 @@ public class EditMenu extends MenuManager{
         vociVisibili.put("Modifica Luogo", true);
 
         chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", possibilitiesService::modNumMaxSub);
-        chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", possibilitiesService::modActivity);
-        chiamateMetodi.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", possibilitiesService::modPlace);
+        chiamateMetodi.put("Modifica Attività", possibilitiesService::modActivity);
+        chiamateMetodi.put("Modifica Luogo", possibilitiesService::modPlace);
       
     }
 
@@ -36,10 +36,9 @@ public class EditMenu extends MenuManager{
     public String toString(List<String> menu) {
         StringBuffer menuOut = new StringBuffer();
         menuOut.append("\n\n\n------------------\n\n\n");
-        menuOut.append("BENVENUTO NEL MENU VOLONTARIO!");
+        menuOut.append("BENVENUTO NEL MENU DI MODIFICA DEI DATI!");
         menuOut.append("\n\nSelezionare una opzione:\n");
-        menuOut.append(obtainMenuString("\n\nFunzioni di visualizzazione:\n\n", "Mostra", menu));
-        menuOut.append(obtainMenuString("\n\nFunzioni di aggiunta:\n\n", "Aggiungi", menu));
+        menuOut.append(obtainMenuString("", "Modifica", menu));
 
         return menuOut.toString();
     }

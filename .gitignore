@@ -60,4 +60,7 @@ build/
 ### Mac OS ###
 .DS_Store
 
+# Txt local notes files
+*.txt
+
 /out

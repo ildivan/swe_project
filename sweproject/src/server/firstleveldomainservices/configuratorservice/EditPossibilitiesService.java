@@ -2,16 +2,15 @@ package server.firstleveldomainservices.configuratorservice;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Map;
 
 import com.google.gson.JsonObject;
-
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
-import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.ConfiguratorMenu;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.EditMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
@@ -54,7 +53,7 @@ public class EditPossibilitiesService extends MainService<Void>{
         MonthlyConfig monthlyConfig = getMonthlyConfig();
 
         if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
-            ioService.writeMessage("\nnFase di modifica non disponibile, piano corrente non ancora generato\n\n", false);
+            ioService.writeMessage("\n\nFase di modifica non disponibile, piano corrente non ancora generato\n\n", false);
             return null;
         }
 
@@ -93,7 +92,9 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     private void setIsBeingConfigured(PlanState isBeingConfigured, Boolean value) {
         MonthlyConfig mc = getMonthlyConfig();
-        mc.getPlanStateMap().put(isBeingConfigured, value);
+        Map<PlanState, Boolean> stateMap = mc.getPlanStateMap();
+        stateMap.put(isBeingConfigured, value);
+        mc.setPlanStateMap(stateMap);
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
         locInfo.setKey(MONTHLY_CONFIG_KEY);
         dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
@@ -142,14 +143,16 @@ public class EditPossibilitiesService extends MainService<Void>{
      * metodo per modificare una attivita
      */
     public void modActivity(){
-        //TODO
+        ioService.writeMessage(CLEAR,false);    
+        ioService.writeMessage("\nModifica attivita non ancora implementata\n", false);
     }
 
     /**
      * metodo per modificare un luogo
      */
     public void modPlace(){
-        //TODO
+        ioService.writeMessage(CLEAR,false);    
+        ioService.writeMessage("\nModifica luogo non ancora implementata\n", false);
     }
 
     

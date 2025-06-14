@@ -47,13 +47,13 @@ public class ConfiguratorMenu extends MenuManager{
         vociVisibili.put("Mostra Attività Completa", true);
         vociVisibili.put("Mostra Attività Cancellata", true);
         vociVisibili.put("Mostra Attività Effettuata", true);
-        vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
+        vociVisibili.put("Modifica dati", true);
         vociVisibili.put("Genera Piano Mensile", true);
         vociVisibili.put("Elimina Volontario", true);
         vociVisibili.put("Elimina Luogo", true);
         vociVisibili.put("Elimina Attività", true);
         vociVisibili.put("Mostra Piano Mensile", true);
-        vociVisibili.put("Modifica dati", true);
+        
         
         chiamateMetodi.put("Aggiungi Volontario", configService::addVolunteer);
         chiamateMetodi.put("Aggiungi Luogo", configService::addPlace);
@@ -67,12 +67,13 @@ public class ConfiguratorMenu extends MenuManager{
         chiamateMetodi.put("Mostra Attività Completa", () -> configService.showActivitiesWithCondition(ActivityState.COMPLETA));
         chiamateMetodi.put("Mostra Attività Cancellata", () -> configService.showActivitiesWithCondition(ActivityState.CANCELLATA));
         chiamateMetodi.put("Mostra Attività Effettuata", () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
+        chiamateMetodi.put("Modifica dati", () -> configService.modifyData(configType));
         chiamateMetodi.put("Genera Piano Mensile", configService::generateMonthlyPlan);
         chiamateMetodi.put("Elimina Volontario", configService::deleteVolunteer);
         chiamateMetodi.put("Elimina Luogo", configService::deletePlace);
         chiamateMetodi.put("Elimina Attività", configService::deleteActivity);
         chiamateMetodi.put("Mostra Piano Mensile", configService::showMonthlyPlan);
-        chiamateMetodi.put("Modifica dati", () -> configService.modifyData(configType));
+        
     }
 
     @Override

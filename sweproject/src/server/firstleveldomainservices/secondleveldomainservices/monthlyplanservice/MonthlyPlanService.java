@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.JsonObject;
@@ -15,6 +16,7 @@ import server.datalayerservice.datalocalizationinformations.JsonDataLocalization
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfigManager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.PlanState;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
@@ -37,10 +39,12 @@ public class MonthlyPlanService {
         MonthlyConfig mc = getMonthlyConfig();
 
 
-        setIsBeingConfigured(mc, PlanState.DISPONIBILITA_APERTE, false);
-        setIsBeingConfigured(mc,PlanState.GENERAZIONE_PIANO, true);
+        // si potrebbe fare un metodo nel maager che fa questi, ma non credo sia necessatio
+        mc = setIsBeingConfigured(mc, PlanState.DISPONIBILITA_APERTE, false);
+        mc = setIsBeingConfigured(mc,PlanState.GENERAZIONE_PIANO, true);
         
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
+        MonthlyConfigManager monthlyConfigManager = new MonthlyConfigManager(mc, today);
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
     
@@ -53,9 +57,7 @@ public class MonthlyPlanService {
 
         dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
        
-        monthlyPlan.setPlanBuildFlagAsTrue();
-        monthlyPlan.incrementMonthOfPlan();
-        monthlyPlan.clearPrecludedDates();
+        monthlyConfigManager.updateMonthlyConfigAfterPlan();
             
         refreshVolunteers();
 
@@ -73,12 +75,16 @@ public class MonthlyPlanService {
      * @param mc
      * @param isBeingConfigured
      */
-    private void setIsBeingConfigured(MonthlyConfig mc, PlanState isBeingConfigured, Boolean value) {
+    private MonthlyConfig setIsBeingConfigured(MonthlyConfig mc, PlanState isBeingConfigured, Boolean value) {
 
-        mc.getPlanStateMap().put(isBeingConfigured, value);
+        Map<PlanState, Boolean> stateMap = mc.getPlanStateMap();
+        stateMap.put(isBeingConfigured, value);
+        mc.setPlanStateMap(stateMap);
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
         locInfo.setKey(MONTHLY_CONFIG_KEY);
         dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
+
+        return mc;
 
     }
 

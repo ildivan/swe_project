@@ -582,12 +582,8 @@ public void deleteVolunteer() {
     }
 
     public void modifyData(ConfigType configType) {
-        //creare il menu che mostra le varie opzioni di modifica, usando i servizi di menu che gia hai presenti
-        /*
-         * pensavo di fare oer ogni mofica e oer ogni attributo di scegliere se vuoi modificarlo o no(tenere quello presente) cosi ci sta
-         * poi alla fine se esci dal menu (non vuoi fare piu nulla prima del return fai che metti true alla modifica delle disponibilità dei volontari)
-         * e false a questa
-         */
+        EditPossibilitiesService editPossibilitiesService = new EditPossibilitiesService(socket, configType);
+        editPossibilitiesService.run();
     }
     
 }
