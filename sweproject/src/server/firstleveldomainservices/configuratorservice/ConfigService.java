@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -321,14 +322,38 @@ public class ConfigService extends MainService<Void>{
         dataLayer.delete(dataLayer.get(placesLocInfo), placesLocInfo);
     }
 
+
+    private void deleteActivitiesAtPlace(JsonDataLocalizationInformation activitiesLocInfo, String place) {
+        activitiesLocInfo.setKey("placeName");
+        activitiesLocInfo.setKeyDesc(place);
+        for (JsonObject a : dataLayer.getAll(activitiesLocInfo))
+            dataLayer.delete(a, locInfoFactory.getActivityLocInfo());
+    }
+
+
     private void deleteVolunteersWithoutActivities() {
         JsonDataLocalizationInformation volunteersLocInfo = locInfoFactory.getVolunteerLocInfo();
 
         for (JsonObject volunteer : getVolunteersWithoutActivities()) {
-            //TODO Delete volunteer from all activities
+            deleteVolunteerFromActivities(volunteer.get("name").getAsString());
             dataLayer.delete(volunteer, volunteersLocInfo);
         }
 
+    }
+
+    // TODO FIX
+    private void deleteVolunteerFromActivities(String volunteerName) {
+        JsonDataLocalizationInformation activityLocInfo = locInfoFactory.getActivityLocInfo();
+        for(JsonObject a : dataLayer.getAll(activityLocInfo)) {
+            JsonArray volunteers = a.get("volunteers").getAsJsonArray();
+            Iterator<JsonElement> iterator = volunteers.iterator();
+            while(iterator.hasNext()) {
+                JsonElement nxt = iterator.next();
+                if(nxt.getAsString().equals(volunteerName)) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     private List<JsonObject> getVolunteersWithoutActivities() {
@@ -343,13 +368,6 @@ public class ConfigService extends MainService<Void>{
             volunteerWithActivitiesNames.addAll(jo.getAsJsonArray().asList().stream().map(JsonElement::getAsString).toList());
         }
         return volunteersJsonObjects.stream().filter((v) -> !volunteerWithActivitiesNames.contains(v.getAsString())).toList();
-    }
-
-    private void deleteActivitiesAtPlace(JsonDataLocalizationInformation activitiesLocInfo, String place) {
-        activitiesLocInfo.setKey("placeName");
-        activitiesLocInfo.setKeyDesc(place);
-        for (JsonObject a : dataLayer.getAll(activitiesLocInfo))
-            dataLayer.delete(a, locInfoFactory.getActivityLocInfo());
     }
 
     /**
