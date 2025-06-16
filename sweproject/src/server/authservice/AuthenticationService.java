@@ -44,6 +44,11 @@ public class AuthenticationService extends MainService<User> {
         if (userJO == null) return null;
 
         String username = userJO.get("name").getAsString();
+        String role = userJO.get("role").getAsString();
+
+        if(!isTerminalCorrect(role)){
+            return null;
+        }
 
         if (AuthenticationUtil.checkIfTemp(username)) {
             changePassword(username);
@@ -68,6 +73,19 @@ public class AuthenticationService extends MainService<User> {
 
         assert user != null : "User is null";
         return user;
+    }
+
+    private boolean isTerminalCorrect(String role) {
+        boolean isCorrect = true;
+        if((role.equals("configuratore") || role.equals("volontario"))&&connectionType==ConnectionType.External){
+            ioService.writeMessage("Terminale non corretto per il ruolo configuratore o volontario", false);
+            isCorrect = false;
+        }
+        if(role.equals("fruitore")&&connectionType==ConnectionType.Internal){
+            ioService.writeMessage("Terminale non corretto per il ruolo fruitore", false);
+            isCorrect = false;
+        }
+        return isCorrect;
     }
 
     private JsonObject getUser() {

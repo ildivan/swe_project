@@ -12,6 +12,7 @@ import server.datalayerservice.datalocalizationinformations.JsonDataLocalization
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.demonservices.DemonsService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
+import server.firstleveldomainservices.userservice.UserService;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
@@ -47,75 +48,108 @@ public class Server {
        // this.planManager = new PlanManager();
     }
 
-    public void startServer(ConfigType configType){
-        try (ServerSocket clientSS = new ServerSocket(CLIENT_PORT);
-            ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
-            System.out.println("Server is listening on port " + CLIENT_PORT);
-            System.out.println("Server is listening on port " + SERVER_TERMINA_PORT);
+public void startServer(ConfigType configType) {
+    try (ServerSocket clientSS = new ServerSocket(CLIENT_PORT);
+         ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
 
-            //avvio i demoni
-            demonsService.run();
+        System.out.println("Server is listening on port " + CLIENT_PORT);
+        System.out.println("Server is listening on port " + SERVER_TERMINA_PORT);
 
+        // Avvio i demoni
+        demonsService.run();
 
-            if(configType == ConfigType.NORMAL){
-                firstTimeConfiguration();
-                System.out.println("First time default configuration completed");
-            }
-
-            Thread internalConnectionThread = new Thread(() -> {
-                try {
-                    while(true) {
-                        Socket socket = serverTerminalSS.accept();
-                        ReadWrite.setConnection(socket);
-                        System.out.println("Internal Connection");
-                        User u = authenticate(socket,ConnectionType.Internal);
-                        if(u == null){
-                            socket.close();
-                            continue;
-                        }
-
-                        //pattern solid delle inteerfacce per generalizzare e non dover riscrivere 
-                        //il codice se aggiungo unnuovo tipo di utente 
-                        Thread serviceThread = new Thread(() -> {
-                            try {
-                                ReadWrite.setConnection(socket);
-                                // Ottieni il servizio associato all'utente e alla connessione
-                                MainService<?> s = obtainService(u, socket, configType);
-                                s.run();  // Esegui il servizio
-                            } catch (IOException e) {
-                                System.out.println(e.getMessage());
-                            } finally {
-                                try {
-                                    socket.close();  // Assicurati di chiudere il socket alla fine
-                                } catch (IOException e) {
-                                    System.out.println("Error closing socket: " + e.getMessage());
-                                }
-                            }
-                        });
-            
-                        // Avvia il thread che gestisce il servizio
-                        serviceThread.start();
-                        
-                    }
-                } catch (IOException | InterruptedException e) {
-                    System.out.println(e.getMessage());
-                    throw new RuntimeException(e);
-                }
-            });
-            internalConnectionThread.start();
-
-            while (true) {
-                Socket socket = clientSS.accept();
-                System.out.println("External Connection"); //è sicuramente un fruitore da implementare
-                authenticate(socket,ConnectionType.External);
-                socket.close();
-            }
-        } catch (IOException e) {
-            System.out.println("Server exception: " + e.getMessage());
-        } catch(InterruptedException e) {
-            System.out.println("Server interrupted: " + e.getMessage());
+        if (configType == ConfigType.NORMAL) {
+            firstTimeConfiguration();
+            System.out.println("First time default configuration completed");
         }
+
+        // Thread per connessioni interne
+        Thread internalConnectionThread = new Thread(() -> {
+            try {
+                while (true) {
+                    Socket socket = serverTerminalSS.accept();
+                    System.out.println("Internal Connection accepted");
+
+                    final Socket internalSocket = socket;
+
+                    // Autentica e gestisci la connessione in un thread separato
+                    Thread serviceThread = new Thread(() -> {
+                        try {
+                            ReadWrite.setConnection(internalSocket);
+                            User u = authenticate(internalSocket, ConnectionType.Internal);
+                            if (u == null) {
+                                internalSocket.close();
+                                return;
+                            }
+                           
+                            MainService<?> service = obtainService(u, internalSocket, configType);
+                            service.run();
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("Internal service error: " + e.getMessage());
+                        } finally {
+                            try {
+                                internalSocket.close();
+                            } catch (IOException e) {
+                                System.out.println("Error closing internal socket: " + e.getMessage());
+                            }
+                        }
+                    });
+                    serviceThread.start();
+                }
+            } catch (IOException e) {
+                System.out.println("Internal connection thread exception: " + e.getMessage());
+            }
+        });
+        internalConnectionThread.start();
+
+        // Thread per connessioni esterne
+        Thread externalConnectionThread = new Thread(() -> {
+            try {
+                while (true) {
+                    Socket socket = clientSS.accept();
+                    System.out.println("External Connection accepted");
+
+                    final Socket externalSocket = socket;
+
+                    Thread serviceThread = new Thread(() -> {
+                        try {
+                            ReadWrite.setConnection(externalSocket);
+                            User u = authenticate(externalSocket, ConnectionType.External);
+                            if (u == null) {
+                                externalSocket.close();
+                                return;
+                            }
+                            MainService<?> service = new UserService(externalSocket);
+                            service.run();
+                        } catch (IOException | InterruptedException e) {
+                            System.out.println("External service error: " + e.getMessage());
+                        } finally {
+                            try {
+                                externalSocket.close();
+                            } catch (IOException e) {
+                                System.out.println("Error closing external socket: " + e.getMessage());
+                            }
+                        }
+                    });
+                    serviceThread.start();
+                }
+            } catch (IOException e) {
+                System.out.println("External connection thread exception: " + e.getMessage());
+            }
+        });
+        externalConnectionThread.start();
+
+        //attendo che i due thread terminimo prima di chiudere il socket (creato nel try in cui sono creati
+        //i thread di ascolto)
+        internalConnectionThread.join();
+        externalConnectionThread.join();
+
+
+    } catch (IOException | InterruptedException e) {
+        System.out.println("Server exception: " + e.getMessage());
     }
+}
+
 
     private User authenticate(Socket socket, ConnectionType connectionType)
             throws InterruptedException, IOException {

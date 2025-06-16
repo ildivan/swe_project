@@ -22,7 +22,7 @@
     },
     {
       "name": "Luca",
-      "password": "temp0.9610413940195237",
+      "password": "$2a$12$ilvjNWh60.rWnaPbmU0xRuBL1BybVRiXATAEOFx2K5VbLQtk3wwdi",
       "role": "volontario"
     },
     {
@@ -49,6 +49,16 @@
       "name": "Corrado",
       "password": "temp0.913940195237",
       "role": "volontario"
+    },
+    {
+      "name": "Fruitore-1",
+      "password": "$2a$12$vLwgdztumqMzVgQPKcCkJemU81frT7CluAKk7XKuREF6TYAVJ4PdW",
+      "role": "fruitore"
+    },
+    {
+      "name": "Fruitore-2",
+      "password": "temp0.91394019645745237",
+      "role": "fruitore"
     }
   ]
 }
