@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import server.DateService;
 import server.datalayerservice.datalayers.IDataLayer;
@@ -28,6 +29,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
+import server.gsonfactoryservice.GsonFactoryService;
 import server.ioservice.AMIOUtil;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
@@ -68,6 +70,15 @@ public class ConfigService extends MainService<Void>{
         this.gson = gson;
         this.menu = new ConfiguratorMenu(this, configType);
     }
+
+    public ConfigService(Socket socket,ConfigType configType) {
+        super(socket);
+        this.configType = configType;
+        GsonFactoryService gsonBuilder = new GsonFactoryService();
+        this.gson = gsonBuilder.getGson();
+        this.menu = new ConfiguratorMenu(this, configType);
+    }
+
     /**
      * apply the logic of the service
      * @return null

@@ -63,7 +63,7 @@ public class AMIOUtil{
      * @param message
      * @return
      */
-    private static LocalTime getTime(String message) {
+    public static LocalTime getTime(String message) {
         IInputOutput ioService = getIOService();
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime time = null;
@@ -87,7 +87,7 @@ public class AMIOUtil{
      * @param message
      * @return
      */
-    private static LocalDate getDate(String message){
+    public static LocalDate getDate(String message){
         IInputOutput ioService = getIOService();
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = null;
@@ -111,9 +111,9 @@ public class AMIOUtil{
      * @return
      * @throws IOException
      */
-    private static Address getMeetingPoint(Place p){
+    public static Address getMeetingPoint(Place p){
         IInputOutput ioService = getIOService();
-        if((ioService.readString("\nInserire punto di ritrovo (indirizzo): (d-indirizzo luogo/altro inserire)")).equals("d")){
+        if((ioService.readString("\nInserire punto di ritrovo (indirizzo): ('d' per indirizzo luogo vuoto per inserire)")).equals("d")){
             return p.getAddress();
         }else{
             return getAddress();
