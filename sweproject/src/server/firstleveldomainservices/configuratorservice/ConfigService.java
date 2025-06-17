@@ -544,6 +544,9 @@ public void deleteVolunteer() {
         
         dataLayer.delete(volunteerLoc);
         ioService.writeMessage("\nVolontario e attività associate eliminati", false);
+    
+        //comunicazione su canale esterno dell'eliminazione del volontario
+        ioService.writeMessage("\nSei stato rimosso", false);
     } else {
         ioService.writeMessage("\nVolontario non esistente", false);
     }
