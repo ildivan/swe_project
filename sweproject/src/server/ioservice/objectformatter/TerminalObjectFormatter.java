@@ -12,6 +12,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
+import server.firstleveldomainservices.volunteerservice.ConfirmedActivity;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 public class TerminalObjectFormatter implements IIObjectFormatter<String> {
@@ -212,6 +213,35 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
 
         return output.toString();
     }
+
+    /**
+     * metodo per formattare al volontario una visita confermata
+     */
+    @Override
+    public String formatListConfirmedActivity(List<ConfirmedActivity> actList) {
+
+        StringBuilder out = new StringBuilder();
+        for (ConfirmedActivity activity : actList) {
+            out.append("\n\n\nAttività confermate\n\n");
+            out.append(formatConfirmedActivity(activity));
+        }
+        return out.toString();
+       
+    }
+
+    private Object formatConfirmedActivity(ConfirmedActivity confirmedAactivity) {
+        DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+         StringBuffer sb = new StringBuffer();
+        sb.append("\n\n----\n\n");
+        sb.append("activityName='").append(confirmedAactivity.getActivityName()).append("\n");
+        sb.append("numberOfSub=").append(confirmedAactivity.getNumberOfSub()).append("\n");
+        sb.append("timeOfTheActivity='").append(confirmedAactivity.getTimeOfTheActivity()).append("\n");
+        sb.append("dateOfTheActivity=").append(confirmedAactivity.getDateOfTheActivity().format(formatterDate)).append("\n");
+        
+        return sb.toString();
+    }
+
+    
 
 
 }

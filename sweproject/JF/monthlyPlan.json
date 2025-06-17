@@ -8,43 +8,51 @@
           "plan": {
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "state": "CONFERMATA",
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Serale al Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 20:00"
+              "timeOfTheActivity": "17:30 - 20:00",
+              "subscriptions": []
             },
             "Tour del Museo Mille Miglia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -54,47 +62,56 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Tour Serale alla Pinacoteca Tosio Martinengo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 20:00"
+              "timeOfTheActivity": "18:00 - 20:00",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Escursione al Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:00 - 13:00"
+              "timeOfTheActivity": "08:00 - 13:00",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Spettacolo al Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:30 - 20:30"
+              "timeOfTheActivity": "18:30 - 20:30",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 21:00"
+              "timeOfTheActivity": "18:00 - 21:00",
+              "subscriptions": []
             }
           }
         },
@@ -104,52 +121,62 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia giornata completa": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 16:30"
+              "timeOfTheActivity": "08:30 - 16:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Cena al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "19:30 - 23:30"
+              "timeOfTheActivity": "19:30 - 23:30",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Visita al Teatro Grande di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 15:30"
+              "timeOfTheActivity": "14:00 - 15:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -159,42 +186,50 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Spettacolo Teatrale al Teatro Grande": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "20:30 - 22:30"
+              "timeOfTheActivity": "20:30 - 22:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Escursione al Parco delle Colline": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 13:00"
+              "timeOfTheActivity": "10:00 - 13:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour in Barca sul Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 12:30"
+              "timeOfTheActivity": "09:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -204,47 +239,56 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Visita Serale al Duomo Nuovo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 19:30"
+              "timeOfTheActivity": "17:30 - 19:30",
+              "subscriptions": []
             },
             "Visita alla Basilica di San Salvatore": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -254,42 +298,50 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour della Cattedrale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:30 - 13:30"
+              "timeOfTheActivity": "11:30 - 13:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -299,37 +351,44 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour Artistico alla Pinacoteca": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 16:30"
+              "timeOfTheActivity": "14:00 - 16:30",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -339,42 +398,50 @@
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Serale al Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 20:00"
+              "timeOfTheActivity": "17:30 - 20:00",
+              "subscriptions": []
             },
             "Tour del Museo Mille Miglia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -384,47 +451,56 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Tour Serale alla Pinacoteca Tosio Martinengo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 20:00"
+              "timeOfTheActivity": "18:00 - 20:00",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Escursione al Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:00 - 13:00"
+              "timeOfTheActivity": "08:00 - 13:00",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Spettacolo al Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:30 - 20:30"
+              "timeOfTheActivity": "18:30 - 20:30",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 21:00"
+              "timeOfTheActivity": "18:00 - 21:00",
+              "subscriptions": []
             }
           }
         },
@@ -434,52 +510,62 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia giornata completa": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 16:30"
+              "timeOfTheActivity": "08:30 - 16:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Cena al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "19:30 - 23:30"
+              "timeOfTheActivity": "19:30 - 23:30",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Visita al Teatro Grande di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 15:30"
+              "timeOfTheActivity": "14:00 - 15:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -489,42 +575,50 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Spettacolo Teatrale al Teatro Grande": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "20:30 - 22:30"
+              "timeOfTheActivity": "20:30 - 22:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Escursione al Parco delle Colline": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 13:00"
+              "timeOfTheActivity": "10:00 - 13:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour in Barca sul Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 12:30"
+              "timeOfTheActivity": "09:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -534,47 +628,56 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Visita Serale al Duomo Nuovo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 19:30"
+              "timeOfTheActivity": "17:30 - 19:30",
+              "subscriptions": []
             },
             "Visita alla Basilica di San Salvatore": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -584,42 +687,50 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour della Cattedrale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:30 - 13:30"
+              "timeOfTheActivity": "11:30 - 13:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -629,37 +740,44 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour Artistico alla Pinacoteca": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 16:30"
+              "timeOfTheActivity": "14:00 - 16:30",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -669,42 +787,50 @@
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Serale al Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 20:00"
+              "timeOfTheActivity": "17:30 - 20:00",
+              "subscriptions": []
             },
             "Tour del Museo Mille Miglia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -714,47 +840,56 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Tour Serale alla Pinacoteca Tosio Martinengo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 20:00"
+              "timeOfTheActivity": "18:00 - 20:00",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Escursione al Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:00 - 13:00"
+              "timeOfTheActivity": "08:00 - 13:00",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Spettacolo al Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:30 - 20:30"
+              "timeOfTheActivity": "18:30 - 20:30",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 21:00"
+              "timeOfTheActivity": "18:00 - 21:00",
+              "subscriptions": []
             }
           }
         },
@@ -764,52 +899,62 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia giornata completa": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 16:30"
+              "timeOfTheActivity": "08:30 - 16:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Cena al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "19:30 - 23:30"
+              "timeOfTheActivity": "19:30 - 23:30",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Visita al Teatro Grande di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 15:30"
+              "timeOfTheActivity": "14:00 - 15:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -819,42 +964,50 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Spettacolo Teatrale al Teatro Grande": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "20:30 - 22:30"
+              "timeOfTheActivity": "20:30 - 22:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Escursione al Parco delle Colline": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 13:00"
+              "timeOfTheActivity": "10:00 - 13:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour in Barca sul Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 12:30"
+              "timeOfTheActivity": "09:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -864,47 +1017,56 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Visita Serale al Duomo Nuovo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 19:30"
+              "timeOfTheActivity": "17:30 - 19:30",
+              "subscriptions": []
             },
             "Visita alla Basilica di San Salvatore": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -914,42 +1076,50 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour della Cattedrale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:30 - 13:30"
+              "timeOfTheActivity": "11:30 - 13:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -959,37 +1129,44 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour Artistico alla Pinacoteca": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 16:30"
+              "timeOfTheActivity": "14:00 - 16:30",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -999,42 +1176,50 @@
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Serale al Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 20:00"
+              "timeOfTheActivity": "17:30 - 20:00",
+              "subscriptions": []
             },
             "Tour del Museo Mille Miglia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -1044,47 +1229,56 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Tour Serale alla Pinacoteca Tosio Martinengo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 20:00"
+              "timeOfTheActivity": "18:00 - 20:00",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Escursione al Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:00 - 13:00"
+              "timeOfTheActivity": "08:00 - 13:00",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Spettacolo al Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:30 - 20:30"
+              "timeOfTheActivity": "18:30 - 20:30",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 21:00"
+              "timeOfTheActivity": "18:00 - 21:00",
+              "subscriptions": []
             }
           }
         },
@@ -1094,52 +1288,62 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia giornata completa": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 16:30"
+              "timeOfTheActivity": "08:30 - 16:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Cena al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "19:30 - 23:30"
+              "timeOfTheActivity": "19:30 - 23:30",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Visita al Teatro Grande di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 15:30"
+              "timeOfTheActivity": "14:00 - 15:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -1149,42 +1353,50 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Spettacolo Teatrale al Teatro Grande": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "20:30 - 22:30"
+              "timeOfTheActivity": "20:30 - 22:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Escursione al Parco delle Colline": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 13:00"
+              "timeOfTheActivity": "10:00 - 13:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour in Barca sul Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 12:30"
+              "timeOfTheActivity": "09:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -1194,47 +1406,56 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Visita Serale al Duomo Nuovo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 19:30"
+              "timeOfTheActivity": "17:30 - 19:30",
+              "subscriptions": []
             },
             "Visita alla Basilica di San Salvatore": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -1244,42 +1465,50 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour della Cattedrale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:30 - 13:30"
+              "timeOfTheActivity": "11:30 - 13:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         },
@@ -1289,37 +1518,44 @@
             "Visita Guidata al Duomo Vecchio": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Passeggiata Fascista: Architettura e Storia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30"
+              "timeOfTheActivity": "11:00 - 12:30",
+              "subscriptions": []
             },
             "Tour Artistico alla Pinacoteca": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 16:30"
+              "timeOfTheActivity": "14:00 - 16:30",
+              "subscriptions": []
             },
             "Passeggiata Guidata al Parco Tarello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30"
+              "timeOfTheActivity": "09:00 - 10:30",
+              "subscriptions": []
             }
           }
         },
@@ -1329,42 +1565,50 @@
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Visita Serale al Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 20:00"
+              "timeOfTheActivity": "17:30 - 20:00",
+              "subscriptions": []
             },
             "Tour del Museo Mille Miglia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30"
+              "timeOfTheActivity": "10:00 - 11:30",
+              "subscriptions": []
             },
             "Storia dell\u0027Unità d\u0027Italia a Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Escursione al Parco dell\u0027Acqua": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 11:30"
+              "timeOfTheActivity": "08:30 - 11:30",
+              "subscriptions": []
             },
             "Tour del Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "12:00 - 14:30"
+              "timeOfTheActivity": "12:00 - 14:30",
+              "subscriptions": []
             },
             "Visita Guidata al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 14:00"
+              "timeOfTheActivity": "11:00 - 14:00",
+              "subscriptions": []
             }
           }
         },
@@ -1374,47 +1618,56 @@
             "Passeggiata Archeologica nel Foro Romano": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 10:00"
+              "timeOfTheActivity": "08:30 - 10:00",
+              "subscriptions": []
             },
             "Tour Serale alla Pinacoteca Tosio Martinengo": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 20:00"
+              "timeOfTheActivity": "18:00 - 20:00",
+              "subscriptions": []
             },
             "Tour della Piazza del Duomo di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             },
             "Tour del Museo delle Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Escursione al Lago di Garda": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:00 - 13:00"
+              "timeOfTheActivity": "08:00 - 13:00",
+              "subscriptions": []
             },
             "Tour del Museo di Santa Giulia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30"
+              "timeOfTheActivity": "10:00 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata al Parco del Castello": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00"
+              "timeOfTheActivity": "15:00 - 17:00",
+              "subscriptions": []
             },
             "Spettacolo al Teatro Sociale di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:30 - 20:30"
+              "timeOfTheActivity": "18:30 - 20:30",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "18:00 - 21:00"
+              "timeOfTheActivity": "18:00 - 21:00",
+              "subscriptions": []
             }
           }
         },
@@ -1424,52 +1677,62 @@
             "Passeggiata al Parco dell\u0027Acqua al Tramonto": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "17:00 - 20:00"
+              "timeOfTheActivity": "17:00 - 20:00",
+              "subscriptions": []
             },
             "Alla Scoperta del Tempio Capitolino": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:30 - 11:00"
+              "timeOfTheActivity": "09:30 - 11:00",
+              "subscriptions": []
             },
             "Visita alla Piazza della Vittoria": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Passeggiata Naturalistica al Parco Ducos": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00"
+              "timeOfTheActivity": "10:00 - 12:00",
+              "subscriptions": []
             },
             "Visita al Castello di Brescia giornata completa": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "08:30 - 16:30"
+              "timeOfTheActivity": "08:30 - 16:30",
+              "subscriptions": []
             },
             "Laboratorio Naturalistico per Famiglie": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "10:30 - 12:30"
+              "timeOfTheActivity": "10:30 - 12:30",
+              "subscriptions": []
             },
             "Cena al Castello di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "19:30 - 23:30"
+              "timeOfTheActivity": "19:30 - 23:30",
+              "subscriptions": []
             },
             "Tour delle Antiche Armi": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00"
+              "timeOfTheActivity": "11:00 - 13:00",
+              "subscriptions": []
             },
             "Visita al Teatro Grande di Brescia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 15:30"
+              "timeOfTheActivity": "14:00 - 15:30",
+              "subscriptions": []
             },
             "Tour Completo Piazza delle Loggia": {
               "numberOfSub": 0,
               "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00"
+              "timeOfTheActivity": "09:00 - 11:00",
+              "subscriptions": []
             }
           }
         }

@@ -21,6 +21,7 @@ import server.firstleveldomainservices.secondleveldomainservices.menuservice.Men
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.VolunteerMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
@@ -254,6 +255,45 @@ public class VolunteerService extends MainService<Void>{
         }
 
         return false;
+    }
+
+    /**
+     * visualizza viste confermate del volontario
+     */
+    public void showMyConfirmedActivitiesDescription(){
+        
+        List<ConfirmedActivity> myActivities = getMyConfirmedActivities();
+
+        
+        ioService.writeMessage(formatter.formatListConfirmedActivity(myActivities), false);
+        ioService.writeMessage(SPACE,false);
+    }
+
+    /**
+     * metodo che ottiene le mie visite confermate
+     * @return
+     */
+    private List<ConfirmedActivity> getMyConfirmedActivities() {
+        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+        
+        List<ConfirmedActivity> myActivities = new ArrayList<>();
+
+        for (Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlan.getMonthlyPlan().entrySet()) {
+            LocalDate date = dailyEntry.getKey();
+            DailyPlan dailyPlan = dailyEntry.getValue();
+
+            for (Map.Entry<String, ActivityInfo> activityEntry : dailyPlan.getPlan().entrySet()) {
+                String activityName = activityEntry.getKey();
+                ActivityInfo activityInfo = activityEntry.getValue();
+
+                if (activityInfo.getState() == ActivityState.CONFERMATA && isMyActivity(activityName, getMyActivities())) {
+                    myActivities.add(new ConfirmedActivity(activityName, activityInfo.getNumberOfSub() ,activityInfo.getTime(), date));
+                }
+            }
+        }
+
+        return myActivities;
     }
 
 }
