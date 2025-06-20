@@ -35,7 +35,7 @@ public class AuthenticationService extends MainService<User> {
     @Override
     public User applyLogic() {
         User user;
-        
+        boolean temp;
 
         ioService.writeMessage(CLEAR, false);
 
@@ -50,29 +50,49 @@ public class AuthenticationService extends MainService<User> {
             return null;
         }
 
-        if (AuthenticationUtil.checkIfTemp(username)) {
-            changePassword(username);
+        if(AuthenticationUtil.checkIfTemp(username)){
+            temp = true;
+        }else{
+            temp = false;
         }
 
-        int i = 0;
-        while(true) {
-            String pass = ioService.readString("Inserisci password:");
-            if (verifyPassword(username, pass)) {
-                //write("DEBUG: calsse auth service line 42 password corretta", false);
-                break;
+        if(!obtainPassword(username, temp)){
+            return null;
+        }
+       
+        if (temp) {
+            changePassword(username);
+            ioService.writeMessage("\n\nPer favore fare nuovamente l'accesso\n\n", false);
+            if(!obtainPassword(username, false)){
+            return null;
             }
-            ioService.writeMessage(String.format("Password sbagliata riprovare, tentativi rimasti %d", 2 - i), false);
-            if (i == 2) {
-                ioService.writeMessage("Tentativi esauriti, connessione chiusa", false);
-                return null;
-            }
-            i += 1;
         }
 
         user = gson.fromJson(userJO, User.class);
 
         assert user != null : "User is null";
         return user;
+    }
+
+    /**
+     * method to obtain password, calls the verifyPassword method
+     * @param username
+     */
+    private boolean obtainPassword(String username, boolean temp) {
+        int i = 0;
+        while(true) {
+            String pass = ioService.readString("Inserisci password:");
+            if (verifyPassword(username, pass, temp)) {
+                break;
+            }
+            ioService.writeMessage(String.format("Password sbagliata riprovare, tentativi rimasti %d", 2 - i), false);
+            if (i == 2) {
+                ioService.writeMessage("Tentativi esauriti, connessione chiusa", false);
+                return false;
+            }
+            i += 1;
+        }
+        return true;
     }
 
     private boolean isTerminalCorrect(String role) {
@@ -142,7 +162,7 @@ public class AuthenticationService extends MainService<User> {
     private void changePassword(String username) {
         assert AuthenticationUtil.getUserJsonObject(username) != null : "cannot change password of invalid username";
 
-        String newPassword = ioService.readString("Inserisci nuova password:");
+        String newPassword = ioService.readString("\nPrimo accesso, cambio password necessario\n\nInserisci nuova password:");
 
         if (!newPassword.isEmpty()) {
             if (AuthenticationUtil.changePassword(username, newPassword)) {
@@ -154,16 +174,19 @@ public class AuthenticationService extends MainService<User> {
         }
     }
 
-    private boolean verifyPassword(String username, String password) {
+    private boolean verifyPassword(String username, String password, boolean temp) {
+    
         assert AuthenticationUtil.getUserJsonObject(username) != null : "cannot verify password of invalid username";
         assert !password.isEmpty() : "cannot verify password if empty";
 
-        if (AuthenticationUtil.verifyPassword(username, password)) {
-            return true;
-        } else {
-            ioService.writeMessage("Password errata", false);
-            return false;
+        if (temp){
+            return AuthenticationUtil.verifyClearPassword(username, password);
         }
+
+        return AuthenticationUtil.verifyPassword(username, password);
+       
     }
+
+    
 
 }

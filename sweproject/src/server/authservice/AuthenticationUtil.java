@@ -52,6 +52,15 @@ public class AuthenticationUtil {
         return BCrypt.checkpw(password, hashedPassword);
     }
 
+    public static boolean verifyClearPassword(String username, String password) {
+        assert !password.trim().isEmpty(): "password is empty";
+        JsonObject userJO = getUserJsonObject(username);
+        assert userJO != null: "user not found";
+
+        String clearPassword = userJO.get("password").getAsString();
+        return clearPassword.contentEquals(password);
+    }
+
     public static JsonObject getUserJsonObject(String username){
         assert !username.trim().isEmpty(): "username is empty";
         JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
