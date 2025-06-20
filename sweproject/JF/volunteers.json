@@ -2,58 +2,126 @@
   "volunteers": [
     {
       "name": "Marco",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "17-07-2025",
+        "21-07-2025",
+        "25-07-2025",
+        "30-07-2025",
+        "05-08-2025"
+      ]
     },
     {
       "name": "Lucia",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "18-07-2025",
+        "22-07-2025",
+        "27-07-2025",
+        "01-08-2025",
+        "07-08-2025"
+      ]
     },
     {
       "name": "Marta",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "19-07-2025",
+        "23-07-2025",
+        "28-07-2025",
+        "02-08-2025",
+        "08-08-2025"
+      ]
     },
     {
       "name": "Luca",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [
+        "12-10-2025"
+      ],
+      "disponibilityDaysOld": [
+        "20-07-2025",
+        "24-07-2025",
+        "29-07-2025",
+        "03-08-2025",
+        "09-08-2025"
+      ]
     },
     {
       "name": "Riccardo",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "21-07-2025",
+        "25-07-2025",
+        "30-07-2025",
+        "04-08-2025",
+        "10-08-2025"
+      ]
     },
     {
       "name": "Nadia",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "22-07-2025",
+        "26-07-2025",
+        "31-07-2025",
+        "05-08-2025",
+        "11-08-2025"
+      ]
     },
     {
       "name": "Erica",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "23-07-2025",
+        "27-07-2025",
+        "01-08-2025",
+        "06-08-2025",
+        "12-08-2025"
+      ]
     },
     {
       "name": "Corrado",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "24-07-2025",
+        "28-07-2025",
+        "02-08-2025",
+        "07-08-2025",
+        "13-08-2025"
+      ]
     },
     {
       "name": "Samuele",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "25-07-2025",
+        "29-07-2025",
+        "03-08-2025",
+        "08-08-2025",
+        "14-08-2025"
+      ]
     },
     {
       "name": "Elena",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "26-07-2025",
+        "30-07-2025",
+        "04-08-2025",
+        "09-08-2025",
+        "15-08-2025"
+      ]
     },
     {
       "name": "Adele",
-      "nondisponibilityDaysCurrent": [],
-      "nondisponibilityDaysOld": []
+      "disponibilityDaysCurrent": [],
+      "disponibilityDaysOld": [
+        "27-07-2025",
+        "31-07-2025",
+        "05-08-2025",
+        "10-08-2025",
+        "16-08-2025"
+      ]
     }
   ]
 }

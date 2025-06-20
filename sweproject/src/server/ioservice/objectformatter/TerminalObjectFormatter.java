@@ -80,13 +80,18 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
         StringBuffer s = new StringBuffer();
         s.append("\n\n------------\n\n");
         s.append(String.format("Nome volontario: %s", v.getName()));
-        s.append((String.format("\nGiorni in cui il volontario non è libero: %s", dispDaysToString(v))));
+        s.append((String.format("\nGiorni in cui il volontario è disponibile nel prossimo mese: %s", dispDaysToString(v))));
         return s.toString();
     }
 
     private String dispDaysToString(Volunteer v){
         String out ="";
-        for(String s : v.getNondisponibilityDaysCurrent()){
+
+        if (v.getDisponibilityDaysCurrent() == null || v.getDisponibilityDaysCurrent().isEmpty()) {
+            return "Nessuno";
+        }
+
+        for(String s : v.getDisponibilityDaysCurrent()){
             out = out + s + ", ";
         }
 

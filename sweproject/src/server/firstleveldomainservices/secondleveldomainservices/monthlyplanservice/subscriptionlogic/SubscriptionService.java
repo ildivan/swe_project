@@ -16,6 +16,6 @@ public class SubscriptionService {
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
-    
+    //TODO
 
 }

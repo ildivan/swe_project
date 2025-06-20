@@ -26,6 +26,7 @@ public class JsonFactoryService implements IJsonFactoryService{
         try {
             return gson.fromJson(json, c);
         } catch (JsonSyntaxException e) {
+            assert false: "Json syntax error: " + e.getMessage();
             System.out.println(e.getMessage());
             return null;
         }

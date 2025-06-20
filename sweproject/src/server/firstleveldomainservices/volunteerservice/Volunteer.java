@@ -5,13 +5,13 @@ import java.util.Set;
 
 public class Volunteer {
     private String name;
-    private Set<String> nondisponibilityDaysCurrent; // contiene le date in formato standard dd-mm-yyyy delle NON disponibilità dei volontari
-    private Set<String> nondisponibilityDaysOld;
+    private Set<String> disponibilityDaysCurrent; // contiene le date in formato standard dd-mm-yyyy delle NON disponibilità dei volontari
+    private Set<String> disponibilityDaysOld;
 
     public Volunteer(String name) {
         this.name = name;
-        this.nondisponibilityDaysCurrent = new LinkedHashSet<>();
-        this.nondisponibilityDaysOld = new LinkedHashSet<>();
+        this.disponibilityDaysCurrent = new LinkedHashSet<>();
+        this.disponibilityDaysOld = new LinkedHashSet<>();
     }
 
     // Getters and Setters
@@ -23,19 +23,19 @@ public class Volunteer {
         this.name = name;
     }
 
-    public Set<String> getNondisponibilityDaysCurrent() {
-        return nondisponibilityDaysCurrent;
+    public Set<String> getDisponibilityDaysCurrent() {
+        return disponibilityDaysCurrent;
     }
 
-    public void setNondisponibilityDaysCurrent(Set<String> nondisponibilityDaysCurrent) {
-        this.nondisponibilityDaysCurrent = nondisponibilityDaysCurrent;
+    public void setDisponibilityDaysCurrent(Set<String> disponibilityDaysCurrent) {
+        this.disponibilityDaysCurrent = disponibilityDaysCurrent;
     }
 
-    public Set<String> getNondisponibilityDaysOld() {
-        return nondisponibilityDaysOld;
+    public Set<String> getDisponibilityDaysOld() {
+        return disponibilityDaysOld;
     }
 
-    public void setNondisponibilityDaysOld(Set<String> nondisponibilityDaysOld) {
-        this.nondisponibilityDaysOld = nondisponibilityDaysOld;
+    public void setDisponibilityDaysOld(Set<String> disponibilityDaysOld) {
+        this.disponibilityDaysOld = disponibilityDaysOld;
     }
 }

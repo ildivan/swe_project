@@ -7,12 +7,17 @@ import com.google.gson.Gson;
 
 import server.utils.*;
 
-public abstract class Terminal {
+public class TerminalUser extends Terminal {
     private static final String CLEAR = "CLEAR";
     private static final String SPACE = "SPACE";
     private int port;
     private String hostname;
     
+    public TerminalUser(String hostname) {
+        this.hostname = hostname;
+        this.port = 5001;
+        
+    }
 
     public void run(){
         Gson gson = FrontEndUtils.buildGson();
@@ -54,6 +59,16 @@ public abstract class Terminal {
         }
     }
 
+
+    public static void main(String[] args) {
+
+        FrontEndUtils.clearConsole();
+
+        Terminal terminal = new TerminalUser("localhost");
+            
+        terminal.run();
+    
+    }
 }
 
 

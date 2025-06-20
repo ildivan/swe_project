@@ -81,17 +81,21 @@ public class DailyPlan {
             JsonObject volunteerJO = dataLayer.get(locInfo);
             Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
 
-            for (String d : volunteer.getNondisponibilityDaysOld()) {
+            if(volunteer.getDisponibilityDaysOld()==null || volunteer.getDisponibilityDaysOld().isEmpty()){
+                return false; 
+            }
+
+            for (String d : volunteer.getDisponibilityDaysOld()) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 String formattedDate = date.format(formatter);
 
                 if(d.equalsIgnoreCase(formattedDate.toString())){
-                    return false;
+                    return true;
                 }
             }
 
         }
-        return true;
+        return false;
     }
 
     /**

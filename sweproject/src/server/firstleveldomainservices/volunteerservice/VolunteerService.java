@@ -2,10 +2,16 @@ package server.firstleveldomainservices.volunteerservice;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import com.google.gson.Gson;
@@ -115,7 +121,7 @@ public class VolunteerService extends MainService<Void>{
     }
 
     /**
-     * metodo che permette al volontario di inserire le date in cui esso non è disponibile
+     * metodo che permette al volontario di inserire le date in cui esso è disponibile
      * 
      * solo nei giorni in cui sono presenti sue visite e che non sono preclusi
      */
@@ -132,7 +138,7 @@ public class VolunteerService extends MainService<Void>{
         int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
         int minNumDay = 1;
         
-        int day = ioService.readIntegerWithMinMax("\"Inserire giorno in cui non si è disponibili nel prossimo mese", minNumDay, maxNumDay);
+        int day = ioService.readIntegerWithMinMax("\"Inserire giorno in cui si è disponibili nel prossimo mese", minNumDay, maxNumDay);
 
         /*
          * prendere il mese e l'anno cosi permette di evitare race conditions
@@ -143,15 +149,15 @@ public class VolunteerService extends MainService<Void>{
         LocalDate date = LocalDate.of(year, month, day);
 
 
-        addPrecludeDatesForVolunteer(date);
+        addDisponibilityDatesForVolunteer(date);
 
     }
 
     /**
-     * metodo per aggiungere la data in cui il volontario on è disponibile al file
+     * metodo per aggiungere la data in cui il volontario è disponibile al file
      * @param date
      */
-    private void addPrecludeDatesForVolunteer(LocalDate date){
+    private void addDisponibilityDatesForVolunteer(LocalDate date){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDate = date.format(formatter);
@@ -159,7 +165,7 @@ public class VolunteerService extends MainService<Void>{
         assert formattedDate != null && !formattedDate.trim().isEmpty();
 
         if(!dateContainsVolunteerActivity(date, getMyActivities())){
-            ioService.writeMessage("Non hai attività programmate per questa data, non puoi aggiungerla come preclusa", false);
+            ioService.writeMessage("Non hai attività programmate per questa data, non puoi aggiungerla come data disponibile", false);
             return;
         }
 
@@ -167,15 +173,23 @@ public class VolunteerService extends MainService<Void>{
         locInfo.setKey(name);
         JsonObject volunteerJO = dataLayer.get(locInfo);
         Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
+        Set<String> disponibilityDays;
 
-        Set<String> precludeDates = volunteer.getNondisponibilityDaysCurrent();
-        precludeDates.add(formattedDate);
+        if(volunteer.getDisponibilityDaysCurrent() == null){
+            disponibilityDays = new LinkedHashSet<String>();
+        }else{
+            disponibilityDays = volunteer.getDisponibilityDaysCurrent();
+        }
+
+        disponibilityDays.add(formattedDate);
+
+        volunteer.setDisponibilityDaysCurrent(disponibilityDays);
 
         JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);
 
         dataLayer.modify(newVolunteerJO, locInfo);
 
-        ioService.writeMessage("Data " + formattedDate + " aggiunta con successo come preclusa", false);
+        ioService.writeMessage("Data " + formattedDate + " aggiunta con successo come data di disponibilità", false);
     }
 
     private boolean isMyActivity(String actName, List<Activity> myActivities){
@@ -236,22 +250,23 @@ public class VolunteerService extends MainService<Void>{
      * @param monthlyPlan
      * @return
      */
-    public boolean dateContainsVolunteerActivity(LocalDate data, List<Activity> myActivities) {
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+    public boolean dateContainsVolunteerActivity(LocalDate date, List<Activity> myActivities) {
+      
+        DayOfWeek dayOfWeek = date.getDayOfWeek(); 
 
+        String nameDay = dayOfWeek.name();
 
-        DailyPlan dailyPlan = monthlyPlan.getDailyPlan(data);
-        if (dailyPlan == null || dailyPlan.getPlan().isEmpty()) {
-            return false;
-        }
-
-        Set<String> dailyActivity = dailyPlan.getPlan().keySet();
-
+        //lo formatto per averlo in italiano e con solo la prima lettera maiuscola
+        nameDay = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ITALIAN);
+        nameDay = Character.toUpperCase(nameDay.charAt(0)) + nameDay.substring(1);
         for (Activity a : myActivities) {
-            if (dailyActivity.contains(a.getTitle())) {
-                return true;
+            String[] days = a.getProgrammableDays();
+            for (String day : days) {
+                if(day.equalsIgnoreCase(nameDay)){
+                    return true;
+                }
             }
+        
         }
 
         return false;

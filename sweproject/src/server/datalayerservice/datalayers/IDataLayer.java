@@ -80,6 +80,13 @@ List<JsonObject> getList(T localizationInformation);
  */
 List<JsonObject> getAll(T localizationInformation);
 
+/**
+ * Erases a JSON object from the data layer with the specified localization information.
+ *
+ * @param localizationInformation The localization information associated with the JSON object to be erased.
+ */
+void erase(T localizationInformation);
+
 
 }
 

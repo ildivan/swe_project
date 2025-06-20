@@ -1,18 +1,18 @@
 {
   "users": [
     {
-      "name": "CT",
+      "name": "ct",
       "password": "$2a$12$SXxe9/MMAE3ih7wa/T70v.iVQOz0qrgqWDxjloJ.MTTUMw4rcONKq",
       "role": "configuratore"
     },
     {
       "name": "Marco",
-      "password": "$2a$12$vVoK/tcgciRY/vZx2j03d.O/Cfq1IMpfpYhp.0jRXTwevItewGULK",
+      "password": "temp0.12112121212121",
       "role": "volontario"
     },
     {
       "name": "Lucia",
-      "password": "temp0.822318206305791",
+      "password": "temp0.12345678901230000000000",
       "role": "volontario"
     },
     {
@@ -57,7 +57,7 @@
     },
     {
       "name": "Fruitore-2",
-      "password": "temp0.91394019645745237",
+      "password": "temp0.1234567890123456",
       "role": "fruitore"
     }
   ]

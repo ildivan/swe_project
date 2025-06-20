@@ -132,4 +132,17 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         assert result != null;
         return result;
     }
+
+    @Override
+    public void erase(JsonDataLocalizationInformation info) {
+        assert info != null;
+
+        if (!checkFileExistance(info)) {
+            jsonReadWrite.createJSONEmptyFile(info.getPath());
+        }
+
+        // Svuota completamente la lista associata al memberName
+        List<JsonObject> emptyList = new ArrayList<>();
+        jsonReadWrite.writeToFile(info.getPath(), emptyList, info.getMemberName());
+    }
 }

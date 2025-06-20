@@ -10,9 +10,10 @@
       "type": "current",
       "planStateMap": {
         "DISPONIBILITA_APERTE": true,
-        "GENERAZIONE_PIANO": false,
+        "GENERAZIONE_PIANO": false, 
         "MODIFICHE_APERTE": false
       }
     }
   ]
 }
+

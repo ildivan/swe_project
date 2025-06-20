@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# da correggere, sono cambiati i terminali
+
 echo "Compilazione di tutti i file Java..."
 mkdir -p out
 javac -cp "lib/*" -d out $(find src -name "*.java") || { echo "Errore nella compilazione"; exit 1; }

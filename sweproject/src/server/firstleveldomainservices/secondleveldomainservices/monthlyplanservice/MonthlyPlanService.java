@@ -55,6 +55,7 @@ public class MonthlyPlanService {
 
         final JsonDataLocalizationInformation monthlyPlanLocInfo = locInfoFactory.getMonthlyPlanLocInfo();
 
+        dataLayer.erase(monthlyPlanLocInfo);
         dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
        
         monthlyConfigManager.updateMonthlyConfigAfterPlan();
@@ -94,11 +95,17 @@ public class MonthlyPlanService {
     private void refreshVolunteers() {
         
         List<Volunteer> volunteers = getVolunteers();
+        Set<String> newDays;
 
         for (Volunteer volunteer : volunteers) {
-            Set<String> newDays = volunteer.getNondisponibilityDaysCurrent();
-            volunteer.setNondisponibilityDaysOld(newDays);
-            volunteer.setNondisponibilityDaysCurrent(new LinkedHashSet<>());
+            if(volunteer.getDisponibilityDaysCurrent() == null) {
+                newDays = new LinkedHashSet<>();
+            }else{
+                newDays = volunteer.getDisponibilityDaysCurrent();
+            }
+            
+            volunteer.setDisponibilityDaysOld(newDays);
+            volunteer.setDisponibilityDaysCurrent(new LinkedHashSet<>());
 
             saveVolunteer(volunteer);
         }
@@ -107,7 +114,7 @@ public class MonthlyPlanService {
     }
 
     private void saveVolunteer(Volunteer volunteer) {
-         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         
         locInfo.setKey(volunteer.getName());
 
