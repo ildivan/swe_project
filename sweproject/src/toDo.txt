@@ -1,8 +1,5 @@
 
 quarta versione
 
-fix date for volunteer
-controlla che tutto benfa rimosso correttamente, anche le dipendenze
-
 
 

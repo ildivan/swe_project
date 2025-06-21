@@ -63,4 +63,7 @@ build/
 # Txt local notes files
 *.txt
 
+# Json local serislization files
+*.json
+
 /out
