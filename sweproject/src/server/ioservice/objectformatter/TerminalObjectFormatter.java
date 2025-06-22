@@ -194,7 +194,12 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
         return output.toString();
     }
     
-    private String formatDailyPlan(DailyPlan dailyPlan){
+    /**
+     * metodo per formattare un piano giornaliero
+     * @param dailyPlan
+     * @return
+     */
+    public String formatDailyPlan(DailyPlan dailyPlan){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         StringBuffer output = new StringBuffer();

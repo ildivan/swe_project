@@ -4,6 +4,7 @@ import java.util.List;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.volunteerservice.ConfirmedActivity;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
@@ -18,4 +19,5 @@ public interface IIObjectFormatter <T> {
     public T formatListActivityRecord(List<ActivityRecord> arList);
     public T formatMonthlyPlan(MonthlyPlan monthlyPlanData);
     public T formatListConfirmedActivity(List<ConfirmedActivity> actList);
+    public T formatDailyPlan(DailyPlan dailyPlan);
 }

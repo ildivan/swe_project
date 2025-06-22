@@ -1,4 +1,4 @@
-package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig;
+package server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -13,18 +13,19 @@ import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
-public class MonthlyConfigManager {
+public class MonthlyConfigUpdater {
     
 
     private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
 
     private MonthlyConfig mc;
     private LocalDate date;
    
-    public MonthlyConfigManager(MonthlyConfig monthlyConfig, LocalDate date) {
+    public MonthlyConfigUpdater(MonthlyConfig monthlyConfig, LocalDate date) {
         this.mc = monthlyConfig;
         this.date = date;
     }
@@ -54,12 +55,9 @@ public class MonthlyConfigManager {
         
         mc.setPrecludeDates(new HashSet<>());
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
 
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
-        
+        monthlyConfigService.saveMonthlyConfig(mc);
+
     }
 
     /**
@@ -71,11 +69,7 @@ public class MonthlyConfigManager {
         LocalDate newDate = date.plusMonths(1);
         mc.setMonthAndYear(newDate);
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
-
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
+        monthlyConfigService.saveMonthlyConfig(mc);
     }
 
     /**
@@ -88,11 +82,7 @@ public class MonthlyConfigManager {
         planConfiguredMap.put(date.plusMonths(1),false);
         mc.setPlanConfigured(planConfiguredMap);
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
-
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
+        monthlyConfigService.saveMonthlyConfig(mc);
     }
 
 

@@ -1,13 +1,11 @@
-package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.subscriptionlogic;
+package server.firstleveldomainservices.secondleveldomainservices.subscriptionservice;
 
 public class Subscription {
     private String userName;
-    private int subscriptionCode;
     private int numberOfSubscriptions;
 
-    public Subscription(String userId, int subscriptionCode, int numberOfSubscriptions) {
+    public Subscription(String userId, int numberOfSubscriptions) {
         this.userName = userId;
-        this.subscriptionCode = subscriptionCode;
         this.numberOfSubscriptions = numberOfSubscriptions;
     }
 
@@ -21,14 +19,6 @@ public class Subscription {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public int getSubscriptionCode() {
-        return subscriptionCode;
-    }
-
-    public void setSubscriptionCode(int subscriptionCode) {
-        this.subscriptionCode = subscriptionCode;
     }
 
     public int getNumberOfSubscriptions() {

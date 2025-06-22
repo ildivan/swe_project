@@ -119,7 +119,7 @@ public void startServer(ConfigType configType) {
                                 externalSocket.close();
                                 return;
                             }
-                            MainService<?> service = new UserService(externalSocket);
+                            MainService<?> service = new UserService(externalSocket,u,configType);
                             service.run();
                         } catch (IOException | InterruptedException e) {
                             System.out.println("External service error: " + e.getMessage());

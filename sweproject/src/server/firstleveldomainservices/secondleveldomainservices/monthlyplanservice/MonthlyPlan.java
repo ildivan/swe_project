@@ -5,23 +5,20 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import com.google.gson.JsonObject;
-
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 
 
 public class MonthlyPlan{
-
-    private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
 
     private LocalDate date;
     private Map<LocalDate,DailyPlan> monthlyPlan;
@@ -30,6 +27,7 @@ public class MonthlyPlan{
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private transient MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
    
     public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date) {
         this.monthlyPlan = montlyPlan;
@@ -49,7 +47,7 @@ public class MonthlyPlan{
         
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
-        MonthlyConfig mc = geMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
  
         date = mc.getMonthAndYear();
 
@@ -93,15 +91,6 @@ public class MonthlyPlan{
         }
     }
 
-
-    private MonthlyConfig geMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
-
-        JsonObject mcJO = dataLayer.get(locInfo);
-        return jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
-    }
 
     public DailyPlan getDailyPlan(LocalDate date) {
         return monthlyPlan.get(date);

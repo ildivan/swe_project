@@ -15,9 +15,10 @@ import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfigManager;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.PlanState;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigUpdater;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
@@ -30,13 +31,14 @@ public class MonthlyPlanService {
     private transient DateService dateService = new DateService();
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
 
 
     public boolean buldMonthlyPlan() {
         LocalDate today = dateService.getTodayDate();
 
         //permette di evitare race conditions durante la configurazione del piano mensile
-        MonthlyConfig mc = getMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
 
 
         // si potrebbe fare un metodo nel maager che fa questi, ma non credo sia necessatio
@@ -44,7 +46,7 @@ public class MonthlyPlanService {
         mc = setIsBeingConfigured(mc,PlanState.GENERAZIONE_PIANO, true);
         
         MonthlyPlan monthlyPlan = new MonthlyPlan(today);
-        MonthlyConfigManager monthlyConfigManager = new MonthlyConfigManager(mc, today);
+        MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today);
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
     
@@ -81,9 +83,7 @@ public class MonthlyPlanService {
         Map<PlanState, Boolean> stateMap = mc.getPlanStateMap();
         stateMap.put(isBeingConfigured, value);
         mc.setPlanStateMap(stateMap);
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        locInfo.setKey(MONTHLY_CONFIG_KEY);
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
+        monthlyConfigService.saveMonthlyConfig(mc);
 
         return mc;
 
@@ -148,21 +148,29 @@ public class MonthlyPlanService {
         return jsonFactoryService.createObject(mpJO, MonthlyPlan.class);
     }
 
-    private String getMonthlyPlanDate(){
-        MonthlyConfig mc = getMonthlyConfig();
+    public String getMonthlyPlanDate(){
+        
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
         LocalDate date = mc.isPlanConfigured().keySet().iterator().next();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return date.format(formatter);
     }
 
-    public MonthlyConfig getMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo =locInfoFactory.getMonthlyConfigLocInfo();
+    /**
+     * metodo per aggiornare il monthly plan dopo una iscrizione
+     * @param dateOfSubscription
+     * @param updatedDailyPlan
+     */
+    public void updateMonthlyPlan(LocalDate dateOfSubscription, DailyPlan updatedDailyPlan) {
+        MonthlyPlan monthlyPlan = getMonthlyPlan();
+        Map<LocalDate, DailyPlan> monthlyMap = monthlyPlan.getMonthlyPlan();
+        monthlyMap.put(dateOfSubscription, updatedDailyPlan);
+        monthlyPlan.setMonthlyPlan(monthlyMap);
 
-        locInfo.setKey(MONTHLY_CONFIG_KEY);
 
-        JsonObject mcJO = dataLayer.get(locInfo);
-        MonthlyConfig mc = jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
-        return mc;
-
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyPlanLocInfo();
+        locInfo.setKey(getMonthlyPlanDate());
+        dataLayer.modify(jsonFactoryService.createJson(monthlyPlan), locInfo);
     }
+
 }

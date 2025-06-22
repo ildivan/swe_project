@@ -12,7 +12,7 @@ public class UserMenu extends MenuManager{
         super();
         vociVisibili.put("Aggiungi iscrizione", true);
         
-        chiamateMetodi.put("Mostra le mie visite del piano", userService::addSubscription);
+        chiamateMetodi.put("Aggiungi iscrizione", userService::addSubscription);
         
       
     }

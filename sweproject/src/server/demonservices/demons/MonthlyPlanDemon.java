@@ -11,21 +11,23 @@ import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.demonservices.IDemon;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.PerformedActivity;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 public class MonthlyPlanDemon implements IDemon{
-    private static final String MONTHLY_CONFIG_KEY = "current";
+
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
 
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone
     @Override
@@ -97,21 +99,12 @@ public class MonthlyPlanDemon implements IDemon{
     }
 
     private String getMonthlyPlanDate(){
-        MonthlyConfig mc = getMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
         LocalDate date = mc.isPlanConfigured().keySet().iterator().next();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return date.format(formatter);
     }
 
-    private MonthlyConfig getMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        locInfo.setKey(MONTHLY_CONFIG_KEY);
-
-        JsonObject mcJO = dataLayer.get(locInfo);
-        MonthlyConfig mc = jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
-        assert mc != null;
-        return mc;
-
-    }
+    
     
 }

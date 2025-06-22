@@ -1,20 +1,20 @@
 package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice;
 
-import java.util.HashSet;
-import java.util.Set;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.subscriptionlogic.Subscription;
+import java.util.HashMap;
+import java.util.Map;
+import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 
 public class ActivityInfo {
     private int numberOfSub;
     private ActivityState state;
     private String timeOfTheActivity;
-    private Set<Subscription> subscriptions;
+    private Map<Integer, Subscription> subscriptions;
 
     public ActivityInfo(int numberOfSub, ActivityState state, String timeOfTheActivity) {
         this.numberOfSub = numberOfSub;
         this.state = state;
         this.timeOfTheActivity = timeOfTheActivity;
-        this.subscriptions = new HashSet<>();
+        this.subscriptions = new HashMap<>();
     }
 
     public int getNumberOfSub() {
@@ -41,11 +41,20 @@ public class ActivityInfo {
         return timeOfTheActivity;
     }
 
-    public Set<Subscription> getSubscriptions() {
+    public Map<Integer, Subscription> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(Set<Subscription> subscriptions) {
+    public void setSubscriptions(Map<Integer, Subscription> subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public synchronized void addSubscription(int subscriptionCode, Subscription subscription) {
+       subscriptions.put(subscriptionCode, subscription);
+       updateNumberOfSub(subscription);
+    }
+
+    private void updateNumberOfSub(Subscription subscription) {
+        numberOfSub += subscription.getNumberOfSubscriptions();
     }
 }

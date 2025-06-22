@@ -1,4 +1,4 @@
-package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig;
+package server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice;
 
 public enum PlanState {
     DISPONIBILITA_APERTE("disponibilita_aperte"),

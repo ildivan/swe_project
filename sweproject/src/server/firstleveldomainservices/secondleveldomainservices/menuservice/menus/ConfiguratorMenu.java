@@ -12,8 +12,9 @@ import server.datalayerservice.datalocalizationinformations.JsonDataLocalization
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
@@ -28,6 +29,7 @@ public class ConfiguratorMenu extends MenuManager{
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     private transient ConfigType configType;
+    private transient MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
 
 
     public ConfiguratorMenu(ConfigService configService, ConfigType configType) {
@@ -78,7 +80,7 @@ public class ConfiguratorMenu extends MenuManager{
 
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
-        MonthlyConfig mc = geMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
         
         if(dateService.getTodayDate().equals(mc.getMonthAndYear()) && checkIfAlredyBuildPlan()){
             map.put("Genera Piano Mensile", true);
@@ -96,7 +98,7 @@ public class ConfiguratorMenu extends MenuManager{
      * @return
      */
     private boolean checkIfAlredyBuildPlan(){
-        MonthlyConfig mc = geMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
         LocalDate dateOfNextPlan = mc.getMonthAndYear();
         //come oggetto Boolean e non come tipo primitivo cosi da poter gestire il caso null
         Boolean planConfigured = mc.isPlanConfigured().get(dateOfNextPlan);
@@ -112,13 +114,6 @@ public class ConfiguratorMenu extends MenuManager{
         }
     }
 
-    private MonthlyConfig geMonthlyConfig(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
-
-        JsonObject mcJO = dataLayer.get(locInfo);
-        return jsonFactoryService.createObject(mcJO, MonthlyConfig.class);
-    }
 
     /**
      * convert the menu to a string

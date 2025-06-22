@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -25,14 +23,15 @@ import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.VolunteerMenu;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.PlanState;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
@@ -58,6 +57,7 @@ public class VolunteerService extends MainService<Void>{
     private final DateService dateService = new DateService();
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
     
   
 
@@ -127,7 +127,7 @@ public class VolunteerService extends MainService<Void>{
      */
     public void addPrecludeDate(){
         
-        MonthlyConfig mc = monthlyPlanService.getMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
 
         if(!mc.getPlanStateMap().get(PlanState.DISPONIBILITA_APERTE)){
             ioService.writeMessage("Piano mensile o modifica attivita in corso, non puoi aggiungere date precluse", false);

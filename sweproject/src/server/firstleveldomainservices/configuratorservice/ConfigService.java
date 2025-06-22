@@ -21,13 +21,14 @@ import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.ConfiguratorMenu;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.ioservice.AMIOUtil;
@@ -61,6 +62,7 @@ public class ConfigService extends MainService<Void>{
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
     
   
 
@@ -472,15 +474,10 @@ public class ConfigService extends MainService<Void>{
 
         ioService.writeMessage(CLEAR,false);
 
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-        MonthlyConfig mc = monthlyPlanService.getMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
 
         int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
         int minNumDay = 1;
-            
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-
-        locInfo.setKey(MONTHLY_CONFIG_KEY);
         
         int day = ioService.readIntegerWithMinMax("Inserire giorno non disponibile", minNumDay, maxNumDay);
 
@@ -488,9 +485,7 @@ public class ConfigService extends MainService<Void>{
         int year = dateService.setYearOnPrecludeDay(mc, day);
 
         mc.getPrecludeDates().add(LocalDate.of(year, month, day));
-        JsonObject newConfigsJO = jsonFactoryService.createJson(mc);
-
-        dataLayer.modify(newConfigsJO, locInfo);
+        monthlyConfigService.saveMonthlyConfig(mc);
 
     }
 

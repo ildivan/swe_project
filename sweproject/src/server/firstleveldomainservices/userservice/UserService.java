@@ -2,22 +2,12 @@ package server.firstleveldomainservices.userservice;
 
 import java.io.IOException;
 import java.net.Socket;
-
-import com.google.gson.Gson;
-
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
+import server.authservice.User;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.UserMenu;
+import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.SubscriptionService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
-import server.ioservice.objectformatter.IIObjectFormatter;
-import server.ioservice.objectformatter.TerminalObjectFormatter;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
 import server.utils.MainService;
 
@@ -27,17 +17,15 @@ public class UserService extends MainService<Void> {
     private static final String SPACE = "SPACE";
 
     private final MenuService menu; 
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
-    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
-    private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final SubscriptionService subscriptionService;
     
-  
 
-    public UserService(Socket socket) {
+
+    public UserService(Socket socket, User user, ConfigType configType) {
         super(socket);
         this.menu = new UserMenu(this);
+        this.subscriptionService = new SubscriptionService(user, configType);
     }
 
 
@@ -67,11 +55,7 @@ public class UserService extends MainService<Void> {
     }
 
     public void addSubscription() {
-        // Implement the logic to add a subscription
-        // This is a placeholder method and should be replaced with actual implementation
-        ioService.writeMessage("TO DO: Implement addSubscription logic in UserService.", false);
+        subscriptionService.addSubscription();
     }
-
-
 
 }

@@ -1,4 +1,4 @@
-package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig;
+package server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -12,6 +12,7 @@ public class MonthlyConfig {
     private Set<LocalDate> precludeDates;
     private String type = "current"; //old or current depends if is the current or not
     private Map<PlanState, Boolean> planStateMap; //permette di ottenere sequenzialita
+    private int sequenceSubscriptionNumber;
 
     public MonthlyConfig(LocalDate date, Map<LocalDate, Boolean> planConfigured, Set<LocalDate> precludeDates) {
         this.monthAndYear = date;
@@ -21,8 +22,8 @@ public class MonthlyConfig {
         PlanState.GENERAZIONE_PIANO, true,
         PlanState.MODIFICHE_APERTE, false,
         PlanState.DISPONIBILITA_APERTE, false
-));
-
+        ));
+        this.sequenceSubscriptionNumber = 1;
 
     }
 
@@ -68,6 +69,14 @@ public class MonthlyConfig {
 
     public void setPlanStateMap(Map<PlanState, Boolean> planStateMap) {
         this.planStateMap = planStateMap;
+    }
+
+    public int getSequenceSubscriptionNumber() {
+        return sequenceSubscriptionNumber;
+    }
+    
+    public void setSequenceSubscriptionNumber(int sequenceSubscriptionNumber) {
+        this.sequenceSubscriptionNumber = sequenceSubscriptionNumber;
     }
 
 }

@@ -2,7 +2,7 @@ package server;
 
 import java.time.*;
 
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 
 
 public class DateService {
@@ -102,6 +102,44 @@ public class DateService {
                 return 2;
             }
             return monthOfPlan+2;
+        }
+    }
+
+    /**
+     * setta il mese in base al giorno scelto per l'iscrizione
+     * @param dateOfPlan
+     * @param choseDay
+     * @return
+     */
+    public int setMonthOnDayOfSubscription(LocalDate dateOfPlan, int choseDay) {
+
+        int month = dateOfPlan.getMonthValue();
+
+        if(choseDay >= 17 && choseDay <= 31){
+            return month;
+        }else{
+            if(month == 12){
+                return 1;
+            }
+            return month + 1;
+        }
+    }
+
+    /**
+     * setta l'anno in base al giorno scelto per l'iscrizione
+     * @param dateOfPlan
+     * @param choseDay
+     * @return
+     */
+    public int setYearOnDayOfSubscription(LocalDate dateOfPlan, int choseDay) {
+        int year = dateOfPlan.getYear();
+        if(choseDay >= 17 && choseDay <= 31){
+            return year;
+        }else{
+            if(dateOfPlan.getMonthValue() == 12){
+                return year + 1;
+            }
+            return year;
         }
     }
 }

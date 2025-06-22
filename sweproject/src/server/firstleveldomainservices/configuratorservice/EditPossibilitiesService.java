@@ -19,9 +19,10 @@ import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.EditMenu;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.monthlyconfig.PlanState;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.ioservice.AMIOUtil;
 import server.ioservice.IInputOutput;
@@ -47,6 +48,7 @@ public class EditPossibilitiesService extends MainService<Void>{
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
     private ConfigType configType;
 
 
@@ -58,8 +60,8 @@ public class EditPossibilitiesService extends MainService<Void>{
 
     @Override
     protected Void applyLogic() throws IOException {
-        
-        MonthlyConfig monthlyConfig = getMonthlyConfig();
+
+        MonthlyConfig monthlyConfig = monthlyConfigService.getMonthlyConfig();
 
         if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
             ioService.writeMessage("\n\nFase di modifica non disponibile, piano corrente non ancora generato\n\n", false);
@@ -90,23 +92,17 @@ public class EditPossibilitiesService extends MainService<Void>{
         setIsBeingConfigured(PlanState.DISPONIBILITA_APERTE, true);
     }
 
-    private MonthlyConfig getMonthlyConfig(){
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-        return monthlyPlanService.getMonthlyConfig();
-    }
-
     /**
      * metodo epr modificare il fatto che si sta iniziando a modificare dati
      * @param isBeingConfigured
      */
     private void setIsBeingConfigured(PlanState isBeingConfigured, Boolean value) {
-        MonthlyConfig mc = getMonthlyConfig();
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
         Map<PlanState, Boolean> stateMap = mc.getPlanStateMap();
         stateMap.put(isBeingConfigured, value);
         mc.setPlanStateMap(stateMap);
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-        locInfo.setKey(MONTHLY_CONFIG_KEY);
-        dataLayer.modify(jsonFactoryService.createJson(mc), locInfo);
+       
+        monthlyConfigService.saveMonthlyConfig(mc);
 
     }
 
