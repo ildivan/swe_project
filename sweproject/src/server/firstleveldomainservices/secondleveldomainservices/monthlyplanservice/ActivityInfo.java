@@ -1,20 +1,21 @@
 package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
+
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 
 public class ActivityInfo {
     private int numberOfSub;
     private ActivityState state;
     private String timeOfTheActivity;
-    private Map<Integer, Subscription> subscriptions;
+    private Set<Integer> subscriptions;
 
     public ActivityInfo(int numberOfSub, ActivityState state, String timeOfTheActivity) {
         this.numberOfSub = numberOfSub;
         this.state = state;
         this.timeOfTheActivity = timeOfTheActivity;
-        this.subscriptions = new HashMap<>();
+        this.subscriptions = new HashSet<>();
     }
 
     public int getNumberOfSub() {
@@ -41,20 +42,27 @@ public class ActivityInfo {
         return timeOfTheActivity;
     }
 
-    public Map<Integer, Subscription> getSubscriptions() {
+    public  Set<Integer> getSubscriptions() {
         return subscriptions;
     }
 
-    public void setSubscriptions(Map<Integer, Subscription> subscriptions) {
+    public void setSubscriptions(Set<Integer> subscriptions) {
         this.subscriptions = subscriptions;
     }
 
     public synchronized void addSubscription(int subscriptionCode, Subscription subscription) {
-       subscriptions.put(subscriptionCode, subscription);
+       subscriptions.add(subscriptionCode);
        updateNumberOfSub(subscription);
     }
 
     private void updateNumberOfSub(Subscription subscription) {
         numberOfSub += subscription.getNumberOfSubscriptions();
+    }
+
+    public void removeSubscription(Subscription subscription) {
+        if (subscriptions.contains(subscription.getSubscriptionId())) {
+            subscriptions.remove(subscription.getSubscriptionId());
+            numberOfSub -= subscription.getNumberOfSubscriptions();
+        }
     }
 }

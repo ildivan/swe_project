@@ -24,13 +24,13 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigse
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.gsonfactoryservice.GsonFactoryService;
-import server.ioservice.AMIOUtil;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
+import server.utils.ActivityUtil;
 import server.utils.ConfigType;
 import server.utils.Configs;
 import server.utils.MainService;
@@ -49,6 +49,7 @@ public class EditPossibilitiesService extends MainService<Void>{
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
+    private final ActivityUtil activityUtil = new ActivityUtil();
     private ConfigType configType;
 
 
@@ -178,7 +179,7 @@ public class EditPossibilitiesService extends MainService<Void>{
                 ioService.writeMessage("\nLuogo non trovato, impossibile modificare il punto di ritrovo", false);
                 return;
             }
-            Address newMeetingPoint = AMIOUtil.getMeetingPoint(place); 
+            Address newMeetingPoint = activityUtil.getMeetingPoint(place); 
             activity.setMeetingPoint(newMeetingPoint);
         }
 
@@ -190,7 +191,7 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         boolean changeDays = ioService.readBoolean("\nVuoi modificare i giorni programmabili? (true/false)");
         if (changeDays) {
-            String[] newDays = AMIOUtil.insertDays();
+            String[] newDays = activityUtil.insertDays();
             activity.setProgrammableDays(newDays);
         }
 

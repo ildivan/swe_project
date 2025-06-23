@@ -19,6 +19,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigse
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigUpdater;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
+import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
@@ -171,6 +172,70 @@ public class MonthlyPlanService {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyPlanLocInfo();
         locInfo.setKey(getMonthlyPlanDate());
         dataLayer.modify(jsonFactoryService.createJson(monthlyPlan), locInfo);
+    }
+
+    /**
+     * metodo per aggiornare il piano mensile dopo una eliminazione di una iscrizione
+     * @param subscription
+     */
+    public void removeSubscription(Subscription subscription) {
+        //ottengo il piano giornaliero della data dell'attività a cui sono iscritto
+        DailyPlan dailyPlan = getDailyPlan(subscription.getDateOfActivity());
+        if(dailyPlan == null) {
+            return;
+        }
+
+        //rimuovo l'iscrizione
+        dailyPlan.removeSubscriptionOnActivity(subscription);
+
+        //aggiorno il piano mensile
+        updateMonthlyPlan(subscription.getDateOfActivity(), dailyPlan);
+
+    }
+
+        /**
+     * metodo per ottenere le informazoni delle attività del giorno scelto
+     * @param day
+     * @return
+     */
+    public DailyPlan getDailyPlanOfTheChosenDay(int day) {
+
+        LocalDate data = getFullDateOfChosenDay(day); //ottengo la data completa del giorno scelto
+
+        return getDailyPlan(data);
+    
+    }
+
+    private DailyPlan getDailyPlan(LocalDate date) {
+        Map<LocalDate, DailyPlan> monthlyMap = getMonthlyPlan().getMonthlyPlan();
+
+        if(monthlyMap.containsKey(date)) {
+            if(monthlyMap.get(date) == null) {
+                return null;
+            }
+            return monthlyMap.get(date);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * metodo che ritorna la data del gionro scelto
+     * @param day
+     * @return
+     */
+    public LocalDate getFullDateOfChosenDay(int day) {
+        DateService dateService = new DateService();
+        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String dateString = monthlyPlanService.getMonthlyPlanDate();
+        LocalDate dateOfPlan = LocalDate.parse(dateString, formatter); //data del piano, uso questa data per ottenere il mese e l'anno
+
+        int chosenMonth = dateService.setMonthOnDayOfSubscription(dateOfPlan, day);
+        int chosenYear = dateService.setYearOnDayOfSubscription(dateOfPlan, day);
+
+        LocalDate data = LocalDate.of(chosenYear, chosenMonth, day); //data del giorno scelto
+        return data;
     }
 
 }

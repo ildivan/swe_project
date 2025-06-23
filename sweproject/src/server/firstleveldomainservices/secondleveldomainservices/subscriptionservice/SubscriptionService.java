@@ -2,7 +2,10 @@ package server.firstleveldomainservices.secondleveldomainservices.subscriptionse
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.gson.JsonObject;
 
@@ -29,6 +32,7 @@ import server.utils.Configs;
 
 public class SubscriptionService {
 
+    private static final String SUBSCRIPTION_KEY_DESC = "subscriptionId";
     private final ConfigType configType;
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
@@ -44,12 +48,18 @@ public class SubscriptionService {
         this.configType = configType;
     }
 
-
+    /**
+     * metodo per aggiungere una iscrizione
+     */
     public void addSubscription() {
 
         int day = ioService.readIntegerWithMinMax("Inserisci il giorno per la sottoscrizione (1-31): ",1,31);
 
-        DailyPlan dailyPlan = getDailyPlanOfTheChosenDay(day);
+        DailyPlan dailyPlan = monthlyPlanService.getDailyPlanOfTheChosenDay(day);
+        if(dailyPlan == null) {
+            ioService.writeMessage("Impossibile trovare attività per la data selezionata per la data selezionata.", false);
+            return;
+        }
 
         String activityName  = choseActivity(day, dailyPlan); 
 
@@ -63,17 +73,28 @@ public class SubscriptionService {
         int subscriptionCode = monthlyConfigService.getCurrentSubCode();
         int numberOfSubscriptions = ioService.readIntegerWithMinMax("\nInserisci il numero di iscrizioni: ",1,getMaxNumberOfSubscriptions());
 
-        Subscription subscription = new Subscription(userName, numberOfSubscriptions);
+        Subscription subscription = new Subscription(userName, numberOfSubscriptions, activityName, subscriptionCode, LocalDate.now(), monthlyPlanService.getFullDateOfChosenDay(day));
 
         DailyPlan updatedDailyPlan = updateDailyPlan(dailyPlan, activityInfo, subscription, subscriptionCode, activityName);
     
         LocalDate dateOfSubscription = dailyPlan.getDate(); //ottengo la data del piano giornaliero a cui mi sto iscrivendo
         //cosi da poter aggiurnare il piano mensile
         
+        saveSubscription(subscription);
         monthlyPlanService.updateMonthlyPlan(dateOfSubscription, updatedDailyPlan);
 
         ioService.writeMessage("Sottoscrizione aggiunta con successo!", false);
     }
+
+    /**
+     * metodo per salvare l'iscrizione
+     * @param subscription
+     */
+    private void saveSubscription(Subscription subscription) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getSubscriptionLocInfo();
+        dataLayer.add(jsonFactoryService.createJson(subscription), locInfo);
+    }
+
 
     /**
      * aggiorna il piano giornaliero
@@ -141,47 +162,87 @@ public class SubscriptionService {
        
     }
 
-
-
     /**
-     * metodo per ottenere le informazoni delle attività del giorno scelto
-     * @param day
+     * metodo per ottenre le iscrizioni dell'utente
      * @return
      */
-    private DailyPlan getDailyPlanOfTheChosenDay(int day) {
-        DateService dateService = new DateService();
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
-        Map<LocalDate,DailyPlan> monthlyMap = monthlyPlan.getMonthlyPlan();
+    public Set<Subscription> getSubscriptionsForUser() {
+        Set<Subscription> subscriptions = getSubscriptions(); //questo metodo deve essere inserito nella facade per il datalayer
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String dateString = monthlyPlanService.getMonthlyPlanDate();
-        LocalDate dateOfPlan = LocalDate.parse(dateString, formatter); //data del piano, uso questa data per ottenere il mese e l'anno
-
-        int chosenMonth = dateService.setMonthOnDayOfSubscription(dateOfPlan, day);
-        int chosenYear = dateService.setYearOnDayOfSubscription(dateOfPlan, day);
-
-        LocalDate data = LocalDate.of(chosenYear, chosenMonth, day); //data del giorno scelto
-
-        DailyPlan dailyPlan;
-
-        if(monthlyMap.containsKey(data)) {
-            if(monthlyMap.get(data) == null) {
-                ioService.writeMessage("Piano mensile nullo per la data selezionata.", false);
-                return null;
+        for (Subscription subscription : subscriptions) {
+            if (subscription.getUserName().equals(user.getName())) {
+                subscriptions.add(subscription);
             }
-            dailyPlan = monthlyMap.get(data);
-
-        } else {
-            ioService.writeMessage("Piano mensile non trovato per la data selezionata.", false);
-            return null;
         }
 
-
-       return dailyPlan;
-        
-            
+        return subscriptions;
     }
 
+    /**
+     * metodo per ottenrer tutte le iscrizioni
+     * @return
+     */
+    private Set<Subscription> getSubscriptions() {
+        Set<Subscription> subscriptions = new HashSet<>();
+        List<JsonObject> subscriptionsJO = dataLayer.getAll(locInfoFactory.getSubscriptionLocInfo());
+
+        for (JsonObject jsonObject : subscriptionsJO) {
+            Subscription subscription = jsonFactoryService.createObject(jsonObject, Subscription.class);
+            subscriptions.add(subscription);
+        }
+
+        return subscriptions;
+    }
+
+    /**
+     * metodo per eliminare una iscrizione
+     * @param subCode
+     */
+    public void deleteSubscription(int subCode) {
+        Subscription subscription = getSubscriptionByCode(subCode);
+        if (subscription != null) {
+            updateSubscriptionArchive(subscription);
+            updateMonthlyPlan(subscription);
+            ioService.writeMessage("Iscrizione eliminata con successo.", false);
+        } else {
+            ioService.writeMessage("Iscrizione non trovata.", false);
+        }
+    }
+
+    /**
+     * metodo per rimuovere l'iscrizione dal piano mensile
+     * @param subscription
+     */
+    private void updateMonthlyPlan(Subscription subscription) {
+        monthlyPlanService.removeSubscription(subscription);
+    }
+
+    /**
+     * metodo per aggiornare l'archivio delle iscrizioni
+     * @param subscription
+     */
+    private void updateSubscriptionArchive(Subscription subscription) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getSubscriptionLocInfo();
+        locInfo.setKeyDesc(SUBSCRIPTION_KEY_DESC);
+        locInfo.setKey(String.valueOf(subscription.getSubscriptionId()));
+
+        dataLayer.delete(locInfo);
+        
+    }
+
+    /**
+     * metodo per ottenere l'iscrizione in base al codice
+     * @param subCode
+     * @return
+     */
+    private Subscription getSubscriptionByCode(int subCode) {
+        Set<Subscription> subscriptions = getSubscriptions();
+        for (Subscription subscription : subscriptions) {
+            if (subscription.getSubscriptionId() == subCode) {
+                return subscription;
+            }
+        }
+        return null;
+    }
 
 }

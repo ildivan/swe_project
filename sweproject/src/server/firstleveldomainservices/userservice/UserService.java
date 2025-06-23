@@ -2,12 +2,22 @@ package server.firstleveldomainservices.userservice;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import server.authservice.User;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.UserMenu;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
+import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.SubscriptionService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
+import server.ioservice.objectformatter.IIObjectFormatter;
+import server.ioservice.objectformatter.TerminalObjectFormatter;
+import server.utils.ActivityUtil;
 import server.utils.ConfigType;
 import server.utils.MainService;
 
@@ -19,7 +29,8 @@ public class UserService extends MainService<Void> {
     private final MenuService menu; 
     private final IInputOutput ioService = new IOService();
     private final SubscriptionService subscriptionService;
-    
+    private final ActivityUtil activityUtil = new ActivityUtil();
+    private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
 
 
     public UserService(Socket socket, User user, ConfigType configType) {
@@ -54,8 +65,55 @@ public class UserService extends MainService<Void> {
         }while(continuare);
     }
 
+    /**
+     * metodo per aggiungere una iscrizione
+     */
     public void addSubscription() {
         subscriptionService.addSubscription();
+    }
+
+     /**
+     * mostra le visite in base allo stato richiesto
+     * @param desiredState stato delle visite che vuoi visualizzare
+     */
+    public void showActivitiesWithCondition(ActivityState desiredState) {
+        
+        List<ActivityRecord> result = activityUtil.getActiviyByState(desiredState);
+    
+        ioService.writeMessage(formatter.formatListActivityRecord(result), false);
+        ioService.writeMessage(SPACE,false);
+    }
+
+    /**
+     * metotodo per visualizzare le iscrizioni effettuate dall'utente
+     */
+    public void showSubscriptions(){
+        Set<Subscription> subscriptions = subscriptionService.getSubscriptionsForUser();
+        if(subscriptions.isEmpty()){
+            ioService.writeMessage("Non hai sottoscrizioni attive.", false);
+            return;
+        }
+        ioService.writeMessage(formatter.formatListSubscription(subscriptions), false);
+        ioService.writeMessage(SPACE,false);
+    }
+
+    /**
+     * metodo per eliminare una iscrizione
+     */
+    public void deleteSubscription() {
+        int subCode;
+        ioService.writeMessage("\n\nIscrizioni effettuate:\n", false);
+        showSubscriptions();
+        subCode = getSubCode();
+        subscriptionService.deleteSubscription(subCode);
+    }
+
+    /**
+     * metodo per ottenre il codice dell'iscrizione da rimuovere
+     * @return
+     */
+    private int getSubCode() {
+        return ioService.readInteger("Inserisci il codice dell'iscrizione da rimuovere: ");
     }
 
 }

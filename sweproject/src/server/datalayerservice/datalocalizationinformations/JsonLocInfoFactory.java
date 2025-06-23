@@ -25,6 +25,8 @@ public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationI
     private static final String USERS_PATH = "sweproject/JF/users.json";
     private static final String ARCHIVE_PATH = "sweproject/JF/archive.json";
     private static final String ARCHIVE_MEMBER_NAME = "activityArchive";
+    private static final String SUBSCRIPTION_PATH = "sweproject/JF/subscription.json";
+    private static final String SUBSCRIPTION_MEMBER_NAME = "activitySubscription";
 
     /**
      * metodo che ritorna le informazioni di localizzazione per dati salvati in
@@ -126,6 +128,14 @@ public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationI
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(ARCHIVE_PATH);
         locInfo.setMemberName(ARCHIVE_MEMBER_NAME);
+        return locInfo;
+    }
+
+    @Override
+    public JsonDataLocalizationInformation getSubscriptionLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(SUBSCRIPTION_PATH);
+        locInfo.setMemberName(SUBSCRIPTION_MEMBER_NAME);
         return locInfo;
     }
     

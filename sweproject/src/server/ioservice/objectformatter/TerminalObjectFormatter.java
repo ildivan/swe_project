@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
@@ -12,6 +13,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
+import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 import server.firstleveldomainservices.volunteerservice.ConfirmedActivity;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 
@@ -251,7 +253,20 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
         return sb.toString();
     }
 
-    
-
+    /**
+     * metodo per formattare la lista delle sottoscrizioni
+     */
+    @Override
+    public String formatListSubscription(Set<Subscription> subscriptions) {
+        StringBuilder sb = new StringBuilder();
+        for (Subscription sub : subscriptions) {
+            sb.append("\n\n----\n\n");
+            sb.append("ID Iscrizione: ").append(sub.getSubscriptionId()).append("\n");
+            sb.append("Attività: ").append(sub.getActivityName()).append("\n");
+            sb.append("Data: ").append(sub.getDateOfActivity()).append("\n");
+            sb.append("Numero di iscritti: ").append(sub.getNumberOfSubscriptions()).append("\n");
+        }
+        return sb.toString();
+    }
 
 }

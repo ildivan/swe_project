@@ -3,6 +3,7 @@ package server.firstleveldomainservices.secondleveldomainservices.menuservice.me
 import java.util.List;
 import java.util.Map;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.userservice.UserService;
 
 
@@ -11,10 +12,19 @@ public class UserMenu extends MenuManager{
     public UserMenu(UserService userService) {
         super();
         vociVisibili.put("Aggiungi iscrizione", true);
+        vociVisibili.put("Mostra Attività Proposte", true);
+        vociVisibili.put("Mostra Attività Confermata", true);
+        vociVisibili.put("Mostra Attività Cancellata", true);
+        vociVisibili.put("Mostra iscrizioni effettuate", true);
+        vociVisibili.put("Cancellazione iscrizione", true);
+        
         
         chiamateMetodi.put("Aggiungi iscrizione", userService::addSubscription);
-        
-      
+        chiamateMetodi.put("Mostra Attività Proposte", () -> userService.showActivitiesWithCondition(ActivityState.PROPOSTA));
+        chiamateMetodi.put("Mostra Attività Confermata", () -> userService.showActivitiesWithCondition(ActivityState.CONFERMATA));
+        chiamateMetodi.put("Mostra Attività Cancellata", () -> userService.showActivitiesWithCondition(ActivityState.CANCELLATA));
+        chiamateMetodi.put("Mostra iscrizioni effettuate", userService::showSubscriptions);
+        chiamateMetodi.put("Cancellazione iscrizione", userService::deleteSubscription);
     }
 
     @Override
@@ -35,6 +45,8 @@ public class UserMenu extends MenuManager{
         menuOut.append("BENVENUTO NEL MENU FRUITORE!");
         menuOut.append("\n\nSelezionare una opzione:\n");
         menuOut.append(obtainMenuString("\n\nFunzioni di iscrizione:\n\n", "iscrizione", menu));
+        menuOut.append(obtainMenuString("\n\nFunzioni di visualizzazione:\n\n", "Mostra", menu));
+        menuOut.append(obtainMenuString("\n\nFunzioni di cancellazione:\n\n", "Cancellazione", menu));
 
         return menuOut.toString();
     }

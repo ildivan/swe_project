@@ -12,6 +12,7 @@ import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
+import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
@@ -188,5 +189,18 @@ public class DailyPlan {
             return str;
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
+    }
+
+    /**
+     * metodo per rimuovere una iscrizione su un'attività
+     * @param activityName nome dell'attività
+     * @param subscriptionId id dell'iscrizione da rimuovere
+     */
+    public void removeSubscriptionOnActivity(Subscription subscription) {
+        String activityName = subscription.getActivityName();
+        if (plan.containsKey(activityName)) {
+            ActivityInfo activityInfo = plan.get(activityName);
+            activityInfo.removeSubscription(subscription);
+        }
     }
 }

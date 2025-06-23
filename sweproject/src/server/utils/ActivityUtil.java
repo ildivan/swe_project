@@ -1,4 +1,4 @@
-package server.ioservice;
+package server.utils;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -7,12 +7,22 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import com.google.gson.Gson;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
+import server.ioservice.IInputOutput;
+import server.ioservice.IOService;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
@@ -20,7 +30,7 @@ import server.datalayerservice.datalocalizationinformations.JsonDataLocalization
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 
 
-public class AMIOUtil{
+public class ActivityUtil{
    
 
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
@@ -28,7 +38,7 @@ public class AMIOUtil{
     private final static ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
     private final static IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
-    public static Address getAddress(){
+    public Address getAddress(){
         IInputOutput ioService = getIOService();
         String street = ioService.readString("Inserire via");
         String city = ioService.readString("Inserire città");
@@ -41,7 +51,7 @@ public class AMIOUtil{
         return new Address(street, city, nation, zipCode);
     }
 
-    public static Activity getActivity(Place place){
+    public Activity getActivity(Place place){
         IInputOutput ioService = getIOService();
             String title = ioService.readString("\nInserire titolo attività");
             String description = ioService.readString("\nInserire descrizione attività");
@@ -63,7 +73,7 @@ public class AMIOUtil{
      * @param message
      * @return
      */
-    public static LocalTime getTime(String message) {
+    public LocalTime getTime(String message) {
         IInputOutput ioService = getIOService();
         DateTimeFormatter formatterTime = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime time = null;
@@ -87,7 +97,7 @@ public class AMIOUtil{
      * @param message
      * @return
      */
-    public static LocalDate getDate(String message){
+    public LocalDate getDate(String message){
         IInputOutput ioService = getIOService();
         DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = null;
@@ -111,7 +121,7 @@ public class AMIOUtil{
      * @return
      * @throws IOException
      */
-    public static Address getMeetingPoint(Place p){
+    public Address getMeetingPoint(Place p){
         IInputOutput ioService = getIOService();
         if((ioService.readString("\nInserire punto di ritrovo (indirizzo): ('d' per indirizzo luogo vuoto per inserire)")).equals("d")){
             return p.getAddress();
@@ -125,7 +135,7 @@ public class AMIOUtil{
      * @return
      * @throws IOException
      */
-    public static String[] addVolunteersToActivity(){
+    public String[] addVolunteersToActivity(){
         IInputOutput ioService = getIOService();
         ArrayList<String> volunteers = new ArrayList<>();
       
@@ -147,7 +157,7 @@ public class AMIOUtil{
      * @param name name of the volunteer to check
      * @return true if the volunteer already exists
      */
-    private static boolean checkIfVolunteersExist(String name) {
+    private boolean checkIfVolunteersExist(String name) {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
 
         locInfo.setKey(name);
@@ -160,7 +170,7 @@ public class AMIOUtil{
      * method to check if a string is numeric
      * @return
      */
-    private static boolean isNumeric(String str) {
+    private boolean isNumeric(String str) {
         return str != null && str.matches("\\d+");
     }
 
@@ -169,7 +179,7 @@ public class AMIOUtil{
      * @param message
      * @return
      */
-    public static String[] insertDays() {
+    public String[] insertDays() {
         IInputOutput ioService = getIOService();
         
         List<String> days = new ArrayList<>();
@@ -193,7 +203,7 @@ public class AMIOUtil{
      * @param message the operation the user wants to continue
      * @return
      */
-    protected static boolean continueChoice(String message) {
+    protected boolean continueChoice(String message) {
         IInputOutput ioService = getIOService();
         String choice = ioService.readString(String.format("\nProseguire con %s? (s/n)", message));
        
@@ -203,8 +213,36 @@ public class AMIOUtil{
         return true;
     }
 
-    private static IInputOutput getIOService(){
+    private IInputOutput getIOService(){
         return new IOService();
+    }
+
+    public List<ActivityRecord> getActiviyByState(ActivityState desiredState){
+        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+
+        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+
+        if( monthlyPlan == null){
+            return null;
+        }
+
+
+        List<ActivityRecord> result = new ArrayList<>();
+
+        for (Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlan.getMonthlyPlan().entrySet()) {
+            LocalDate date = dailyEntry.getKey();
+            DailyPlan dailyPlan = dailyEntry.getValue();
+    
+            for (Map.Entry<String, ActivityInfo> activityEntry : dailyPlan.getPlan().entrySet()) {
+                String activityName = activityEntry.getKey();
+                ActivityInfo activityInfo = activityEntry.getValue();
+    
+                if (activityInfo.getState() == desiredState) {
+                    result.add(new ActivityRecord(date, activityName, activityInfo));
+                }
+            }
+        }
+        return result;
     }
 
 }

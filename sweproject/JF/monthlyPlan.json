@@ -7,10 +7,12 @@
           "date": "17-07-2025",
           "plan": {
             "Escursione al Parco dell\u0027Acqua": {
-              "numberOfSub": 0,
+              "numberOfSub": 20,
               "state": "PROPOSTA",
               "timeOfTheActivity": "08:30 - 11:30",
-              "subscriptions": []
+              "subscriptions": [
+                2
+              ]
             }
           }
         },

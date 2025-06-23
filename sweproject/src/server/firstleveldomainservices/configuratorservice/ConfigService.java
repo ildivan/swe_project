@@ -31,13 +31,13 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.gsonfactoryservice.GsonFactoryService;
-import server.ioservice.AMIOUtil;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
+import server.utils.ActivityUtil;
 import server.utils.ConfigType;
 import server.utils.Configs;
 import server.utils.MainService;
@@ -63,6 +63,7 @@ public class ConfigService extends MainService<Void>{
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
+    private final ActivityUtil activityUtil = new ActivityUtil();
     
   
 
@@ -283,7 +284,7 @@ public class ConfigService extends MainService<Void>{
      * @return the new address
      */
     private Address addNewAddress() {
-        return AMIOUtil.getAddress();
+        return activityUtil.getAddress();
     }
 
     /**
@@ -355,7 +356,7 @@ public class ConfigService extends MainService<Void>{
     private void addActivityWithPlace(Place place) {
         assert place != null;
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-        Activity activity = AMIOUtil.getActivity(place);
+        Activity activity = activityUtil.getActivity(place);
 
         dataLayer.add(jsonFactoryService.createJson(activity), locInfo);
     
@@ -400,35 +401,12 @@ public class ConfigService extends MainService<Void>{
     }
 
     /**
-     * da concludere
+     * mostra le visite in base allo stato richiesto
      * @param desiredState stato delle visite che vuoi visualizzare
      */
     public void showActivitiesWithCondition(ActivityState desiredState) {
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-
-        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
-
-        if( monthlyPlan == null){
-            ioService.writeMessage("Piano Mensile non ancora generato", false);
-            return;
-        }
-
-
-        List<ActivityRecord> result = new ArrayList<>();
-
-        for (Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlan.getMonthlyPlan().entrySet()) {
-            LocalDate date = dailyEntry.getKey();
-            DailyPlan dailyPlan = dailyEntry.getValue();
-    
-            for (Map.Entry<String, ActivityInfo> activityEntry : dailyPlan.getPlan().entrySet()) {
-                String activityName = activityEntry.getKey();
-                ActivityInfo activityInfo = activityEntry.getValue();
-    
-                if (activityInfo.getState() == desiredState) {
-                    result.add(new ActivityRecord(date, activityName, activityInfo));
-                }
-            }
-        }
+        
+        List<ActivityRecord> result = activityUtil.getActiviyByState(desiredState);
     
         ioService.writeMessage(formatter.formatListActivityRecord(result), false);
         ioService.writeMessage(SPACE,false);
