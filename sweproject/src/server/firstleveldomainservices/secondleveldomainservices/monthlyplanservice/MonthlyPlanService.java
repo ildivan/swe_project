@@ -328,6 +328,13 @@ public class MonthlyPlanService {
         }
     }
 
+    public ActivityInfo getActivityInfoBasedOnSubCode(Subscription subscription){
+        DailyPlan dailyPlan = getDailyPlan(subscription.getDateOfActivity());
+        Map<String,ActivityInfo> activityMap = dailyPlan.getPlan();
+        return activityMap.get(subscription.getActivityName());
+
+    }
+
 
 
 }

@@ -18,7 +18,6 @@ import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.VolunteerMenu;
@@ -78,6 +77,23 @@ public class VolunteerService extends MainService<Void>{
 
         return null;
     }
+
+    private void doOperations() {
+        boolean continuare;
+        do{
+            ioService.writeMessage(CLEAR,false);
+            Runnable toRun = menu.startMenu();
+            ioService.writeMessage(SPACE, false);
+            if(toRun==null){
+                continuare = false;
+            }else{
+                toRun.run();
+                continuare = continueChoice("scelta operazioni");
+            }
+
+        }while(continuare);
+    }
+
 
     /**
      * mostra le attività del pianp in cui è presente il volontario
@@ -223,22 +239,6 @@ public class VolunteerService extends MainService<Void>{
         List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
         List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
         return activities;
-    }
-
-    private void doOperations() {
-        boolean continuare;
-        do{
-            ioService.writeMessage(CLEAR,false);
-            Runnable toRun = menu.startMenu();
-            ioService.writeMessage(SPACE, false);
-            if(toRun==null){
-                continuare = false;
-            }else{
-                toRun.run();
-                continuare = continueChoice("scelta operazioni");
-            }
-
-        }while(continuare);
     }
 
     /**

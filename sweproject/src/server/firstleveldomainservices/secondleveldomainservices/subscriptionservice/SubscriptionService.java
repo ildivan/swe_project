@@ -12,8 +12,10 @@ import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
+import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.ioservice.IInputOutput;
@@ -67,9 +69,19 @@ public class SubscriptionService {
             return;
         }
 
+        if(!(activityInfo.getState()==ActivityState.PROPOSTA)){
+            ioService.writeMessage(String.format("Impossibile iscriversi a questa visita:\nMotivo: %s",getErrorMessagebaseOnState(activityInfo)), false);
+            return;
+        }
+
         String userName = user.getName();
         int subscriptionCode = monthlyConfigService.getCurrentSubCode();
         int numberOfSubscriptions = ioService.readIntegerWithMinMax("\nInserisci il numero di iscrizioni: ",1,getMaxNumberOfSubscriptions());
+
+        if(checkIfCanSubscribeEveryone(numberOfSubscriptions,activityName, activityInfo)){
+            ioService.writeMessage("Impossibile iscriversi a questa visita: MASSIMO NUMERO DI ISCRITTI SUPERATO", false);
+            return;
+        }
 
         Subscription subscription = new Subscription(userName, numberOfSubscriptions, activityName, subscriptionCode, LocalDate.now(), monthlyPlanService.getFullDateOfChosenDay(day));
 
@@ -82,6 +94,69 @@ public class SubscriptionService {
         monthlyPlanService.updateMonthlyPlan(dateOfSubscription, updatedDailyPlan);
 
         ioService.writeMessage("Sottoscrizione aggiunta con successo!", false);
+    }
+
+    /**
+     * metodo per controllare s enon supero il numero massimo di iscritti
+     * @param numberOfSubscriptions
+     * @param activityName
+     * @return
+     */
+    private boolean checkIfCanSubscribeEveryone(int numberOfSubscriptions, String activityName, ActivityInfo activityInfo) {
+        Activity activity = localizeActivity(activityName);
+
+        if((activityInfo.getNumberOfSub()+numberOfSubscriptions)>activity.getMaxPartecipanti()){
+            return false;
+        }
+
+        return true;
+
+    }
+
+    /**
+     * metodo util di checkIfCanSubscribeEveryone,
+     * per ottenere l'attività dato il titolo
+     * @param activityTitle
+     * @return
+     */
+    private Activity localizeActivity(String activityTitle) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        locInfo.setKey(activityTitle);
+        JsonObject activityJO = dataLayer.get(locInfo);
+        
+        if (activityJO == null) {
+            ioService.writeMessage("\nAttività non trovata con il titolo: " + activityTitle, false);
+            return null;
+        }
+        
+        return jsonFactoryService.createObject(activityJO, Activity.class);
+    }
+
+    /**
+     * metodo per ottenere errore in base allo stato della visita
+     * @param activityInfo
+     * @return
+     */
+    private String getErrorMessagebaseOnState(ActivityInfo activityInfo) {
+        //Posssibile refactor tramite polimorfismo
+        String message;
+        switch (activityInfo.getState()) {
+            case CANCELLATA:
+                message = "Visita cancellata";
+                break;
+            case COMPLETA:
+                message = "Visita completa";
+                break;
+
+            case CONFERMATA:
+                message = "Visita confermata";
+                break;
+            default:
+                message = "";
+                break;
+        }
+
+        return message;
     }
 
     /**
@@ -197,7 +272,15 @@ public class SubscriptionService {
      * @param subCode
      */
     public void deleteSubscription(int subCode) {
+
         Subscription subscription = getSubscriptionByCode(subCode);
+
+        ActivityInfo activityInfo = monthlyPlanService.getActivityInfoBasedOnSubCode(subscription);
+
+        if(!(activityInfo.getState()==ActivityState.PROPOSTA)){
+            ioService.writeMessage(String.format("Impossibile eliminare iscrizione a questa visita:\nMotivo: %s",getErrorMessagebaseOnState(activityInfo)), false);
+        }
+
         if (subscription != null) {
             updateSubscriptionArchive(subscription);
             updateMonthlyPlan(subscription);
@@ -205,6 +288,11 @@ public class SubscriptionService {
         } else {
             ioService.writeMessage("Iscrizione non trovata.", false);
         }
+
+        
+
+        
+        
     }
 
     /**

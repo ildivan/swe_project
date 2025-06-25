@@ -1,7 +1,3 @@
 
-
-controllare che non superi il numero max di iscrizioni,
-contrllare che possa iscrivermi solo a visite proposte
-
-puoi cancellare solo da visite proposte
+test che tutto funzioni, prova due cicli
 
