@@ -27,6 +27,10 @@ public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationI
     private static final String ARCHIVE_MEMBER_NAME = "activityArchive";
     private static final String SUBSCRIPTION_PATH = "sweproject/JF/subscription.json";
     private static final String SUBSCRIPTION_MEMBER_NAME = "activitySubscription";
+    private static final String CHANGED_ACTIVITY_PATH = "sweproject/JF/changedActivities.json";
+    private static final String CHANGED_PLACES_PATH = "sweproject/JF/changedPlaces.json";
+    private static final String CHANGED_VOLUNTEER_PATH = "sweproject/JF/changedVolunteers.json";
+
 
     /**
      * metodo che ritorna le informazioni di localizzazione per dati salvati in
@@ -136,6 +140,33 @@ public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationI
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
         locInfo.setPath(SUBSCRIPTION_PATH);
         locInfo.setMemberName(SUBSCRIPTION_MEMBER_NAME);
+        return locInfo;
+    }
+
+    @Override
+    public JsonDataLocalizationInformation getChangedActivitiesLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(CHANGED_ACTIVITY_PATH);
+        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
+        locInfo.setKeyDesc(ACTIVITY_KEY_DESC);
+        return locInfo;
+    }
+
+    @Override
+    public JsonDataLocalizationInformation getChangedPlacesLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(CHANGED_PLACES_PATH);
+        locInfo.setMemberName(PLACES_MEMBER_NAME);
+        locInfo.setKeyDesc(PLACES_KEY_DESC);
+        return locInfo;
+    }
+
+    @Override
+    public JsonDataLocalizationInformation getChangedVolunteersLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(CHANGED_VOLUNTEER_PATH);
+        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
+        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
         return locInfo;
     }
     

@@ -1,5 +1,6 @@
 package server.firstleveldomainservices.secondleveldomainservices.menuservice.menus;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class ConfiguratorMenu extends MenuManager{
         Configs configs = configsUtil.getConfig();
         MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
         
-        if(dateService.getTodayDate().equals(mc.getMonthAndYear()) && checkIfAlredyBuildPlan()){
+        if(correctDateToGeneratePlan(mc)&& checkIfAlredyBuildPlan()){
             map.put("Genera Piano Mensile", true);
             //fare che se il piano non è stato generato il 16 laprima cosa da fare è quella, vanno osxurate tutte le altre voci
         }else{
@@ -115,6 +116,40 @@ public class ConfiguratorMenu extends MenuManager{
         }
 
         return map;
+    }
+
+    /**
+     * metodo che controlla che mi trovi nella data corretta per generare il piano
+     * se il 16 è un gionro lavoroativo allora ok,
+     * altrimenti vado al primo giorno lavorativo (no sabato ne domenica
+     * 
+     * @param mc
+     * @return
+     */
+    private boolean correctDateToGeneratePlan(MonthlyConfig mc) {
+        LocalDate correctDate = getCorrectDateForPlan(mc.getMonthAndYear());
+        if(dateService.getTodayDate().equals(correctDate)){
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * metodo per ottenre la orreetta data di generazone del piano
+     * controllo se il 16 è giorno lavorativo altrimenti sposto
+     * @param teoricalDate
+     * @return
+     */
+    private LocalDate getCorrectDateForPlan(LocalDate teoricalDate) {
+
+        if (teoricalDate.getDayOfWeek() == DayOfWeek.SATURDAY) {
+            return teoricalDate.plusDays(2);
+        } else if (teoricalDate.getDayOfWeek() == DayOfWeek.SUNDAY) {
+            return teoricalDate.plusDays(1);
+        }
+
+        return teoricalDate;
     }
 
     /**

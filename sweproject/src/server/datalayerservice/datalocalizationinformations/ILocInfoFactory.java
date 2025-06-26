@@ -10,4 +10,7 @@ public interface ILocInfoFactory <T extends IDataLocalizationInformation<T>>{
     T getMonthlyPlanLocInfo();
     T getArchiveLocInfo();
     T getSubscriptionLocInfo();
+    T getChangedActivitiesLocInfo();
+    T getChangedPlacesLocInfo();
+    T getChangedVolunteersLocInfo();
 }

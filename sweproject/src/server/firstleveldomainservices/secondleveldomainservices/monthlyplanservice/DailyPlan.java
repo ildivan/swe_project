@@ -4,18 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
-import com.google.gson.JsonObject;
 import server.DateService;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
-import server.firstleveldomainservices.volunteerservice.Volunteer;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 
 public class DailyPlan {
   
@@ -23,16 +16,12 @@ public class DailyPlan {
     private Map<String, ActivityInfo> plan = new HashMap<>();
 
     //non deve essere serializzato -> inserisco transient
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
-    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
         
     
 
     public DailyPlan(LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
         this.date = date;
-        this.locInfoFactory = locInfoFactory;
     }
 
     /*
@@ -63,41 +52,12 @@ public class DailyPlan {
             //controllo se il gionro in cui sto facendo il piano (attributo date) è compreso nel periodo di esecuzione della visita
             //controllo se il giorno della settimana della visita è quello in cui sto facendo il piano
             //aggiiungo l'attivita alle visite possibili
-            if(isProgrammablePeriodCheck(act) && isOnCorrectDay(act) && checkIfVolunteersAreFree(act)){
+            if(isProgrammablePeriodCheck(act) && isOnCorrectDay(act)){
                 actPossibleToday.add(act);
             }
         }
 
         return actPossibleToday;
-    }
-
-    private boolean checkIfVolunteersAreFree(Activity activity){
-        String [] volunteers = activity.getVolunteers();
-       
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        
-        for (String name : volunteers) {
-
-            locInfo.setKey(name);
-
-            JsonObject volunteerJO = dataLayer.get(locInfo);
-            Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
-
-            if(volunteer.getDisponibilityDaysOld()==null || volunteer.getDisponibilityDaysOld().isEmpty()){
-                return false; 
-            }
-
-            for (String d : volunteer.getDisponibilityDaysOld()) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                String formattedDate = date.format(formatter);
-
-                if(d.equalsIgnoreCase(formattedDate.toString())){
-                    return true;
-                }
-            }
-
-        }
-        return false;
     }
 
     /**

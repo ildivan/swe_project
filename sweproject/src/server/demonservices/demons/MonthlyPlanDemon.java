@@ -1,6 +1,7 @@
 package server.demonservices.demons;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import com.google.gson.JsonObject;
@@ -18,6 +19,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.PerformedActivity;
+import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
@@ -83,10 +85,17 @@ public class MonthlyPlanDemon implements IDemon{
                 ActivityInfo activityInfo = activityEntry.getValue();
 
                 //eseguo i controlli
-                activityInfo = checkActivityState(activityInfo,activity, date);
+                if(needsToBeDeleted(activityInfo,activity, date)){
+                    //se è da eliminare la elimino definitivamente, una volta superato
+                    //il giorno della sua teorica esecuzione
+                    activityMap.remove(activityName);
+                }else{
+                    //altrimenti eseguo gli altri controlli
+                    activityInfo = checkActivityState(activityInfo,activity, date);
 
-                activityMap.put(activityName, activityInfo);
-
+                    activityMap.put(activityName, activityInfo);
+                }
+            
             }
 
             dailyPlan.setPlan(activityMap);
@@ -96,9 +105,24 @@ public class MonthlyPlanDemon implements IDemon{
         return monthlyPlan;
     }
 
+    /**
+     * metodo per controllare se una visita è definitivamente da eliminare
+     * @param activityInfo
+     * @param activity
+     * @param dateOfActivity
+     * @return
+     */
+    private boolean needsToBeDeleted(ActivityInfo activityInfo, Activity activity, LocalDate dateOfActivity) {
+        if((activityInfo.getState() == ActivityState.CANCELLATA) && ((ChronoUnit.DAYS.between(LocalDate.now(), dateOfActivity))<0)){
+            return true;
+        }
+
+        return false;
+    }
+
 
     /**
-     * 
+     * metodo per controllare eventuali cambio di stato su una visita
      */
     private ActivityInfo checkActivityState(ActivityInfo activityInfo, Activity activity, LocalDate date) {
         //controllo se è al completo
@@ -149,13 +173,49 @@ public class MonthlyPlanDemon implements IDemon{
      */
     private boolean checkIfActivitiesNeedToBeConfirmed(ActivityInfo activityInfo, Activity activity, LocalDate date) {
         if(isTimeToCheckActivityConfirmation(date)){
-            if(minNumberOfSubsReached(activityInfo, activity)){
+            if(minNumberOfSubsReached(activityInfo, activity) && isVolunteerAvailable(activity, date)){
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * util method to checkIfActivitiesNeedToBeConfirmed,
+     * controlla se il volontario è disponibile tale data
+     * 
+     * @param activity
+     * @param dateOfActivity
+     * @return
+     */
+    private boolean isVolunteerAvailable (Activity activity, LocalDate dateOfActivity) {
+        String [] volunteers = activity.getVolunteers();
+       
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        
+        for (String name : volunteers) {
+
+            locInfo.setKey(name);
+
+            JsonObject volunteerJO = dataLayer.get(locInfo);
+            Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
+
+            if(volunteer.getDisponibilityDaysOld()==null || volunteer.getDisponibilityDaysOld().isEmpty()){
+                return false; 
+            }
+
+            for (String d : volunteer.getDisponibilityDaysOld()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String formattedDate = dateOfActivity.format(formatter);
+
+                if(d.equalsIgnoreCase(formattedDate.toString())){
+                    return true;
+                }
+            }
+
+        }
+        return false;
+    }
 
     /**
      * util method to checkIfActivitiesNeedToBeConfirmed,

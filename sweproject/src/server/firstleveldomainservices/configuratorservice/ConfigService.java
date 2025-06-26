@@ -212,7 +212,7 @@ public class ConfigService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
         locInfo.setKey(name);
 
         if (!dataLayer.exists(locInfo)) {
@@ -237,7 +237,7 @@ public class ConfigService extends MainService<Void>{
         ioService.writeMessage(CLEAR,false);
         boolean continuare;
         
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
 
         do{
                 String name = ioService.readString("Inserire nome luogo");
@@ -282,7 +282,7 @@ public class ConfigService extends MainService<Void>{
         ioService.writeMessage(CLEAR,false);
         boolean jump = false;
 
-        //DA TESTARE QUESTO IF
+        //controllo se ci sono luoghi senza attvità
         if(placesUtilForConfigService.existPlaceWithNoActivity()){
             ioService.writeMessage("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
             addActivityOnNoConfiguredPlaces();
@@ -291,33 +291,34 @@ public class ConfigService extends MainService<Void>{
             }
         }
        
-            do{
-                if(jump){
-                    continue;
-                }
-                showPlaces();
-                String placeName = ioService.readString("\nInserire luogo per l'attività");
+        //aggiungo nuove attività
+        do{
+            if(jump){
+                continue;
+            }
+            showPlaces();
+            String placeName = ioService.readString("\nInserire luogo per l'attività");
 
-                JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
-        
-                locInfo.setKey(placeName);
-
-                while(!dataLayer.exists(locInfo)){
-                    ioService.writeMessage("Luogo non esistente, riprovare", false);
-                    placeName = ioService.readString("\nInserire luogo per l'attività");
-
-                }
-                    
-                Place place = jsonFactoryService.createObject(dataLayer.get(locInfo), Place.class);   
-
-                // Pre-condizione: il luogo selezionato deve esistere
-                assert place != null : "Il luogo selezionato non esiste";
-
-                addActivityWithPlace(place);
-
+            JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
     
-            }while(continueChoice("aggiunta attività"));
-        
+            locInfo.setKey(placeName);
+
+            while(!dataLayer.exists(locInfo)){
+                ioService.writeMessage("Luogo non esistente, riprovare", false);
+                placeName = ioService.readString("\nInserire luogo per l'attività");
+
+            }
+                
+            Place place = jsonFactoryService.createObject(dataLayer.get(locInfo), Place.class);   
+
+            // Pre-condizione: il luogo selezionato deve esistere
+            assert place != null : "Il luogo selezionato non esiste";
+
+            addActivityWithPlace(place);
+
+
+        }while(continueChoice("aggiunta attività"));
+    
 
     }
 
@@ -338,7 +339,7 @@ public class ConfigService extends MainService<Void>{
      */
     private void addActivityWithPlace(Place place) {
         assert place != null;
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
         Activity activity = activityUtil.getActivity(place);
 
         dataLayer.add(jsonFactoryService.createJson(activity), locInfo);
@@ -485,12 +486,12 @@ public class ConfigService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
 
-        JsonDataLocalizationInformation volunteerLoc = locInfoFactory.getVolunteerLocInfo();
+        JsonDataLocalizationInformation volunteerLoc = locInfoFactory.getChangedVolunteersLocInfo();
         volunteerLoc.setKey(name);
 
         if (dataLayer.exists(volunteerLoc)) {
 
-            JsonDataLocalizationInformation activityLoc = locInfoFactory.getActivityLocInfo();
+            JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
             List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
 
             for (JsonObject activity : allActivities) {
@@ -506,7 +507,7 @@ public class ConfigService extends MainService<Void>{
                     }
 
                     String activityName = activity.get("title").getAsString();
-                    JsonDataLocalizationInformation singleActLoc = locInfoFactory.getActivityLocInfo();
+                    JsonDataLocalizationInformation singleActLoc = locInfoFactory.getChangedActivitiesLocInfo();
                     singleActLoc.setKey(activityName);
 
                     if (volunteers.size() == 0) {
@@ -540,19 +541,19 @@ public class ConfigService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome luogo non valido";
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
         locInfo.setKey(name);
 
         if (dataLayer.exists(locInfo)) {
             // Elimina tutte le attività che usano questo luogo
-            JsonDataLocalizationInformation activityLoc = locInfoFactory.getActivityLocInfo();
+            JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
             List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
 
             for (JsonObject activity : allActivities) {
                 if (activity.has("placeName")) {
                     String activityPlace = activity.get("placeName").getAsString();
                     if (activityPlace.equalsIgnoreCase(name)) {
-                        JsonDataLocalizationInformation singleActLoc = locInfoFactory.getActivityLocInfo();
+                        JsonDataLocalizationInformation singleActLoc = locInfoFactory.getChangedActivitiesLocInfo();
                         singleActLoc.setKey(activity.get("title").getAsString());
                         dataLayer.delete(singleActLoc);
                     }
@@ -579,7 +580,7 @@ public class ConfigService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome attività non valido";
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
         locInfo.setKey(name);
 
         if (dataLayer.exists(locInfo)) {

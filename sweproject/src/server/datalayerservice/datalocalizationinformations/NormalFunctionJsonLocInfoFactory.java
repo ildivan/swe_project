@@ -27,6 +27,9 @@ public class NormalFunctionJsonLocInfoFactory implements ILocInfoFactory<JsonDat
     private static final String ARCHIVE_MEMBER_NAME = "activityArchive";
     private static final String SUBSCRIPTION_PATH = "sweproject/JFNormalFunction/subscription.json";
     private static final String SUBSCRIPTION_MEMBER_NAME = "activitySubscription";
+    private static final String CHANGED_ACTIVITY_PATH = "sweproject/JFNormalFunction/changedActivities.json";
+    private static final String CHANGED_PLACES_PATH = "sweproject/JFNormalFunction/changedPlaces.json";
+    private static final String CHANGED_VOLUNTEER_PATH = "sweproject/JFNormalFunction/changedVolunteers.json";
 
     /**
      * metodo che ritorna le informazioni di localizzazione per dati salvati in
@@ -138,5 +141,31 @@ public class NormalFunctionJsonLocInfoFactory implements ILocInfoFactory<JsonDat
         locInfo.setMemberName(SUBSCRIPTION_MEMBER_NAME);
         return locInfo;
     }
-    
+
+    @Override
+    public JsonDataLocalizationInformation getChangedActivitiesLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(CHANGED_ACTIVITY_PATH);
+        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
+        locInfo.setKeyDesc(ACTIVITY_KEY_DESC);
+        return locInfo;
+    }
+
+    @Override
+    public JsonDataLocalizationInformation getChangedPlacesLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(CHANGED_PLACES_PATH);
+        locInfo.setMemberName(PLACES_MEMBER_NAME);
+        locInfo.setKeyDesc(PLACES_KEY_DESC);
+        return locInfo;
+    }
+
+    @Override
+    public JsonDataLocalizationInformation getChangedVolunteersLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(CHANGED_VOLUNTEER_PATH);
+        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
+        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
+        return locInfo;
+    }
 }

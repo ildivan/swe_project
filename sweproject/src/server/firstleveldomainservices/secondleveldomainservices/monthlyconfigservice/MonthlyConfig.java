@@ -6,6 +6,11 @@ import java.util.Map;
 import java.util.Set;
 
 public class MonthlyConfig {
+
+    //per comodita istanzio i gionri prima della visita in cui controllo se è completa hai giorni 
+    //di differenza dopo i quali non posso piu iscrivere
+    private static final int DAYS_BEFORE_SUBSCRIPTION_CLOSURE = 3;
+    
     private LocalDate monthAndYear; //key a cui accedo, nel mese di aprile modifico il piano di maggio
     //le date disponibili dei volontari di giugno e le date non utilizzabili di luglio
     private Map<LocalDate, Boolean> previousPlanlanConfigured;
@@ -25,7 +30,7 @@ public class MonthlyConfig {
         PlanState.DISPONIBILITA_APERTE, false
         ));
         this.sequenceSubscriptionNumber = 1;
-        this.daysBeforeActivityConfirmation = 2;
+        this.daysBeforeActivityConfirmation = DAYS_BEFORE_SUBSCRIPTION_CLOSURE;
 
     }
 

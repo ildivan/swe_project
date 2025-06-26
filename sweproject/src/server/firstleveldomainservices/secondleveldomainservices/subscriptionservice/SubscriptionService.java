@@ -1,11 +1,13 @@
 package server.firstleveldomainservices.secondleveldomainservices.subscriptionservice;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.gson.JsonObject;
+import server.DateService;
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
@@ -28,6 +30,8 @@ import server.utils.ConfigType;
 import server.utils.Configs;
 
 public class SubscriptionService {
+
+    private static final int DAYS_BEFORE_SUBSCRIPTION_CLOSURE = 3;
 
     private static final String SUBSCRIPTION_KEY_DESC = "subscriptionId";
     private final ConfigType configType;
@@ -74,6 +78,11 @@ public class SubscriptionService {
             return;
         }
 
+        if(!isInTimeToSubscribe(activityInfo, dailyPlan.getDate())){
+            ioService.writeMessage(String.format("Impossibile iscriversi a questa visita: SUPERATA LA DATA DI TERMINE DELLE ISCRIZIONI",getErrorMessagebaseOnState(activityInfo)), false);
+            return;
+        }
+
         String userName = user.getName();
         int subscriptionCode = monthlyConfigService.getCurrentSubCode();
         int numberOfSubscriptions = ioService.readIntegerWithMinMax("\nInserisci il numero di iscrizioni: ",1,getMaxNumberOfSubscriptions());
@@ -94,6 +103,22 @@ public class SubscriptionService {
         monthlyPlanService.updateMonthlyPlan(dateOfSubscription, updatedDailyPlan);
 
         ioService.writeMessage("Sottoscrizione aggiunta con successo!", false);
+    }
+
+    /**
+     * metodo che controlla se sono in tempo per iscrivermi
+     * 
+     * @param activityInfo
+     * @param dateOfActivity
+     * @return
+     */
+    private boolean isInTimeToSubscribe(ActivityInfo activityInfo, LocalDate dateOfActivity) {
+        if((ChronoUnit.DAYS.between(LocalDate.now(), dateOfActivity))>=DAYS_BEFORE_SUBSCRIPTION_CLOSURE){
+            return true;
+        }
+
+        return false;
+    
     }
 
     /**

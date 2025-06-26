@@ -137,9 +137,9 @@ public class VolunteerService extends MainService<Void>{
     /**
      * metodo che permette al volontario di inserire le date in cui esso è disponibile
      * 
-     * solo nei giorni in cui sono presenti sue visite e che non sono preclusi
+     * solo in giorni non preclusi i cui possono essere instanziate sue visite
      */
-    public void addPrecludeDate(){
+    public void addDisponibilityDate(){
         
         MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
 
@@ -178,8 +178,8 @@ public class VolunteerService extends MainService<Void>{
 
         assert formattedDate != null && !formattedDate.trim().isEmpty();
 
-        if(!dateContainsVolunteerActivity(date, getMyActivities())){
-            ioService.writeMessage("Non hai attività programmate per questa data, non puoi aggiungerla come data disponibile", false);
+        if(!dateContainsPossibleVolunteerActivity(date, getMyActivities())){
+            ioService.writeMessage("Non è possibile programmare tue attività per questa data, non puoi aggiungerla come data disponibile", false);
             return;
         }
 
@@ -242,13 +242,14 @@ public class VolunteerService extends MainService<Void>{
     }
 
     /**
-     * Metodo che verifica se il volontario ha un'attività programmata per una data specifica
+     * Metodo che verifica se il volontario puo avere un'attività programmata per una data specifica,
+     * controllo se il giorno è compatibile
      * @param data
      * @param attivitaVolontario
      * @param monthlyPlan
      * @return
      */
-    public boolean dateContainsVolunteerActivity(LocalDate date, List<Activity> myActivities) {
+    public boolean dateContainsPossibleVolunteerActivity(LocalDate date, List<Activity> myActivities) {
       
         DayOfWeek dayOfWeek = date.getDayOfWeek(); 
 

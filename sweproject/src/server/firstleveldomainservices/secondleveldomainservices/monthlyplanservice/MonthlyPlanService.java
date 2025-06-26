@@ -1,5 +1,9 @@
 package server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -30,8 +34,6 @@ import server.utils.ConfigsUtil;
 public class MonthlyPlanService {
 
     private static final int DAY_OF_PLAN = 16;
-
-    private static final String CONFIG_FIRST_PLAN_KEY_DESC = "firstPlanConfigured";
   
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
@@ -89,8 +91,68 @@ public class MonthlyPlanService {
         if(firstMonthlyPlan){
             updateConfigAfterFirstPlanGenerated();
         }
+
+        refreshData();
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
         //DA FARE
+    }
+
+    /**
+     * metodo per applicare le modifiche effettuate nel mese precedente
+     */
+    private void refreshData() {
+        refreshChangedPlaces();
+        refreshChangedActivities();
+        refreshChangedVolunteers();
+    }
+    
+    /**
+     * metodo di utilita a refreshData
+     * aggiorna le modifiche hai luoghi
+     */
+    private void refreshChangedPlaces() {
+        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
+        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
+
+        try {
+            Files.copy(changedPlacesPath, originalPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * metodo di utilita a refreshData
+     * aggiorna le modifiche alle attività
+     */
+    private void refreshChangedActivities() {
+        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
+        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+
+        try {
+            Files.copy(changedActivitiesPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * metodo di utilita a refreshData
+     * aggiorna le modifiche hai volontari
+     */
+    private void refreshChangedVolunteers() {
+        /* leggo il file con le modifiche, sovrascrivo quello in cui si legge 
+         * con il file modificato*/
+
+        Path locInfoWithChangesPath = Paths.get(locInfoFactory.getChangedVolunteersLocInfo().getPath());
+        Path locInfoToUpdatePath = Paths.get(locInfoFactory.getVolunteerLocInfo().getPath());
+
+        try {
+            Files.copy(locInfoWithChangesPath, locInfoToUpdatePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**

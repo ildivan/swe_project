@@ -6,14 +6,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Map;
-
 import com.google.gson.JsonObject;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -24,6 +23,8 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigse
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
+import server.ioservice.objectformatter.IIObjectFormatter;
+import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ActivityUtil;
@@ -44,6 +45,7 @@ public class EditPossibilitiesService extends MainService<Void>{
     private final IInputOutput ioService = new IOService();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     private final MonthlyConfigService monthlyConfigService;
+    private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final ActivityUtil activityUtil;
     private final ConfigType configType;
 
@@ -220,7 +222,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @param oldTitle
      */
     private void saveActivity(Activity activity, String oldTitle) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
         locInfo.setKey(oldTitle);
         
         JsonObject activityJO = jsonFactoryService.createJson(activity);
@@ -241,7 +243,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Place getPlace(String placeName) {
-       JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+       JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
         locInfo.setKey(placeName);
     
         while (true) {
@@ -271,13 +273,29 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Activity getActivity() {
-        ConfigService configService = new ConfigService(socket, locInfoFactory, configType);
-        configService.showActivities();
+        
+        showChangableActivities();
         String activityTitle = ioService.readString("\nScegli l'attività da modificare (inserisci il titolo):");
 
         Activity chosenActivity = localizeActivity(activityTitle);
         return chosenActivity;
     }
+
+    /**
+     * metodo helper del metodo getActivity,
+     * per ottenere l'attività da modificare
+     * @return
+     */
+    private void showChangableActivities() {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
+
+        List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
+        List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
+
+        ioService.writeMessage(formatter.formatListActivity(activities), false);
+        ioService.writeMessage(SPACE,false);
+    }
+
 
     /**
      * metodo helepr del metodo modifica attività,
@@ -286,7 +304,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Activity localizeActivity(String activityTitle) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
         locInfo.setKey(activityTitle);
         JsonObject activityJO = dataLayer.get(locInfo);
         
@@ -400,7 +418,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @param oldTitle
      */
     private void savePlace(Place place, String oldName) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
         locInfo.setKey(oldName);
         
         JsonObject placeJO = jsonFactoryService.createJson(place);
@@ -419,16 +437,31 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Place getPlace() {
-        ConfigService configService = new ConfigService(socket,locInfoFactory, configType);
-        configService.showPlaces();
+        showChangeblePlaces();
         String placeName = ioService.readString("\nScegli il luogo da modificare (inserisci il nome):");
 
         Place place = localizePlace(placeName);
         return place;
     }
 
+    /**
+     * metodo helper di getPlace,
+     * metodo per ottenere il luogo da modificare
+     * @return
+     */
+    private void showChangeblePlaces() {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
+
+        List<JsonObject> placesJO = dataLayer.getAll(locInfo);
+        List<Place> places = jsonFactoryService.createObjectList(placesJO, Place.class);
+
+        ioService.writeMessage(formatter.formatListPlace(places), false);
+        ioService.writeMessage(SPACE,false);
+    }
+
+
     private Place localizePlace(String placeName) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
         locInfo.setKey(placeName);
         JsonObject placeJO = dataLayer.get(locInfo);
         
