@@ -50,7 +50,7 @@ public class ConfigService extends MainService<Void>{
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final ActivityUtil activityUtil;
     private final PlacesUtilForConfigService placesUtilForConfigService;
@@ -59,17 +59,19 @@ public class ConfigService extends MainService<Void>{
     
   
 
-    public ConfigService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
-        super(socket);
+    public ConfigService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
 
+        super(socket);
+        this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
-        this.placesUtilForConfigService = new PlacesUtilForConfigService(locInfoFactory);
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType);
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType);
-        this.menu = new ConfiguratorMenu(this, configType, monthlyConfigService, locInfoFactory);
+        this.placesUtilForConfigService = new PlacesUtilForConfigService(locInfoFactory, dataLayer);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
+        this.menu = new ConfiguratorMenu(this, configType, monthlyConfigService, locInfoFactory, dataLayer);
     }
 
     /**
@@ -592,7 +594,7 @@ public class ConfigService extends MainService<Void>{
     }
 
     public void modifyData(ConfigType configType) {
-        EditPossibilitiesService editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType);
+        EditPossibilitiesService editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer);
         editPossibilitiesService.run();
     }
     

@@ -10,6 +10,8 @@ import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.NormalFunctionJsonLocInfoFactory;
+import server.datalayerservice.datareadwrite.IJsonReadWrite;
+import server.datalayerservice.datareadwrite.JsonReadWrite;
 import server.demonservices.DemonsService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
@@ -35,16 +37,19 @@ public class Server {
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     DemonsService demonsService;
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IJsonReadWrite jsonReadWrite;
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     MonthlyPlanService monthlyPlanService;
 
     public Server(ConfigType configType) {
+        this.jsonReadWrite = new JsonReadWrite();
+        this.dataLayer = new JsonDataLayer(jsonReadWrite);
         this.locInfoFactory = getLocInfoFactory(configType);
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
         if(configType == ConfigType.NORMAL){
             initializeMonthlyConfig();
         }
-        this.demonsService = new DemonsService(locInfoFactory, configType);
+        this.demonsService = new DemonsService(locInfoFactory, configType, dataLayer);
 
     }
 
@@ -155,7 +160,7 @@ public class Server {
                                     externalSocket.close();
                                     return;
                                 }
-                                MainService<?> service = new UserService(externalSocket,u,locInfoFactory,configType);
+                                MainService<?> service = new UserService(externalSocket,u,locInfoFactory,configType, dataLayer);
                                 service.run();
                             } catch (IOException | InterruptedException e) {
                                 System.out.println("External service error: " + e.getMessage());
@@ -189,7 +194,7 @@ public class Server {
 
     private User authenticate(Socket socket, ConnectionType connectionType)
             throws InterruptedException, IOException {
-        AuthenticationService login = new AuthenticationService(socket, connectionType, locInfoFactory);
+        AuthenticationService login = new AuthenticationService(socket, connectionType, locInfoFactory, dataLayer);
         return login.run();
     }
 
@@ -200,9 +205,9 @@ public class Server {
 
         switch (u.getRole()){
             case "configuratore":
-                return new ConfigService(socket,locInfoFactory, configType);
+                return new ConfigService(socket,locInfoFactory, configType, dataLayer);
             case "volontario":
-                return new VolunteerService(socket,u.getName(),locInfoFactory, configType);
+                return new VolunteerService(socket,u.getName(),locInfoFactory, configType, dataLayer);
             default:
                 assert false;
                 return null;

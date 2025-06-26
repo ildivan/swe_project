@@ -3,10 +3,9 @@ package server.firstleveldomainservices.userservice;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-
 import server.authservice.User;
+import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
@@ -35,11 +34,12 @@ public class UserService extends MainService<Void> {
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
 
 
-    public UserService(Socket socket, User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public UserService(Socket socket, User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         super(socket);
         this.menu = new UserMenu(this);
-        this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType);
+        this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType, dataLayer);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
     }
 
 

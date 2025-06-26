@@ -43,19 +43,21 @@ public class EditPossibilitiesService extends MainService<Void>{
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;    
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final ActivityUtil activityUtil;
     private final ConfigType configType;
 
-    public EditPossibilitiesService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public EditPossibilitiesService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         super(socket);
 
+        this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
     }
 
 

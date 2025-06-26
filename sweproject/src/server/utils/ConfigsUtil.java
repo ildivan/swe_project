@@ -2,7 +2,6 @@ package server.utils;
 
 import com.google.gson.JsonObject;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.jsonfactoryservice.IJsonFactoryService;
@@ -16,12 +15,14 @@ public class ConfigsUtil {
     private final ConfigType configType;
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
 
     
   
 
-    public ConfigsUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public ConfigsUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+        this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
     }

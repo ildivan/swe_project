@@ -23,15 +23,18 @@ public class AuthenticationService extends MainService<User> {
     //qua posso modificare il tipo di factory per polimorfismo
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final IInputOutput ioService = new IOService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private final AuthenticationUtil authenticationUtil;
 
 
-    public AuthenticationService(Socket socket, ConnectionType connectionType, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public AuthenticationService(Socket socket, ConnectionType connectionType,
+     ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+     IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         super(socket);
+        this.dataLayer = dataLayer;
         this.connectionType = connectionType;
         this.locInfoFactory = locInfoFactory;
-        this.authenticationUtil = new AuthenticationUtil(locInfoFactory);
+        this.authenticationUtil = new AuthenticationUtil(locInfoFactory,dataLayer);
     }
 
     @Override

@@ -29,11 +29,13 @@ public class ActivityUtil{
    
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final MonthlyPlanService monthlyPlanService;
-    private final static IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
 
-    public ActivityUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public ActivityUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
+        this.dataLayer = dataLayer;
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
     }
     public Address getAddress(){
         IInputOutput ioService = getIOService();

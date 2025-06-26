@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Place;
@@ -19,10 +17,12 @@ public class PlacesUtilForConfigService {
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final Gson gson = gsonFactoryService.getGson();
-    private static final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
 
-    public PlacesUtilForConfigService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public PlacesUtilForConfigService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
+        this.dataLayer = dataLayer;
     }
 
     /**

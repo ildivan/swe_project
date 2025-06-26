@@ -38,17 +38,19 @@ public class MonthlyPlanService {
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private MonthlyConfigService monthlyConfigService;
     private final ConfigsUtil configsUtil;
     private final ConfigType configType;
 
 
-    public MonthlyPlanService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,ConfigType configType) {
+    public MonthlyPlanService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,ConfigType configType,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.configType = configType;
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType);
+        this.dataLayer = dataLayer;
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
 
     }
 
@@ -66,7 +68,7 @@ public class MonthlyPlanService {
         mc = setIsBeingConfigured(mc,PlanState.GENERAZIONE_PIANO, true);
 
         MonthlyPlan monthlyPlan = new MonthlyPlan(today, locInfoFactory, monthlyConfigService);
-        MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today, locInfoFactory);
+        MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today, locInfoFactory, dataLayer);
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
     

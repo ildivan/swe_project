@@ -7,13 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import com.google.gson.JsonObject;
-import server.DateService;
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
@@ -37,19 +34,21 @@ public class SubscriptionService {
     private final ConfigType configType;
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private final IInputOutput ioService = new IOService();
     private final MonthlyConfigService monthlyConfigService;
     private final IIObjectFormatter<String> objectFormatter = new TerminalObjectFormatter();
     private final MonthlyPlanService monthlyPlanService;
     private User user;
 
-    public SubscriptionService(User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public SubscriptionService(User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.user = user;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
+        this.dataLayer = dataLayer;
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
     }
 
     /**

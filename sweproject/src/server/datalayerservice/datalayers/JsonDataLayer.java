@@ -1,20 +1,19 @@
 package server.datalayerservice.datalayers;
 
 import com.google.gson.JsonObject;
-
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.datalayerservice.datareadwrite.IJsonReadWrite;
-import server.datalayerservice.datareadwrite.JsonReadWrite;
-
 import java.io.File;
 import java.util.*;
+
 public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation> {
 
-    private static final IJsonReadWrite jsonReadWrite = new JsonReadWrite();
+    private final IJsonReadWrite jsonReadWrite;
 
-    public JsonDataLayer() {
-        super();
+    public JsonDataLayer(IJsonReadWrite jsonReadWrite) {
+        this.jsonReadWrite = jsonReadWrite;
     }
+
 
 
     @Override

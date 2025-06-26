@@ -29,14 +29,16 @@ public class MonthlyPlanDemon implements IDemon{
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private MonthlyPlanService monthlyPlanService;
     private MonthlyConfigService monthlyConfigService;
 
-    public MonthlyPlanDemon(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public MonthlyPlanDemon(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, 
+    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
+        this.dataLayer = dataLayer;
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
     }
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone
     @Override

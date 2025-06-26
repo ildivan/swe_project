@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 
@@ -14,10 +16,12 @@ public class MonthlyConfigUpdater {
     private MonthlyConfig mc;
     private LocalDate date;
    
-    public MonthlyConfigUpdater(MonthlyConfig monthlyConfig, LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public MonthlyConfigUpdater(MonthlyConfig monthlyConfig, LocalDate date,
+    ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.mc = monthlyConfig;
         this.date = date;
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
     }
 
 

@@ -3,6 +3,7 @@ package server.firstleveldomainservices.secondleveldomainservices.menuservice.me
 import java.util.List;
 import java.util.Map;
 
+import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
@@ -16,10 +17,11 @@ public class VolunteerMenu extends MenuManager{
 
     private final ConfigsUtil configsUtil;
 
-    public VolunteerMenu(VolunteerService volService,  ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public VolunteerMenu(VolunteerService volService,  ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         super();
 
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType);
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
 
         vociVisibili.put("Mostra le mie visite del piano", true);
         vociVisibili.put("Mostra la scheda delle mie visite", true);

@@ -2,7 +2,6 @@ package server.firstleveldomainservices.volunteerservice;
 
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.ioservice.IInputOutput;
@@ -16,10 +15,12 @@ public class VMIOUtil{
  
      private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
      private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+     private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
 
-    public VMIOUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public VMIOUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
+        this.dataLayer = dataLayer;
     }
      /**
      * method to add a new user profile to user database creating a new random password

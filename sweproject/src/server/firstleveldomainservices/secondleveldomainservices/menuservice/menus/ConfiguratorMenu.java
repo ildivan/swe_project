@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import server.DateService;
+import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
@@ -24,11 +25,14 @@ public class ConfiguratorMenu extends MenuManager{
 
 
 
-    public ConfiguratorMenu(ConfigService configService, ConfigType configType, MonthlyConfigService monthlyConfigService, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public ConfiguratorMenu(ConfigService configService, ConfigType configType,
+    MonthlyConfigService monthlyConfigService,
+    ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         super();
 
         this.monthlyConfigService = monthlyConfigService;
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType);
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
 
         vociVisibili.put("Aggiungi Volontario", true);
         vociVisibili.put("Aggiungi Luogo", true);

@@ -3,7 +3,6 @@ package server.authservice;
 import com.google.gson.JsonObject;
 
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import org.mindrot.jbcrypt.*;
@@ -12,10 +11,12 @@ public class AuthenticationUtil {
 
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final int HASH_ROUNDS = 12;
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
 
-    public AuthenticationUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public AuthenticationUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
+        this.dataLayer = dataLayer;
     }
 
     public boolean checkIfTemp(String username) {

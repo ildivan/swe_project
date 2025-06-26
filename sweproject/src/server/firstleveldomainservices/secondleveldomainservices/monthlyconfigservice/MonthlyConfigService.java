@@ -2,7 +2,6 @@ package server.firstleveldomainservices.secondleveldomainservices.monthlyconfigs
 
 import com.google.gson.JsonObject;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.jsonfactoryservice.IJsonFactoryService;
@@ -14,10 +13,12 @@ public class MonthlyConfigService {
     
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
 
-    public MonthlyConfigService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public MonthlyConfigService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
+        this.dataLayer = dataLayer;
     }
 
     /**

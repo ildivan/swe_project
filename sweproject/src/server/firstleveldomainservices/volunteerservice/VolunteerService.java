@@ -51,19 +51,21 @@ public class VolunteerService extends MainService<Void>{
     private final MonthlyPlanService monthlyPlanService;
     private final DateService dateService = new DateService();
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final String name;
     
   
 
-    public VolunteerService(Socket socket, String name, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+    public VolunteerService(Socket socket, String name, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         super(socket);
+        this.dataLayer = dataLayer;
         this.name = name;
         this.locInfoFactory = locInfoFactory;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
-        this.menu = new VolunteerMenu(this, locInfoFactory, configType);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
+        this.menu = new VolunteerMenu(this, locInfoFactory, configType, dataLayer);
     }
     /**
      * apply the logic of the service
