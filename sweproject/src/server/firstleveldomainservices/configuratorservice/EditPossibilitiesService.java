@@ -304,12 +304,11 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     private boolean noVolunteersExists() {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        if (dataLayer.getAll(locInfo) == null) {
-            return true;
-        }
+        List<JsonObject> volunteers = dataLayer.getAll(locInfo);
 
-        return false;
+        return volunteers.isEmpty();
     }
+
 
 
 
