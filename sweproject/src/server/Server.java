@@ -312,11 +312,12 @@ public class Server {
 
     public static void main(String[] args) {
         
-        // ConfigType configType = ConfigType.NORMAL;
-        ConfigType configType = ConfigType.NO_FIRST_CONFIG;
+        ConfigType configType = ConfigType.NORMAL;
+        // ConfigType configType = ConfigType.NO_FIRST_CONFIG;
 
         //creo gli utenti che mi servono
-        // configuratore, volontario, fruitore
+        // configuratore, fruitore -> volontario è aggiunto successivamente
+        
         List<User> users = new ArrayList<>();
         User configuratore = new User("c1", "temp_123", "configuratore");
         User fruitore = new User("f1", "temp_234", "fruitore");
