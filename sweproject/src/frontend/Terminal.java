@@ -46,7 +46,6 @@ public abstract class Terminal {
                     writer.println(text);
                 }
             } while (true);
-
         } catch (UnknownHostException ex) {
             System.out.println("Server not found: " + ex.getMessage());
         } catch (IOException ex) {
