@@ -1,5 +1,5 @@
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import java.io.*;
 import java.net.Socket;
@@ -11,21 +11,18 @@ import server.utils.ConfigType;
 import server.utils.Message;
 import static org.junit.Assert.*;
 
-// filepath: c:\Users\ivanp\Documents\GitHub\swe_project\test\AuthenticationServiceTest.java
-
-
 
 
 
 public class AuthenticationServiceTest {
 
-    private static Server server;
-    private static Thread serverThread;
-    private static final int CLIENT_PORT = 5001;
-    private static final Gson gson = new Gson();
+    private  Server server;
+    private  Thread serverThread;
+    private  final int CLIENT_PORT = 5001;
+    private  final Gson gson = new Gson();
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public  void setUp() throws Exception {
         List<User> users = new ArrayList<User>();
         users.add(new User("test_config", "pass", "configuratore"));
         users.add(new User("test_fruitore", "pass", "fruitore"));
@@ -56,7 +53,7 @@ public class AuthenticationServiceTest {
   
         out.println("pass");
 
-        assertFalse(socket.isClosed());
+        assertNotNull(in.readLine());
 
         socket.close();
     }
@@ -74,15 +71,16 @@ public class AuthenticationServiceTest {
         Message insertUsernameMessage = gson.fromJson(in.readLine(), Message.class);
         assertEquals("Inserisci username:", insertUsernameMessage.text);
         out.println("invalid_user");
+
         Message invalidUserMsg = gson.fromJson(in.readLine(), Message.class);
-        System.out.println("Invalid user message: " + invalidUserMsg.text);
         assertTrue(invalidUserMsg.text.contains("Utente inesistente"));
 
         out.println("n");
         
         Message closedMsg = gson.fromJson(in.readLine(), Message.class);
         assertTrue(closedMsg.text.contains("CONNESSIONE CHIUSA"));
-        assertTrue(socket.isClosed());
+
+        assertNull(in.readLine());
         socket.close();
     }
 
@@ -104,6 +102,7 @@ public class AuthenticationServiceTest {
             Message insertPasswordMessage = gson.fromJson(in.readLine(), Message.class);
             assertEquals("Inserisci password:", insertPasswordMessage.text);
             out.println("wrongpass");
+
             Message errorMsg = gson.fromJson(in.readLine(), Message.class);
             if (i < 2) {
                 assertTrue(errorMsg.text.contains("Password sbagliata"));
@@ -114,7 +113,7 @@ public class AuthenticationServiceTest {
             }
         }
 
-        assertTrue(socket.isClosed());
+        assertNull(in.readLine());
         socket.close();
     }
 
@@ -127,18 +126,19 @@ public class AuthenticationServiceTest {
         Message clearMsg = gson.fromJson(in.readLine(), Message.class);
         assertEquals("CLEAR", clearMsg.text);
 
+        Message insertUsernameMessage = gson.fromJson(in.readLine(), Message.class);
+        assertEquals("Inserisci username:", insertUsernameMessage.text);
         out.println("test_config");
-
-        out.println("pass");
 
         Message msg = gson.fromJson(in.readLine(), Message.class);
         assertTrue(msg.text.contains("Terminale non corretto"));
 
+        assertNull(in.readLine());
         socket.close();
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         serverThread.interrupt();
     }
 }
