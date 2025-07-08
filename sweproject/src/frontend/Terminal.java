@@ -13,6 +13,10 @@ public abstract class Terminal {
     private int port;
     private String hostname;
     
+    public Terminal(String hostname, int port) {
+        this.hostname = hostname;
+        this.port = port;
+    }
 
     public void run(){
         Gson gson = FrontEndUtils.buildGson();
