@@ -34,7 +34,6 @@ public class JsonReadWrite implements IJsonReadWrite {
             for (JsonElement elem : objectArray) {
                 list.add(elem.getAsJsonObject());
             }
-            assert !list.isEmpty();
             return list;
         } catch (IOException e) {
             System.out.println(e.getMessage());
