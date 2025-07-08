@@ -58,7 +58,6 @@ public class IOService extends ReadWrite implements IInputOutput{
 		try {
 			return read();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

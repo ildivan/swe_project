@@ -49,11 +49,17 @@ public class AuthenticationServiceTest {
         Message clearMsg = gson.fromJson(in.readLine(), Message.class);
         assertEquals("CLEAR", clearMsg.text);
 
+        Message usernameMsg = gson.fromJson(in.readLine(), Message.class);
+        assertEquals("Inserisci username:", usernameMsg.text);
         out.println("test_fruitore");
-  
+        
+        Message passwordMsg = gson.fromJson(in.readLine(), Message.class);
+        assertEquals("Inserisci password:", passwordMsg.text);
         out.println("pass");
 
-        assertNotNull(in.readLine());
+
+        Message msg = gson.fromJson(in.readLine(), Message.class);
+        assertFalse(msg.text.contains("Password sbagliata"));
 
         socket.close();
     }
