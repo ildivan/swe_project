@@ -2,41 +2,13 @@ import com.google.gson.JsonObject;
 
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datareadwrite.IJsonReadWrite;
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.io.File;
 import java.util.*;
+import stubs.StubJsonReadWrite;
 
 public class JsonDataLayerTest {
-
-    static class StubJsonReadWrite implements IJsonReadWrite {
-        public Map<String, List<JsonObject>> fileData = new HashMap<>();
-        public Set<String> createdFiles = new HashSet<>();
-        public String lastWritePath = null;
-        public String lastWriteMember = null;
-        public List<JsonObject> lastWriteList = null;
-
-        @Override
-        public List<JsonObject> readFromFile(String path, String memberName) {
-            return fileData.getOrDefault(path + ":" + memberName, new ArrayList<>());
-        }
-
-        @Override
-        public Boolean writeToFile(String path, List<JsonObject> list, String memberName) {
-            fileData.put(path + ":" + memberName, new ArrayList<>(list));
-            lastWritePath = path;
-            lastWriteMember = memberName;
-            lastWriteList = new ArrayList<>(list);
-            return true;
-        }
-
-        @Override
-        public boolean createJSONEmptyFile(String path) {
-            createdFiles.add(path);
-            return true;
-        }
-    }
 
     private StubJsonReadWrite stub;
     private JsonDataLayer dataLayer;
