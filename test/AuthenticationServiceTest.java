@@ -37,7 +37,7 @@ public class AuthenticationServiceTest {
         serverThread.setDaemon(true);
         serverThread.start();
         // Wait for server to start
-        Thread.sleep(1500);
+        Thread.sleep(100);
     }
 
     @Test
