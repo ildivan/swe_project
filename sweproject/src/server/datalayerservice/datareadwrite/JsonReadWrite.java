@@ -66,8 +66,6 @@ public class JsonReadWrite implements IJsonReadWrite {
     }
 
     public synchronized boolean createJSONEmptyFile(String filePath) {
-        Path path = Paths.get(filePath);
-        assert Files.exists(path): "File path does not exist";
         JsonObject emptyJson = new JsonObject();
     
         try (FileWriter writer = new FileWriter(filePath)) {

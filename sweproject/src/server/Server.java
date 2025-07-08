@@ -312,8 +312,8 @@ public class Server {
 
     public static void main(String[] args) {
         
-        ConfigType configType = ConfigType.NORMAL;
-        // ConfigType configType = ConfigType.NO_FIRST_CONFIG;
+        // ConfigType configType = ConfigType.NORMAL;
+        ConfigType configType = ConfigType.NO_FIRST_CONFIG;
 
         //creo gli utenti che mi servono
         // configuratore, fruitore -> volontario è aggiunto successivamente
