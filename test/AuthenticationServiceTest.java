@@ -1,6 +1,7 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mindrot.jbcrypt.BCrypt;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
@@ -24,18 +25,17 @@ public class AuthenticationServiceTest {
     @Before
     public  void setUp() throws Exception {
         List<User> users = new ArrayList<User>();
-        users.add(new User("test_config", "pass", "configuratore"));
-        users.add(new User("test_fruitore", "pass", "fruitore"));
+        String hashedConfigPass = BCrypt.hashpw("pass", BCrypt.gensalt());
+        String hashedFruitorePass = BCrypt.hashpw("pass", BCrypt.gensalt());
+
+        users.add(new User("test_config", hashedConfigPass, "configuratore"));
+        users.add(new User("test_fruitore", hashedFruitorePass, "fruitore"));
+
         server = new Server(ConfigType.NORMAL, users);
 
-        serverThread = new Thread(new Runnable() {
-            public void run() {
-                server.startServer(ConfigType.NORMAL);
-            }
-        });
+        serverThread = new Thread(() -> server.startServer(ConfigType.NORMAL));
         serverThread.setDaemon(true);
         serverThread.start();
-
         // Wait for server to start
         Thread.sleep(1500);
     }
@@ -64,7 +64,6 @@ public class AuthenticationServiceTest {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-        // Read CLEAR message
         Message clearMsg = gson.fromJson(in.readLine(), Message.class);
         assertEquals("CLEAR", clearMsg.text);
 
@@ -90,20 +89,27 @@ public class AuthenticationServiceTest {
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-        // Read CLEAR message
+        assertTrue(socket.isConnected());
+
         Message clearMsg = gson.fromJson(in.readLine(), Message.class);
         assertEquals("CLEAR", clearMsg.text);
+
+        assertTrue(socket.isConnected());
 
         Message insertUsernameMessage = gson.fromJson(in.readLine(), Message.class);
         assertEquals("Inserisci username:", insertUsernameMessage.text);
         out.println("test_fruitore");
-        // Send wrong password 3 times
+
+        assertTrue(socket.isConnected());
+  
         for (int i = 0; i < 3; i++) {
             Message insertPasswordMessage = gson.fromJson(in.readLine(), Message.class);
             assertEquals("Inserisci password:", insertPasswordMessage.text);
             out.println("wrongpass");
 
             Message errorMsg = gson.fromJson(in.readLine(), Message.class);
+            assertTrue(socket.isConnected());
+            assertNotNull(errorMsg);
             if (i < 2) {
                 assertTrue(errorMsg.text.contains("Password sbagliata"));
             } else {

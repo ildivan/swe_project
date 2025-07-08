@@ -91,13 +91,31 @@ public class Server {
     }
 
     /**
-     * method to create JFNormalFunction directory
+     * Metodo per creare la directory JFNormalFunction e svuotarla se esiste
      */
     private void initializeJsonRepository() {
         File newFolder = new File(JSON_NORMAL_FUNCTION_DIRECTORY);
 
+        if (newFolder.exists()) {
+            deleteContents(newFolder);
+        }
+
         newFolder.mkdirs();
-     
+    }
+
+    /**
+     * Metodo ricorsivo per cancellare tutti i file e le sottocartelle in una directory
+     */
+    private void deleteContents(File folder) {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    deleteContents(file); // Elimina ricorsivamente il contenuto
+                }
+                file.delete(); // Elimina file o cartella vuota
+            }
+        }
     }
 
     /**
@@ -197,6 +215,7 @@ public class Server {
                                 ReadWrite.setConnection(internalSocket);
                                 User u = authenticate(internalSocket, ConnectionType.Internal);
                                 if (u == null) {
+                                    Thread.sleep(100);
                                     internalSocket.close();
                                     return;
                                 }
@@ -235,6 +254,7 @@ public class Server {
                                 ReadWrite.setConnection(externalSocket);
                                 User u = authenticate(externalSocket, ConnectionType.External);
                                 if (u == null) {
+                                    Thread.sleep(100);
                                     externalSocket.close();
                                     return;
                                 }

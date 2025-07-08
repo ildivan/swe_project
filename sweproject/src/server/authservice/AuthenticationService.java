@@ -106,6 +106,12 @@ public class AuthenticationService extends MainService<User> {
             ioService.writeMessage(String.format("Password sbagliata riprovare, tentativi rimasti %d", 2 - i), false);
             if (i == 2) {
                 ioService.writeMessage("Tentativi esauriti, connessione chiusa", false);
+                
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 return false;
             }
             i += 1;
@@ -139,11 +145,6 @@ public class AuthenticationService extends MainService<User> {
             if(exist){
                 JsonObject userJO = authenticationUtil.getUserJsonObject(username);
                 assert userJO != null : "User is null";
-                 assert (
-                    (userJO.get("role").getAsString().equals("configuratore") && connectionType == ConnectionType.Internal) ||
-                    (userJO.get("role").getAsString().equals("volontario") && connectionType == ConnectionType.Internal) ||
-                    (userJO.get("role").getAsString().equals("fruitore") && connectionType == ConnectionType.External)
-                 );
                 return userJO;
                 
             }

@@ -23,6 +23,7 @@ public abstract class ReadWrite {
 
     protected static void write(String message, boolean responseRequired) {
         writer.get().println(gson.toJson(new Message(message, responseRequired)));
+
     }
 
     protected static String read() throws IOException {
