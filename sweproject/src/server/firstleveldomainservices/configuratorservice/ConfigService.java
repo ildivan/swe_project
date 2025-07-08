@@ -42,6 +42,7 @@ public class ConfigService extends MainService<Void>{
   
     private static final int MONTH_TO_ADD_PRECLUDE_DATE = 3;
     // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
+    private static final String USER_KEY_DESC = "userConfigured";
     private static final String CONFIG_PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String CONFIG_ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
     private static final String CLEAR = "CLEAR";
@@ -90,8 +91,8 @@ public class ConfigService extends MainService<Void>{
              * classe che mi gestisce la valutazione della data odierna qua, in base alla data mi restituisce 
              * la mappa con le varie possibili voci
              */
-            if(configType == ConfigType.NORMAL){
-                if(firstTimeConfiguration()){
+            if(configType == ConfigType.NORMAL && !checkIfConfigured(USER_KEY_DESC)){
+                if(firstTimeConfiguration() ){
                     ioService.writeMessage("Configurazione base completata", false);
                 }else{
                     ioService.writeMessage("Errore durante la configurazione", false);
