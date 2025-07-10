@@ -4,22 +4,23 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
 public class PrecludeDateService {
 
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final IJsonLocInfoFactory locInfoFactory;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
  
   
 
-    public PrecludeDateService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public PrecludeDateService(IJsonLocInfoFactory locInfoFactory,
+    JsonDataLayer dataLayer) {
 
         this.dataLayer = dataLayer;
         this.locInfoFactory = locInfoFactory;

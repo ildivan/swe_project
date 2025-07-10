@@ -5,9 +5,8 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Set;
 import server.authservice.User;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.UserMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
@@ -34,8 +33,8 @@ public class UserService extends MainService<Void> {
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
 
 
-    public UserService(Socket socket, User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public UserService(Socket socket, User user, IJsonLocInfoFactory locInfoFactory, ConfigType configType,
+    JsonDataLayer dataLayer) {
         super(socket);
         this.menu = new UserMenu(this);
         this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType, dataLayer);

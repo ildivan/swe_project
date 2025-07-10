@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
@@ -18,12 +18,12 @@ public class MonthlyPlan{
     private Map<LocalDate,DailyPlan> monthlyPlan;
 
     //questo non deve essere serializzato -> inserisco transient per risolvere il problema
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private transient IJsonLocInfoFactory locInfoFactory;
     private transient MonthlyConfigService monthlyConfigService;
     private transient PrecludeDateService precludeDateService;
     private transient boolean firstMonthlyPlan;
 
-    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date, IJsonLocInfoFactory locInfoFactory,
     MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService,
     boolean firstMonthlyPlan) {
 
@@ -35,7 +35,7 @@ public class MonthlyPlan{
         this.firstMonthlyPlan = firstMonthlyPlan;
     }
 
-    public MonthlyPlan(LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    public MonthlyPlan(LocalDate date, IJsonLocInfoFactory locInfoFactory,
     MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService,
     boolean firstMonthlyPlan) {
         

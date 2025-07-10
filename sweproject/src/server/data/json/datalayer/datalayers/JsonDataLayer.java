@@ -1,12 +1,14 @@
-package server.datalayerservice.datalayers;
+package server.data.json.datalayer.datalayers;
 
 import com.google.gson.JsonObject;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datareadwrite.IJsonReadWrite;
+
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
+
 import java.io.File;
 import java.util.*;
 
-public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation> {
+public class JsonDataLayer {
 
     private final IJsonReadWrite jsonReadWrite;
 
@@ -14,9 +16,6 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         this.jsonReadWrite = jsonReadWrite;
     }
 
-
-
-    @Override
     public void add(JsonObject jsonObject, JsonDataLocalizationInformation info) {
         assert info != null;
         assert jsonObject != null;
@@ -32,7 +31,6 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         jsonReadWrite.writeToFile(info.getPath(), list, info.getMemberName());
     }
 
-    @Override
     public boolean modify(JsonObject jsonObject, JsonDataLocalizationInformation info) {
         assert info != null;
         assert jsonObject != null;
@@ -53,7 +51,6 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         return false;
     }
 
-    @Override
     public void delete(JsonDataLocalizationInformation info) {
         assert info != null;
 
@@ -66,7 +63,6 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         jsonReadWrite.writeToFile(info.getPath(), list, info.getMemberName());
     }
 
-    @Override
     public JsonObject get(JsonDataLocalizationInformation info) {
         assert info != null;
 
@@ -83,26 +79,22 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         return null;
     }
 
-    @Override
     public boolean exists(JsonDataLocalizationInformation info) {
         assert info != null;
         return get(info) != null;
     }
 
-    @Override
     public boolean checkFileExistance(JsonDataLocalizationInformation info) {
         assert info != null;
         File file = new File(info.getPath());
         return file.exists();
     }
 
-    @Override
     public void createJSONEmptyFile(JsonDataLocalizationInformation info) {
         assert info != null;
         jsonReadWrite.createJSONEmptyFile(info.getPath());
     }
 
-    @Override
     public List<JsonObject> getList(JsonDataLocalizationInformation info) {
         assert info != null;
 
@@ -120,7 +112,6 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         return result.isEmpty() ? null : result;
     }
 
-    @Override
     public List<JsonObject> getAll(JsonDataLocalizationInformation info) {
         assert info != null;
 
@@ -132,7 +123,6 @@ public class JsonDataLayer implements IDataLayer<JsonDataLocalizationInformation
         return result;
     }
 
-    @Override
     public void erase(JsonDataLocalizationInformation info) {
         assert info != null;
 

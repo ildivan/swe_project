@@ -1,9 +1,10 @@
 package server.utils;
 
 import com.google.gson.JsonObject;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
@@ -13,15 +14,15 @@ import server.jsonfactoryservice.JsonFactoryService;
 public class ConfigsUtil {
 
     private final ConfigType configType;
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final IJsonLocInfoFactory locInfoFactory;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
 
     
   
 
-    public ConfigsUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public ConfigsUtil(IJsonLocInfoFactory locInfoFactory, ConfigType configType,
+    JsonDataLayer dataLayer) {
         this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;

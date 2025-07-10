@@ -5,8 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 import server.DateService;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 
@@ -20,7 +19,7 @@ public class DailyPlan {
         
     
 
-    public DailyPlan(LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+    public DailyPlan(LocalDate date, IJsonLocInfoFactory locInfoFactory) {
         this.date = date;
     }
 

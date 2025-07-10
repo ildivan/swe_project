@@ -1,6 +1,6 @@
-package server.datalayerservice.datalocalizationinformations;
+package server.data.json.datalayer.datalocalizationinformations;
 
-public class NormalFunctionJsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationInformation> {
+public class NormalFunctionJsonLocInfoFactory implements IJsonLocInfoFactory {
 
     private static final String ACTIVITY_PATH = "sweproject/JFNormalFunction/activities.json";
     private static final String ACTIVITY_MEMBER_NAME = "activities";

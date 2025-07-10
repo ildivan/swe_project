@@ -3,21 +3,20 @@ package server.demonservices;
 import java.util.ArrayList;
 import java.util.List;
 
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.demonservices.demons.MonthlyPlanDemon;
 import server.utils.ConfigType;
 
 public class DemonsService implements Runnable{
 
     private List<IDemon> demons;
-    private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private IJsonLocInfoFactory locInfoFactory;
     private ConfigType configType;
-    private IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private JsonDataLayer dataLayer;
 
-    public DemonsService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public DemonsService(IJsonLocInfoFactory locInfoFactory,
+    ConfigType configType, JsonDataLayer dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.configType = configType;
         this.dataLayer = dataLayer;

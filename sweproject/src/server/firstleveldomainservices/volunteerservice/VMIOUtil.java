@@ -6,9 +6,9 @@ import java.util.Set;
 import com.google.gson.JsonObject;
 
 import server.authservice.User;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.jsonfactoryservice.IJsonFactoryService;
@@ -19,11 +19,11 @@ public class VMIOUtil{
      private static final String ROLE = "volontario";
  
      private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-     private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-     private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+     private IJsonLocInfoFactory locInfoFactory;
+     private final JsonDataLayer dataLayer;
 
-    public VMIOUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public VMIOUtil(IJsonLocInfoFactory locInfoFactory,
+    JsonDataLayer dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
     }

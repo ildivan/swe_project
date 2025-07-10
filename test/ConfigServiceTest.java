@@ -2,15 +2,15 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import java.net.Socket;
 import java.util.*;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalayers.JsonDataLayer;
+import server.datalayerservice.datalocalizationinformations.IJsonLocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.utils.ConfigType;
 import server.utils.ConfigsUtil;
 
 // Minimal stubs/mocks for dependencies
-class DummyDataLayer implements IDataLayer<JsonDataLocalizationInformation> {
+class DummyDataLayer implements JsonDataLayer {
     public List<com.google.gson.JsonObject> getAll(JsonDataLocalizationInformation locInfo) { return new ArrayList<>(); }
     public com.google.gson.JsonObject get(JsonDataLocalizationInformation locInfo) { return new com.google.gson.JsonObject(); }
     public boolean modify(com.google.gson.JsonObject obj, JsonDataLocalizationInformation locInfo) { return true; }
@@ -22,7 +22,7 @@ class DummyDataLayer implements IDataLayer<JsonDataLocalizationInformation> {
     public List<com.google.gson.JsonObject> getList(JsonDataLocalizationInformation locInfo) { return new ArrayList<>(); }
     public void erase(JsonDataLocalizationInformation locInfo) {}
 }
-class DummyLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationInformation> {
+class DummyLocInfoFactory implements IJsonLocInfoFactory {
     public JsonDataLocalizationInformation getVolunteerLocInfo() { return new JsonDataLocalizationInformation(); }
     public JsonDataLocalizationInformation getPlaceLocInfo() { return new JsonDataLocalizationInformation(); }
     public JsonDataLocalizationInformation getActivityLocInfo() { return new JsonDataLocalizationInformation(); }
@@ -54,9 +54,9 @@ public class ConfigServiceTest {
     @Before
     public void setUp() {
         Socket dummySocket = null;
-        ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new DummyLocInfoFactory();
+        IJsonLocInfoFactory locInfoFactory = new DummyLocInfoFactory();
         ConfigType configType = ConfigType.NORMAL;
-        IDataLayer<JsonDataLocalizationInformation> dataLayer = new DummyDataLayer();
+        JsonDataLayer dataLayer = new DummyDataLayer();
         configService = new ConfigService(dummySocket, locInfoFactory, configType, dataLayer);
     }
 

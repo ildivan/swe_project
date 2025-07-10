@@ -4,14 +4,17 @@ package server;// Server.java
 import com.google.gson.JsonObject;
 import server.authservice.AuthenticationService;
 import server.authservice.User;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.NormalFunctionJsonLocInfoFactory;
-import server.datalayerservice.datareadwrite.IJsonReadWrite;
-import server.datalayerservice.datareadwrite.JsonReadWrite;
+import server.data.DataController;
+import server.data.facade.FacadeAbstractFactory;
+import server.data.json.JsonFacadeAbstractFactory;
+import server.data.json.NormalFunctionJsonFacadeAbstractFactory;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalocalizationinformations.JsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.NormalFunctionJsonLocInfoFactory;
+import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
+import server.data.json.datalayer.datareadwrite.JsonReadWrite;
 import server.demonservices.DemonsService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
@@ -37,13 +40,13 @@ import java.util.List;
 public class Server {
 
     private static final String JSON_NORMAL_FUNCTION_DIRECTORY = "sweproject/JFNormalFunction";
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final IJsonLocInfoFactory locInfoFactory;
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     DemonsService demonsService;
     private final IJsonReadWrite jsonReadWrite;
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
     MonthlyPlanService monthlyPlanService;
 
     public Server(ConfigType configType, List<User> users) {
@@ -173,7 +176,7 @@ public class Server {
      * @param configType
      * @return
      */
-    private ILocInfoFactory<JsonDataLocalizationInformation> getLocInfoFactory(ConfigType configType) {
+    private IJsonLocInfoFactory getLocInfoFactory(ConfigType configType) {
         switch (configType) {
             case NORMAL:
                 return new NormalFunctionJsonLocInfoFactory();
@@ -212,6 +215,13 @@ public class Server {
                         // Autentica e gestisci la connessione in un thread separato
                         Thread serviceThread = new Thread(() -> {
                             try {
+                                FacadeAbstractFactory facadeFactory;
+                                if (configType == ConfigType.NORMAL){
+                                    facadeFactory = new NormalFunctionJsonFacadeAbstractFactory();
+                                } else {
+                                    facadeFactory = new JsonFacadeAbstractFactory();
+                                }
+                                DataController data = new DataController(facadeFactory);
                                 ReadWrite.setConnection(internalSocket);
                                 User u = authenticate(internalSocket, ConnectionType.Internal);
                                 if (u == null) {
@@ -219,8 +229,8 @@ public class Server {
                                     internalSocket.close();
                                     return;
                                 }
-                            
-                                MainService<?> service = obtainService(u, internalSocket, configType);
+                                
+                                MainService<?> service = obtainService(u, internalSocket, configType, data);
                                 service.run();
                             } catch (IOException | InterruptedException e) {
                                 System.out.println("Internal service error: " + e.getMessage());
@@ -296,14 +306,14 @@ public class Server {
         return login.run();
     }
 
-    private MainService<?> obtainService(User u, Socket socket, ConfigType configType){
+    private MainService<?> obtainService(User u, Socket socket, ConfigType configType, DataController data){
         assert u != null;
         assert socket != null;
         assert configType != null;
 
         switch (u.getRole()){
             case "configuratore":
-                return new ConfigService(socket,locInfoFactory, configType, dataLayer);
+                return new ConfigService(socket,locInfoFactory, configType, dataLayer, data);
             case "volontario":
                 return new VolunteerService(socket,u.getName(),locInfoFactory, configType, dataLayer);
             default:

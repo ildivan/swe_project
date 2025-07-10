@@ -8,10 +8,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import com.google.gson.JsonObject;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+
+import server.data.DataController;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -43,29 +47,29 @@ public class EditPossibilitiesService extends MainService<Void>{
 
     private final MenuService menu = new EditMenu(this);
 
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;    
+    private final IJsonLocInfoFactory locInfoFactory;    
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final ActivityUtil activityUtil;
     private final ConfigsUtil configsUtil;
-    private final PlacesUtilForConfigService placesUtilForConfigService;
     private final ConfigType configType;
+    private final DataController data;
 
-    public EditPossibilitiesService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer,
-    ConfigsUtil configsUtil) {
+    public EditPossibilitiesService(Socket socket, IJsonLocInfoFactory locInfoFactory,
+    ConfigType configType, JsonDataLayer dataLayer,
+    ConfigsUtil configsUtil, DataController dataController) {
         super(socket);
 
         this.configsUtil = configsUtil;
         this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
-        this.placesUtilForConfigService = new PlacesUtilForConfigService(locInfoFactory, dataLayer);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
         this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
+        this.data = dataController;
     }
 
 
@@ -152,28 +156,25 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         ioService.writeMessage(CLEAR,false);
         boolean continuare;
-        
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
 
         do{
-                String name = ioService.readString("Inserire nome luogo");
-                locInfo.setKey(name);
+            String name = ioService.readString("Inserire nome luogo");
 
-                assert name != null && !name.trim().isEmpty() : "Il nome del luogo non può essere vuoto";
+            assert name != null && !name.trim().isEmpty() : "Il nome del luogo non può essere vuoto";
 
-                if(dataLayer.exists(locInfo)){
-                    ioService.writeMessage("Luogo già esistente", false);
-                    return;
-                }
-                String description = ioService.readString("Inserire descrizione luogo");
-                ioService.writeMessage("Inserire indirizzo luogo", false);
-                Address address = addNewAddress();
+            if(data.getPlacesFacade().doesPlaceExist(name)){
+                ioService.writeMessage("Luogo già esistente", false);
+                return;
+            }
+            String description = ioService.readString("Inserire descrizione luogo");
+            ioService.writeMessage("Inserire indirizzo luogo", false);
+            Address address = addNewAddress();
 
-                dataLayer.add((jsonFactoryService.createJson(new Place(name, address, description))),locInfo);
+            data.getPlacesFacade().addPlace(name, description, address);
 
-                // Post-condizione: il luogo è stato aggiunto
-        boolean placeAdded = dataLayer.exists(locInfo);
-        assert placeAdded : "Aggiunta del luogo fallita";
+            // Post-condizione: il luogo è stato aggiunto
+            boolean placeAdded = data.getPlacesFacade().doesPlaceExist(name);
+            assert placeAdded : "Aggiunta del luogo fallita";
 
             continuare = continueChoice("inserimento luoghi");
         }while(continuare);
@@ -223,7 +224,7 @@ public class EditPossibilitiesService extends MainService<Void>{
         boolean jump = false;
 
         //controllo se ci sono luoghi senza attvità
-        if(placesUtilForConfigService.existPlaceWithNoActivity()){
+        if(data.getPlacesFacade().existPlaceWithNoActivity()){
             ioService.writeMessage("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
             addActivityOnNoConfiguredPlaces();
             if((ioService.readString("Si vogliono inserire nuove attività?: (y/n)")).equalsIgnoreCase("n")){
@@ -237,41 +238,30 @@ public class EditPossibilitiesService extends MainService<Void>{
                 continue;
             }
 
-            ConfigService cf = new ConfigService(socket, locInfoFactory, configType, dataLayer);
+            ConfigService cf = new ConfigService(socket, locInfoFactory, configType, dataLayer, data);
             cf.showPlaces();
             String placeName = ioService.readString("\nInserire luogo per l'attività");
 
-            JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-    
-            locInfo.setKey(placeName);
 
-            while(!dataLayer.exists(locInfo)){
+            while(!data.getPlacesFacade().doesPlaceExist(placeName)) {
                 ioService.writeMessage("Luogo non esistente, riprovare", false);
                 placeName = ioService.readString("\nInserire luogo per l'attività");
-
             }
                 
-            Place place = jsonFactoryService.createObject(dataLayer.get(locInfo), Place.class);   
-
-            // Pre-condizione: il luogo selezionato deve esistere
-            assert place != null : "Il luogo selezionato non esiste";
+            Place place = data.getPlacesFacade().getPlace(placeName);   
 
             addActivityWithPlace(place);
-
-
         }while(continueChoice("aggiunta attività"));
-    
-
     }
 
     /**
      * show places where there is no activity related
      */
     private void addActivityOnNoConfiguredPlaces() {
-        List<Place> places = placesUtilForConfigService.getCustomList();
+        List<Place> places = data.getPlacesFacade().getCustomList();
         for (Place place : places) {
             ioService.writeMessage("Inserire attività per il luogo:\n " + formatter.formatPlace(place), false);
-              addActivityWithPlace(place);
+            addActivityWithPlace(place);
         }
     }
               
@@ -462,19 +452,13 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Place getPlace(String placeName) {
-       JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-        locInfo.setKey(placeName);
-    
         while (true) {
-            locInfo.setKey(placeName);
-            JsonObject placeJO = dataLayer.get(locInfo);
 
-            if (placeJO != null) {
-                return jsonFactoryService.createObject(placeJO, Place.class);
+            if(data.getPlacesFacade().doesPlaceExist(placeName)) {
+                return data.getPlacesFacade().getPlace(placeName);
             }
 
             ioService.writeMessage("\nLuogo non trovato con il nome: " + placeName, false);
-
         
             boolean retry = ioService.readBoolean("Vuoi riprovare con un altro nome? (true/false)");
             if (!retry) {
@@ -603,6 +587,7 @@ public class EditPossibilitiesService extends MainService<Void>{
         }
 
         boolean changeAddress = ioService.readBoolean("\nVuoi modificare l'indirizzo? (true/false)");
+        Address newAddress = null;
         if (changeAddress) {
             Address currentAddress = place.getAddress();
             String street = ioService.readString("Via attuale: " + currentAddress.getStreet() + "\nNuova via (lascia vuoto per mantenere):");
@@ -620,28 +605,15 @@ public class EditPossibilitiesService extends MainService<Void>{
                     ioService.writeMessage("Il CAP deve contenere solo cifre numeriche.", false);
                 }
             }
-
-            if (!street.isBlank()) currentAddress.setStreet(street);
-            if (!city.isBlank()) currentAddress.setCity(city);
-            if (!state.isBlank()) currentAddress.setState(state);
-            if (!zip.isBlank()) currentAddress.setZipCode(zip);
+            newAddress = new Address(
+                street.isBlank() ? currentAddress.getStreet() : street,
+                city.isBlank() ? currentAddress.getCity() : city,
+                state.isBlank() ? currentAddress.getState() : state,
+                zip.isBlank() ? currentAddress.getZipCode() : zip
+            );
         }
 
-        savePlace(place, oldName);
-    }
-
-    /**
-     * metodo helper del metodo modifca luogo, 
-     * metodo per salvare il luogo modificato
-     * @param place
-     * @param oldTitle
-     */
-    private void savePlace(Place place, String oldName) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-        locInfo.setKey(oldName);
-        
-        JsonObject placeJO = jsonFactoryService.createJson(place);
-        boolean modified = dataLayer.modify(placeJO, locInfo);
+        boolean modified = data.getPlacesFacade().modifyPlace(oldName, newName, newDesc, Optional.of(newAddress));
         
         if (modified) {
             ioService.writeMessage("\nLuogo modificata con successo", false);
@@ -656,7 +628,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Place getPlace() {
-        showChangeblePlaces();
+        showChangeablePlaces();
         String placeName = ioService.readString("\nScegli il luogo da modificare (inserisci il nome):");
 
         Place place = localizePlace(placeName);
@@ -668,11 +640,8 @@ public class EditPossibilitiesService extends MainService<Void>{
      * metodo per ottenere il luogo da modificare
      * @return
      */
-    private void showChangeblePlaces() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-
-        List<JsonObject> placesJO = dataLayer.getAll(locInfo);
-        List<Place> places = jsonFactoryService.createObjectList(placesJO, Place.class);
+    private void showChangeablePlaces() {
+        List<Place> places = data.getPlacesFacade().getChangeablePlaces();
 
         ioService.writeMessage(formatter.formatListPlace(places), false);
         ioService.writeMessage(SPACE,false);
@@ -680,18 +649,13 @@ public class EditPossibilitiesService extends MainService<Void>{
 
 
     private Place localizePlace(String placeName) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-        locInfo.setKey(placeName);
-        JsonObject placeJO = dataLayer.get(locInfo);
-        
-        if (placeJO == null) {
+        Place place = data.getPlacesFacade().getPlace(placeName);
+        if (place == null) {
             ioService.writeMessage("\nPlace non trovata con il titolo: " + placeName, false);
             return null;
         }
-        
-        return jsonFactoryService.createObject(placeJO, Place.class);
+        return place;
     }
-
 
     
     /**
@@ -779,12 +743,9 @@ public class EditPossibilitiesService extends MainService<Void>{
         ioService.writeMessage(CLEAR, false);
         String name = ioService.readString("\nInserire nome del luogo da eliminare");
 
-        assert name != null && !name.trim().isEmpty() : "Nome luogo non valido";
+        Place toDelete = data.getPlacesFacade().getPlace(name);
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-        locInfo.setKey(name);
-
-        if (dataLayer.exists(locInfo)) {
+        if (toDelete != null) {
             // Elimina tutte le attività che usano questo luogo
             JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
             List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
@@ -800,7 +761,7 @@ public class EditPossibilitiesService extends MainService<Void>{
                 }
             }
 
-            dataLayer.delete(locInfo);
+            data.getPlacesFacade().deletePlace(name);
             ioService.writeMessage("\nLuogo e attività collegate eliminate", false);
         } else {
             ioService.writeMessage("\nLuogo non esistente", false);

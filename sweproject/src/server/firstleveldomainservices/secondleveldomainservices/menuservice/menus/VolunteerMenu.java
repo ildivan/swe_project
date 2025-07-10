@@ -3,9 +3,8 @@ package server.firstleveldomainservices.secondleveldomainservices.menuservice.me
 import java.util.List;
 import java.util.Map;
 
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
 import server.utils.ConfigType;
@@ -17,8 +16,8 @@ public class VolunteerMenu extends MenuManager{
 
     private final ConfigsUtil configsUtil;
 
-    public VolunteerMenu(VolunteerService volService,  ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public VolunteerMenu(VolunteerService volService,  IJsonLocInfoFactory locInfoFactory,
+    ConfigType configType, JsonDataLayer dataLayer) {
         super();
 
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);

@@ -1,27 +1,12 @@
-package server.datalayerservice.datalocalizationinformations;
+package server.data.json.datalayer.datalocalizationinformations;
 
-public class JsonDataLocalizationInformation implements IDataLocalizationInformation<JsonDataLocalizationInformation> {
+public class JsonDataLocalizationInformation {
     // informazioni per la localizzazione e la connessione al file JSON
     private String path;
     private String memberName;
     private String key; 
     private String keyDesc;
-
-    /**
-     * construcotor
-     */
-    public JsonDataLocalizationInformation() {
-       super();
-    }
-
-    /**
-     * method to get localization information
-     * @return
-     */
-    public JsonDataLocalizationInformation getDataLocalizationInformation(){
-        return this;
-    }
-
+    
     public String getPath() {
         return path;
     }

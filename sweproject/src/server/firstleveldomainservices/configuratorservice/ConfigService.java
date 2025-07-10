@@ -10,9 +10,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import com.google.gson.JsonObject;
 import server.DateService;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.DataController;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
@@ -51,22 +52,23 @@ public class ConfigService extends MainService<Void>{
     private final ConfigType configType;
 
     private final MenuService menu; 
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final IJsonLocInfoFactory locInfoFactory;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final ActivityUtil activityUtil;
     private final MonthlyPlanService monthlyPlanService;
     private final ConfigsUtil configsUtil;
     private final PrecludeDateService precludeDateService;
     private final EditPossibilitiesService editPossibilitiesService;
+    private final DataController data;
     
   
 
-    public ConfigService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public ConfigService(Socket socket, IJsonLocInfoFactory locInfoFactory,
+    ConfigType configType, JsonDataLayer dataLayer, DataController dataController) {
 
         super(socket);
         this.dataLayer = dataLayer;
@@ -77,9 +79,10 @@ public class ConfigService extends MainService<Void>{
         this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
         this.precludeDateService = new PrecludeDateService(locInfoFactory, dataLayer);
-        this.editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer, configsUtil);
+        this.editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer, configsUtil, dataController);
         this.menu = new ConfiguratorMenu(this, configType, monthlyConfigService, locInfoFactory, dataLayer);
-    }
+        this.data = dataController;
+    }   
 
     /**
      * apply the logic of the service
@@ -260,10 +263,7 @@ public class ConfigService extends MainService<Void>{
      * method to show all places
      */
     public void showPlaces() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
-
-        List<JsonObject> placesJO = dataLayer.getAll(locInfo);
-        List<Place> places = jsonFactoryService.createObjectList(placesJO, Place.class);
+        List<Place> places = data.getPlacesFacade().getPlaces();
 
         ioService.writeMessage(formatter.formatListPlace(places), false);
         ioService.writeMessage(SPACE,false);

@@ -1,4 +1,4 @@
-package server.datalayerservice.datareadwrite;
+package server.data.json.datalayer.datareadwrite;
 
 import java.util.List;
 

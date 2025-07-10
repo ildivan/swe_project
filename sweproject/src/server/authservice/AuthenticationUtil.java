@@ -2,19 +2,20 @@ package server.authservice;
 
 import com.google.gson.JsonObject;
 
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
+
 import org.mindrot.jbcrypt.*;
 
 public class AuthenticationUtil {
 
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final IJsonLocInfoFactory locInfoFactory;
     private final int HASH_ROUNDS = 12;
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
 
-    public AuthenticationUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public AuthenticationUtil(IJsonLocInfoFactory locInfoFactory,
+    JsonDataLayer dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
     }

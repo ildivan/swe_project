@@ -19,9 +19,9 @@ import com.google.gson.JsonObject;
 import lock.MonthlyPlanLockManager;
 import server.DateService;
 import server.authservice.User;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
@@ -43,16 +43,15 @@ public class MonthlyPlanService {
   
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private transient IJsonLocInfoFactory locInfoFactory;
+    private transient JsonDataLayer dataLayer;
     private MonthlyConfigService monthlyConfigService;
     private VMIOUtil volUtil;
     private final ConfigsUtil configsUtil;
     private final ConfigType configType;
 
 
-    public MonthlyPlanService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,ConfigType configType,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public MonthlyPlanService(IJsonLocInfoFactory locInfoFactory,ConfigType configType, JsonDataLayer dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.configType = configType;
         this.dataLayer = dataLayer;

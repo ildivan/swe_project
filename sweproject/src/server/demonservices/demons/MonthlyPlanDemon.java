@@ -12,9 +12,9 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.JsonObject;
 
 import lock.MonthlyPlanLockManager;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.demonservices.IDemon;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
@@ -34,15 +34,15 @@ public class MonthlyPlanDemon implements IDemon{
 
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private IJsonLocInfoFactory locInfoFactory;
+    private JsonDataLayer dataLayer;
     private MonthlyPlanService monthlyPlanService;
     private MonthlyConfigService monthlyConfigService;
     private Map<String, Activity> activities;
     private Map<String, Volunteer> volunteers;
 
-    public MonthlyPlanDemon(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, 
-    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public MonthlyPlanDemon(IJsonLocInfoFactory locInfoFactory, 
+    ConfigType configType, JsonDataLayer dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);

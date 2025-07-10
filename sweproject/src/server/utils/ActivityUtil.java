@@ -8,6 +8,10 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -20,20 +24,17 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 
 
 public class ActivityUtil{
    
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final IJsonLocInfoFactory locInfoFactory;
     private final MonthlyPlanService monthlyPlanService;
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
     private final VMIOUtil volUtil;
 
-    public ActivityUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public ActivityUtil(IJsonLocInfoFactory locInfoFactory, ConfigType configType,
+    JsonDataLayer dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);

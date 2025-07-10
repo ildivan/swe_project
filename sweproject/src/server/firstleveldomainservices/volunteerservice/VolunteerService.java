@@ -12,9 +12,9 @@ import java.util.Locale;
 import java.util.Map;
 import com.google.gson.JsonObject;
 import server.DateService;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.VolunteerMenu;
@@ -48,8 +48,8 @@ public class VolunteerService extends MainService<Void>{
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
     private final MonthlyPlanService monthlyPlanService;
     private final DateService dateService = new DateService();
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final IJsonLocInfoFactory locInfoFactory;
+    private final JsonDataLayer dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final ConfigsUtil configsUtil;
     private final VMIOUtil volUtil;
@@ -57,8 +57,8 @@ public class VolunteerService extends MainService<Void>{
     
   
 
-    public VolunteerService(Socket socket, String name, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public VolunteerService(Socket socket, String name, IJsonLocInfoFactory locInfoFactory,
+    ConfigType configType, JsonDataLayer dataLayer) {
         super(socket);
         this.dataLayer = dataLayer;
         this.name = name;

@@ -4,9 +4,10 @@ import java.net.Socket;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 import server.ioservice.IInputOutput;
@@ -20,15 +21,15 @@ public class AuthenticationService extends MainService<User> {
     private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
     //qua posso modificare il tipo di factory per polimorfismo
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final IJsonLocInfoFactory locInfoFactory;
     private final IInputOutput ioService = new IOService();
-    private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final JsonDataLayer dataLayer;
     private final AuthenticationUtil authenticationUtil;
 
 
     public AuthenticationService(Socket socket, ConnectionType connectionType,
-     ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-     IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+     IJsonLocInfoFactory locInfoFactory,
+     JsonDataLayer dataLayer) {
         super(socket);
         this.dataLayer = dataLayer;
         this.connectionType = connectionType;

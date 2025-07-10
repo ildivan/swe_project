@@ -5,9 +5,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import server.DateService;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
@@ -27,8 +26,8 @@ public class ConfiguratorMenu extends MenuManager{
 
     public ConfiguratorMenu(ConfigService configService, ConfigType configType,
     MonthlyConfigService monthlyConfigService,
-    ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    IJsonLocInfoFactory locInfoFactory,
+    JsonDataLayer dataLayer) {
         super();
 
         this.monthlyConfigService = monthlyConfigService;

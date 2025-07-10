@@ -12,9 +12,9 @@ import com.google.gson.JsonObject;
 
 import lock.MonthlyPlanLockManager;
 import server.authservice.User;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
@@ -37,16 +37,16 @@ public class SubscriptionService {
     private static final String SUBSCRIPTION_KEY_DESC = "subscriptionId";
     private final ConfigType configType;
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
-    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private transient IJsonLocInfoFactory locInfoFactory;
+    private transient JsonDataLayer dataLayer;
     private final IInputOutput ioService = new IOService();
     private final MonthlyConfigService monthlyConfigService;
     private final IIObjectFormatter<String> objectFormatter = new TerminalObjectFormatter();
     private final MonthlyPlanService monthlyPlanService;
     private User user;
 
-    public SubscriptionService(User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
-    IDataLayer<JsonDataLocalizationInformation> dataLayer) {
+    public SubscriptionService(User user, IJsonLocInfoFactory locInfoFactory, ConfigType configType,
+    JsonDataLayer dataLayer) {
         this.user = user;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
