@@ -6,12 +6,12 @@ import server.authservice.AuthenticationService;
 import server.authservice.User;
 import server.data.DataController;
 import server.data.facade.IFacadeAbstractFactory;
-import server.data.json.JsonFacadeAbstractFactory;
+import server.data.json.NoFirstConfigJsonFacadeAbstractFactory;
 import server.data.json.NormalFunctionJsonFacadeAbstractFactory;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.data.json.datalayer.datalocalizationinformations.JsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.NoFirstConfigJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.NormalFunctionJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.TestJsonLocInfoFactory;
 import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
@@ -190,7 +190,7 @@ public class Server {
             case NORMAL:
                 return new NormalFunctionJsonLocInfoFactory();
             case NO_FIRST_CONFIG:
-                return new JsonLocInfoFactory();
+                return new NoFirstConfigJsonLocInfoFactory();
             case TEST:
                 return new TestJsonLocInfoFactory();
             default:
@@ -230,7 +230,7 @@ public class Server {
                                 if (configType == ConfigType.NORMAL){
                                     facadeFactory = new NormalFunctionJsonFacadeAbstractFactory();
                                 } else {
-                                    facadeFactory = new JsonFacadeAbstractFactory();
+                                    facadeFactory = new NoFirstConfigJsonFacadeAbstractFactory();
                                 }
                                 DataController data = new DataController(facadeFactory);
                                 ReadWrite.setConnection(internalSocket);

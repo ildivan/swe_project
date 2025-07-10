@@ -1,25 +1,30 @@
 package server.data.json;
 
 import server.data.facade.IFacadeAbstractFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datareadwrite.JsonReadWrite;
 
-public class JsonFacadeAbstractFactory implements IFacadeAbstractFactory{
+public abstract class JsonFacadeAbstractFactory implements IFacadeAbstractFactory {
+
+    private final IJsonLocInfoFactory locInfoFactory;
+
+    public JsonFacadeAbstractFactory(IJsonLocInfoFactory locInfoFactory) {
+        this.locInfoFactory = locInfoFactory;
+    }
 
     @Override
     public JsonPlacesFacade createPlacesFacade() {
         JsonReadWrite readWrite = new JsonReadWrite();
-        JsonLocInfoFactory locInfoFactory = new JsonLocInfoFactory();
         return new JsonPlacesFacade(readWrite, locInfoFactory);
     }
 
     @Override
-    public JsonUserFacade createUserFacade() {
-        // To be implemented
+    public  JsonUserFacade createUserFacade() {
+        //to implement
     }
 
     @Override
-    public JsonActivitiesFacade createActivitiesFacade() {
-        // To be implemented
+    public  JsonActivitiesFacade createActivitiesFacade(){
+        //to implement
     }
 }
