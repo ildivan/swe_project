@@ -3,10 +3,8 @@ package server.data.json;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import server.data.facade.PlacesFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
@@ -42,7 +40,7 @@ public class JsonPlacesFacade implements PlacesFacade{
     public Place getPlace(String placeName) {
         assert placeName != null && !placeName.trim().isEmpty() : "Il nome del luogo non può essere vuoto";
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
         return getPlaceUtil(placeName, locInfo);
     }
 
@@ -88,7 +86,7 @@ public class JsonPlacesFacade implements PlacesFacade{
         assert newName != null && !newName.trim().isEmpty() : "Il nuovo nome del luogo non può essere vuoto";
         assert newDescription != null && !newDescription.trim().isEmpty() : "La nuova descrizione del luogo non può essere vuota";
 
-        Place place = getPlace(placeName);
+        Place place = getChangedPlace(placeName);
         place.setName(newName);
         place.setDescription(newDescription);
         if (newAddress.isPresent()) {
@@ -161,7 +159,6 @@ public class JsonPlacesFacade implements PlacesFacade{
 
     public List<Place> getCustomList(){
         JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-
         locInfo.setKeyDesc("atLeastOneActivityRelated");
         locInfo.setKey("false");
         List<JsonObject> pJO = dataLayer.getList(locInfo);

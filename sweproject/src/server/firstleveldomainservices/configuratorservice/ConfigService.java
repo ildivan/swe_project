@@ -42,7 +42,6 @@ import server.utils.MainService;
 public class ConfigService extends MainService<Void>{
   
     private static final int MONTH_TO_ADD_PRECLUDE_DATE = 3;
-    // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String USER_KEY_DESC = "userConfigured";
     private static final String CONFIG_PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String CONFIG_ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
@@ -50,7 +49,6 @@ public class ConfigService extends MainService<Void>{
     private static final String SPACE = "SPACE";
 
     private final ConfigType configType;
-
     private final MenuService menu; 
     private final IJsonLocInfoFactory locInfoFactory;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
@@ -65,7 +63,6 @@ public class ConfigService extends MainService<Void>{
     private final EditPossibilitiesService editPossibilitiesService;
     private final DataController data;
     
-  
 
     public ConfigService(Socket socket, IJsonLocInfoFactory locInfoFactory,
     ConfigType configType, JsonDataLayer dataLayer, DataController dataController) {

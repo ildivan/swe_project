@@ -248,7 +248,7 @@ public class EditPossibilitiesService extends MainService<Void>{
                 placeName = ioService.readString("\nInserire luogo per l'attività");
             }
                 
-            Place place = data.getPlacesFacade().getPlace(placeName);   
+            Place place = data.getPlacesFacade().getChangedPlace(placeName);   
 
             addActivityWithPlace(place);
         }while(continueChoice("aggiunta attività"));
@@ -455,7 +455,7 @@ public class EditPossibilitiesService extends MainService<Void>{
         while (true) {
 
             if(data.getPlacesFacade().doesPlaceExist(placeName)) {
-                return data.getPlacesFacade().getPlace(placeName);
+                return data.getPlacesFacade().getChangedPlace(placeName);
             }
 
             ioService.writeMessage("\nLuogo non trovato con il nome: " + placeName, false);
@@ -649,7 +649,7 @@ public class EditPossibilitiesService extends MainService<Void>{
 
 
     private Place localizePlace(String placeName) {
-        Place place = data.getPlacesFacade().getPlace(placeName);
+        Place place = data.getPlacesFacade().getChangedPlace(placeName);
         if (place == null) {
             ioService.writeMessage("\nPlace non trovata con il titolo: " + placeName, false);
             return null;
@@ -743,7 +743,7 @@ public class EditPossibilitiesService extends MainService<Void>{
         ioService.writeMessage(CLEAR, false);
         String name = ioService.readString("\nInserire nome del luogo da eliminare");
 
-        Place toDelete = data.getPlacesFacade().getPlace(name);
+        Place toDelete = data.getPlacesFacade().getChangedPlace(name);
 
         if (toDelete != null) {
             // Elimina tutte le attività che usano questo luogo
