@@ -1,7 +1,8 @@
 import com.google.gson.JsonObject;
 
-import server.datalayerservice.datalayers.JsonDataLayer;
-import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.json.datalayer.datalayers.JsonDataLayer;
+import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
+
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.io.File;

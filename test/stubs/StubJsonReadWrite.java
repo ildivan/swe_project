@@ -9,7 +9,7 @@ import java.util.Set;
 
 import com.google.gson.JsonObject;
 
-import server.datalayerservice.datareadwrite.IJsonReadWrite;
+import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
 
 public class StubJsonReadWrite implements IJsonReadWrite {
         public Map<String, List<JsonObject>> fileData = new HashMap<>();
