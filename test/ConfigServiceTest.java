@@ -2,7 +2,7 @@ import org.junit.*;
 
 import java.net.Socket;
 import server.data.DataController;
-import server.data.facade.FacadeAbstractFactory;
+import server.data.facade.IFacadeAbstractFactory;
 import server.data.json.JsonFacadeAbstractFactory;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.*;
@@ -34,7 +34,7 @@ public class ConfigServiceTest {
         ConfigType configType = ConfigType.NORMAL;
         IJsonReadWrite readWrite = new JsonReadWrite();
         JsonDataLayer dataLayer = new JsonDataLayer(readWrite);
-        FacadeAbstractFactory facadeFactory = new JsonFacadeAbstractFactory();
+        IFacadeAbstractFactory facadeFactory = new JsonFacadeAbstractFactory();
         DataController dataController = new DataController(facadeFactory);
         configService = new ConfigService(dummySocket, locInfoFactory, configType, dataLayer, dataController);
     }

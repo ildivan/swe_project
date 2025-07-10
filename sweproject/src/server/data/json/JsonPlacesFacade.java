@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import server.data.facade.PlacesFacade;
+import server.data.facade.IPlacesFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -15,7 +15,7 @@ import server.firstleveldomainservices.Place;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 
-public class JsonPlacesFacade implements PlacesFacade{
+public class JsonPlacesFacade implements IPlacesFacade{
     private JsonDataLayer dataLayer;
     private final IJsonLocInfoFactory locInfoFactory;
     private final JsonFactoryService jsonFactoryService = new JsonFactoryService();

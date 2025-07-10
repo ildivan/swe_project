@@ -6,7 +6,7 @@ import java.util.Optional;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 
-public interface PlacesFacade {
+public interface IPlacesFacade {
     public List<Place> getPlaces();
 
     public List<Place> getChangeablePlaces();

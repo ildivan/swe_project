@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import server.authservice.AuthenticationService;
 import server.authservice.User;
 import server.data.DataController;
-import server.data.facade.FacadeAbstractFactory;
+import server.data.facade.IFacadeAbstractFactory;
 import server.data.json.JsonFacadeAbstractFactory;
 import server.data.json.NormalFunctionJsonFacadeAbstractFactory;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
@@ -226,7 +226,7 @@ public class Server {
                         // Autentica e gestisci la connessione in un thread separato
                         Thread serviceThread = new Thread(() -> {
                             try {
-                                FacadeAbstractFactory facadeFactory;
+                                IFacadeAbstractFactory facadeFactory;
                                 if (configType == ConfigType.NORMAL){
                                     facadeFactory = new NormalFunctionJsonFacadeAbstractFactory();
                                 } else {
