@@ -21,11 +21,11 @@ public class ServerTest {
         List<User> users = new ArrayList<User>();
         users.add(new User("test_config", "pass", "configuratore"));
         users.add(new User("test_fruitore", "pass", "fruitore"));
-        server = new Server(ConfigType.NORMAL, users);
+        server = new Server(ConfigType.TEST, users);
 
         serverThread = new Thread(new Runnable() {
             public void run() {
-                server.startServer(ConfigType.NORMAL);
+                server.startServer(ConfigType.TEST);
             }
         });
         serverThread.setDaemon(true);

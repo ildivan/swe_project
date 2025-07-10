@@ -1,59 +1,9 @@
 {
   "activities": [
     {
-      "placeName": "Piazza della Loggia",
-      "title": "Tour Completo Piazza delle Loggia",
-      "description": "Un tour che esplora la storia e l'architettura della piazza centrale di Brescia.",
-      "meetingPoint": {
-        "street": "Piazza della Loggia",
-        "city": "Brescia",
-        "state": "Italia",
-        "zipCode": "25121"
-      },
-      "firstProgrammableDate": "01-04-2025",
-      "lastProgrammableDate": "01-10-2025",
-      "programmableDays": [
-        "Sabato",
-        "Martedi"
-      ],
-      "programmableHour": "09:00",
-      "duration": "02:00",
-      "bigliettoNecessario": true,
-      "maxPartecipanti": 20,
-      "minPartecipanti": 5,
-      "volunteers": [
-        "Elena"
-      ]
-    },
-    {
-      "placeName": "Piazza della Loggia",
-      "title": "Visita Storica alla Torre dell'Orologio",
-      "description": "Scopri la storia della Torre dell'Orologio, una delle principali attrazioni storiche di Brescia.",
-      "meetingPoint": {
-        "street": "Piazza della Loggia",
-        "city": "Brescia",
-        "state": "Italia",
-        "zipCode": "25121"
-      },
-      "firstProgrammableDate": "02-04-2025",
-      "lastProgrammableDate": "01-10-2025",
-      "programmableDays": [
-        "Domenica",
-        "Giovedi"
-      ],
-      "programmableHour": "16:00",
-      "duration": "01:30",
-      "bigliettoNecessario": true,
-      "maxPartecipanti": 15,
-      "minPartecipanti": 5,
-      "volunteers": [
-        "Erica"
-      ]
-    },
-    {
       "placeName": "Castello di Brescia",
       "title": "Visita Guidata al Castello di Brescia",
-      "description": "Esplora il Castello di Brescia, un'antica fortezza con un panorama mozzafiato sulla città.",
+      "description": "Esplora il Castello di Brescia, un\u0027antica fortezza con un panorama mozzafiato sulla città.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -78,7 +28,7 @@
     {
       "placeName": "Castello di Brescia",
       "title": "Passeggiata al Parco del Castello",
-      "description": "Un'esperienza immersiva nel verde del parco che circonda il Castello di Brescia.",
+      "description": "Un\u0027esperienza immersiva nel verde del parco che circonda il Castello di Brescia.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -128,7 +78,7 @@
     {
       "placeName": "Museo di Santa Giulia",
       "title": "Visita alla Chiesa di San Salvatore",
-      "description": "Visita la Chiesa di San Salvatore all'interno del Museo di Santa Giulia e scopri la sua storia.",
+      "description": "Visita la Chiesa di San Salvatore all\u0027interno del Museo di Santa Giulia e scopri la sua storia.",
       "meetingPoint": {
         "street": "Via dei Musei, 81/b",
         "city": "Brescia",
@@ -153,7 +103,7 @@
     {
       "placeName": "Teatro Grande",
       "title": "Visita al Teatro Grande di Brescia",
-      "description": "Un tour guidato all'interno del teatro storico di Brescia, esplorando la sua architettura e la storia culturale.",
+      "description": "Un tour guidato all\u0027interno del teatro storico di Brescia, esplorando la sua architettura e la storia culturale.",
       "meetingPoint": {
         "street": "Piazza Cesare Beccaria",
         "city": "Brescia",
@@ -228,7 +178,7 @@
     {
       "placeName": "Duomo Vecchio (Rotonda di San Lorenzo)",
       "title": "Visita Guidata al Duomo Vecchio",
-      "description": "Esplora la storica Rotonda di San Lorenzo, una delle chiese romaniche più affascinanti d'Italia.",
+      "description": "Esplora la storica Rotonda di San Lorenzo, una delle chiese romaniche più affascinanti d\u0027Italia.",
       "meetingPoint": {
         "street": "Piazza Paolo VI",
         "city": "Brescia",
@@ -406,7 +356,7 @@
     {
       "placeName": "Piazza del Foro",
       "title": "Passeggiata Archeologica nel Foro Romano",
-      "description": "Un tour tra i resti dell'antico foro romano di Brescia.",
+      "description": "Un tour tra i resti dell\u0027antico foro romano di Brescia.",
       "meetingPoint": {
         "street": "Piazza del Foro",
         "city": "Brescia",
@@ -431,7 +381,7 @@
     {
       "placeName": "Museo di Scienze Naturali",
       "title": "Laboratorio Naturalistico per Famiglie",
-      "description": "Un'attività interattiva pensata per adulti e bambini per esplorare la natura.",
+      "description": "Un\u0027attività interattiva pensata per adulti e bambini per esplorare la natura.",
       "meetingPoint": {
         "street": "Via Ozanam, 4",
         "city": "Brescia",
@@ -530,7 +480,7 @@
     },
     {
       "placeName": "Palazzo Martinengo Cesaresco",
-      "title": "Mostra d'Arte a Palazzo Martinengo",
+      "title": "Mostra d\u0027Arte a Palazzo Martinengo",
       "description": "Visita una mostra temporanea all’interno del prestigioso palazzo storico.",
       "meetingPoint": {
         "street": "Via Musei, 30",
@@ -555,7 +505,7 @@
     },
     {
       "placeName": "Museo del Risorgimento",
-      "title": "Storia dell'Unità d'Italia a Brescia",
+      "title": "Storia dell\u0027Unità d\u0027Italia a Brescia",
       "description": "Ripercorri gli eventi che hanno reso Brescia protagonista del Risorgimento.",
       "meetingPoint": {
         "street": "Via del Castello, 9",
@@ -606,7 +556,7 @@
     {
       "placeName": "Piazza del Duomo",
       "title": "Tour della Piazza del Duomo di Brescia",
-      "description": "Scopri la storia e l'architettura della splendida Piazza del Duomo di Brescia.",
+      "description": "Scopri la storia e l\u0027architettura della splendida Piazza del Duomo di Brescia.",
       "meetingPoint": {
         "street": "Piazza Paolo VI",
         "city": "Brescia",
@@ -632,7 +582,7 @@
     {
       "placeName": "Piazza della Vittoria",
       "title": "Visita alla Piazza della Vittoria",
-      "description": "Un viaggio nel cuore del Novecento tra i monumenti e l'architettura fascista della città.",
+      "description": "Un viaggio nel cuore del Novecento tra i monumenti e l\u0027architettura fascista della città.",
       "meetingPoint": {
         "street": "Piazza della Vittoria",
         "city": "Brescia",
@@ -684,7 +634,7 @@
     {
       "placeName": "Teatro Sociale",
       "title": "Tour del Teatro Sociale di Brescia",
-      "description": "Scopri l'incredibile storia di uno dei teatri più importanti della città.",
+      "description": "Scopri l\u0027incredibile storia di uno dei teatri più importanti della città.",
       "meetingPoint": {
         "street": "Piazza della Loggia",
         "city": "Brescia",
@@ -710,7 +660,7 @@
     {
       "placeName": "Castello di Brescia",
       "title": "Visita al Castello di Brescia",
-      "description": "Un tour esplorativo di uno dei castelli medievali più affascinanti d'Italia.",
+      "description": "Un tour esplorativo di uno dei castelli medievali più affascinanti d\u0027Italia.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -758,8 +708,8 @@
       ]
     },
     {
-      "placeName": "Parco dell'Acqua",
-      "title": "Escursione al Parco dell'Acqua",
+      "placeName": "Parco dell\u0027Acqua",
+      "title": "Escursione al Parco dell\u0027Acqua",
       "description": "Passeggiata panoramica nel verde e nelle riserve naturali del parco.",
       "meetingPoint": {
         "street": "Via della Valle",
@@ -785,7 +735,7 @@
     {
       "placeName": "Duomo Nuovo",
       "title": "Visita Guidata al Duomo Nuovo",
-      "description": "Scopri la storia e l'architettura del Duomo Nuovo, una delle chiese più imponenti della città.",
+      "description": "Scopri la storia e l\u0027architettura del Duomo Nuovo, una delle chiese più imponenti della città.",
       "meetingPoint": {
         "street": "Piazza Paolo VI",
         "city": "Brescia",
@@ -835,7 +785,7 @@
     {
       "placeName": "Teatro Sociale",
       "title": "Spettacolo al Teatro Sociale di Brescia",
-      "description": "Vivi l'emozione di uno spettacolo teatrale al Teatro Sociale, un'esperienza unica nel cuore della città.",
+      "description": "Vivi l\u0027emozione di uno spettacolo teatrale al Teatro Sociale, un\u0027esperienza unica nel cuore della città.",
       "meetingPoint": {
         "street": "Piazza della Loggia",
         "city": "Brescia",
@@ -887,7 +837,7 @@
     {
       "placeName": "Castello di Brescia",
       "title": "Visita al Castello di Brescia al Tramonto",
-      "description": "Esplora il Castello di Brescia al tramonto, un'esperienza unica che ti permette di godere di una vista spettacolare sulla città.",
+      "description": "Esplora il Castello di Brescia al tramonto, un\u0027esperienza unica che ti permette di godere di una vista spettacolare sulla città.",
       "meetingPoint": {
         "street": "Castello di Brescia",
         "city": "Brescia",
@@ -963,7 +913,7 @@
     {
       "placeName": "Teatro Grande",
       "title": "Spettacolo Teatrale al Teatro Grande",
-      "description": "Assisti a uno spettacolo teatrale all'interno del magnifico Teatro Grande di Brescia.",
+      "description": "Assisti a uno spettacolo teatrale all\u0027interno del magnifico Teatro Grande di Brescia.",
       "meetingPoint": {
         "street": "Piazza Cesare Beccaria",
         "city": "Brescia",
@@ -987,9 +937,9 @@
       ]
     },
     {
-      "placeName": "Parco dell'Acqua",
-      "title": "Passeggiata al Parco dell'Acqua al Tramonto",
-      "description": "Goditi una passeggiata al tramonto nel Parco dell'Acqua, immergendoti nella natura.",
+      "placeName": "Parco dell\u0027Acqua",
+      "title": "Passeggiata al Parco dell\u0027Acqua al Tramonto",
+      "description": "Goditi una passeggiata al tramonto nel Parco dell\u0027Acqua, immergendoti nella natura.",
       "meetingPoint": {
         "street": "Via della Valle",
         "city": "Brescia",

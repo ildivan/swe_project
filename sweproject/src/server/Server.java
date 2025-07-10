@@ -13,6 +13,7 @@ import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFacto
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.data.json.datalayer.datalocalizationinformations.JsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.NormalFunctionJsonLocInfoFactory;
+import server.data.json.datalayer.datalocalizationinformations.TestJsonLocInfoFactory;
 import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
 import server.data.json.datalayer.datareadwrite.JsonReadWrite;
 import server.demonservices.DemonsService;
@@ -40,6 +41,7 @@ import java.util.List;
 public class Server {
 
     private static final String JSON_NORMAL_FUNCTION_DIRECTORY = "sweproject/JFNormalFunction";
+    private static final String JSON_TEST_FUNCTION_DIRECTORY = "test/JFTest";
     private final IJsonLocInfoFactory locInfoFactory;
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
@@ -55,8 +57,8 @@ public class Server {
         this.locInfoFactory = getLocInfoFactory(configType);
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
         
-        if(configType == ConfigType.NORMAL){
-            initializeJsonRepository();
+        if(configType == ConfigType.NORMAL || configType == ConfigType.TEST){
+            initializeJsonRepository(configType);
             initializeConfig();
             initializeUsers(users);
             initializeVolunteers();
@@ -96,8 +98,15 @@ public class Server {
     /**
      * Metodo per creare la directory JFNormalFunction e svuotarla se esiste
      */
-    private void initializeJsonRepository() {
-        File newFolder = new File(JSON_NORMAL_FUNCTION_DIRECTORY);
+    private void initializeJsonRepository(ConfigType configType) {
+
+        File newFolder;
+
+        if(configType == ConfigType.NORMAL){
+            newFolder = new File(JSON_NORMAL_FUNCTION_DIRECTORY);
+        }else{
+            newFolder = new File(JSON_TEST_FUNCTION_DIRECTORY);
+        }
 
         if (newFolder.exists()) {
             deleteContents(newFolder);
@@ -182,6 +191,8 @@ public class Server {
                 return new NormalFunctionJsonLocInfoFactory();
             case NO_FIRST_CONFIG:
                 return new JsonLocInfoFactory();
+            case TEST:
+                return new TestJsonLocInfoFactory();
             default:
                 throw new IllegalArgumentException("Unsupported config type: " + configType);
         }

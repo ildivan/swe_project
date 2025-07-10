@@ -152,7 +152,6 @@ public class ConfigService extends MainService<Void>{
                 editPossibilitiesService.addPlace();
                 configs.setPlacesFirtsConfigured(true);
             }
-                //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
             if(!checkIfConfigured(CONFIG_ACTIVITY_KEY_DESC)){
                 ioService.writeMessage("Inizio prima configurazione attività", false);
                 editPossibilitiesService.addActivity();
