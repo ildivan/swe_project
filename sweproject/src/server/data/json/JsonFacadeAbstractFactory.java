@@ -21,10 +21,12 @@ public abstract class JsonFacadeAbstractFactory implements IFacadeAbstractFactor
     @Override
     public  JsonUserFacade createUserFacade() {
         //to implement
+        throw new UnsupportedOperationException("Unimplemented method 'getname'");
     }
 
     @Override
     public  JsonActivitiesFacade createActivitiesFacade(){
         //to implement
+        throw new UnsupportedOperationException("Unimplemented method 'getname'");
     }
 }

@@ -1,4 +1,2 @@
-
-
-test che tutto funzioni, prova due cicli
+- data controller non è un controller
 

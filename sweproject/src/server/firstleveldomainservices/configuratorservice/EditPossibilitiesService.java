@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
-import server.data.DataController;
+import server.data.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -56,11 +56,11 @@ public class EditPossibilitiesService extends MainService<Void>{
     private final ActivityUtil activityUtil;
     private final ConfigsUtil configsUtil;
     private final ConfigType configType;
-    private final DataController data;
+    private final FacadeHub data;
 
     public EditPossibilitiesService(Socket socket, IJsonLocInfoFactory locInfoFactory,
     ConfigType configType, JsonDataLayer dataLayer,
-    ConfigsUtil configsUtil, DataController dataController) {
+    ConfigsUtil configsUtil, FacadeHub dataController) {
         super(socket);
 
         this.configsUtil = configsUtil;

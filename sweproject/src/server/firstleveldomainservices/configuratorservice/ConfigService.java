@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import com.google.gson.JsonObject;
 import server.DateService;
-import server.data.DataController;
+import server.data.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -61,11 +61,11 @@ public class ConfigService extends MainService<Void>{
     private final ConfigsUtil configsUtil;
     private final PrecludeDateService precludeDateService;
     private final EditPossibilitiesService editPossibilitiesService;
-    private final DataController data;
+    private final FacadeHub data;
     
 
     public ConfigService(Socket socket, IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer, DataController dataController) {
+    ConfigType configType, JsonDataLayer dataLayer, FacadeHub dataController) {
 
         super(socket);
         this.dataLayer = dataLayer;
