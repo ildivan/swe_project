@@ -81,8 +81,16 @@ public class JsonPlacesFacade implements IPlacesFacade{
         return placeAdded;
     }
 
+
+    public boolean modifyPlace(
+        String placeName, String newName, String newDescription, 
+        Optional<Address> newAddress) {
+        return modifyPlace(placeName, newName, newDescription, newAddress, false);
+    }
     
-    public boolean modifyPlace(String placeName, String newName, String newDescription, Optional<Address> newAddress) {
+    public boolean modifyPlace(
+        String placeName, String newName, String newDescription, 
+        Optional<Address> newAddress, Boolean atLeastOneActivityRelated) {
         assert placeName != null && !placeName.trim().isEmpty() : "Il nome del luogo non può essere vuoto";
         assert newName != null && !newName.trim().isEmpty() : "Il nuovo nome del luogo non può essere vuoto";
         assert newDescription != null && !newDescription.trim().isEmpty() : "La nuova descrizione del luogo non può essere vuota";
@@ -93,6 +101,7 @@ public class JsonPlacesFacade implements IPlacesFacade{
         if (newAddress.isPresent()) {
             place.setAddress(newAddress.get());
         }
+        place.setAtLeastOneActivityRelated(atLeastOneActivityRelated);
 
         boolean saved = savePlace(placeName, place);
         return saved;
@@ -164,7 +173,9 @@ public class JsonPlacesFacade implements IPlacesFacade{
         locInfo.setKey("false");
         List<JsonObject> pJO = dataLayer.getList(locInfo);
         List<Place> places = new ArrayList<>();
-        
+        if (pJO == null) {
+            return null;
+        }
         for(JsonObject jo : pJO){
             Place p = gson.fromJson(jo, Place.class);
             if(!p.getAtLeastOneActivityRelated()){

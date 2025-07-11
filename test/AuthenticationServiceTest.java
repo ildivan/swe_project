@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 
 
 
-
 public class AuthenticationServiceTest {
 
     private  Server server;

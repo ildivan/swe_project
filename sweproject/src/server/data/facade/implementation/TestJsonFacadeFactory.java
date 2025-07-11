@@ -2,9 +2,9 @@ package server.data.facade.implementation;
 
 import server.data.json.datalayer.datalocalizationinformations.TestJsonLocInfoFactory;
 
-public class TestFacadeFactory extends JsonFacadeAbstractFactory{
+public class TestJsonFacadeFactory extends JsonFacadeAbstractFactory{
 
-    public TestFacadeFactory() {
+    public TestJsonFacadeFactory() {
         super(new TestJsonLocInfoFactory());
       
     }
