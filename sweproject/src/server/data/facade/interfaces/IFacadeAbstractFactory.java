@@ -1,4 +1,4 @@
-package server.data.facade;
+package server.data.facade.interfaces;
 
 public interface IFacadeAbstractFactory {
     public IPlacesFacade createPlacesFacade();

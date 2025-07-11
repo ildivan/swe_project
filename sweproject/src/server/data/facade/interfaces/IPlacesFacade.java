@@ -1,4 +1,4 @@
-package server.data.facade;
+package server.data.facade.interfaces;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,10 +4,10 @@ package server;// Server.java
 import com.google.gson.JsonObject;
 import server.authservice.AuthenticationService;
 import server.authservice.User;
-import server.data.DataController;
-import server.data.facade.IFacadeAbstractFactory;
-import server.data.json.NoFirstConfigJsonFacadeAbstractFactory;
-import server.data.json.NormalFunctionJsonFacadeAbstractFactory;
+import server.data.facade.FacadeHub;
+import server.data.facade.implementation.NoFirstConfigJsonFacadeFactory;
+import server.data.facade.implementation.NormalFunctionJsonFacadeFactory;
+import server.data.facade.interfaces.IFacadeAbstractFactory;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -228,11 +228,11 @@ public class Server {
                             try {
                                 IFacadeAbstractFactory facadeFactory;
                                 if (configType == ConfigType.NORMAL){
-                                    facadeFactory = new NormalFunctionJsonFacadeAbstractFactory();
+                                    facadeFactory = new NormalFunctionJsonFacadeFactory();
                                 } else {
-                                    facadeFactory = new NoFirstConfigJsonFacadeAbstractFactory();
+                                    facadeFactory = new NoFirstConfigJsonFacadeFactory();
                                 }
-                                DataController data = new DataController(facadeFactory);
+                                FacadeHub data = new FacadeHub(facadeFactory);
                                 ReadWrite.setConnection(internalSocket);
                                 User u = authenticate(internalSocket, ConnectionType.Internal);
                                 if (u == null) {
@@ -317,7 +317,7 @@ public class Server {
         return login.run();
     }
 
-    private MainService<?> obtainService(User u, Socket socket, ConfigType configType, DataController data){
+    private MainService<?> obtainService(User u, Socket socket, ConfigType configType, FacadeHub data){
         assert u != null;
         assert socket != null;
         assert configType != null;

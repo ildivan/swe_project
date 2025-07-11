@@ -1,6 +1,6 @@
-package server.data.json;
+package server.data.facade.implementation;
 
-import server.data.facade.IUserFacade;
+import server.data.facade.interfaces.IUserFacade;
 
 public class JsonUserFacade implements IUserFacade {
     // Implementation of IUserFacade methods goes here

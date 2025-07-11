@@ -1,9 +1,9 @@
-package server.data;
+package server.data.facade;
 
-import server.data.facade.IActivitiesFacade;
-import server.data.facade.IFacadeAbstractFactory;
-import server.data.facade.IPlacesFacade;
-import server.data.facade.IUserFacade;
+import server.data.facade.interfaces.IActivitiesFacade;
+import server.data.facade.interfaces.IFacadeAbstractFactory;
+import server.data.facade.interfaces.IPlacesFacade;
+import server.data.facade.interfaces.IUserFacade;
 
 public class FacadeHub {
     private final IPlacesFacade placesFacade;

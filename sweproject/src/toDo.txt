@@ -1,2 +1,4 @@
 - data controller non è un controller
 
+-dobbiamo passare hai mainservice la ifacadaabstrractfactory non le loc info!! alla fine dopo aver creato tutte le facade si fa
+

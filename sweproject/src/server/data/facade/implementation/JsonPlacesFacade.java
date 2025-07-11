@@ -1,11 +1,12 @@
-package server.data.json;
+package server.data.facade.implementation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import server.data.facade.IPlacesFacade;
+
+import server.data.facade.interfaces.IPlacesFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;

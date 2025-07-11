@@ -1,6 +1,6 @@
-package server.data.json;
+package server.data.facade.implementation;
 
-import server.data.facade.IFacadeAbstractFactory;
+import server.data.facade.interfaces.IFacadeAbstractFactory;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datareadwrite.JsonReadWrite;
 

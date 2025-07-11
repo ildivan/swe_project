@@ -12,7 +12,7 @@ import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
-import server.data.FacadeHub;
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
