@@ -2,11 +2,14 @@ package server;// Server.java
 
 
 import com.google.gson.JsonObject;
+
+import junit.framework.Test;
 import server.authservice.AuthenticationService;
 import server.authservice.User;
 import server.data.facade.FacadeHub;
 import server.data.facade.implementation.NoFirstConfigJsonFacadeFactory;
 import server.data.facade.implementation.NormalFunctionJsonFacadeFactory;
+import server.data.facade.implementation.TestJsonFacadeFactory;
 import server.data.facade.interfaces.IFacadeAbstractFactory;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
@@ -362,10 +365,18 @@ public class Server {
         users.add(configuratore);
         
         IFacadeAbstractFactory facadeFactory;
-        if (configType == ConfigType.NORMAL){
-            facadeFactory = new NormalFunctionJsonFacadeFactory();
-        } else {
-            facadeFactory = new NoFirstConfigJsonFacadeFactory();
+        switch(configType) {
+            case ConfigType.NORMAL:
+                facadeFactory = new NormalFunctionJsonFacadeFactory();
+            break;
+            case ConfigType.NO_FIRST_CONFIG:
+                facadeFactory = new NoFirstConfigJsonFacadeFactory();
+            break;
+            case ConfigType.TEST:
+                facadeFactory = new TestJsonFacadeFactory();
+            break;
+            default:
+                facadeFactory = null;
         }
 
         Server s = new Server(configType,users, facadeFactory);

@@ -1,4 +1,6 @@
-- data controller non è un controller
+synchronized in tutti i metodi delle facade
 
--dobbiamo passare hai mainservice la ifacadaabstrractfactory non le loc info!! alla fine dopo aver creato tutte le facade si fa
+dacadehub nella costruzione del server che viene passato
+
+
 
