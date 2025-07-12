@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.JsonObject;
 
 import lock.MonthlyPlanLockManager;
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -40,13 +41,15 @@ public class MonthlyPlanDemon implements IDemon{
     private MonthlyConfigService monthlyConfigService;
     private Map<String, Activity> activities;
     private Map<String, Volunteer> volunteers;
+    private FacadeHub data;
 
     public MonthlyPlanDemon(IJsonLocInfoFactory locInfoFactory, 
-    ConfigType configType, JsonDataLayer dataLayer) {
+    ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
+        this.data = data;
     }
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone
     @Override
@@ -102,10 +105,9 @@ public class MonthlyPlanDemon implements IDemon{
      */
     private Map<String, Activity> readAllActivities() {
         //leggo dal file non modificato ovviamente, in quanto il piano attuale si basa su di esso
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        
         Map<String, Activity> map = new HashMap<>();
-        for (JsonObject jo : dataLayer.getAll(locInfo)) {
-            Activity a = jsonFactoryService.createObject(jo, Activity.class);
+        for (Activity a : data.getActivitiesFacade().getActivities()) {
             map.put(a.getTitle(), a);
         }
         return map;

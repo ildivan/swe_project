@@ -8,6 +8,7 @@ import java.util.*;
 import com.google.gson.Gson;
 import server.Server;
 import server.authservice.User;
+import server.data.facade.implementation.TestJsonFacadeFactory;
 import server.utils.ConfigType;
 import server.utils.Message;
 import static org.junit.Assert.*;
@@ -30,7 +31,7 @@ public class AuthenticationServiceTest {
         users.add(new User("test_config", hashedConfigPass, "configuratore"));
         users.add(new User("test_fruitore", hashedFruitorePass, "fruitore"));
 
-        server = new Server(ConfigType.NORMAL, users);
+        server = new Server(ConfigType.NORMAL, users, new TestJsonFacadeFactory());
 
         serverThread = new Thread(() -> server.startServer(ConfigType.NORMAL));
         serverThread.setDaemon(true);

@@ -3,6 +3,7 @@ package server.demonservices;
 import java.util.ArrayList;
 import java.util.List;
 
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.demonservices.demons.MonthlyPlanDemon;
@@ -14,12 +15,14 @@ public class DemonsService implements Runnable{
     private IJsonLocInfoFactory locInfoFactory;
     private ConfigType configType;
     private JsonDataLayer dataLayer;
+    private final FacadeHub data;
 
     public DemonsService(IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer) {
+    ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
         this.locInfoFactory = locInfoFactory;
         this.configType = configType;
         this.dataLayer = dataLayer;
+        this.data = data;
     }
 
     @Override
@@ -39,10 +42,8 @@ public class DemonsService implements Runnable{
 
     private void buildDemons() {
         this.demons = new ArrayList<>();
-        demons.add(new MonthlyPlanDemon(locInfoFactory, configType, dataLayer));
+        demons.add(new MonthlyPlanDemon(locInfoFactory, configType, dataLayer, data));
         System.out.println("Demone costruito");
     }
 
-    
-    
 }

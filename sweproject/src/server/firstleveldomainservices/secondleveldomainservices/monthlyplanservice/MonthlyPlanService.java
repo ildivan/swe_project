@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import lock.MonthlyPlanLockManager;
 import server.DateService;
 import server.authservice.User;
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -49,16 +50,19 @@ public class MonthlyPlanService {
     private VMIOUtil volUtil;
     private final ConfigsUtil configsUtil;
     private final ConfigType configType;
+    private final FacadeHub data;
 
 
-    public MonthlyPlanService(IJsonLocInfoFactory locInfoFactory,ConfigType configType, JsonDataLayer dataLayer) {
+    public MonthlyPlanService(
+        IJsonLocInfoFactory locInfoFactory,ConfigType configType, 
+        JsonDataLayer dataLayer, FacadeHub data) {
         this.locInfoFactory = locInfoFactory;
         this.configType = configType;
         this.dataLayer = dataLayer;
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
         this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
-
+        this.data = data;
     }
 
     public boolean buildMonthlyPlan() {
@@ -88,11 +92,9 @@ public class MonthlyPlanService {
 
             MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today, locInfoFactory, dataLayer);
 
-            JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-            List<JsonObject> activityJO = dataLayer.getAll(locInfo);
-            List<Activity> activity = jsonFactoryService.createObjectList(activityJO, Activity.class);
+            List<Activity> activities = data.getActivitiesFacade().getActivities();
 
-            monthlyPlan.generateMonthlyPlan(activity);
+            monthlyPlan.generateMonthlyPlan(activities);
 
             JsonDataLocalizationInformation monthlyPlanLocInfo = locInfoFactory.getMonthlyPlanLocInfo();
             dataLayer.erase(monthlyPlanLocInfo);

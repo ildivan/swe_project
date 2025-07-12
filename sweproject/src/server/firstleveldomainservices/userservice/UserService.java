@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Set;
 import server.authservice.User;
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
@@ -31,14 +32,15 @@ public class UserService extends MainService<Void> {
     private final SubscriptionService subscriptionService;
     private final ActivityUtil activityUtil;
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
-
+    private final FacadeHub data;
 
     public UserService(Socket socket, User user, IJsonLocInfoFactory locInfoFactory, ConfigType configType,
-    JsonDataLayer dataLayer) {
+    JsonDataLayer dataLayer, FacadeHub data) {
         super(socket);
         this.menu = new UserMenu(this);
-        this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType, dataLayer);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
+        this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType, dataLayer, data);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer, data);
+        this.data = data;
     }
 
 
@@ -80,7 +82,7 @@ public class UserService extends MainService<Void> {
      */
     public void showActivitiesWithCondition(ActivityState desiredState) {
         
-        List<ActivityRecord> result = activityUtil.getActiviyByState(desiredState);
+        List<ActivityRecord> result = activityUtil.getActivitiesByState(desiredState);
 
         if(result == null){
             ioService.writeMessage("\nPiano mensile non ancora creato", false);

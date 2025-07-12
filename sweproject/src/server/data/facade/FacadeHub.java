@@ -12,7 +12,8 @@ public class FacadeHub {
 
     public FacadeHub(IFacadeAbstractFactory facadeFactory) {
         this.placesFacade = facadeFactory.createPlacesFacade();
-        this.userFacade = facadeFactory.createUserFacade();
+        //this.userFacade = facadeFactory.createUserFacade();
+        this.userFacade = null;
         this.activityFacade = facadeFactory.createActivitiesFacade();
     }
     
@@ -24,7 +25,7 @@ public class FacadeHub {
         return userFacade;
     }
 
-    public IActivitiesFacade getActivityFacade() {
+    public IActivitiesFacade getActivitiesFacade() {
         return activityFacade;
     }
 }

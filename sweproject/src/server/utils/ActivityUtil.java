@@ -7,18 +7,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.volunteerservice.VMIOUtil;
@@ -32,13 +29,15 @@ public class ActivityUtil{
     private final MonthlyPlanService monthlyPlanService;
     private final JsonDataLayer dataLayer;
     private final VMIOUtil volUtil;
+    private final FacadeHub data;
 
     public ActivityUtil(IJsonLocInfoFactory locInfoFactory, ConfigType configType,
-    JsonDataLayer dataLayer) {
+    JsonDataLayer dataLayer, FacadeHub data) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
         this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+        this.data = data;
     }
     public Address getAddress(){
         IInputOutput ioService = getIOService();
@@ -53,7 +52,7 @@ public class ActivityUtil{
         return new Address(street, city, nation, zipCode);
     }
 
-    public Activity getActivity(Place place){
+    public Activity addActivity(Place place){
         IInputOutput ioService = getIOService();
         String title = ioService.readString("\nInserire titolo attività");
         String description = ioService.readString("\nInserire descrizione attività");
@@ -68,7 +67,21 @@ public class ActivityUtil{
         int minPartecipanti = ioService.readIntegerWithMinMax("\nInserire numero minimo partecipanti",1,maxPartecipanti);
         String[] volunteers = choseVolunteers();
             
-        return new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti, volunteers);
+        return data.getActivitiesFacade().addActivity(
+            place,
+            title,
+            description,
+            meetingPoint,
+            firstProgrammableDate,
+            lastProgrammableDate,
+            programmableDays,
+            programmableHour,
+            duration,
+            bigliettoNecessario,
+            maxPartecipanti,
+            minPartecipanti,
+            volunteers
+        );
     }
 
     private String[] choseVolunteers() {
@@ -259,31 +272,10 @@ public class ActivityUtil{
         return new IOService();
     }
 
-    public List<ActivityRecord> getActiviyByState(ActivityState desiredState){
+    public List<ActivityRecord> getActivitiesByState(ActivityState desiredState){
 
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
 
-        if(monthlyPlan == null){
-            return null;
-        }
-
-
-        List<ActivityRecord> result = new ArrayList<>();
-
-        for (Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlan.getMonthlyPlan().entrySet()) {
-            LocalDate date = dailyEntry.getKey();
-            DailyPlan dailyPlan = dailyEntry.getValue();
-    
-            for (Map.Entry<String, ActivityInfo> activityEntry : dailyPlan.getPlan().entrySet()) {
-                String activityName = activityEntry.getKey();
-                ActivityInfo activityInfo = activityEntry.getValue();
-    
-                if (activityInfo.getState() == desiredState) {
-                    result.add(new ActivityRecord(date, activityName, activityInfo));
-                }
-            }
-        }
-        return result;
+        return data.getActivitiesFacade().getActivitiesByState(desiredState, monthlyPlan);
     }
-
 }

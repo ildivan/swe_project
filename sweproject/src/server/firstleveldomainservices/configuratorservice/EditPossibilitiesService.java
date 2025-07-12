@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,7 +61,7 @@ public class EditPossibilitiesService extends MainService<Void>{
 
     public EditPossibilitiesService(Socket socket, IJsonLocInfoFactory locInfoFactory,
     ConfigType configType, JsonDataLayer dataLayer,
-    ConfigsUtil configsUtil, FacadeHub dataController) {
+    ConfigsUtil configsUtil, FacadeHub data) {
         super(socket);
 
         this.configsUtil = configsUtil;
@@ -68,8 +69,8 @@ public class EditPossibilitiesService extends MainService<Void>{
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
-        this.data = dataController;
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer, data);
+        this.data = data;
     }
 
 
@@ -271,7 +272,6 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     private void addActivityWithPlace(Place place) {
         assert place != null;
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
 
         if(noVolunteersExists()){
             //entro qua solo nella prima iterazione quando non ho nessun volontario, oppure se li elimino e non ho piu volontari
@@ -279,10 +279,7 @@ public class EditPossibilitiesService extends MainService<Void>{
             addVolunteer(true);
         }
 
-        Activity activity = activityUtil.getActivity(place);
-
-        dataLayer.add(jsonFactoryService.createJson(activity), locInfo);
-    
+        activityUtil.addActivity(place);
     }
 
 
@@ -368,75 +365,62 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         //necessito il vecchio titolo per effettuare le modifiche
         String oldTitle = activity.getTitle(); 
-        
-
 
         String title = ioService.readString("\nTitolo attuale: " + activity.getTitle() + "\nInserisci nuovo titolo (lascia vuoto per mantenere):");
-        if (!title.isBlank()) {
-            activity.setTitle(title);
-        }
 
         String description = ioService.readString("\nDescrizione attuale: " + activity.getDescription() + "\nInserisci nuova descrizione (lascia vuoto per mantenere):");
-        if (!description.isBlank()) {
-            activity.setDescription(description);
-        }
 
         boolean changeMeetingPoint = ioService.readBoolean("\nPunto di ritrovo attuale: " + activity.getMeetingPoint() +"\nVuoi modificare il punto di ritrovo? (true/false)");
+        Address newMeetingPoint = null;
         if (changeMeetingPoint) {
             Place place = getPlace(activity.getPlaceName());
             if (place == null) {
                 ioService.writeMessage("\nLuogo non trovato, impossibile modificare il punto di ritrovo", false);
-                return;
+            } else {
+                newMeetingPoint = activityUtil.getMeetingPoint(place);
             }
-            Address newMeetingPoint = activityUtil.getMeetingPoint(place); 
-            activity.setMeetingPoint(newMeetingPoint);
         }
 
         LocalDate firstDate = getOptionalDate("\nData inizio attuale: " + activity.getFirstProgrammableDate() + "\nNuova data inizio (dd-mm-yyyy) o lascia vuoto:");
         if (firstDate != null) activity.setFirstProgrammableDate(firstDate);
 
         LocalDate lastDate = getOptionalDate("\nData fine attuale: " + activity.getLastProgrammableDate() + "\nNuova data fine (dd-mm-yyyy) o lascia vuoto:");
-        if (lastDate != null) activity.setLastProgrammableDate(lastDate);
-
+        
         boolean changeDays = ioService.readBoolean("\nVuoi modificare i giorni programmabili? (true/false)");
+        String[] newDays = null;
         if (changeDays) {
-            String[] newDays = activityUtil.insertDays();
-            activity.setProgrammableDays(newDays);
+            newDays = activityUtil.insertDays();
         }
 
         LocalTime newHour = getOptionalTime("\nOrario attuale: " + activity.getProgrammableHour() + "\nNuovo orario (HH:mm) o lascia vuoto:");
-        if (newHour != null) activity.setProgrammableHour(newHour);
-
+    
         LocalTime newDuration = getOptionalTime("\nDurata attuale: " + activity.getDurationAsLocalTime() + "\nNuova durata (HH:mm) o lascia vuoto:");
-        if (newDuration != null) activity.setDurationAsLocalTime(newDuration);
-
+        
         boolean changeTicket = ioService.readBoolean("\nVuoi modificare il requisito del biglietto? (true/false)");
+        Boolean newTicket = null;
         if (changeTicket) {
-            boolean newTicket = ioService.readBoolean("È necessario il biglietto? (true/false)");
-            activity.setBigliettoNecessario(newTicket);
+            newTicket = ioService.readBoolean("È necessario il biglietto? (true/false)");
         }
 
         int newMax = ioService.readIntegerWithMinMax("\nNumero massimo attuale: " + activity.getMaxPartecipanti() + "\nNuovo massimo (o stesso numero):", 1, 1000);
         int newMin = ioService.readIntegerWithMinMax("\nNumero minimo attuale: " + activity.getMinPartecipanti() + "\nNuovo minimo (o stesso numero):", 1, newMax);
-        activity.setMaxPartecipanti(newMax);
-        activity.setMinPartecipanti(newMin);
 
-        saveActivity(activity, oldTitle);
-    }
+        boolean modified = data.getActivitiesFacade().modifyActivity(
+            oldTitle, 
+            Optional.ofNullable(title), 
+            Optional.ofNullable(description),
+            Optional.ofNullable(newMeetingPoint),
+            Optional.ofNullable(firstDate),
+            Optional.ofNullable(lastDate),
+            Optional.ofNullable(newDays),
+            Optional.ofNullable(newHour),
+            Optional.ofNullable(newDuration),
+            Optional.ofNullable(newTicket), 
+            Optional.ofNullable(newMax), 
+            Optional.ofNullable(newMin),
+            Optional.ofNullable(null)
+        );
 
-    /**
-     * metodo helper modifica attività,
-     * metodo per salvare l'attività modificata
-     * @param activity
-     * @param oldTitle
-     */
-    private void saveActivity(Activity activity, String oldTitle) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
-        locInfo.setKey(oldTitle);
-        
-        JsonObject activityJO = jsonFactoryService.createJson(activity);
-        boolean modified = dataLayer.modify(activityJO, locInfo);
-        
         if (modified) {
             ioService.writeMessage("\nAttività modificata con successo", false);
         } else {
@@ -490,10 +474,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private void showChangableActivities() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
-
-        List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
-        List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
+        List<Activity> activities = data.getActivitiesFacade().getChangedActivities();
 
         ioService.writeMessage(formatter.formatListActivity(activities), false);
         ioService.writeMessage(SPACE,false);
@@ -507,16 +488,16 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Activity localizeActivity(String activityTitle) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
-        locInfo.setKey(activityTitle);
-        JsonObject activityJO = dataLayer.get(locInfo);
+
+        assert activityTitle != null && !activityTitle.trim().isEmpty() : "Il titolo dell'attività non può essere vuoto";
+
+        Activity activity = data.getActivitiesFacade().getActivity(activityTitle);
         
-        if (activityJO == null) {
+        if (activity == null) {
             ioService.writeMessage("\nAttività non trovata con il titolo: " + activityTitle, false);
             return null;
         }
-        
-        return jsonFactoryService.createObject(activityJO, Activity.class);
+        return activity;
     }
 
 
@@ -686,31 +667,39 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         if (volUtil.checkVolunteerExistance(name)) {
 
-            JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
-            List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
+            List<Activity> allActivities = data.getActivitiesFacade().getChangedActivities();
 
-            for (JsonObject activity : allActivities) {
-                if (activity.has("volunteers")) {
-                    var volunteers = activity.getAsJsonArray("volunteers");
-
+            for (Activity activity : allActivities) {
+                if (activity.getVolunteers() != null && activity.getVolunteers().length > 0) {
+                    ArrayList<String> newVolunteers = new ArrayList<>(List.of(activity.getVolunteers()));
                     // Rimuovi il volontario dalla lista
-                    for (int i = 0; i < volunteers.size(); i++) {
-                        if (volunteers.get(i).getAsString().equalsIgnoreCase(name)) {
-                            volunteers.remove(i);
-                            break;
-                        }
-                    }
+                    String[] newVolunteersArray = newVolunteers.stream()
+                        .filter(volunteer -> !volunteer.equalsIgnoreCase(name))
+                        .toArray(String[]::new);
 
-                    String activityName = activity.get("title").getAsString();
-                    JsonDataLocalizationInformation singleActLoc = locInfoFactory.getChangedActivitiesLocInfo();
-                    singleActLoc.setKey(activityName);
+                    String activityName = activity.getTitle();
 
-                    if (volunteers.size() == 0) {
+                    if (newVolunteers.size() == 0) {
                         // Nessun volontario rimasto → elimina l’attività
-                        dataLayer.delete(singleActLoc);
+                        boolean deleted = data.getActivitiesFacade().deleteActivity(activityName);
+                        assert deleted : "Eliminazione dell'attività fallita";
                     } else {
-                        // Altrimenti salva la versione aggiornata dell’attività
-                        dataLayer.modify(activity, singleActLoc);
+                        boolean modified = data.getActivitiesFacade().modifyActivity(
+                            activityName,
+                            Optional.ofNullable(null), 
+                            Optional.ofNullable(null), 
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(null),
+                            Optional.ofNullable(newVolunteersArray)
+                        );
+                        assert modified : "Modifica dell'attività fallita";
                     }
                 }
             }
@@ -747,17 +736,13 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         if (toDelete != null) {
             // Elimina tutte le attività che usano questo luogo
-            JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
-            List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
+            List<Activity> allActivities = data.getActivitiesFacade().getChangedActivities();
 
-            for (JsonObject activity : allActivities) {
-                if (activity.has("placeName")) {
-                    String activityPlace = activity.get("placeName").getAsString();
-                    if (activityPlace.equalsIgnoreCase(name)) {
-                        JsonDataLocalizationInformation singleActLoc = locInfoFactory.getChangedActivitiesLocInfo();
-                        singleActLoc.setKey(activity.get("title").getAsString());
-                        dataLayer.delete(singleActLoc);
-                    }
+            for (Activity activity : allActivities) {
+                String activityPlace = activity.getPlaceName();
+                if (activityPlace.equalsIgnoreCase(name)) {
+                    boolean deleted = data.getActivitiesFacade().deleteActivity(activity.getTitle());
+                    assert deleted : "Eliminazione dell'attività fallita";
                 }
             }
 
@@ -790,11 +775,9 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome attività non valido";
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
-        locInfo.setKey(name);
 
-        if (dataLayer.exists(locInfo)) {
-            dataLayer.delete(locInfo);
+        if (data.getActivitiesFacade().doesActivityExist(name)) {
+            data.getActivitiesFacade().deleteActivity(name);
             ioService.writeMessage("\nAttività eliminata", false);
         } else {
             ioService.writeMessage("\nAttività non esistente", false);

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import server.Server;
 import server.authservice.User;
+import server.data.facade.implementation.TestJsonFacadeFactory;
 import server.utils.ConfigType;
 import static org.junit.Assert.*;
 
@@ -21,7 +22,7 @@ public class ServerTest {
         List<User> users = new ArrayList<User>();
         users.add(new User("test_config", "pass", "configuratore"));
         users.add(new User("test_fruitore", "pass", "fruitore"));
-        server = new Server(ConfigType.TEST, users);
+        server = new Server(ConfigType.TEST, users, new TestJsonFacadeFactory());
 
         serverThread = new Thread(new Runnable() {
             public void run() {

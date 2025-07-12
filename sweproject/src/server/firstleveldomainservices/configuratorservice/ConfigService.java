@@ -65,20 +65,20 @@ public class ConfigService extends MainService<Void>{
     
 
     public ConfigService(Socket socket, IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer, FacadeHub dataController) {
+    ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
 
         super(socket);
         this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer, data);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
         this.precludeDateService = new PrecludeDateService(locInfoFactory, dataLayer);
-        this.editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer, configsUtil, dataController);
+        this.editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer, configsUtil, data);
         this.menu = new ConfiguratorMenu(this, configType, monthlyConfigService, locInfoFactory, dataLayer);
-        this.data = dataController;
+        this.data = data;
     }   
 
     /**
@@ -269,10 +269,7 @@ public class ConfigService extends MainService<Void>{
      * method to show all activities
      */
     public void showActivities() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-
-        List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
-        List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
+        List<Activity> activities = data.getActivitiesFacade().getActivities();
 
         ioService.writeMessage(formatter.formatListActivity(activities), false);
         ioService.writeMessage(SPACE,false);
@@ -284,7 +281,7 @@ public class ConfigService extends MainService<Void>{
      */
     public void showActivitiesWithCondition(ActivityState desiredState) {
         
-        List<ActivityRecord> result = activityUtil.getActiviyByState(desiredState);
+        List<ActivityRecord> result = activityUtil.getActivitiesByState(desiredState);
     
         ioService.writeMessage(formatter.formatListActivityRecord(result), false);
         ioService.writeMessage(SPACE,false);

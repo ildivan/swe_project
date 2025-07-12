@@ -50,12 +50,14 @@ public class Server {
     private final IJsonReadWrite jsonReadWrite;
     private final JsonDataLayer dataLayer;
     MonthlyPlanService monthlyPlanService;
+    private final FacadeHub data;
 
-    public Server(ConfigType configType, List<User> users) {
+    public Server(ConfigType configType, List<User> users, IFacadeAbstractFactory facadeFactory) {
         this.jsonReadWrite = new JsonReadWrite();
         this.dataLayer = new JsonDataLayer(jsonReadWrite);
         this.locInfoFactory = getLocInfoFactory(configType);
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.data = new FacadeHub(facadeFactory);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
         
         if(configType == ConfigType.NORMAL || configType == ConfigType.TEST){
             initializeJsonRepository(configType);
@@ -68,7 +70,7 @@ public class Server {
         if(configType == ConfigType.NO_FIRST_CONFIG){
             initializeChangedFiles();
         }
-        this.demonsService = new DemonsService(locInfoFactory, configType, dataLayer);
+        this.demonsService = new DemonsService(locInfoFactory, configType, dataLayer, data);
 
     }
 
@@ -201,7 +203,7 @@ public class Server {
     public void startServer(ConfigType configType) {
         try (ServerSocket clientSS = new ServerSocket(CLIENT_PORT);
             ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
-
+            
             System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
             System.out.println("Server is listening on port " + CLIENT_PORT + " -> Client Port");
             System.out.println("Server is listening on port " + SERVER_TERMINA_PORT + " -> Backend Port");
@@ -226,13 +228,7 @@ public class Server {
                         // Autentica e gestisci la connessione in un thread separato
                         Thread serviceThread = new Thread(() -> {
                             try {
-                                IFacadeAbstractFactory facadeFactory;
-                                if (configType == ConfigType.NORMAL){
-                                    facadeFactory = new NormalFunctionJsonFacadeFactory();
-                                } else {
-                                    facadeFactory = new NoFirstConfigJsonFacadeFactory();
-                                }
-                                FacadeHub data = new FacadeHub(facadeFactory);
+                                
                                 ReadWrite.setConnection(internalSocket);
                                 User u = authenticate(internalSocket, ConnectionType.Internal);
                                 if (u == null) {
@@ -279,7 +275,7 @@ public class Server {
                                     externalSocket.close();
                                     return;
                                 }
-                                MainService<?> service = new UserService(externalSocket,u,locInfoFactory,configType, dataLayer);
+                                MainService<?> service = new UserService(externalSocket,u,locInfoFactory,configType, dataLayer, data);
                                 service.run();
                             } catch (IOException | InterruptedException e) {
                                 System.out.println("External service error: " + e.getMessage());
@@ -326,7 +322,7 @@ public class Server {
             case "configuratore":
                 return new ConfigService(socket,locInfoFactory, configType, dataLayer, data);
             case "volontario":
-                return new VolunteerService(socket,u.getName(),locInfoFactory, configType, dataLayer);
+                return new VolunteerService(socket,u.getName(),locInfoFactory, configType, dataLayer, data);
             default:
                 assert false;
                 return null;
@@ -364,8 +360,15 @@ public class Server {
         User fruitore = new User("f1", "temp_234", "fruitore");
         users.add(fruitore);
         users.add(configuratore);
+        
+        IFacadeAbstractFactory facadeFactory;
+        if (configType == ConfigType.NORMAL){
+            facadeFactory = new NormalFunctionJsonFacadeFactory();
+        } else {
+            facadeFactory = new NoFirstConfigJsonFacadeFactory();
+        }
 
-        Server s = new Server(configType,users);
+        Server s = new Server(configType,users, facadeFactory);
 
         s.startServer(configType);
        

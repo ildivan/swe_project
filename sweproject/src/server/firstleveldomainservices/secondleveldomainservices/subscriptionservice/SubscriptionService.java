@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 
 import lock.MonthlyPlanLockManager;
 import server.authservice.User;
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -44,15 +45,17 @@ public class SubscriptionService {
     private final IIObjectFormatter<String> objectFormatter = new TerminalObjectFormatter();
     private final MonthlyPlanService monthlyPlanService;
     private User user;
+    private FacadeHub data;
 
     public SubscriptionService(User user, IJsonLocInfoFactory locInfoFactory, ConfigType configType,
-    JsonDataLayer dataLayer) {
+    JsonDataLayer dataLayer, FacadeHub data) {
         this.user = user;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
+        this.data = data;
     }
 
     /**
@@ -171,16 +174,14 @@ public class SubscriptionService {
      * @return
      */
     private Activity localizeActivity(String activityTitle) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-        locInfo.setKey(activityTitle);
-        JsonObject activityJO = dataLayer.get(locInfo);
+        Activity activity = data.getActivitiesFacade().getActivity(activityTitle);
         
-        if (activityJO == null) {
+        if (activity == null) {
             ioService.writeMessage("\nAttività non trovata con il titolo: " + activityTitle, false);
             return null;
         }
         
-        return jsonFactoryService.createObject(activityJO, Activity.class);
+        return activity;
     }
 
     /**

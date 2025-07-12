@@ -10,11 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import com.google.gson.JsonObject;
 import server.DateService;
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.VolunteerMenu;
@@ -31,8 +30,6 @@ import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
 import server.utils.ConfigsUtil;
 import server.utils.MainService;
@@ -43,31 +40,28 @@ public class VolunteerService extends MainService<Void>{
 
 
     private final MenuService menu;
-    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
     private final MonthlyPlanService monthlyPlanService;
     private final DateService dateService = new DateService();
-    private final IJsonLocInfoFactory locInfoFactory;
-    private final JsonDataLayer dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final ConfigsUtil configsUtil;
     private final VMIOUtil volUtil;
     private final String name;
+    private final FacadeHub data;
     
   
 
     public VolunteerService(Socket socket, String name, IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer) {
+    ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
         super(socket);
-        this.dataLayer = dataLayer;
         this.name = name;
-        this.locInfoFactory = locInfoFactory;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
         this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
         this.menu = new VolunteerMenu(this, locInfoFactory, configType, dataLayer);
+        this.data = data;
     }
     /**
      * apply the logic of the service
@@ -205,7 +199,11 @@ public class VolunteerService extends MainService<Void>{
     }
 
     private boolean isMyActivity(String actName, List<Activity> myActivities){
-        assert getActivities().stream().map(Activity::getTitle).toList().contains(actName);
+        assert data.getActivitiesFacade().getActivities()
+                .stream()
+                .map(Activity::getTitle)
+                .toList()
+                .contains(actName);
 
         for (Activity activity : myActivities) {
             if(activity.getTitle().equalsIgnoreCase(actName)){
@@ -216,7 +214,7 @@ public class VolunteerService extends MainService<Void>{
     }
 
     private List<Activity> getMyActivities(){
-        List<Activity> activities = getActivities();
+        List<Activity> activities = data.getActivitiesFacade().getActivities();
         List<Activity> myActivities = new ArrayList<>();
         
         for (Activity activity : activities) {
@@ -232,13 +230,7 @@ public class VolunteerService extends MainService<Void>{
         return act.getVolunteers()[0].equalsIgnoreCase(name);
     }
 
-    private List<Activity> getActivities(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-        List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
-        List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
-        return activities;
-    }
-
+    
     /**
      * Metodo che verifica se il volontario puo avere un'attività programmata per una data specifica,
      * controllo se il giorno è compatibile
