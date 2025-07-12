@@ -29,8 +29,7 @@ public class NormalFunctionJsonLocInfoFactory implements IJsonLocInfoFactory {
     private static final String SUBSCRIPTION_MEMBER_NAME = "activitySubscription";
     private static final String CHANGED_ACTIVITY_PATH = "sweproject/JFNormalFunction/changedActivities.json";
     private static final String CHANGED_PLACES_PATH = "sweproject/JFNormalFunction/changedPlaces.json";
-    private static final String CHANGED_VOLUNTEER_PATH = "sweproject/JFNormalFunction/changedVolunteers.json";
-      private static final String PRECLUDE_DATES_PATH = "sweproject/JFNormalFunction/precludeDates.json";
+    private static final String PRECLUDE_DATES_PATH = "sweproject/JFNormalFunction/precludeDates.json";
     private static final String PRECLUDE_DATES_PATH_MEMBER_NAME = "precludeDates";
     private static final String PRECLUDE_DATES_PATH_KEY_DESC = "dateOfPlan";
 

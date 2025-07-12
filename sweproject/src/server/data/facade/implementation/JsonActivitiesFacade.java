@@ -62,6 +62,7 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
         locInfo.setKey(activityName);
+        assert dataLayer.exists(locInfo) : "L'attività non esiste";
         return jsonFactoryService.createObject(dataLayer.get(locInfo), Activity.class);
     }
 
@@ -71,6 +72,7 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
         locInfo.setKey(activityName);
+        assert dataLayer.exists(locInfo) : "L'attività non esiste";
         return jsonFactoryService.createObject(dataLayer.get(locInfo), Activity.class);
     }
 
@@ -151,12 +153,11 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
             Optional<Integer> newMin,
             Optional<String[]> volunteers
         ){
-
-        Activity activity = getActivity(activityName);
-
-        if (activity == null) {
+        
+        if (!doesActivityExist(activityName))
             return false;
-        }
+            
+        Activity activity = getChangedActivity(activityName);
 
         if (title.isPresent() && !title.get().isBlank()) 
             activity.setTitle(title.get());
@@ -216,7 +217,7 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
     public boolean doesActivityExist(String activityName) {
         assert activityName != null && !activityName.trim().isEmpty() : "Il nome dell'attività non può essere vuoto";
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
         locInfo.setKey(activityName);
         return dataLayer.exists(locInfo);
     }

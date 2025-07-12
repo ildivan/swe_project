@@ -21,29 +21,24 @@ public class MonthlyPlan{
     private transient IJsonLocInfoFactory locInfoFactory;
     private transient MonthlyConfigService monthlyConfigService;
     private transient PrecludeDateService precludeDateService;
-    private transient boolean firstMonthlyPlan;
 
     public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date, IJsonLocInfoFactory locInfoFactory,
-    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService,
-    boolean firstMonthlyPlan) {
+    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService) {
 
         this.monthlyPlan = montlyPlan;
         this.date = date;
         this.locInfoFactory = locInfoFactory;
         this.monthlyConfigService = monthlyConfigService;
         this.precludeDateService = precludeDateService;
-        this.firstMonthlyPlan = firstMonthlyPlan;
     }
 
     public MonthlyPlan(LocalDate date, IJsonLocInfoFactory locInfoFactory,
-    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService,
-    boolean firstMonthlyPlan) {
+    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService) {
         
         this.date = date;
         this.locInfoFactory = locInfoFactory;
         this.monthlyConfigService = monthlyConfigService;
         this.precludeDateService = precludeDateService;
-        this.firstMonthlyPlan = firstMonthlyPlan;
         this.monthlyPlan = buildMonthlyMap();
 
     }

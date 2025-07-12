@@ -86,8 +86,7 @@ public class MonthlyPlanService {
 
             MonthlyPlan monthlyPlan = new MonthlyPlan(
                 today, locInfoFactory, monthlyConfigService,
-                new PrecludeDateService(locInfoFactory, dataLayer),
-                firstMonthlyPlan
+                new PrecludeDateService(locInfoFactory, dataLayer)
             );
 
             MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today, locInfoFactory, dataLayer);

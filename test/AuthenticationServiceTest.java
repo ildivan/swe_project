@@ -33,7 +33,7 @@ public class AuthenticationServiceTest {
 
         server = new Server(ConfigType.NORMAL, users, new TestJsonFacadeFactory());
 
-        serverThread = new Thread(() -> server.startServer(ConfigType.NORMAL));
+        serverThread = new Thread(() -> server.startServer(ConfigType.TEST));
         serverThread.setDaemon(true);
         serverThread.start();
         // Wait for server to start

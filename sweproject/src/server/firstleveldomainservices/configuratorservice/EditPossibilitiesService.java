@@ -418,7 +418,7 @@ public class EditPossibilitiesService extends MainService<Void>{
             Optional.ofNullable(newTicket), 
             Optional.ofNullable(newMax), 
             Optional.ofNullable(newMin),
-            Optional.ofNullable(null)
+            Optional.empty()
         );
 
         if (modified) {
