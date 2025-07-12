@@ -66,6 +66,15 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
     }
 
     @Override
+    public Activity getChangedActivity(String activityName) {
+        assert activityName != null && !activityName.trim().isEmpty() : "Il nome dell'attività non può essere vuoto";
+
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
+        locInfo.setKey(activityName);
+        return jsonFactoryService.createObject(dataLayer.get(locInfo), Activity.class);
+    }
+
+    @Override
     public Activity addActivity(
             Place place,
             String name,

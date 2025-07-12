@@ -491,7 +491,7 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         assert activityTitle != null && !activityTitle.trim().isEmpty() : "Il titolo dell'attività non può essere vuoto";
 
-        Activity activity = data.getActivitiesFacade().getActivity(activityTitle);
+        Activity activity = data.getActivitiesFacade().getChangedActivity(activityTitle);
         
         if (activity == null) {
             ioService.writeMessage("\nAttività non trovata con il titolo: " + activityTitle, false);

@@ -16,6 +16,7 @@ public interface IActivitiesFacade {
     public List<Activity> getActivities();
     public List<Activity> getChangedActivities();
     public Activity getActivity(String activityName);
+    public Activity getChangedActivity(String activityName);
     public Activity addActivity(
         Place place,
         String name,
