@@ -61,9 +61,12 @@ public class JsonVolunteersFacadeTest {
     @Test
     public void testSaveVolunteerUpdatesFields() {
         volunteersFacade.addVolunteer("carol");
-        Volunteer v = volunteersFacade.getVolunteer("carol");
-        v.setName("carol_new");
-        volunteersFacade.saveVolunteer("carol",v);
+        volunteersFacade.modifyVolunteer(
+            "carol",
+            Optional.of("carol_new"),
+            Optional.empty(),
+            Optional.empty()
+        );
         Volunteer updated = volunteersFacade.getVolunteer("carol_new");
         assertNotNull(updated);
         assertEquals("carol_new", updated.getName());
