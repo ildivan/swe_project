@@ -165,11 +165,13 @@ public class MonthlyPlanBuilder {
             }else{
                 newDays = volunteer.getDisponibilityDaysCurrent();
             }
-            
-            volunteer.setDisponibilityDaysOld(newDays);
-            volunteer.setDisponibilityDaysCurrent(new LinkedHashSet<>());
 
-            data.getVolunteersFacade().saveVolunteer(volunteer.getName(), volunteer);
+            data.getVolunteersFacade().modifyVolunteer(
+                volunteer.getName(), 
+                Optional.empty(),
+                Optional.of(newDays),
+                Optional.of(new LinkedHashSet<>())
+            );
         }
        
 
