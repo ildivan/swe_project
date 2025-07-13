@@ -1,11 +1,13 @@
 package server.firstleveldomainservices.volunteerservice;
 
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import com.google.gson.JsonObject;
 
 import server.authservice.User;
+import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -16,16 +18,18 @@ import server.jsonfactoryservice.JsonFactoryService;
 
 
 public class VMIOUtil{
-     private static final String ROLE = "volontario";
- 
-     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-     private IJsonLocInfoFactory locInfoFactory;
-     private final JsonDataLayer dataLayer;
+    private static final String ROLE = "volontario";
+
+    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private IJsonLocInfoFactory locInfoFactory;
+    private final JsonDataLayer dataLayer;
+    private final FacadeHub data;
 
     public VMIOUtil(IJsonLocInfoFactory locInfoFactory,
-    JsonDataLayer dataLayer) {
+    JsonDataLayer dataLayer, FacadeHub data) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
+        this.data = data;
     }
 
     public boolean checkVolunteerExistance(String name){
@@ -59,9 +63,7 @@ public class VMIOUtil{
         ioService.writeMessage(String.format("Nuova password temporanea per volontario: %s\n%s", name, tempPass), false);
         User u = new User(name, tempPass, ROLE, false);
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
-        
-        dataLayer.add(jsonFactoryService.createJson(u), locInfo);
+        data.getUsersFacade().addUser(u);
     }
 
     /**
@@ -81,15 +83,22 @@ public class VMIOUtil{
      * @param name
      */
     public void deactivateVolunteer(String name) {
-       JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
-       locInfo.setKey(name);
 
-       User user = jsonFactoryService.createObject(dataLayer.get(locInfo), User.class);
+       User user = data.getUsersFacade().getUser(name);
+       assert user != null : "User not found";
 
        user.setActive(false);
        user.setIsDeleted(true);
 
-       dataLayer.modify(jsonFactoryService.createJson(user), locInfo);
+       boolean modified = data.getUsersFacade().modifyUser(
+            user.getName(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.of(false),
+            Optional.of(true)
+        );
+        assert modified;
     }
 
     /**

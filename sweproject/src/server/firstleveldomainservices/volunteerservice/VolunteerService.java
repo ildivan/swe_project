@@ -59,7 +59,7 @@ public class VolunteerService extends MainService<Void>{
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
-        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
         this.menu = new VolunteerMenu(this, locInfoFactory, configType, dataLayer);
         this.data = data;
     }

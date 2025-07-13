@@ -2,14 +2,7 @@ package server.authservice;
 
 import java.net.Socket;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.gsonfactoryservice.GsonFactoryService;
-import server.gsonfactoryservice.IGsonFactory;
+import server.data.facade.FacadeHub;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.utils.*;
@@ -18,43 +11,35 @@ public class AuthenticationService extends MainService<User> {
     private static final String CLEAR = "CLEAR";
 
     private final ConnectionType connectionType;
-    private final IGsonFactory gsonFactoryService = new GsonFactoryService();
-    private final Gson gson = gsonFactoryService.getGson();
-    //qua posso modificare il tipo di factory per polimorfismo
-    private final IJsonLocInfoFactory locInfoFactory;
     private final IInputOutput ioService = new IOService();
-    private final JsonDataLayer dataLayer;
     private final AuthenticationUtil authenticationUtil;
+    private final FacadeHub data;
 
 
-    public AuthenticationService(Socket socket, ConnectionType connectionType,
-     IJsonLocInfoFactory locInfoFactory,
-     JsonDataLayer dataLayer) {
+    public AuthenticationService(Socket socket, ConnectionType connectionType, FacadeHub data) {
         super(socket);
-        this.dataLayer = dataLayer;
         this.connectionType = connectionType;
-        this.locInfoFactory = locInfoFactory;
-        this.authenticationUtil = new AuthenticationUtil(locInfoFactory,dataLayer);
+        this.authenticationUtil = new AuthenticationUtil(data);
+        this.data = data;
     }
 
     @Override
     public User applyLogic() {
-        User user;
         boolean temp;
 
         ioService.writeMessage(CLEAR, false);
 
         //se esiste ottengo l'utente
-        JsonObject userJO = getUser();
-        if (userJO == null) return null;
+        User user = getUser();
+        if (user == null) return null;
 
-        if(userNotActive(userJO)){
+        if(userNotActive(user)){
             ioService.writeMessage("\nUtente non ancora attivo", false);
             return null;
         }
 
-        String username = userJO.get("name").getAsString();
-        String role = userJO.get("role").getAsString();
+        String username = user.getName();
+        String role = user.getRole();
 
         if(!isTerminalCorrect(role)){
             return null;
@@ -78,8 +63,6 @@ public class AuthenticationService extends MainService<User> {
             }
         }
 
-        user = gson.fromJson(userJO, User.class);
-
         assert user != null : "User is null";
         return user;
     }
@@ -89,8 +72,8 @@ public class AuthenticationService extends MainService<User> {
      * @param userJO
      * @return
      */
-    private boolean userNotActive(JsonObject userJO) {
-        return !userJO.get("active").getAsBoolean();
+    private boolean userNotActive(User user) {
+        return !user.isActive();
     }
 
     /**
@@ -133,44 +116,37 @@ public class AuthenticationService extends MainService<User> {
         return isCorrect;
     }
 
-    private JsonObject getUser() {
+    private User getUser() {
         String username;
         String riprovare = ""; // n no y si
         do {
             username = ioService.readString("Inserisci username:");
-            JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
-            
-            locInfo.setKey(username);
-
-            boolean exist = dataLayer.exists(locInfo);
-            if(exist){
-                JsonObject userJO = authenticationUtil.getUserJsonObject(username);
-                assert userJO != null : "User is null";
-                return userJO;
-                
+            User user = data.getUsersFacade().getUser(username);
+            if(user != null){
+                return user;
             }
-                //DEBUG write(String.valueOf(dataLayer.exists(dataContainer)), false);
-                riprovare = ioService.readString("Utente inesistente, vuoi riprovare? (y/n):");
-                if (!riprovare.equalsIgnoreCase("y") && !riprovare.equalsIgnoreCase("n")){
-                    riprovare = ioService.readString("\nComando non valido inserire 'n' o 'y'");
-                }
-                if (riprovare.equalsIgnoreCase("n")) {
-                    ioService.writeMessage("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
-                    return null;
-                }
+
+            riprovare = ioService.readString("Utente inesistente, vuoi riprovare? (y/n):");
+            if (!riprovare.equalsIgnoreCase("y") && !riprovare.equalsIgnoreCase("n")){
+                riprovare = ioService.readString("\nComando non valido inserire 'n' o 'y'");
+            }
+            if (riprovare.equalsIgnoreCase("n")) {
+                ioService.writeMessage("\n\n\nCONNESSIONE CHIUSA\n\n\n", false);
+                return null;
+            }
 
 
             
         } while (riprovare.equalsIgnoreCase("y"));
 
-        JsonObject userJO = authenticationUtil.getUserJsonObject(username);
-        assert userJO != null : "User is null";
+        User user = data.getUsersFacade().getUser(username);
+        assert user != null : "User is null";
         assert (
-                (userJO.get("role").getAsString().equals("configuratore") && connectionType == ConnectionType.Internal) ||
-                (userJO.get("role").getAsString().equals("volontario") && connectionType == ConnectionType.Internal) ||
-                (userJO.get("role").getAsString().equals("fruitore") && connectionType == ConnectionType.External)
+                (user.getRole().equals("configuratore") && connectionType == ConnectionType.Internal) ||
+                (user.getRole().equals("volontario") && connectionType == ConnectionType.Internal) ||
+                (user.getRole().equals("fruitore") && connectionType == ConnectionType.External)
         );
-        return userJO;
+        return user;
     }
 
 
@@ -180,7 +156,7 @@ public class AuthenticationService extends MainService<User> {
      * @param username username
      */
     private void changePassword(String username) {
-        assert authenticationUtil.getUserJsonObject(username) != null : "cannot change password of invalid username";
+        assert data.getUsersFacade().doesUserExist(username): "cannot change password of invalid username";
 
         String newPassword = ioService.readString("\nPrimo accesso, cambio password necessario\n\nInserisci nuova password:");
 
@@ -196,7 +172,7 @@ public class AuthenticationService extends MainService<User> {
 
     private boolean verifyPassword(String username, String password, boolean temp) {
     
-        assert authenticationUtil.getUserJsonObject(username) != null : "cannot verify password of invalid username";
+        assert data.getUsersFacade().doesUserExist(username): "cannot verify password of invalid username";
         assert !password.isEmpty() : "cannot verify password if empty";
 
         if (temp){

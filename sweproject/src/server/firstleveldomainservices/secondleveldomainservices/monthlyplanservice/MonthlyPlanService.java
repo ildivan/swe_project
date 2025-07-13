@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +62,7 @@ public class MonthlyPlanService {
         this.dataLayer = dataLayer;
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
-        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
         this.data = data;
     }
 
@@ -185,29 +186,27 @@ public class MonthlyPlanService {
      * method to refresh users
      */
     private void refreshUsers() {
-        JsonDataLocalizationInformation lcoInfo = locInfoFactory.getUserLocInfo();
-        List<JsonObject> usersJO = dataLayer.getAll(lcoInfo);
+        List<User> users = data.getUsersFacade().getUsers();
 
-        for (JsonObject jsonObject : usersJO) {
-            if(jsonObject.get("deleted").getAsBoolean()){
-                JsonDataLocalizationInformation userLocInfo = locInfoFactory.getUserLocInfo();
-                userLocInfo.setKey(jsonObject.get("name").getAsString());
-                //elimina l'utente
-                dataLayer.delete(userLocInfo);
+        for (User user : users) {
+            if(user.isDeleted()){
+                data.getUsersFacade().deleteUser(user.getName());
 
                 //se è un volontario elimina anche il volontario
-                if(jsonObject.get("role").getAsString().equalsIgnoreCase("volontario")){
-                    volUtil.deleteVolunteer(jsonObject.get("name").getAsString());
+                if(user.getRole().equalsIgnoreCase("volontario")){
+                    volUtil.deleteVolunteer(user.getName());
                 }
             }
 
-            if(!jsonObject.get("active").getAsBoolean()){
-                JsonDataLocalizationInformation userLocInfo = locInfoFactory.getUserLocInfo();
-                userLocInfo.setKey(jsonObject.get("name").getAsString());
-                User user = jsonFactoryService.createObject(jsonObject, User.class);
-                user.setActive(true);
-
-                dataLayer.modify(jsonFactoryService.createJson(user), userLocInfo);
+            if(!user.isActive()){
+                data.getUsersFacade().modifyUser(
+                    user.getName(),
+                    Optional.empty(),
+                    Optional.empty(),
+                    Optional.empty(),
+                    Optional.of(true),
+                    Optional.empty()
+                );
             }
         }
     }

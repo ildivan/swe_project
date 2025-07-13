@@ -3,17 +3,16 @@ package server.data.facade;
 import server.data.facade.interfaces.IActivitiesFacade;
 import server.data.facade.interfaces.IFacadeAbstractFactory;
 import server.data.facade.interfaces.IPlacesFacade;
-import server.data.facade.interfaces.IUserFacade;
+import server.data.facade.interfaces.IUsersFacade;
 
 public class FacadeHub {
     private final IPlacesFacade placesFacade;
-    private final IUserFacade userFacade;
+    private final IUsersFacade userFacade;
     private final IActivitiesFacade activityFacade;
 
     public FacadeHub(IFacadeAbstractFactory facadeFactory) {
         this.placesFacade = facadeFactory.createPlacesFacade();
-        //this.userFacade = facadeFactory.createUserFacade();
-        this.userFacade = null;
+        this.userFacade = facadeFactory.createUsersFacade();
         this.activityFacade = facadeFactory.createActivitiesFacade();
     }
     
@@ -21,7 +20,7 @@ public class FacadeHub {
         return placesFacade;
     }
 
-    public IUserFacade getUserFacade() {
+    public IUsersFacade getUsersFacade() {
         return userFacade;
     }
 

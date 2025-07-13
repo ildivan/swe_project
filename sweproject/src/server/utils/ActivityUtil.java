@@ -36,7 +36,7 @@ public class ActivityUtil{
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
-        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
         this.data = data;
     }
     public Address getAddress(){

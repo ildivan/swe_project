@@ -63,7 +63,7 @@ public class Server {
         if(configType == ConfigType.NORMAL || configType == ConfigType.TEST){
             initializeJsonRepository(configType);
             initializeConfig();
-            initializeUsers(users);
+            data.getUsersFacade().addUsers(users);
             initializeVolunteers();
             initializeMonthlyConfig();
         }
@@ -143,17 +143,7 @@ public class Server {
         dataLayer.add(jsonFactoryService.createJson(configs), locInfo);
     }
 
-    /**
-     * method to initialize users.json
-     * @param users
-     */
-    private void initializeUsers(List<User> users) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
-
-        for (User user : users) {
-            dataLayer.add(jsonFactoryService.createJson(user), locInfo);
-        }
-    }
+    
 
     /**
      * method to initialize volunteers.json
@@ -310,7 +300,7 @@ public class Server {
 
     private User authenticate(Socket socket, ConnectionType connectionType)
             throws InterruptedException, IOException {
-        AuthenticationService login = new AuthenticationService(socket, connectionType, locInfoFactory, dataLayer);
+        AuthenticationService login = new AuthenticationService(socket, connectionType, data);
         return login.run();
     }
 

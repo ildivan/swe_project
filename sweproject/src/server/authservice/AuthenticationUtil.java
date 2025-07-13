@@ -1,43 +1,39 @@
 package server.authservice;
 
-import com.google.gson.JsonObject;
-
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
+import server.data.facade.FacadeHub;
+import java.util.Optional;
 
 import org.mindrot.jbcrypt.*;
 
 public class AuthenticationUtil {
 
-    private final IJsonLocInfoFactory locInfoFactory;
+    private final FacadeHub data;
     private final int HASH_ROUNDS = 12;
-    private final JsonDataLayer dataLayer;
 
-    public AuthenticationUtil(IJsonLocInfoFactory locInfoFactory,
-    JsonDataLayer dataLayer) {
-        this.locInfoFactory = locInfoFactory;
-        this.dataLayer = dataLayer;
+    public AuthenticationUtil(FacadeHub data) {
+        this.data = data;
     }
 
     public boolean checkIfTemp(String username) {
-        JsonObject userJO = getUserJsonObject(username);
-        assert userJO != null: "user not found";
+        User user = data.getUsersFacade().getUser(username);
+        assert user != null: "user not found";
         
-        return userJO.get("password").getAsString().contains("temp");
+        return user.getPassword().contains("temp");
     }
 
     public boolean changePassword(String username, String newPassword) {
         assert !newPassword.trim().isEmpty(): "password is empty";
-        JsonObject userJO = getUserJsonObject(username);
-        assert userJO != null: "user not found";
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
-
-        locInfo.setKey(username);
+        assert data.getUsersFacade().doesUserExist(username): "user not found";
+        
         String newPasswordEncrypted = cryptPassword(newPassword);
-        userJO.addProperty("password", newPasswordEncrypted);
-
-        return dataLayer.modify(userJO, locInfo);
+        return data.getUsersFacade().modifyUser(
+            username,
+            Optional.empty(),
+            Optional.of(newPasswordEncrypted),
+            Optional.empty(),
+            Optional.empty(),
+            Optional.empty()
+        );
     }
 
     private String cryptPassword(String password) {
@@ -49,31 +45,19 @@ public class AuthenticationUtil {
 
     public boolean verifyPassword(String username, String password) {
         assert !password.trim().isEmpty(): "password is empty";
-        JsonObject userJO = getUserJsonObject(username);
-        assert userJO != null: "user not found";
+        User user = data.getUsersFacade().getUser(username);
+        assert user != null: "user not found";
 
-        String hashedPassword = userJO.get("password").getAsString();
+        String hashedPassword = user.getPassword();
         return BCrypt.checkpw(password, hashedPassword);
     }
 
     public boolean verifyClearPassword(String username, String password) {
         assert !password.trim().isEmpty(): "password is empty";
-        JsonObject userJO = getUserJsonObject(username);
-        assert userJO != null: "user not found";
+        User user = data.getUsersFacade().getUser(username);
+        assert user != null: "user not found";
 
-        String clearPassword = userJO.get("password").getAsString();
+        String clearPassword = user.getPassword();
         return clearPassword.contentEquals(password);
     }
-
-    public JsonObject getUserJsonObject(String username){
-        assert !username.trim().isEmpty(): "username is empty";
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
-
-        locInfo.setKey(username);
-        JsonObject user =  dataLayer.get(locInfo);
-        assert user != null: "user not found";
-        return user;
-    }
-
-    
 }

@@ -117,7 +117,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @post Se il volontario non esisteva, viene aggiunto al database. In caso contrario, viene mostrato un messaggio.
      */
     public void addVolunteer(boolean first) {
-        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
         if(!first){
             ioService.writeMessage(CLEAR,false);
         }
@@ -658,7 +658,7 @@ public class EditPossibilitiesService extends MainService<Void>{
         }
     
 
-        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
 
         ioService.writeMessage(CLEAR, false);
         String name = ioService.readString("\nInserire nome del volontario da eliminare");

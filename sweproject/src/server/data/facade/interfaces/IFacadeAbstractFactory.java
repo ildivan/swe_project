@@ -3,7 +3,9 @@ package server.data.facade.interfaces;
 public interface IFacadeAbstractFactory {
     public IPlacesFacade createPlacesFacade();
 
-    public IUserFacade createUserFacade();
+    public IUsersFacade createUsersFacade();
+
+    public IVolunteersFacade createVolunteersFacade();
 
     public IActivitiesFacade createActivitiesFacade();
 }
