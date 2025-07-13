@@ -119,10 +119,8 @@ public class MonthlyPlanDemon implements IDemon{
      * @return
      */
     private Map<String, Volunteer> readAllVolunteers() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         Map<String, Volunteer> map = new HashMap<>();
-        for (JsonObject jo : dataLayer.getAll(locInfo)) {
-            Volunteer v = jsonFactoryService.createObject(jo, Volunteer.class);
+        for (Volunteer v : data.getVolunteersFacade().getVolunteers()) {
             map.put(v.getName(), v);
         }
         return map;

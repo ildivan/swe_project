@@ -64,7 +64,6 @@ public class Server {
             initializeJsonRepository(configType);
             initializeConfig();
             data.getUsersFacade().addUsers(users);
-            initializeVolunteers();
             initializeMonthlyConfig();
         }
 
@@ -143,15 +142,7 @@ public class Server {
         dataLayer.add(jsonFactoryService.createJson(configs), locInfo);
     }
 
-    
 
-    /**
-     * method to initialize volunteers.json
-     */
-    private void initializeVolunteers() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        dataLayer.createJSONEmptyFile(locInfo);
-    }
 
     /**
      * method to initialize MonthlyConfig.json

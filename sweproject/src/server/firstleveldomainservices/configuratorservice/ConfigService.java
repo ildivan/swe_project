@@ -8,12 +8,10 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import com.google.gson.JsonObject;
 import server.DateService;
 import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
@@ -30,8 +28,6 @@ import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ActivityUtil;
 import server.utils.ConfigType;
 import server.utils.Configs;
@@ -51,10 +47,8 @@ public class ConfigService extends MainService<Void>{
     private final ConfigType configType;
     private final MenuService menu; 
     private final IJsonLocInfoFactory locInfoFactory;
-    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
-    private final JsonDataLayer dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final ActivityUtil activityUtil;
     private final MonthlyPlanService monthlyPlanService;
@@ -68,7 +62,6 @@ public class ConfigService extends MainService<Void>{
     ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
 
         super(socket);
-        this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
@@ -247,10 +240,7 @@ public class ConfigService extends MainService<Void>{
      * Mostra tutti i volontari registrati nel sistema.
      */
     public void showVolunteers() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-
-        List<JsonObject> volunteersJO = dataLayer.getAll(locInfo);
-        List<Volunteer> volunteers = jsonFactoryService.createObjectList(volunteersJO, Volunteer.class);
+        List<Volunteer> volunteers = data.getVolunteersFacade().getVolunteers();
         ioService.writeMessage(formatter.formatListVolunteer(volunteers), false);
         ioService.writeMessage(SPACE,false);
     }

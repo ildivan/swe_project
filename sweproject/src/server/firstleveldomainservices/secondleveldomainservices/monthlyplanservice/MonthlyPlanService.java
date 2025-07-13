@@ -31,7 +31,6 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigse
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.precludedateservice.PrecludeDateService;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
-import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
@@ -48,7 +47,6 @@ public class MonthlyPlanService {
     private transient IJsonLocInfoFactory locInfoFactory;
     private transient JsonDataLayer dataLayer;
     private MonthlyConfigService monthlyConfigService;
-    private VMIOUtil volUtil;
     private final ConfigsUtil configsUtil;
     private final ConfigType configType;
     private final FacadeHub data;
@@ -62,7 +60,6 @@ public class MonthlyPlanService {
         this.dataLayer = dataLayer;
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
-        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
         this.data = data;
     }
 
@@ -194,7 +191,7 @@ public class MonthlyPlanService {
 
                 //se è un volontario elimina anche il volontario
                 if(user.getRole().equalsIgnoreCase("volontario")){
-                    volUtil.deleteVolunteer(user.getName());
+                    data.getVolunteersFacade().deleteVolunteer(user.getName());
                 }
             }
 
@@ -268,7 +265,7 @@ public class MonthlyPlanService {
      */
     private void refreshVolunteers() {
         
-        List<Volunteer> volunteers = getVolunteers();
+        List<Volunteer> volunteers = data.getVolunteersFacade().getVolunteers();
         Set<String> newDays;
 
         for (Volunteer volunteer : volunteers) {
@@ -281,33 +278,11 @@ public class MonthlyPlanService {
             volunteer.setDisponibilityDaysOld(newDays);
             volunteer.setDisponibilityDaysCurrent(new LinkedHashSet<>());
 
-            saveVolunteer(volunteer);
+            data.getVolunteersFacade().saveVolunteer(volunteer.getName(), volunteer);
         }
        
 
     }
-
-    private void saveVolunteer(Volunteer volunteer) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        
-        locInfo.setKey(volunteer.getName());
-
-        dataLayer.modify(jsonFactoryService.createJson(volunteer), locInfo);
-    }
-
-    /**
-     * metodo per ottenere i volontari
-     * @param locInfo
-     */
-    private List<Volunteer> getVolunteers() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-
-        List<JsonObject> volunteersJO = dataLayer.getAll(locInfo);
-        List<Volunteer> volunteers = jsonFactoryService.createObjectList(volunteersJO, Volunteer.class);
-        return volunteers;
-    }
-
-
 
     /**
      * metodo per ottenere il monthly plan in base alla data di sistema

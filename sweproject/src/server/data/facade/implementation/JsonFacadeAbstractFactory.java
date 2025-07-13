@@ -17,10 +17,10 @@ public abstract class JsonFacadeAbstractFactory implements IFacadeAbstractFactor
         return new JsonPlacesFacade(new JsonReadWrite(), locInfoFactory);
     }
     
-        @Override
-        public  JsonActivitiesFacade createActivitiesFacade(){
-            return new JsonActivitiesFacade(new JsonReadWrite(), locInfoFactory);
-        }
+    @Override
+    public  JsonActivitiesFacade createActivitiesFacade(){
+        return new JsonActivitiesFacade(new JsonReadWrite(), locInfoFactory);
+    }
 
     @Override
     public JsonUsersFacade createUsersFacade() {
@@ -29,7 +29,6 @@ public abstract class JsonFacadeAbstractFactory implements IFacadeAbstractFactor
 
     @Override
     public JsonVolunteersFacade createVolunteersFacade() {
-        //to implement
-        throw new UnsupportedOperationException("Unimplemented method 'getname'");
+        return new JsonVolunteersFacade(new JsonReadWrite(), locInfoFactory);
     }
 }

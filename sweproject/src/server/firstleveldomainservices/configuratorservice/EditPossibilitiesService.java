@@ -26,6 +26,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigse
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.volunteerservice.VMIOUtil;
+import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
@@ -126,11 +127,11 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
 
-        if(!volUtil.checkVolunteerExistance(name)) {
+        if(!data.getVolunteersFacade().doesVolunteerExist(name)) {
             volUtil.addVolunteer(name);
 
             // Post-condizione: ora esiste
-            boolean nowExists = volUtil.checkVolunteerExistance(name);
+            boolean nowExists = data.getVolunteersFacade().doesVolunteerExist(name);
             assert nowExists : "Aggiunta volontario fallita";
         } else {
             ioService.writeMessage("\nVolontario già esistente", false);
@@ -290,9 +291,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private boolean noVolunteersExists() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        List<JsonObject> volunteers = dataLayer.getAll(locInfo);
-
+        List<Volunteer> volunteers = data.getVolunteersFacade().getVolunteers();
         return volunteers.isEmpty();
     }
 
@@ -665,7 +664,7 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
 
-        if (volUtil.checkVolunteerExistance(name)) {
+        if (data.getVolunteersFacade().doesVolunteerExist(name)) {
 
             List<Activity> allActivities = data.getActivitiesFacade().getChangedActivities();
 

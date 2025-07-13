@@ -10,7 +10,6 @@ import java.util.List;
 import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -18,25 +17,18 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 
 
 public class ActivityUtil{
    
-    private final IJsonLocInfoFactory locInfoFactory;
     private final MonthlyPlanService monthlyPlanService;
-    private final JsonDataLayer dataLayer;
-    private final VMIOUtil volUtil;
     private final FacadeHub data;
 
     public ActivityUtil(IJsonLocInfoFactory locInfoFactory, ConfigType configType,
     JsonDataLayer dataLayer, FacadeHub data) {
-        this.locInfoFactory = locInfoFactory;
-        this.dataLayer = dataLayer;
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
-        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
         this.data = data;
     }
     public Address getAddress(){
@@ -107,7 +99,7 @@ public class ActivityUtil{
        String name;
        do{
             name = ioService.readString("Inserire volontario nell'attività");
-            if(!volunteerExist(name)){
+            if(!data.getVolunteersFacade().doesVolunteerExist(name)){
                 ioService.writeMessage("Volontario inesistente, riprovare",false);
             }else{
                 finished = true;
@@ -118,9 +110,6 @@ public class ActivityUtil{
     }
 
 
-    private boolean volunteerExist(String name) {
-       return volUtil.checkVolunteerExistance(name);
-    }
 
     
     /**
@@ -196,7 +185,7 @@ public class ActivityUtil{
       
         do{
             String vol = ioService.readString("\nInserire volontario da aggiungere all'attività");
-            if(checkIfVolunteersExist(vol)){
+            if(data.getVolunteersFacade().doesVolunteerExist(vol)){
                volunteers.add(vol);
             }else{
                 ioService.writeMessage("Volontario non esistente, aggiungere un volontario corretto", false);
@@ -205,20 +194,6 @@ public class ActivityUtil{
         }while(continueChoice("aggiunta volontari all'attività"));
         return volunteers.toArray(new String[volunteers.size()]);
         
-    }
-    
-    /**
-     * method to check if a volunteer already exists
-     * @param name name of the volunteer to check
-     * @return true if the volunteer already exists
-     */
-    private boolean checkIfVolunteersExist(String name) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-
-        locInfo.setKey(name);
-    
-        return dataLayer.exists(locInfo);
-      
     }
 
     /**

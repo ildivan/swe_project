@@ -32,7 +32,6 @@ public class UserService extends MainService<Void> {
     private final SubscriptionService subscriptionService;
     private final ActivityUtil activityUtil;
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
-    private final FacadeHub data;
 
     public UserService(Socket socket, User user, IJsonLocInfoFactory locInfoFactory, ConfigType configType,
     JsonDataLayer dataLayer, FacadeHub data) {
@@ -40,7 +39,6 @@ public class UserService extends MainService<Void> {
         this.menu = new UserMenu(this);
         this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType, dataLayer, data);
         this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer, data);
-        this.data = data;
     }
 
 

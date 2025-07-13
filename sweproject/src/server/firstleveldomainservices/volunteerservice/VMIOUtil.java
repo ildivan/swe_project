@@ -4,40 +4,23 @@ import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import com.google.gson.JsonObject;
-
 import server.authservice.User;
 import server.data.facade.FacadeHub;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 
 
 public class VMIOUtil{
     private static final String ROLE = "volontario";
-
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private IJsonLocInfoFactory locInfoFactory;
-    private final JsonDataLayer dataLayer;
     private final FacadeHub data;
 
     public VMIOUtil(IJsonLocInfoFactory locInfoFactory,
     JsonDataLayer dataLayer, FacadeHub data) {
-        this.locInfoFactory = locInfoFactory;
-        this.dataLayer = dataLayer;
         this.data = data;
     }
 
-    public boolean checkVolunteerExistance(String name){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        locInfo.setKey(name);
-
-        return dataLayer.exists(locInfo);
-    }
 
     /**
      * method to add a volunteer
@@ -45,11 +28,9 @@ public class VMIOUtil{
      * @return
      */
     public void addVolunteer(String name){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        locInfo.setKey(name);
-
-        dataLayer.add(jsonFactoryService.createJson(new Volunteer(name)), locInfo);
-
+        assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
+        boolean added = data.getVolunteersFacade().addVolunteer(name);
+        assert added;
         addNewVolunteerUserProfile(name);
     }
 
@@ -66,17 +47,7 @@ public class VMIOUtil{
         data.getUsersFacade().addUser(u);
     }
 
-    /**
-     * method to delete volunteer from the database
-     * @param name
-     */
-    public void deleteVolunteer(String name){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        locInfo.setKey(name);
-
-        dataLayer.delete(locInfo);
-
-    }
+    
 
     /**
      * method used to deactivate volunteer
@@ -107,11 +78,8 @@ public class VMIOUtil{
      * @param name
      */
     public void addDisponibilityDate(boolean firstPlanConfigured, String name, String formattedDate){
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        locInfo.setKey(name);
-        JsonObject volunteerJO = dataLayer.get(locInfo);
-        Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
+        Volunteer volunteer = data.getVolunteersFacade().getVolunteer(name);
+        assert volunteer != null : "Volontario non trovato";
         Set<String> disponibilityDays;
 
         disponibilityDays = volunteer.getDisponibilityDaysCurrent();
@@ -124,13 +92,7 @@ public class VMIOUtil{
 
         volunteer.setDisponibilityDaysCurrent(disponibilityDays);
 
-        saveVolunteer(volunteer, locInfo);
+        data.getVolunteersFacade().saveVolunteer(name, volunteer);
 
-    }
-
-    private void saveVolunteer(Volunteer volunteer, JsonDataLocalizationInformation locInfo){
-        JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);
-
-        dataLayer.modify(newVolunteerJO, locInfo);
     }
 }
