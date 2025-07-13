@@ -12,26 +12,21 @@ import java.util.Locale;
 import java.util.Map;
 import server.DateService;
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.VolunteerMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.utils.ConfigType;
-import server.utils.ConfigsUtil;
 import server.utils.MainService;
 
 public class VolunteerService extends MainService<Void>{
@@ -42,26 +37,22 @@ public class VolunteerService extends MainService<Void>{
     private final MenuService menu;
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
-    private final MonthlyPlanService monthlyPlanService;
     private final DateService dateService = new DateService();
-    private final MonthlyConfigService monthlyConfigService;
-    private final ConfigsUtil configsUtil;
     private final VMIOUtil volUtil;
     private final String name;
     private final FacadeHub data;
+    private final ConfigType configType;
     
   
 
-    public VolunteerService(Socket socket, String name, IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
+    public VolunteerService(Socket socket, String name,
+    ConfigType configType, FacadeHub data) {
         super(socket);
         this.name = name;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
-        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
-        this.menu = new VolunteerMenu(this, locInfoFactory, configType, dataLayer);
+        this.volUtil = new VMIOUtil(data);
+        this.menu = new VolunteerMenu(this,configType, data);
         this.data = data;
+        this.configType = configType;
     }
     /**
      * apply the logic of the service
@@ -97,7 +88,7 @@ public class VolunteerService extends MainService<Void>{
      * mostra le attività del pianp in cui è presente il volontario
      */
     public void showMyActivities(){
-        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+        MonthlyPlan monthlyPlan = data.getMonthlyPlanFacade().getMonthlyPlan();
 
         if(monthlyPlan == null){
             ioService.writeMessage("\nPiano mensile non ancora generato", false);
@@ -144,7 +135,7 @@ public class VolunteerService extends MainService<Void>{
      */
     public void addDisponibilityDate(){
         
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         if(!mc.getPlanStateMap().get(PlanState.DISPONIBILITA_APERTE)){
             ioService.writeMessage("Piano mensile o modifica attivita in corso, non puoi aggiungere date di disponibilità", false);
@@ -160,7 +151,7 @@ public class VolunteerService extends MainService<Void>{
         /*
          * prendere il mese e l'anno cosi permette di evitare race conditions
          */
-        boolean firstPlanConfigured = configsUtil.getConfig().getFirstPlanConfigured();
+        boolean firstPlanConfigured = data.getConfigFacade().getConfig(configType).getFirstPlanConfigured();
         int month = mc.getMonthAndYear().getMonth().plus(1).getValue();
         
         int year = mc.getMonthAndYear().getYear();
@@ -283,7 +274,7 @@ public class VolunteerService extends MainService<Void>{
      * @return
      */
     private List<ConfirmedActivity> getMyConfirmedActivities() {
-        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+        MonthlyPlan monthlyPlan = data.getMonthlyPlanFacade().getMonthlyPlan();
         
         if(monthlyPlan == null){
             return null;

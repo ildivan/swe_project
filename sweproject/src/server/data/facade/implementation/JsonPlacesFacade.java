@@ -1,5 +1,9 @@
 package server.data.facade.implementation;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -184,4 +188,57 @@ public class JsonPlacesFacade implements IPlacesFacade{
         }
         return places;
     }
+
+    /**
+     * istanzio file sola lettura luoghi
+     */
+    public void copyToReadOnlyPlace() {
+        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
+        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
+
+        try {
+            Files.copy(changedPlacesPath, originalPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * method to initialize editable files
+     */
+    @Override
+    public void initializeChangedFiles() {
+        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
+        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
+
+        try {
+            Files.copy(originalPlacesPath, changedPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * metodo di utilita a refreshData
+     * aggiorna le modifiche hai luoghi
+     */
+    @Override
+    public void refreshChangedPlaces() {
+
+        //file temporaneo per rendere atomica la copia, altrimenti possibili inconsistenze
+        //NECESSARIA ATOMIC_MOVE support
+        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
+        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
+        Path tempPath = originalPlacesPath.resolveSibling(originalPlacesPath.getFileName() + ".tmp");
+
+        try {
+            // Copia su file temporaneo
+            Files.copy(changedPlacesPath, tempPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // Move atomico (rinomina il file temporaneo in quello definitivo)
+            Files.move(tempPath, originalPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

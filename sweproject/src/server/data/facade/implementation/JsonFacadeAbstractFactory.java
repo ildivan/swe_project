@@ -31,4 +31,29 @@ public abstract class JsonFacadeAbstractFactory implements IFacadeAbstractFactor
     public JsonVolunteersFacade createVolunteersFacade() {
         return new JsonVolunteersFacade(new JsonReadWrite(), locInfoFactory);
     }
+
+    @Override
+    public JsonConfigFacade createConfigsFacade() {
+        return new JsonConfigFacade(new JsonReadWrite(), locInfoFactory);
+    }
+
+    @Override
+    public JsonMonthlyConfigFacade createMonthlyConfigsFacade() {
+        return new JsonMonthlyConfigFacade(new JsonReadWrite(), locInfoFactory);
+    }
+
+    @Override
+    public JsonMonthlyPlanFacade createMonthlyPlanFacade() {
+        return new JsonMonthlyPlanFacade(new JsonReadWrite(), locInfoFactory);
+    }
+
+    @Override
+    public JsonSubscriptionFacade createSubscriptionFacade() {
+        return new JsonSubscriptionFacade(new JsonReadWrite(), locInfoFactory);
+    }
+
+    @Override
+    public JsonPrecludeDateFacade createPrecludeDateFacade() {
+        return new JsonPrecludeDateFacade(new JsonReadWrite(), locInfoFactory);
+    }
 }

@@ -2,25 +2,25 @@ package server.firstleveldomainservices.secondleveldomainservices.menuservice.me
 
 import java.util.List;
 import java.util.Map;
-
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.facade.FacadeHub;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
 import server.utils.ConfigType;
 import server.utils.Configs;
-import server.utils.ConfigsUtil;
 
 
 public class VolunteerMenu extends MenuManager{
 
-    private final ConfigsUtil configsUtil;
+    private FacadeHub data;
+    private ConfigType configType;
 
-    public VolunteerMenu(VolunteerService volService,  IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer) {
+    public VolunteerMenu(VolunteerService volService,
+    ConfigType configType,
+    FacadeHub data) {
         super();
 
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
+        this.data = data;
+        this.configType = configType;
 
         vociVisibili.put("Mostra le mie visite del piano", true);
         vociVisibili.put("Mostra la scheda delle mie visite", true);
@@ -36,7 +36,7 @@ public class VolunteerMenu extends MenuManager{
 
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
-        Configs configs = configsUtil.getConfig();
+        Configs configs = data.getConfigFacade().getConfig(configType);
         if(!configs.getFirstPlanConfigured()){
             map.put("Mostra le mie visite del piano", false);
             map.put("Mostra visite confermate", false);

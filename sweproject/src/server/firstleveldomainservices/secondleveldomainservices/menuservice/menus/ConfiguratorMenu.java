@@ -5,34 +5,25 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import server.DateService;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.facade.FacadeHub;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.utils.ConfigType;
 import server.utils.Configs;
-import server.utils.ConfigsUtil;
 
 public class ConfiguratorMenu extends MenuManager{
   
     private DateService dateService = new DateService();
-    private MonthlyConfigService monthlyConfigService;
-    private ConfigsUtil configsUtil;
-
-
+    private FacadeHub data;
+    private ConfigType configType;
 
     public ConfiguratorMenu(ConfigService configService, ConfigType configType,
-    MonthlyConfigService monthlyConfigService,
-    IJsonLocInfoFactory locInfoFactory,
-    JsonDataLayer dataLayer) {
+    FacadeHub data) {
         super();
-
-        this.monthlyConfigService = monthlyConfigService;
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
-
+        this.data = data;
+        this.configType = configType;
         
         vociVisibili.put("Inserisci data preclusa", true);
         vociVisibili.put("Mostra Volontari", true);
@@ -70,8 +61,8 @@ public class ConfiguratorMenu extends MenuManager{
 
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
-        Configs configs = configsUtil.getConfig();
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        Configs configs = data.getConfigFacade().getConfig(configType);
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
         
         if(correctDateToGeneratePlan(mc)&& checkIfAlredyBuildPlan()){
             map.put("Genera Piano Mensile", true);
@@ -141,7 +132,7 @@ public class ConfiguratorMenu extends MenuManager{
      * @return
      */
     private boolean checkIfAlredyBuildPlan(){
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
         LocalDate dateOfNextPlan = mc.getMonthAndYear();
         //come oggetto Boolean e non come tipo primitivo cosi da poter gestire il caso null
         Boolean planConfigured = mc.isPlanConfigured().get(dateOfNextPlan);

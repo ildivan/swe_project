@@ -10,20 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.google.gson.JsonObject;
-
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.EditMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
 import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
@@ -31,12 +24,9 @@ import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ActivityUtil;
 import server.utils.ConfigType;
 import server.utils.Configs;
-import server.utils.ConfigsUtil;
 import server.utils.MainService;
 
 public class EditPossibilitiesService extends MainService<Void>{
@@ -47,30 +37,19 @@ public class EditPossibilitiesService extends MainService<Void>{
     private static final String CONFIG_ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
 
 
-    private final MenuService menu = new EditMenu(this);
-
-    private final IJsonLocInfoFactory locInfoFactory;    
-    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+    private final MenuService menu = new EditMenu(this);    
     private final IInputOutput ioService = new IOService();
-    private final JsonDataLayer dataLayer;
-    private final MonthlyConfigService monthlyConfigService;
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final ActivityUtil activityUtil;
-    private final ConfigsUtil configsUtil;
     private final ConfigType configType;
     private final FacadeHub data;
 
-    public EditPossibilitiesService(Socket socket, IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer,
-    ConfigsUtil configsUtil, FacadeHub data) {
+    public EditPossibilitiesService(Socket socket,ConfigType configType,FacadeHub data) {
         super(socket);
 
-        this.configsUtil = configsUtil;
-        this.dataLayer = dataLayer;
         this.configType = configType;
-        this.locInfoFactory = locInfoFactory;
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer, data);
+
+        this.activityUtil = new ActivityUtil(data);
         this.data = data;
     }
 
@@ -78,7 +57,7 @@ public class EditPossibilitiesService extends MainService<Void>{
     @Override
     protected Void applyLogic() throws IOException {
 
-        MonthlyConfig monthlyConfig = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig monthlyConfig = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
             ioService.writeMessage("\n\nFase di modifica non disponibile, piano corrente non ancora generato\n\n", false);
@@ -118,7 +97,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @post Se il volontario non esisteva, viene aggiunto al database. In caso contrario, viene mostrato un messaggio.
      */
     public void addVolunteer(boolean first) {
-        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
+        VMIOUtil volUtil = new VMIOUtil(data);
         if(!first){
             ioService.writeMessage(CLEAR,false);
         }
@@ -147,7 +126,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @post Il luogo viene aggiunto al database se non esiste già. In caso contrario, viene mostrato un messaggio.
      */
     public void addPlace(){
-        MonthlyConfig monthlyConfig = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig monthlyConfig = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         if(checkIfConfigured(CONFIG_PLACE_KEY_DESC)){
             if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
@@ -198,7 +177,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     private boolean checkIfConfigured(String keyDesc) {
 
-        Configs JO = configsUtil.getConfig();
+        Configs JO = data.getConfigFacade().getConfig(configType);
         return JO.getUserConfigured();
     }
 
@@ -212,7 +191,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     public void addActivity() {
 
-        MonthlyConfig monthlyConfig = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig monthlyConfig = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         if(checkIfConfigured(CONFIG_ACTIVITY_KEY_DESC)){
                 if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
@@ -240,7 +219,7 @@ public class EditPossibilitiesService extends MainService<Void>{
                 continue;
             }
 
-            ConfigService cf = new ConfigService(socket, locInfoFactory, configType, dataLayer, data);
+            ConfigService cf = new ConfigService(socket, configType, data);
             cf.showPlaces();
             String placeName = ioService.readString("\nInserire luogo per l'attività");
 
@@ -303,12 +282,12 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @param isBeingConfigured
      */
     private void setIsBeingConfigured(PlanState isBeingConfigured, Boolean value) {
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
         Map<PlanState, Boolean> stateMap = mc.getPlanStateMap();
         stateMap.put(isBeingConfigured, value);
         mc.setPlanStateMap(stateMap);
        
-        monthlyConfigService.saveMonthlyConfig(mc);
+        data.getMonthlyConfigFacade().saveMonthlyConfig(mc);
 
     }
 
@@ -324,30 +303,15 @@ public class EditPossibilitiesService extends MainService<Void>{
 
         assert n >= 1 && n <= 50 : "Valore non valido per il numero massimo di iscrizioni";
 
-        Configs configs = getConfig();
+        Configs configs = data.getConfigFacade().getConfig(configType);
 
         assert configs != null : "Configurazione non trovata";
 
         configs.setMaxSubscriptions(n);
-        JsonObject newConfigsJO = jsonFactoryService.createJson(configs);
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-        locInfo.setKey(configType.getValue());
         
-        boolean modified = dataLayer.modify(newConfigsJO, locInfo);
-
-        assert modified : "Modifica configurazione fallita";
+        data.getConfigFacade().save(configs, configType);
 
         ioService.writeMessage("\nNumero massimo di iscrizioni modificato", false);
-    }
-
-    private Configs getConfig(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-
-        locInfo.setKey(configType.getValue());
-
-        JsonObject cJO = dataLayer.get(locInfo);
-        return jsonFactoryService.createObject(cJO, Configs.class);
     }
 
     /**
@@ -649,7 +613,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     public void deleteVolunteer() {
 
-        MonthlyConfig monthlyConfig = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig monthlyConfig = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
             ioService.writeMessage("\n\nFase di modifica non disponibile, piano corrente non ancora generato\n\n", false);
@@ -657,7 +621,7 @@ public class EditPossibilitiesService extends MainService<Void>{
         }
     
 
-        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer, data);
+        VMIOUtil volUtil = new VMIOUtil(data);
 
         ioService.writeMessage(CLEAR, false);
         String name = ioService.readString("\nInserire nome del volontario da eliminare");
@@ -721,7 +685,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     public void deletePlace() {
 
-        MonthlyConfig monthlyConfig = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig monthlyConfig = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
             ioService.writeMessage("\n\nFase di modifica non disponibile, piano corrente non ancora generato\n\n", false);
@@ -761,7 +725,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      */
     public void deleteActivity() {
 
-        MonthlyConfig monthlyConfig = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig monthlyConfig = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         if(!monthlyConfig.getPlanStateMap().get(PlanState.MODIFICHE_APERTE)){
             ioService.writeMessage("\n\nFase di modifica non disponibile, piano corrente non ancora generato\n\n", false);

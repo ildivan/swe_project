@@ -1,4 +1,4 @@
-package server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.precludedateservice;
+package server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice;
 
 import java.time.LocalDate;
 import java.util.Set;

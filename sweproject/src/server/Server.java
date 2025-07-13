@@ -1,7 +1,5 @@
-package server;// Server.java
+package server;
 
-
-import com.google.gson.JsonObject;
 import server.authservice.AuthenticationService;
 import server.authservice.User;
 import server.data.facade.FacadeHub;
@@ -9,32 +7,17 @@ import server.data.facade.implementation.NoFirstConfigJsonFacadeFactory;
 import server.data.facade.implementation.NormalFunctionJsonFacadeFactory;
 import server.data.facade.implementation.TestJsonFacadeFactory;
 import server.data.facade.interfaces.IFacadeAbstractFactory;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.data.json.datalayer.datalocalizationinformations.NoFirstConfigJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.NormalFunctionJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.TestJsonLocInfoFactory;
-import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
-import server.data.json.datalayer.datareadwrite.JsonReadWrite;
 import server.demonservices.DemonsService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.userservice.UserService;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
 import server.ioservice.ReadWrite;
-import server.jsonfactoryservice.*;
 import server.utils.ConfigType;
-import server.utils.Configs;
 import server.utils.ConnectionType;
 import server.utils.MainService;
 import server.utils.ServerConnectionPorts;
 import java.io.*;
 import java.net.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,34 +26,28 @@ public class Server {
 
     private static final String JSON_NORMAL_FUNCTION_DIRECTORY = "sweproject/JFNormalFunction";
     private static final String JSON_TEST_FUNCTION_DIRECTORY = "test/JFTest";
-    private final IJsonLocInfoFactory locInfoFactory;
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
-    private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
+
+
     DemonsService demonsService;
-    private final IJsonReadWrite jsonReadWrite;
-    private final JsonDataLayer dataLayer;
-    MonthlyPlanService monthlyPlanService;
     private final FacadeHub data;
 
     public Server(ConfigType configType, List<User> users, IFacadeAbstractFactory facadeFactory) {
-        this.jsonReadWrite = new JsonReadWrite();
-        this.dataLayer = new JsonDataLayer(jsonReadWrite);
-        this.locInfoFactory = getLocInfoFactory(configType);
+
         this.data = new FacadeHub(facadeFactory);
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
-        
+       
         if(configType == ConfigType.NORMAL || configType == ConfigType.TEST){
             initializeJsonRepository(configType);
-            initializeConfig();
+            data.getConfigFacade().initializeConfig();
             data.getUsersFacade().addUsers(users);
-            initializeMonthlyConfig();
+            data.getMonthlyConfigFacade().initializeMonthlyConfig();
         }
 
         if(configType == ConfigType.NO_FIRST_CONFIG){
             initializeChangedFiles();
         }
-        this.demonsService = new DemonsService(locInfoFactory, configType, dataLayer, data);
+        this.demonsService = new DemonsService(configType,data);
 
     }
 
@@ -78,23 +55,9 @@ public class Server {
      * method to initialize editable files
      */
     private void initializeChangedFiles() {
-        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
-        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
-
-        try {
-            Files.copy(originalPlacesPath, changedPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
-        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
-
-        try {
-            Files.copy(originalActivitiesPath,changedActivitiesPath,  java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       data.getPlacesFacade().initializeChangedFiles();
+       data.getActivitiesFacade().initializeChangedFiles();
+        
     }
 
     /**
@@ -132,56 +95,6 @@ public class Server {
         }
     }
 
-    /**
-     * method to initialize configs.json
-     */
-    private void initializeConfig() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-        Configs configs = new Configs();
-
-        dataLayer.add(jsonFactoryService.createJson(configs), locInfo);
-    }
-
-
-
-    /**
-     * method to initialize MonthlyConfig.json
-     */
-    private void initializeMonthlyConfig() {
-        MonthlyConfig monthlyConfig = monthlyPlanService.getNewMonthlyConfig();
-
-        saveMonthlyConfig(monthlyConfig);
-    
-    }
-
-    /**
-     * method to save monthly config
-     * @param monthlyConfig
-     */
-    private void saveMonthlyConfig(MonthlyConfig monthlyConfig) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyConfigLocInfo();
-
-        dataLayer.add(jsonFactoryService.createJson(monthlyConfig), locInfo);
-    }
-
-    /**
-     * Metodo che ritorna il factory per le informazioni di localizzazione
-     * @param configType
-     * @return
-     */
-    private IJsonLocInfoFactory getLocInfoFactory(ConfigType configType) {
-        switch (configType) {
-            case NORMAL:
-                return new NormalFunctionJsonLocInfoFactory();
-            case NO_FIRST_CONFIG:
-                return new NoFirstConfigJsonLocInfoFactory();
-            case TEST:
-                return new TestJsonLocInfoFactory();
-            default:
-                throw new IllegalArgumentException("Unsupported config type: " + configType);
-        }
-    }
-
     public void startServer(ConfigType configType) {
         try (ServerSocket clientSS = new ServerSocket(CLIENT_PORT);
             ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
@@ -194,7 +107,7 @@ public class Server {
             demonsService.run();
 
             if (configType == ConfigType.NORMAL) {
-                firstTimeConfiguration();
+                data.getConfigFacade().firstTimeConfigurationServerConfig();
                 System.out.println("First time default configuration completed");
             }
 
@@ -257,7 +170,7 @@ public class Server {
                                     externalSocket.close();
                                     return;
                                 }
-                                MainService<?> service = new UserService(externalSocket,u,locInfoFactory,configType, dataLayer, data);
+                                MainService<?> service = new UserService(externalSocket,u,configType, data);
                                 service.run();
                             } catch (IOException | InterruptedException e) {
                                 System.out.println("External service error: " + e.getMessage());
@@ -302,9 +215,9 @@ public class Server {
 
         switch (u.getRole()){
             case "configuratore":
-                return new ConfigService(socket,locInfoFactory, configType, dataLayer, data);
+                return new ConfigService(socket,configType, data);
             case "volontario":
-                return new VolunteerService(socket,u.getName(),locInfoFactory, configType, dataLayer, data);
+                return new VolunteerService(socket,u.getName(), configType,data);
             default:
                 assert false;
                 return null;
@@ -312,21 +225,6 @@ public class Server {
     }
     public static void output(String message){
         System.out.println(message);
-    }
-
-    private void firstTimeConfiguration(){
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-
-        if(!dataLayer.checkFileExistance(locInfo)){
-            dataLayer.createJSONEmptyFile(locInfo);
-        }
-
-        JsonObject JO = jsonFactoryService.createJson(new Configs());
-        
-        locInfo.setKey(ConfigType.NORMAL.getValue());
-    
-        dataLayer.modify(JO, locInfo);
     }
 
     public static void main(String[] args) {

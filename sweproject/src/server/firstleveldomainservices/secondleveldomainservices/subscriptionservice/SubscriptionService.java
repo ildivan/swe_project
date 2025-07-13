@@ -3,31 +3,20 @@ package server.firstleveldomainservices.secondleveldomainservices.subscriptionse
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import com.google.gson.JsonObject;
-
 import lock.MonthlyPlanLockManager;
 import server.authservice.User;
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
 import server.ioservice.objectformatter.TerminalObjectFormatter;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
 import server.utils.Configs;
 
@@ -35,26 +24,15 @@ public class SubscriptionService {
 
     private static final int DAYS_BEFORE_SUBSCRIPTION_CLOSURE = 3;
 
-    private static final String SUBSCRIPTION_KEY_DESC = "subscriptionId";
     private final ConfigType configType;
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private transient IJsonLocInfoFactory locInfoFactory;
-    private transient JsonDataLayer dataLayer;
     private final IInputOutput ioService = new IOService();
-    private final MonthlyConfigService monthlyConfigService;
     private final IIObjectFormatter<String> objectFormatter = new TerminalObjectFormatter();
-    private final MonthlyPlanService monthlyPlanService;
     private User user;
     private FacadeHub data;
 
-    public SubscriptionService(User user, IJsonLocInfoFactory locInfoFactory, ConfigType configType,
-    JsonDataLayer dataLayer, FacadeHub data) {
+    public SubscriptionService(User user, ConfigType configType,FacadeHub data) {
         this.user = user;
         this.configType = configType;
-        this.locInfoFactory = locInfoFactory;
-        this.dataLayer = dataLayer;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
         this.data = data;
     }
 
@@ -73,7 +51,7 @@ public class SubscriptionService {
 
             int day = ioService.readIntegerWithMinMax("Inserisci il giorno per la sottoscrizione (1-31): ", 1, 31);
 
-            DailyPlan dailyPlan = monthlyPlanService.getDailyPlanOfTheChosenDay(day);
+            DailyPlan dailyPlan = data.getMonthlyPlanFacade().getDailyPlanOfTheChosenDay(day);
             if (dailyPlan == null) {
                 ioService.writeMessage("Impossibile trovare attività per la data selezionata.", false);
                 return;
@@ -104,7 +82,7 @@ public class SubscriptionService {
                 return;
             }
 
-            int subscriptionCode = monthlyConfigService.getCurrentSubCode();
+            int subscriptionCode = data.getMonthlyConfigFacade().getCurrentSubCode();
 
             Subscription subscription = new Subscription(
                 userName,
@@ -112,14 +90,14 @@ public class SubscriptionService {
                 activityName,
                 subscriptionCode,
                 LocalDate.now(),
-                monthlyPlanService.getFullDateOfChosenDay(day)
+                data.getMonthlyPlanFacade().getFullDateOfChosenDay(day)
             );
 
             DailyPlan updatedDailyPlan = updateDailyPlan(dailyPlan, activityInfo, subscription, subscriptionCode, activityName);
             LocalDate dateOfSubscription = dailyPlan.getDate();
 
-            saveSubscription(subscription);
-            monthlyPlanService.updateMonthlyPlan(dateOfSubscription, updatedDailyPlan);
+            data.getSubscriptionFacade().saveSubscription(subscription);
+            data.getMonthlyPlanFacade().updateMonthlyPlan(dateOfSubscription, updatedDailyPlan);
 
             ioService.writeMessage("Sottoscrizione aggiunta con successo!", false);
 
@@ -212,16 +190,6 @@ public class SubscriptionService {
     }
 
     /**
-     * metodo per salvare l'iscrizione
-     * @param subscription
-     */
-    private void saveSubscription(Subscription subscription) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getSubscriptionLocInfo();
-        dataLayer.add(jsonFactoryService.createJson(subscription), locInfo);
-    }
-
-
-    /**
      * aggiorna il piano giornaliero
      * @param dailyPlan
      * @param activityInfo
@@ -240,11 +208,7 @@ public class SubscriptionService {
      * @return
      */
     private int getMaxNumberOfSubscriptions() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-        locInfo.setKey(configType.getValue());
-        JsonObject jsonObject = dataLayer.get(locInfo);
-
-        Configs configs = jsonFactoryService.createObject(jsonObject, Configs.class);
+        Configs configs = data.getConfigFacade().getConfig(configType);
         return configs.getMaxSubscriptions();
     }
 
@@ -292,7 +256,7 @@ public class SubscriptionService {
      * @return
      */
     public Set<Subscription> getSubscriptionsForUser() {
-        Set<Subscription> subscriptions = getSubscriptions(); //questo metodo deve essere inserito nella facade per il datalayer
+        Set<Subscription> subscriptions = data.getSubscriptionFacade().getAllSubs();
         Set<Subscription> userSubscriptions = new HashSet<>();
 
         for (Subscription subscription : subscriptions) {
@@ -305,22 +269,6 @@ public class SubscriptionService {
     }
 
     /**
-     * metodo per ottenrer tutte le iscrizioni
-     * @return
-     */
-    private Set<Subscription> getSubscriptions() {
-        Set<Subscription> subscriptions = new HashSet<>();
-        List<JsonObject> subscriptionsJO = dataLayer.getAll(locInfoFactory.getSubscriptionLocInfo());
-
-        for (JsonObject jsonObject : subscriptionsJO) {
-            Subscription subscription = jsonFactoryService.createObject(jsonObject, Subscription.class);
-            subscriptions.add(subscription);
-        }
-
-        return subscriptions;
-    }
-
-    /**
      * metodo per eliminare una iscrizione
      * @param subCode
      */
@@ -328,7 +276,7 @@ public class SubscriptionService {
 
         Subscription subscription = getSubscriptionByCode(subCode);
 
-        ActivityInfo activityInfo = monthlyPlanService.getActivityInfoBasedOnSubCode(subscription);
+        ActivityInfo activityInfo = data.getMonthlyPlanFacade().getActivityInfoBasedOnSubCode(subscription);
 
         if (!(activityInfo.getState() == ActivityState.PROPOSTA || activityInfo.getState() == ActivityState.COMPLETA)){
             ioService.writeMessage(String.format("Impossibile eliminare iscrizione a questa visita:\nMotivo: %s",getErrorMessagebaseOnState(activityInfo)), false);
@@ -350,7 +298,7 @@ public class SubscriptionService {
      * @param subscription
      */
     private void updateMonthlyPlan(Subscription subscription) {
-        monthlyPlanService.removeSubscription(subscription);
+        removeSubscription(subscription);
     }
 
     /**
@@ -358,11 +306,7 @@ public class SubscriptionService {
      * @param subscription
      */
     private void updateSubscriptionArchive(Subscription subscription) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getSubscriptionLocInfo();
-        locInfo.setKeyDesc(SUBSCRIPTION_KEY_DESC);
-        locInfo.setKey(String.valueOf(subscription.getSubscriptionId()));
-
-        dataLayer.delete(locInfo);
+        data.getSubscriptionFacade().deleteSubscription(subscription);
         
     }
 
@@ -372,13 +316,32 @@ public class SubscriptionService {
      * @return
      */
     private Subscription getSubscriptionByCode(int subCode) {
-        Set<Subscription> subscriptions = getSubscriptions();
+        Set<Subscription> subscriptions = data.getSubscriptionFacade().getAllSubs();
         for (Subscription subscription : subscriptions) {
             if (subscription.getSubscriptionId() == subCode) {
                 return subscription;
             }
         }
         return null;
+    }
+
+    /**
+     * metodo per aggiornare il piano mensile dopo una eliminazione di una iscrizione
+     * @param subscription
+     */
+    private void removeSubscription(Subscription subscription) {
+        //ottengo il piano giornaliero della data dell'attività a cui sono iscritto
+        DailyPlan dailyPlan = data.getMonthlyPlanFacade().getDailyPlan(subscription.getDateOfActivity());
+        if(dailyPlan == null) {
+            return;
+        }
+
+        //rimuovo l'iscrizione
+        dailyPlan.removeSubscriptionOnActivity(subscription);
+
+        //aggiorno il piano mensile
+        data.getMonthlyPlanFacade().updateMonthlyPlan(subscription.getDateOfActivity(), dailyPlan);
+
     }
 
 }

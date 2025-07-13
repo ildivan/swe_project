@@ -8,47 +8,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import com.google.gson.JsonObject;
-
 import lock.MonthlyPlanLockManager;
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
-import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.demonservices.IDemon;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.PerformedActivity;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
 
 public class MonthlyPlanDemon implements IDemon{
 
-
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private IJsonLocInfoFactory locInfoFactory;
-    private JsonDataLayer dataLayer;
-    private MonthlyPlanService monthlyPlanService;
-    private MonthlyConfigService monthlyConfigService;
     private Map<String, Activity> activities;
     private Map<String, Volunteer> volunteers;
     private FacadeHub data;
 
-    public MonthlyPlanDemon(IJsonLocInfoFactory locInfoFactory, 
-    ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
-        this.locInfoFactory = locInfoFactory;
-        this.dataLayer = dataLayer;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
+    public MonthlyPlanDemon(ConfigType configType, FacadeHub data) {
         this.data = data;
     }
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone
@@ -77,16 +55,16 @@ public class MonthlyPlanDemon implements IDemon{
                 return;
             }
 
-            MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+            MonthlyPlan monthlyPlan = data.getMonthlyPlanFacade().getMonthlyPlan();
             if (monthlyPlan == null) return;
 
             activities = readAllActivities();
             volunteers = readAllVolunteers();
 
-            checkIfActivitiesNeedToBeArchived(monthlyPlan);
+            data.getMonthlyPlanFacade().checkIfActivitiesNeedToBeArchived(monthlyPlan);
             monthlyPlan = checkActivities(monthlyPlan);
 
-            monthlyPlanService.refreshMonthlyPlan(monthlyPlan);
+            data.getMonthlyPlanFacade().refreshMonthlyPlan(monthlyPlan);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -320,7 +298,7 @@ public class MonthlyPlanDemon implements IDemon{
      * @return
      */
     private long getDaysBeforeConfirmation() {
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
         return mc.getDaysBeforeActivityConfirmation();
     }
 
@@ -347,51 +325,6 @@ public class MonthlyPlanDemon implements IDemon{
      */
     private Activity getActivity(String name) {
         return activities.get(name);
-    }
-
-
-    /**
-     * metodo per contorllare se le attivita necessitano di essere archiviate
-     */
-    private void checkIfActivitiesNeedToBeArchived(MonthlyPlan monthlyPlan) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getArchiveLocInfo();
-       
-       //ottengo la lista di attività da aggiungere e le aggiungo al file di archivio
-       
-        for (Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlan.getMonthlyPlan().entrySet()) {
-            LocalDate date = dailyEntry.getKey();
-            DailyPlan dailyPlan = dailyEntry.getValue();
-    
-            for (Map.Entry<String, ActivityInfo> activityEntry : dailyPlan.getPlan().entrySet()) {
-                String activityName = activityEntry.getKey();
-                ActivityInfo activityInfo = activityEntry.getValue();
-    
-                if (activityInfo.getState() == ActivityState.EFFETTUATA && !activityArchived(activityName,date)) {
-                    int subs = activityInfo.getNumberOfSub();
-                    String time = activityInfo.getTime();
-
-                    PerformedActivity pf = new PerformedActivity(activityName, date, subs, time);
-
-                    dataLayer.add(jsonFactoryService.createJson(pf), locInfo);
-                }
-            }
-        }
-    
-    }
-
-
-    private boolean activityArchived(String name, LocalDate date) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getArchiveLocInfo();
-        locInfo.setKeyDesc("name");
-        locInfo.setKey(name);
-
-        JsonObject pfJO = dataLayer.get(locInfo);
-        if(pfJO ==null){
-            return false;
-        }
-        PerformedActivity pf = jsonFactoryService.createObject(pfJO, PerformedActivity.class);
-
-        return pf.getDate().equals(date) && pf.getName().equals(name);
     }
     
 }

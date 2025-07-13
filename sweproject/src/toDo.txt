@@ -1,6 +1,2 @@
-synchronized in tutti i metodi delle facade
-
-dacadehub nella costruzione del server che viene passato
-
 
 

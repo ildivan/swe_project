@@ -3,11 +3,8 @@ package server.firstleveldomainservices.volunteerservice;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import server.authservice.User;
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 
@@ -16,8 +13,7 @@ public class VMIOUtil{
     private static final String ROLE = "volontario";
     private final FacadeHub data;
 
-    public VMIOUtil(IJsonLocInfoFactory locInfoFactory,
-    JsonDataLayer dataLayer, FacadeHub data) {
+    public VMIOUtil(FacadeHub data) {
         this.data = data;
     }
 

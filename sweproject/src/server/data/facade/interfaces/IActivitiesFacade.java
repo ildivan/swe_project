@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -50,4 +49,7 @@ public interface IActivitiesFacade {
     );
     public boolean deleteActivity(String activityName);
     public boolean doesActivityExist(String activityName);
+    public void copyToReadOnlyActivity();
+    public void initializeChangedFiles();
+    public void refreshChangedActivities();
 }

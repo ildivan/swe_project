@@ -2,27 +2,20 @@ package server.firstleveldomainservices.configuratorservice;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import server.DateService;
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.ConfiguratorMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.precludedateservice.PrecludeDateService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanBuilder;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
@@ -31,7 +24,6 @@ import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.utils.ActivityUtil;
 import server.utils.ConfigType;
 import server.utils.Configs;
-import server.utils.ConfigsUtil;
 import server.utils.MainService;
 
 
@@ -46,31 +38,23 @@ public class ConfigService extends MainService<Void>{
 
     private final ConfigType configType;
     private final MenuService menu; 
-    private final IJsonLocInfoFactory locInfoFactory;
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
-    private final MonthlyConfigService monthlyConfigService;
     private final ActivityUtil activityUtil;
-    private final MonthlyPlanService monthlyPlanService;
-    private final ConfigsUtil configsUtil;
-    private final PrecludeDateService precludeDateService;
+    private final MonthlyPlanBuilder monthlyPlanService;
     private final EditPossibilitiesService editPossibilitiesService;
     private final FacadeHub data;
     
 
-    public ConfigService(Socket socket, IJsonLocInfoFactory locInfoFactory,
-    ConfigType configType, JsonDataLayer dataLayer, FacadeHub data) {
+    public ConfigService(Socket socket,
+    ConfigType configType, FacadeHub data) {
 
         super(socket);
         this.configType = configType;
-        this.locInfoFactory = locInfoFactory;
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
-        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer, data);
-        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
-        this.precludeDateService = new PrecludeDateService(locInfoFactory, dataLayer);
-        this.editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer, configsUtil, data);
-        this.menu = new ConfiguratorMenu(this, configType, monthlyConfigService, locInfoFactory, dataLayer);
+        this.monthlyPlanService = new MonthlyPlanBuilder(configType, data);
+        this.activityUtil = new ActivityUtil(data);
+        this.editPossibilitiesService = new EditPossibilitiesService(socket,configType, data);
+        this.menu = new ConfiguratorMenu(this, configType,data);
         this.data = data;
     }   
 
@@ -121,7 +105,7 @@ public class ConfigService extends MainService<Void>{
      */
     private boolean checkIfConfigured(String keyDesc) {
 
-        Configs JO = configsUtil.getConfig();
+        Configs JO = data.getConfigFacade().getConfig(configType);
         return JO.getUserConfigured();
     }
 
@@ -154,7 +138,7 @@ public class ConfigService extends MainService<Void>{
             //creo anche i file di sola lettura
             copyToReadOnlyFiles();
 
-            return configsUtil.save(configs, configType);
+            return data.getConfigFacade().save(configs, configType);
             
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -168,37 +152,9 @@ public class ConfigService extends MainService<Void>{
      */
    private void copyToReadOnlyFiles() {
 
-        copyToReadOnlyPlace();
-        copyToReadOnlyActivity();
-    }
-
-    /**
-     * istanzio file sola lettura luoghi
-     */
-    private void copyToReadOnlyPlace() {
-        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
-        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
-
-        try {
-            Files.copy(changedPlacesPath, originalPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * istanzio file sola lettura luoghi
-     */
-    private void copyToReadOnlyActivity() {
-        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
-        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
-
-        try {
-            Files.copy(changedActivitiesPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+        data.getPlacesFacade().copyToReadOnlyPlace();
+        data.getActivitiesFacade().copyToReadOnlyActivity();
+   }
 
    /**
      * Chiede all’utente di inserire l’area di interesse e la restituisce.
@@ -298,9 +254,9 @@ public class ConfigService extends MainService<Void>{
      * @param daysBeforeActivityConfirmation
      */
     private void updateDaysBeforeConfirmation(int daysBeforeActivityConfirmation) {
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
         mc.setDaysBeforeActivityConfirmation(daysBeforeActivityConfirmation);
-        monthlyConfigService.saveMonthlyConfig(mc);
+        data.getMonthlyConfigFacade().saveMonthlyConfig(mc);
     }
 
     /**
@@ -317,7 +273,7 @@ public class ConfigService extends MainService<Void>{
      */
     public void showMonthlyPlan() {
 
-        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+        MonthlyPlan monthlyPlan = data.getMonthlyPlanFacade().getMonthlyPlan();
 
         if(monthlyPlan == null){
             ioService.writeMessage("Piano Mensile non ancora generato", false);
@@ -337,14 +293,14 @@ public class ConfigService extends MainService<Void>{
 
         ioService.writeMessage(CLEAR,false);
 
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         int maxNumDay = dateService.getMaxNumDay(mc, MONTH_TO_ADD_PRECLUDE_DATE);
         int minNumDay = 1;
         
         int day = ioService.readIntegerWithMinMax("Inserire giorno precluso alle visite", minNumDay, maxNumDay);
 
-        boolean firstPlanConfigured = configsUtil.getConfig().getFirstPlanConfigured();
+        boolean firstPlanConfigured = data.getConfigFacade().getConfig(configType).getFirstPlanConfigured();
         int month = mc.getMonthAndYear().getMonth().plus(2).getValue();
         
         int year = mc.getMonthAndYear().getYear();
@@ -353,7 +309,7 @@ public class ConfigService extends MainService<Void>{
             year =+1;
         }
 
-        precludeDateService.savePrecludeDate(LocalDate.of(year, month, day));
+        data.getPrecludeDateFacade().savePrecludeDate(LocalDate.of(year, month, day));
 
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         ioService.writeMessage(String.format("Aggiunta data preclusa: %s", LocalDate.of(year, month, day).format(dateFormatter)), false);

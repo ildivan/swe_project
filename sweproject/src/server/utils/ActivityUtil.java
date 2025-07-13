@@ -8,27 +8,21 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 
 
 public class ActivityUtil{
-   
-    private final MonthlyPlanService monthlyPlanService;
+
     private final FacadeHub data;
 
-    public ActivityUtil(IJsonLocInfoFactory locInfoFactory, ConfigType configType,
-    JsonDataLayer dataLayer, FacadeHub data) {
-        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer, data);
+    public ActivityUtil(FacadeHub data) {
         this.data = data;
     }
     public Address getAddress(){
@@ -249,7 +243,7 @@ public class ActivityUtil{
 
     public List<ActivityRecord> getActivitiesByState(ActivityState desiredState){
 
-        MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+        MonthlyPlan monthlyPlan = data.getMonthlyPlanFacade().getMonthlyPlan();
 
         return data.getActivitiesFacade().getActivitiesByState(desiredState, monthlyPlan);
     }

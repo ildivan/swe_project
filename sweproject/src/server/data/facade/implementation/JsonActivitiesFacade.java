@@ -1,5 +1,9 @@
 package server.data.facade.implementation;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -220,6 +224,56 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
         locInfo.setKey(activityName);
         return dataLayer.exists(locInfo);
+    }
+
+    /**
+     * istanzio file sola lettura luoghi
+     */
+    @Override
+    public void copyToReadOnlyActivity() {
+        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
+        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+
+        try {
+            Files.copy(changedActivitiesPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void initializeChangedFiles(){
+        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
+        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+
+        try {
+            Files.copy(originalActivitiesPath,changedActivitiesPath,  java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+     /**
+     * metodo di utilita a refreshData
+     * aggiorna le modifiche alle attività
+     */
+    @Override
+    public void refreshChangedActivities() {
+
+        //file temporaneo per rendere atomica la copia, altrimenti possibili inconsistenze
+        //NECESSARIA ATOMIC_MOVE support
+        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
+        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+        Path tempPath = originalActivitiesPath.resolveSibling(originalActivitiesPath.getFileName() + ".tmp");
+
+        try {
+            // Copia su file temporaneo
+            Files.copy(changedActivitiesPath, tempPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // Move atomico
+            Files.move(tempPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Set;
 import server.authservice.User;
 import server.data.facade.FacadeHub;
-import server.data.json.datalayer.datalayers.JsonDataLayer;
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.UserMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
@@ -33,12 +31,11 @@ public class UserService extends MainService<Void> {
     private final ActivityUtil activityUtil;
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
 
-    public UserService(Socket socket, User user, IJsonLocInfoFactory locInfoFactory, ConfigType configType,
-    JsonDataLayer dataLayer, FacadeHub data) {
+    public UserService(Socket socket, User user, ConfigType configType,FacadeHub data) {
         super(socket);
         this.menu = new UserMenu(this);
-        this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType, dataLayer, data);
-        this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer, data);
+        this.subscriptionService = new SubscriptionService(user, configType,data);
+        this.activityUtil = new ActivityUtil(data);
     }
 
 

@@ -26,4 +26,10 @@ public interface IPlacesFacade {
     public boolean existPlaceWithNoActivity();
 
     public List<Place> getCustomList();
+
+    public void copyToReadOnlyPlace();
+
+    public void initializeChangedFiles();
+
+    public void refreshChangedPlaces();
 }

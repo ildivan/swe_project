@@ -5,41 +5,37 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
+import server.data.facade.FacadeHub;
+import server.data.facade.interfaces.IPrecludeDateFacade;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.precludedateservice.PrecludeDateService;
-
 public class MonthlyPlan{
 
     private LocalDate date;
     private Map<LocalDate,DailyPlan> monthlyPlan;
 
     //questo non deve essere serializzato -> inserisco transient per risolvere il problema
-    private transient IJsonLocInfoFactory locInfoFactory;
-    private transient MonthlyConfigService monthlyConfigService;
-    private transient PrecludeDateService precludeDateService;
+    private transient IPrecludeDateFacade precludeDateService;
+    private transient FacadeHub data;
 
-    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date, IJsonLocInfoFactory locInfoFactory,
-    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService) {
+    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date,
+    IPrecludeDateFacade precludeDateService,
+    FacadeHub data) {
 
         this.monthlyPlan = montlyPlan;
         this.date = date;
-        this.locInfoFactory = locInfoFactory;
-        this.monthlyConfigService = monthlyConfigService;
         this.precludeDateService = precludeDateService;
+        this.data = data;
     }
 
-    public MonthlyPlan(LocalDate date, IJsonLocInfoFactory locInfoFactory,
-    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService) {
+    public MonthlyPlan(LocalDate date,
+    IPrecludeDateFacade precludeDateService,
+    FacadeHub data) {
         
         this.date = date;
-        this.locInfoFactory = locInfoFactory;
-        this.monthlyConfigService = monthlyConfigService;
         this.precludeDateService = precludeDateService;
         this.monthlyPlan = buildMonthlyMap();
+        this.data = data;
 
     }
 
@@ -49,7 +45,7 @@ public class MonthlyPlan{
 
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
 
         //Data piano
         LocalDate date;
@@ -70,7 +66,7 @@ public class MonthlyPlan{
             if (isPrecludeDate(currentDate, date)) {
                 monthlyMap.put(currentDate, null);
             } else {
-                monthlyMap.put(currentDate, new DailyPlan(currentDate, locInfoFactory));
+                monthlyMap.put(currentDate, new DailyPlan(currentDate));
             }
 
             currentDate = currentDate.plusDays(1);
