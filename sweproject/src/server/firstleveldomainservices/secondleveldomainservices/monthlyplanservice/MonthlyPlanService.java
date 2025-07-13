@@ -274,11 +274,13 @@ public class MonthlyPlanService {
             }else{
                 newDays = volunteer.getDisponibilityDaysCurrent();
             }
-            
-            volunteer.setDisponibilityDaysOld(newDays);
-            volunteer.setDisponibilityDaysCurrent(new LinkedHashSet<>());
 
-            data.getVolunteersFacade().saveVolunteer(volunteer.getName(), volunteer);
+            boolean modified = data.getVolunteersFacade().modifyVolunteer(
+                volunteer.getName(), 
+                Optional.empty(),
+                Optional.ofNullable(newDays),
+                Optional.of(new LinkedHashSet<>()));
+                assert modified : "Modifica volontario non riuscita: " + volunteer.getName();
         }
        
 

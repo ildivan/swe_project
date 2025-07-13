@@ -1,6 +1,7 @@
 package server.data.facade.implementation;
-
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import com.google.gson.JsonObject;
 
@@ -46,13 +47,31 @@ public class JsonVolunteersFacade implements IVolunteersFacade {
     }
 
     @Override
-    public void saveVolunteer(String name, Volunteer volunteer) {
+    public boolean modifyVolunteer(
+        String name, 
+        Optional<String> newName,
+        Optional<Set<String>> disponibilityDaysCurrent,
+        Optional<Set<String>> disponibilityDaysOld) {
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
         JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        
         locInfo.setKey(name);
+        Volunteer volunteer = getVolunteer(name);
 
-        datalayer.modify(jsonFactoryService.createJson(volunteer), locInfo);
+        if (volunteer == null) {
+            return false; 
+        }
+
+        if (newName.isPresent()) {
+            volunteer.setName(newName.get());
+        }
+        if (disponibilityDaysCurrent.isPresent()) {
+            volunteer.setDisponibilityDaysCurrent(disponibilityDaysCurrent.get());
+        }
+        if (disponibilityDaysOld.isPresent()) {
+            volunteer.setDisponibilityDaysOld(disponibilityDaysOld.get());
+        }
+
+        return datalayer.modify(jsonFactoryService.createJson(volunteer), locInfo);
     }
 
     @Override

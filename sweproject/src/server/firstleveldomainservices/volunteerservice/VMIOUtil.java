@@ -1,5 +1,4 @@
 package server.firstleveldomainservices.volunteerservice;
-
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -20,7 +19,6 @@ public class VMIOUtil{
     JsonDataLayer dataLayer, FacadeHub data) {
         this.data = data;
     }
-
 
     /**
      * method to add a volunteer
@@ -83,16 +81,16 @@ public class VMIOUtil{
         Set<String> disponibilityDays;
 
         disponibilityDays = volunteer.getDisponibilityDaysCurrent();
-
         if(disponibilityDays == null){
             disponibilityDays = new LinkedHashSet<String>();
-        }
-        
+        }        
         disponibilityDays.add(formattedDate);
 
-        volunteer.setDisponibilityDaysCurrent(disponibilityDays);
-
-        data.getVolunteersFacade().saveVolunteer(name, volunteer);
-
+        data.getVolunteersFacade().modifyVolunteer(
+            name, 
+            Optional.empty(),
+            Optional.of(disponibilityDays),
+            Optional.empty()
+        );
     }
 }
