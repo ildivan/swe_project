@@ -2,7 +2,9 @@ package server.firstleveldomainservices.volunteerservice;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
-import server.authservice.User;
+
+import server.data.User;
+import server.data.Volunteer;
 import server.data.facade.FacadeHub;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;

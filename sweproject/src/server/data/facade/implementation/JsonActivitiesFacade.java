@@ -13,14 +13,14 @@ import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
+import server.data.Activity;
+import server.data.Address;
+import server.data.Place;
 import server.data.facade.interfaces.IActivitiesFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
-import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;

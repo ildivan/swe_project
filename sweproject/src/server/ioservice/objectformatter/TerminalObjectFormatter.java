@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
+import server.data.Activity;
+import server.data.Address;
+import server.data.Place;
+import server.data.Volunteer;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 import server.firstleveldomainservices.volunteerservice.ConfirmedActivity;
-import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 public class TerminalObjectFormatter implements IIObjectFormatter<String> {
     

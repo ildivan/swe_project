@@ -5,12 +5,12 @@ import java.util.Set;
 
 import com.google.gson.JsonObject;
 
+import server.data.Volunteer;
 import server.data.facade.interfaces.IVolunteersFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.data.json.datalayer.datareadwrite.JsonReadWrite;
-import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.JsonFactoryService;
 
 public class JsonVolunteersFacade implements IVolunteersFacade {

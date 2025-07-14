@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.google.gson.JsonObject;
 
-import server.authservice.User;
+import server.data.User;
 import server.data.facade.interfaces.IUsersFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;

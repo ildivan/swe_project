@@ -7,10 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import server.data.Activity;
+import server.data.Address;
+import server.data.Place;
 import server.data.facade.FacadeHub;
-import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;

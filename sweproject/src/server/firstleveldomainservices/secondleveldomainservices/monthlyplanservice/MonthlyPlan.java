@@ -5,9 +5,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import server.data.Activity;
 import server.data.facade.FacadeHub;
 import server.data.facade.interfaces.IPrecludeDateFacade;
-import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 public class MonthlyPlan{
 

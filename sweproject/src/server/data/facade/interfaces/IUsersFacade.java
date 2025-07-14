@@ -3,7 +3,7 @@ package server.data.facade.interfaces;
 import java.util.List;
 import java.util.Optional;
 
-import server.authservice.User;
+import server.data.User;
 
 public interface IUsersFacade {
     public void addUsers(List<User> users);

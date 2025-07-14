@@ -1,5 +1,6 @@
 package server.authservice;
 
+import server.data.User;
 import server.data.facade.FacadeHub;
 import java.util.Optional;
 

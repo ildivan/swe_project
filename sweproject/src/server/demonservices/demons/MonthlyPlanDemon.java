@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import lock.MonthlyPlanLockManager;
+import server.data.Activity;
+import server.data.Volunteer;
 import server.data.facade.FacadeHub;
 import server.demonservices.IDemon;
-import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
-import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.utils.ConfigType;
 
 public class MonthlyPlanDemon implements IDemon{

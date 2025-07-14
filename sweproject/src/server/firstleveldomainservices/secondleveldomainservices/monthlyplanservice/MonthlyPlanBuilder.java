@@ -9,12 +9,12 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import lock.MonthlyPlanLockManager;
 import server.DateService;
-import server.authservice.User;
+import server.data.Activity;
+import server.data.User;
+import server.data.Volunteer;
 import server.data.facade.FacadeHub;
-import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
-import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.utils.ConfigType;
 import server.utils.Configs;
 

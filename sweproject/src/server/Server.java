@@ -1,7 +1,7 @@
 package server;
 
 import server.authservice.AuthenticationService;
-import server.authservice.User;
+import server.data.User;
 import server.data.facade.FacadeHub;
 import server.data.facade.implementation.NoFirstConfigJsonFacadeFactory;
 import server.data.facade.implementation.NormalFunctionJsonFacadeFactory;
