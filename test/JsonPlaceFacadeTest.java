@@ -8,13 +8,14 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+
+import server.data.Address;
+import server.data.Place;
 import server.data.facade.implementation.JsonPlacesFacade;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.TestJsonLocInfoFactory;
 import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
 import server.data.json.datalayer.datareadwrite.JsonReadWrite;
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
 
 
 public class JsonPlaceFacadeTest {

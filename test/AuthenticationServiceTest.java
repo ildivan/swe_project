@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.*;
 import com.google.gson.Gson;
 import server.Server;
-import server.authservice.User;
+import server.data.User;
 import server.data.facade.implementation.TestJsonFacadeFactory;
 import server.utils.ConfigType;
 import server.utils.Message;
