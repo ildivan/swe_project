@@ -2,7 +2,10 @@
   "mc": [
     {
       "monthAndYear": "16-05-2025",
-      "planConfigured": false,
+      "previousPlanlanConfigured": {
+        "16-04-2025": true,
+        "16-05-2025": false
+      },
       "precludeDates": [],
       "type": "current"
     }

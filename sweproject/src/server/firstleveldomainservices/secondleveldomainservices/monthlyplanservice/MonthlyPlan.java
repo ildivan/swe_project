@@ -134,6 +134,26 @@ public class MonthlyPlan{
         DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
     }
 
+    /**
+     * set as true the monthly plan build flag in monthly config
+     */
+    public void setPlanBuildFlagAsTrue() {
+        
+        MonthlyConfig mc = geMonthlyConfig();
+        Map<LocalDate, Boolean> planConfiguredMap =new HashMap<>();
+        planConfiguredMap.put(date, true);
+        planConfiguredMap.put(date.plusMonths(1),false);
+        mc.setPlanConfigured(planConfiguredMap);
+
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(MONTHLY_CONFIGS_PATH);
+        locInfo.setMemberName(MONTHLY_CONFIG_MEMBER_NAME);
+        locInfo.setKeyDesc(MONTHLY_CONFIG_KEY_DESCRIPTION);
+        locInfo.setKey(MONTHLY_CONFIG_CURRENT_KEY);
+
+        DataLayerDispatcherService.startWithResult(locInfo, layer->layer.modify(jsonFactoryService.createJson(mc), locInfo));
+    }
+
 
     private MonthlyConfig geMonthlyConfig(){
         JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
