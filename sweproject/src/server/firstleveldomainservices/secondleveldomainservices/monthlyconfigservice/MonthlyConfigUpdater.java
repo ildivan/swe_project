@@ -4,30 +4,20 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 
 public class MonthlyConfigUpdater {
     
-
-    private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
-    private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
-    private IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
-    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
+    private final MonthlyConfigService monthlyConfigService;
 
     private MonthlyConfig mc;
     private LocalDate date;
    
-    public MonthlyConfigUpdater(MonthlyConfig monthlyConfig, LocalDate date) {
+    public MonthlyConfigUpdater(MonthlyConfig monthlyConfig, LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
         this.mc = monthlyConfig;
         this.date = date;
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
     }
 
 

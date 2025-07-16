@@ -5,18 +5,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
-
-
 
 public class MonthlyPlan{
 
@@ -24,20 +17,23 @@ public class MonthlyPlan{
     private Map<LocalDate,DailyPlan> monthlyPlan;
 
     //questo non deve essere serializzato -> inserisco transient per risolvere il problema
-    private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
-    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
-    private transient MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
-   
-    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date) {
+    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private transient MonthlyConfigService monthlyConfigService;
+
+    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, MonthlyConfigService monthlyConfigService) {
         this.monthlyPlan = montlyPlan;
         this.date = date;
+        this.locInfoFactory = locInfoFactory;
+        this.monthlyConfigService = monthlyConfigService;
     }
 
-    public MonthlyPlan(LocalDate date) {
+    public MonthlyPlan(LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, MonthlyConfigService monthlyConfigService) {
         //write("Oggetto JSON caricato: " + dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), false);
+         this.date = date;
+        this.locInfoFactory = locInfoFactory;
+        this.monthlyConfigService = monthlyConfigService;
         this.monthlyPlan = buildMonthlyMap();
-        this.date = date;
+       
 
     }
 
@@ -60,7 +56,7 @@ public class MonthlyPlan{
             if(mc.getPrecludeDates().contains(currentDate)) {
                 monthlyMap.put(currentDate, null); 
             }else{
-                monthlyMap.put(currentDate, new DailyPlan(currentDate)); 
+                monthlyMap.put(currentDate, new DailyPlan(currentDate, locInfoFactory)); 
             }
             
             currentDate = currentDate.plusDays(1);

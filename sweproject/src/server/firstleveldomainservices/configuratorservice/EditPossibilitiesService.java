@@ -22,12 +22,8 @@ import server.firstleveldomainservices.secondleveldomainservices.menuservice.men
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.gsonfactoryservice.GsonFactoryService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
-import server.ioservice.objectformatter.IIObjectFormatter;
-import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ActivityUtil;
@@ -39,23 +35,25 @@ public class EditPossibilitiesService extends MainService<Void>{
 
     private static final String CLEAR = "CLEAR";
     private static final String SPACE = "SPACE";
-    private static final String MONTHLY_CONFIG_KEY = "current";
+
 
     private final MenuService menu = new EditMenu(this);
 
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;    
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
-    private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
-    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
-    private final ActivityUtil activityUtil = new ActivityUtil();
-    private ConfigType configType;
+    private final MonthlyConfigService monthlyConfigService;
+    private final ActivityUtil activityUtil;
+    private final ConfigType configType;
 
-
-    public EditPossibilitiesService(Socket socket, ConfigType configType) {
+    public EditPossibilitiesService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
         super(socket);
+
         this.configType = configType;
+        this.locInfoFactory = locInfoFactory;
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType);
     }
 
 
@@ -273,7 +271,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Activity getActivity() {
-        ConfigService configService = new ConfigService(socket, configType);
+        ConfigService configService = new ConfigService(socket, locInfoFactory, configType);
         configService.showActivities();
         String activityTitle = ioService.readString("\nScegli l'attività da modificare (inserisci il titolo):");
 
@@ -421,7 +419,7 @@ public class EditPossibilitiesService extends MainService<Void>{
      * @return
      */
     private Place getPlace() {
-        ConfigService configService = new ConfigService(socket, configType);
+        ConfigService configService = new ConfigService(socket,locInfoFactory, configType);
         configService.showPlaces();
         String placeName = ioService.readString("\nScegli il luogo da modificare (inserisci il nome):");
 

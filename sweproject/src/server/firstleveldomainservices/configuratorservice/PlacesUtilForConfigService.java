@@ -9,23 +9,27 @@ import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Place;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 
+
 public class PlacesUtilForConfigService {
 
     private IGsonFactory gsonFactoryService = new GsonFactoryService();
-    private static final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final Gson gson = gsonFactoryService.getGson();
     private static final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+
+    public PlacesUtilForConfigService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+        this.locInfoFactory = locInfoFactory;
+    }
 
     /**
      * la condizione è che ci sia almeno luogo senza attivita associata se non c'è ritorna vero
      * @return
      */
-    public static boolean existPlaceWithNoActivity(){
+    public boolean existPlaceWithNoActivity(){
         JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
 
         locInfo.setKeyDesc("atLeastOneActivityRelated");

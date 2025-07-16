@@ -2,14 +2,25 @@ package server.firstleveldomainservices.secondleveldomainservices.menuservice.me
 
 import java.util.List;
 import java.util.Map;
+
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
+import server.utils.ConfigType;
+import server.utils.Configs;
+import server.utils.ConfigsUtil;
 
 
 public class VolunteerMenu extends MenuManager{
 
-    public VolunteerMenu(VolunteerService volService) {
+    private final ConfigsUtil configsUtil;
+
+    public VolunteerMenu(VolunteerService volService,  ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
         super();
+
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType);
+
         vociVisibili.put("Mostra le mie visite del piano", true);
         vociVisibili.put("Mostra la scheda delle mie visite", true);
         vociVisibili.put("Mostra visite confermate", true);
@@ -24,10 +35,15 @@ public class VolunteerMenu extends MenuManager{
 
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
-        // qua possono essere implementate condizioni sulla visibilità delle varie voci del 
-        //menu del volontario, mettendo a false il value nella map voci visibili si oscura
-            return map;
-        
+        Configs configs = configsUtil.getConfig();
+        if(!configs.getFirstPlanConfigured()){
+            map.put("Mostra le mie visite del piano", false);
+            map.put("Mostra visite confermate", false);
+        }else{
+            map.put("Mostra le mie visite del piano", true);
+            map.put("Mostra visite confermate", true);
+        }
+        return map;
     }
     /**
      * convert the menu to a string
@@ -45,15 +61,34 @@ public class VolunteerMenu extends MenuManager{
         return menuOut.toString();
     }
 
-    private String obtainMenuString(String Desc, String key, List<String> menu){ 
+    private String obtainMenuString(String desc, String key, List<String> menu){ 
         StringBuffer menuOut = new StringBuffer();
-        menuOut.append(Desc);
-        for (int i = 0; i < menu.size(); i++) {
-            if(menu.get(i).contains(key)){
-                menuOut.append((i + 1) + ") " + menu.get(i)+"\n");
+        if(!checkIfNullMenuList(desc, key, menu)){
+        
+            menuOut.append(desc);
+            for (int i = 0; i < menu.size(); i++) {
+                if(menu.get(i).contains(key)){
+                    menuOut.append((i + 1) + ") " + menu.get(i)+"\n");
+                }
             }
         }
         return menuOut.toString();
+    }
+
+    /**
+     * metodo che controlla se la lista contiene una voce (contiene key) della categoria indicata (desc)
+     * @param desc
+     * @param key
+     * @param menu
+     * @return
+     */
+    private boolean checkIfNullMenuList(String desc, String key, List<String> menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            if(menu.get(i).contains(key)){
+                return false;
+            }
+        }
+        return true;
     }
     
 }

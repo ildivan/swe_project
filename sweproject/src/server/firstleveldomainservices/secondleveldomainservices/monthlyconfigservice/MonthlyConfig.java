@@ -13,6 +13,7 @@ public class MonthlyConfig {
     private String type = "current"; //old or current depends if is the current or not
     private Map<PlanState, Boolean> planStateMap; //permette di ottenere sequenzialita
     private int sequenceSubscriptionNumber;
+    private int daysBeforeActivityConfirmation;
 
     public MonthlyConfig(LocalDate date, Map<LocalDate, Boolean> planConfigured, Set<LocalDate> precludeDates) {
         this.monthAndYear = date;
@@ -24,6 +25,7 @@ public class MonthlyConfig {
         PlanState.DISPONIBILITA_APERTE, false
         ));
         this.sequenceSubscriptionNumber = 1;
+        this.daysBeforeActivityConfirmation = 2;
 
     }
 
@@ -77,6 +79,14 @@ public class MonthlyConfig {
     
     public void setSequenceSubscriptionNumber(int sequenceSubscriptionNumber) {
         this.sequenceSubscriptionNumber = sequenceSubscriptionNumber;
+    }
+
+    public int getDaysBeforeActivityConfirmation(){
+        return this.daysBeforeActivityConfirmation;
+    }
+
+    public void setDaysBeforeActivityConfirmation(int daysBeforeActivityConfirmation){
+        this.daysBeforeActivityConfirmation = daysBeforeActivityConfirmation;
     }
 
 }

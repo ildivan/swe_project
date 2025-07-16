@@ -1,15 +1,11 @@
 package server.firstleveldomainservices.secondleveldomainservices.subscriptionservice;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import com.google.gson.JsonObject;
-
-import server.DateService;
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
@@ -19,7 +15,6 @@ import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
@@ -35,17 +30,20 @@ public class SubscriptionService {
     private static final String SUBSCRIPTION_KEY_DESC = "subscriptionId";
     private final ConfigType configType;
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
     private final IInputOutput ioService = new IOService();
-    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
+    private final MonthlyConfigService monthlyConfigService;
     private final IIObjectFormatter<String> objectFormatter = new TerminalObjectFormatter();
-    private final MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+    private final MonthlyPlanService monthlyPlanService;
     private User user;
 
-    public SubscriptionService(User user, ConfigType configType) {
+    public SubscriptionService(User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
         this.user = user;
         this.configType = configType;
+        this.locInfoFactory = locInfoFactory;
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
     }
 
     /**

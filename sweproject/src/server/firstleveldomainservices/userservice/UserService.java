@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 
 import server.authservice.User;
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.UserMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
@@ -29,14 +31,15 @@ public class UserService extends MainService<Void> {
     private final MenuService menu; 
     private final IInputOutput ioService = new IOService();
     private final SubscriptionService subscriptionService;
-    private final ActivityUtil activityUtil = new ActivityUtil();
+    private final ActivityUtil activityUtil;
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
 
 
-    public UserService(Socket socket, User user, ConfigType configType) {
+    public UserService(Socket socket, User user, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
         super(socket);
         this.menu = new UserMenu(this);
-        this.subscriptionService = new SubscriptionService(user, configType);
+        this.subscriptionService = new SubscriptionService(user, locInfoFactory, configType);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType);
     }
 
 

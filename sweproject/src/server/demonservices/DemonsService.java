@@ -3,12 +3,20 @@ package server.demonservices;
 import java.util.ArrayList;
 import java.util.List;
 
+import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
+import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.demonservices.demons.MonthlyPlanDemon;
-
+import server.utils.ConfigType;
 
 public class DemonsService implements Runnable{
 
     private List<IDemon> demons;
+    private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private ConfigType configType;
+    public DemonsService(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+        this.locInfoFactory = locInfoFactory;
+        this.configType = configType;
+    }
 
     @Override
     public void run() {
@@ -27,7 +35,7 @@ public class DemonsService implements Runnable{
 
     private void buildDemons() {
         this.demons = new ArrayList<>();
-        demons.add(new MonthlyPlanDemon());
+        demons.add(new MonthlyPlanDemon(locInfoFactory,configType ));
         System.out.println("Demone costruito");
     }
 

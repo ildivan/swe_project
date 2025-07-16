@@ -1,21 +1,15 @@
 package server.firstleveldomainservices.configuratorservice;
 
 import java.io.*;
-import java.io.ObjectInputFilter.Config;
 import java.net.Socket;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import server.DateService;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -23,14 +17,11 @@ import server.firstleveldomainservices.secondleveldomainservices.menuservice.Men
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.ConfiguratorMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
-import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
-import server.gsonfactoryservice.GsonFactoryService;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.ioservice.objectformatter.IIObjectFormatter;
@@ -40,6 +31,7 @@ import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ActivityUtil;
 import server.utils.ConfigType;
 import server.utils.Configs;
+import server.utils.ConfigsUtil;
 import server.utils.MainService;
 
 
@@ -50,36 +42,34 @@ public class ConfigService extends MainService<Void>{
     private static final String CONFIG_ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
     private static final String CLEAR = "CLEAR";
     private static final String SPACE = "SPACE";
-    private static final String MONTHLY_CONFIG_KEY = "current";
 
-
-    private final Gson gson;
     private final ConfigType configType;
 
     private final MenuService menu; 
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter= new TerminalObjectFormatter();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
-    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
-    private final ActivityUtil activityUtil = new ActivityUtil();
+    private final MonthlyConfigService monthlyConfigService;
+    private final ActivityUtil activityUtil;
+    private final PlacesUtilForConfigService placesUtilForConfigService;
+    private final MonthlyPlanService monthlyPlanService;
+    private final ConfigsUtil configsUtil;
     
   
 
-    public ConfigService(Socket socket, Gson gson, ConfigType configType) {
+    public ConfigService(Socket socket, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
         super(socket);
-        this.configType = configType;
-        this.gson = gson;
-        this.menu = new ConfiguratorMenu(this, configType);
-    }
 
-    public ConfigService(Socket socket,ConfigType configType) {
-        super(socket);
         this.configType = configType;
-        GsonFactoryService gsonBuilder = new GsonFactoryService();
-        this.gson = gsonBuilder.getGson();
-        this.menu = new ConfiguratorMenu(this, configType);
+        this.locInfoFactory = locInfoFactory;
+        this.placesUtilForConfigService = new PlacesUtilForConfigService(locInfoFactory);
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
+        this.activityUtil = new ActivityUtil(locInfoFactory, configType);
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType);
+        this.menu = new ConfiguratorMenu(this, configType, monthlyConfigService, locInfoFactory);
     }
 
     /**
@@ -129,7 +119,7 @@ public class ConfigService extends MainService<Void>{
      */
     private boolean checkIfConfigured(String keyDesc) {
 
-        Configs JO = getConfig();
+        Configs JO = configsUtil.getConfig();
         return JO.getUserConfigured();
     }
 
@@ -163,13 +153,7 @@ public class ConfigService extends MainService<Void>{
                 configs.setActivitiesFirtsConfigured(true);
             }
             
-            JsonObject JO = jsonFactoryService.createJson(configs);
-            
-            JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-    
-            locInfo.setKey(ConfigType.NORMAL.getValue());
-            
-            return dataLayer.modify(JO, locInfo);
+            return configsUtil.save(configs, configType);
             
 
         } catch (IOException e) {
@@ -299,7 +283,7 @@ public class ConfigService extends MainService<Void>{
         boolean jump = false;
 
         //DA TESTARE QUESTO IF
-        if(PlacesUtilForConfigService.existPlaceWithNoActivity()){
+        if(placesUtilForConfigService.existPlaceWithNoActivity()){
             ioService.writeMessage("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
             addActivityOnNoConfiguredPlaces();
             if((ioService.readString("Si vogliono inserire nuove attività?: (y/n)")).equalsIgnoreCase("n")){
@@ -341,7 +325,6 @@ public class ConfigService extends MainService<Void>{
      * show places where there is no activity related
      */
     private void addActivityOnNoConfiguredPlaces() {
-        PlacesUtilForConfigService placesUtilForConfigService = new PlacesUtilForConfigService();
         List<Place> places = placesUtilForConfigService.getCustomList();
         for (Place place : places) {
             ioService.writeMessage("Inserire attività per il luogo:\n " + formatter.formatPlace(place), false);
@@ -417,8 +400,10 @@ public class ConfigService extends MainService<Void>{
      * 
      */
     public void generateMonthlyPlan() {
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
-        if(!monthlyPlanService.buldMonthlyPlan()){
+
+        updateDaysBeforeConfirmation(choseTheAmountOfDaysBeforeTheActivityToBeConfirmed());
+
+        if(!monthlyPlanService.buildMonthlyPlan()){
             ioService.writeMessage("Piano mensile non generato, volontari stanno modificando", false);
             return;
         };
@@ -427,11 +412,29 @@ public class ConfigService extends MainService<Void>{
     }
 
     /**
+     * salva il numero di giorni prima dell'attività quando effettuo la verifica
+     * @param daysBeforeActivityConfirmation
+     */
+    private void updateDaysBeforeConfirmation(int daysBeforeActivityConfirmation) {
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        mc.setDaysBeforeActivityConfirmation(daysBeforeActivityConfirmation);
+        monthlyConfigService.saveMonthlyConfig(mc);
+    }
+
+    /**
+     * metodo per ottenere quanti giorni prima controllo se posso confermare una visita
+     * @return
+     */
+    private int choseTheAmountOfDaysBeforeTheActivityToBeConfirmed() {
+        return ioService.readIntegerWithMinMax("\nQuanto prima dell'attività (in giorni) verifico se ho raggiunto il numero minimo di iscrizioni?", 1, 25);
+    }
+
+    /**
      * method to show monthly plan
      *
      */
     public void showMonthlyPlan() {
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
 
         if(monthlyPlan == null){
@@ -465,15 +468,6 @@ public class ConfigService extends MainService<Void>{
         mc.getPrecludeDates().add(LocalDate.of(year, month, day));
         monthlyConfigService.saveMonthlyConfig(mc);
 
-    }
-
-    private Configs getConfig(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
-
-        locInfo.setKey(configType.getValue());
-
-        JsonObject cJO = dataLayer.get(locInfo);
-        return jsonFactoryService.createObject(cJO, Configs.class);
     }
 
     /**
@@ -597,7 +591,7 @@ public class ConfigService extends MainService<Void>{
     }
 
     public void modifyData(ConfigType configType) {
-        EditPossibilitiesService editPossibilitiesService = new EditPossibilitiesService(socket, configType);
+        EditPossibilitiesService editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType);
         editPossibilitiesService.run();
     }
     

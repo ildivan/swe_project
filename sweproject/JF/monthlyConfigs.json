@@ -1,19 +1,20 @@
 {
   "mc": [
     {
-      "monthAndYear": "16-08-2025",
+      "monthAndYear": "16-07-2025",
       "previousPlanlanConfigured": {
-        "16-07-2025": true,
-        "16-08-2025": false
+        "16-06-2025": true,
+        "16-07-2025": false
       },
       "precludeDates": [],
       "type": "current",
       "planStateMap": {
-        "DISPONIBILITA_APERTE": true,
-        "GENERAZIONE_PIANO": false,
+        "GENERAZIONE_PIANO": true,
+        "DISPONIBILITA_APERTE": false,
         "MODIFICHE_APERTE": false
       },
-      "sequenceSubscriptionNumber": 3
+      "sequenceSubscriptionNumber": 1,
+      "daysBeforeActivityConfirmation": 2
     }
   ]
 }

@@ -23,15 +23,16 @@ public class DailyPlan {
     private Map<String, ActivityInfo> plan = new HashMap<>();
 
     //non deve essere serializzato -> inserisco transient
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private transient DateService dateService = new DateService();
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
         
     
 
-    public DailyPlan(LocalDate date) {
+    public DailyPlan(LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
         this.date = date;
+        this.locInfoFactory = locInfoFactory;
     }
 
     /*

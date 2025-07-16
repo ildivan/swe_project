@@ -7,6 +7,7 @@ public class Configs {
     private Integer maxSubscriptions;
     private boolean placesFirtsConfigured;
     private boolean activitiesFirtsConfigured;
+    private boolean firstPlanConfigured;
 
     public Configs() {
         this.configType = "normalFunctionConfigs";
@@ -15,6 +16,7 @@ public class Configs {
         this.maxSubscriptions = null;
         this.placesFirtsConfigured = false;
         this.activitiesFirtsConfigured = false;
+        this.firstPlanConfigured = false;
     }
 
     public boolean getUserConfigured() {
@@ -65,7 +67,13 @@ public class Configs {
         this.activitiesFirtsConfigured = activitiesFirtsConfigured;
     }
 
-    
+    public boolean getFirstPlanConfigured() {
+        return firstPlanConfigured;
+    }
+
+    public void setFirstPlanConfigured(boolean firstPlanConfigured) {
+        this.firstPlanConfigured = firstPlanConfigured;
+    }
 
 
 }

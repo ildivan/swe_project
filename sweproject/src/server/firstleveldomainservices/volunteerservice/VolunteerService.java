@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import server.DateService;
 import server.datalayerservice.datalayers.IDataLayer;
@@ -45,27 +44,27 @@ public class VolunteerService extends MainService<Void>{
     private static final String CLEAR = "CLEAR";
     private static final String SPACE = "SPACE";
 
-    
-    private Gson gson;
-    private final String name;
-    private final MenuService menu = new VolunteerMenu(this);
-    private ConfigType configType;
+
+    private final MenuService menu;
     private final IJsonFactoryService jsonFactoryService = new JsonFactoryService();
     private final IInputOutput ioService = new IOService();
     private final IIObjectFormatter<String> formatter = new TerminalObjectFormatter();
-    private final MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
+    private final MonthlyPlanService monthlyPlanService;
     private final DateService dateService = new DateService();
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
-    private final MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
+    private final MonthlyConfigService monthlyConfigService;
+    private final String name;
     
   
 
-    public VolunteerService(Socket socket, Gson gson, ConfigType configType, String name) {
+    public VolunteerService(Socket socket, String name, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
         super(socket);
-        this.configType = configType;
-        this.gson = gson;
         this.name = name;
+        this.locInfoFactory = locInfoFactory;
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
+        this.menu = new VolunteerMenu(this, locInfoFactory, configType);
     }
     /**
      * apply the logic of the service
@@ -84,7 +83,6 @@ public class VolunteerService extends MainService<Void>{
      * mostra le attività del pianp in cui è presente il volontario
      */
     public void showMyActivities(){
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
 
         List<ActivityRecord> result = new ArrayList<>();
@@ -289,7 +287,6 @@ public class VolunteerService extends MainService<Void>{
      * @return
      */
     private List<ConfirmedActivity> getMyConfirmedActivities() {
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
         
         List<ConfirmedActivity> myActivities = new ArrayList<>();

@@ -3,39 +3,31 @@ package server.firstleveldomainservices.secondleveldomainservices.menuservice.me
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import com.google.gson.JsonObject;
 import server.DateService;
-import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuManager;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
-import server.jsonfactoryservice.IJsonFactoryService;
-import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
+import server.utils.Configs;
+import server.utils.ConfigsUtil;
 
 public class ConfiguratorMenu extends MenuManager{
-
-    
-    private static final String MONTHLY_CONFIG_CURRENT_KEY = "current";
-
-    private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
-    private transient DateService dateService = new DateService();
-    private transient IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private transient IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
-    private transient ConfigType configType;
-    private transient MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
+  
+    private DateService dateService = new DateService();
+    private MonthlyConfigService monthlyConfigService;
+    private ConfigsUtil configsUtil;
 
 
-    public ConfiguratorMenu(ConfigService configService, ConfigType configType) {
+
+    public ConfiguratorMenu(ConfigService configService, ConfigType configType, MonthlyConfigService monthlyConfigService, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
         super();
 
-        this.configType = configType;
+        this.monthlyConfigService = monthlyConfigService;
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType);
 
         vociVisibili.put("Aggiungi Volontario", true);
         vociVisibili.put("Aggiungi Luogo", true);
@@ -49,12 +41,13 @@ public class ConfiguratorMenu extends MenuManager{
         vociVisibili.put("Mostra Attività Completa", true);
         vociVisibili.put("Mostra Attività Cancellata", true);
         vociVisibili.put("Mostra Attività Effettuata", true);
+        vociVisibili.put("Mostra Piano Mensile", true);
         vociVisibili.put("Modifica dati", true);
         vociVisibili.put("Genera Piano Mensile", true);
         vociVisibili.put("Elimina Volontario", true);
         vociVisibili.put("Elimina Luogo", true);
         vociVisibili.put("Elimina Attività", true);
-        vociVisibili.put("Mostra Piano Mensile", true);
+       
         
         
         chiamateMetodi.put("Aggiungi Volontario", configService::addVolunteer);
@@ -69,27 +62,59 @@ public class ConfiguratorMenu extends MenuManager{
         chiamateMetodi.put("Mostra Attività Completa", () -> configService.showActivitiesWithCondition(ActivityState.COMPLETA));
         chiamateMetodi.put("Mostra Attività Cancellata", () -> configService.showActivitiesWithCondition(ActivityState.CANCELLATA));
         chiamateMetodi.put("Mostra Attività Effettuata", () -> configService.showActivitiesWithCondition(ActivityState.EFFETTUATA));
+        chiamateMetodi.put("Mostra Piano Mensile", configService::showMonthlyPlan);
         chiamateMetodi.put("Modifica dati", () -> configService.modifyData(configType));
         chiamateMetodi.put("Genera Piano Mensile", configService::generateMonthlyPlan);
         chiamateMetodi.put("Elimina Volontario", configService::deleteVolunteer);
         chiamateMetodi.put("Elimina Luogo", configService::deletePlace);
         chiamateMetodi.put("Elimina Attività", configService::deleteActivity);
-        chiamateMetodi.put("Mostra Piano Mensile", configService::showMonthlyPlan);
+
         
     }
 
     @Override
     protected Map<String,Boolean> buildMenuVisibility(Map<String, Boolean> map){
+        Configs configs = configsUtil.getConfig();
         MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
         
         if(dateService.getTodayDate().equals(mc.getMonthAndYear()) && checkIfAlredyBuildPlan()){
             map.put("Genera Piano Mensile", true);
             //fare che se il piano non è stato generato il 16 laprima cosa da fare è quella, vanno osxurate tutte le altre voci
-            return map;
         }else{
             map.put("Genera Piano Mensile", false);
-            return map;
         }
+
+        if(!configs.getFirstPlanConfigured()){
+            map.put("Aggiungi Volontario", false);
+            map.put("Aggiungi Luogo", false);
+            map.put("Aggiungi Attività", false);
+            map.put("Mostra Attività Proposte", false);
+            map.put("Mostra Attività Confermata", false);
+            map.put("Mostra Attività Completa", false);
+            map.put("Mostra Attività Cancellata", false);
+            map.put("Mostra Attività Effettuata", false);
+            map.put("Mostra Piano Mensile", false);
+            map.put("Modifica dati", false);
+            map.put("Elimina Volontario", false);
+            map.put("Elimina Luogo", false);
+            map.put("Elimina Attività", false);
+        }else{
+            map.put("Aggiungi Volontario", true);
+            map.put("Aggiungi Luogo", true);
+            map.put("Aggiungi Attività", true);
+            map.put("Mostra Attività Proposte", true);
+            map.put("Mostra Attività Confermata", true);
+            map.put("Mostra Attività Completa", true);
+            map.put("Mostra Attività Cancellata", true);
+            map.put("Mostra Attività Effettuata", true);
+            map.put("Mostra Piano Mensile", true);
+            map.put("Modifica dati", true);
+            map.put("Elimina Volontario", true);
+            map.put("Elimina Luogo", true);
+            map.put("Elimina Attività", true);
+        }
+
+        return map;
     }
 
     /**
@@ -134,15 +159,34 @@ public class ConfiguratorMenu extends MenuManager{
         return menuOut.toString();
     }
 
-    private String obtainMenuString(String Desc, String key, List<String> menu){ 
+    private String obtainMenuString(String desc, String key, List<String> menu){ 
         StringBuffer menuOut = new StringBuffer();
-        menuOut.append(Desc);
-        for (int i = 0; i < menu.size(); i++) {
-            if(menu.get(i).contains(key)){
-                menuOut.append((i + 1) + ") " + menu.get(i)+"\n");
+        if(!checkIfNullMenuList(desc, key, menu)){
+        
+            menuOut.append(desc);
+            for (int i = 0; i < menu.size(); i++) {
+                if(menu.get(i).contains(key)){
+                    menuOut.append((i + 1) + ") " + menu.get(i)+"\n");
+                }
             }
         }
         return menuOut.toString();
+    }
+
+    /**
+     * metodo che controlla se la lista contiene una voce (contiene key) della categoria indicata (desc)
+     * @param desc
+     * @param key
+     * @param menu
+     * @return
+     */
+    private boolean checkIfNullMenuList(String desc, String key, List<String> menu) {
+        for (int i = 0; i < menu.size(); i++) {
+            if(menu.get(i).contains(key)){
+                return false;
+            }
+        }
+        return true;
     }
     
 }

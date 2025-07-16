@@ -8,8 +8,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import com.google.gson.Gson;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
@@ -19,25 +17,24 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.gsonfactoryservice.GsonFactoryService;
-import server.gsonfactoryservice.IGsonFactory;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 
 
 public class ActivityUtil{
    
-
-    private IGsonFactory gsonFactoryService = new GsonFactoryService();
-    private final Gson gson = gsonFactoryService.getGson();
-    private final static ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
+    private final MonthlyPlanService monthlyPlanService;
     private final static IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
+    public ActivityUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+        this.locInfoFactory = locInfoFactory;
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
+    }
     public Address getAddress(){
         IInputOutput ioService = getIOService();
         String street = ioService.readString("Inserire via");
@@ -53,21 +50,61 @@ public class ActivityUtil{
 
     public Activity getActivity(Place place){
         IInputOutput ioService = getIOService();
-            String title = ioService.readString("\nInserire titolo attività");
-            String description = ioService.readString("\nInserire descrizione attività");
-            Address meetingPoint = getMeetingPoint(place);
-            LocalDate firstProgrammableDate = getDate("\nInserire data inizio attività (dd-mm-yyyy)");
-            LocalDate lastProgrammableDate = getDate("\nInserire data fine attività (dd-mm-yyyy)");
-            String[] programmableDays = insertDays();
-            LocalTime programmableHour = getTime("\nInserire ora programmabile (HH:mm)");
-            LocalTime duration = getTime("\nInserire durata attività (HH:mm)");
-            boolean bigliettoNecessario = ioService.readBoolean("\nInserire se è necessatio il biglietto: (true/false)");
-            int maxPartecipanti = ioService.readIntegerWithMinMax("\nInserire numero massimo partecipanti",1, 1000);
-            int minPartecipanti = ioService.readIntegerWithMinMax("\nInserire numero minimo partecipanti",1,maxPartecipanti);
+        String title = ioService.readString("\nInserire titolo attività");
+        String description = ioService.readString("\nInserire descrizione attività");
+        Address meetingPoint = getMeetingPoint(place);
+        LocalDate firstProgrammableDate = getDate("\nInserire data inizio attività (dd-mm-yyyy)");
+        LocalDate lastProgrammableDate = getDate("\nInserire data fine attività (dd-mm-yyyy)");
+        String[] programmableDays = insertDays();
+        LocalTime programmableHour = getTime("\nInserire ora programmabile (HH:mm)");
+        LocalTime duration = getTime("\nInserire durata attività (HH:mm)");
+        boolean bigliettoNecessario = ioService.readBoolean("\nInserire se è necessatio il biglietto: (true/false)");
+        int maxPartecipanti = ioService.readIntegerWithMinMax("\nInserire numero massimo partecipanti",1, 1000);
+        int minPartecipanti = ioService.readIntegerWithMinMax("\nInserire numero minimo partecipanti",1,maxPartecipanti);
+        String[] volunteers = choseVolunteers();
             
-            return new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti, null);
+        return new Activity(place.getName(), title, description, meetingPoint, firstProgrammableDate, lastProgrammableDate, programmableDays, programmableHour, duration, bigliettoNecessario, maxPartecipanti, minPartecipanti, volunteers);
     }
 
+    private String[] choseVolunteers() {
+        IInputOutput ioService = getIOService();
+        boolean finished = true;
+        List<String> out = new ArrayList<>();
+        do{
+            String name = choseVolunteer();
+            out.add(name);
+            String continuare = ioService.readString("Inserire altro volontario? (y si altro no)");
+            if(!continuare.equalsIgnoreCase("y")){
+                finished=false;
+            }
+        }while(finished);
+        return out.toArray(new String[0]);
+    }
+    
+    
+    private String choseVolunteer() {
+       IInputOutput ioService = getIOService();
+       boolean finished = false;
+       String name;
+       do{
+            name = ioService.readString("Inserire volontario nell'attività");
+            if(!volunteerExist(name)){
+                ioService.writeMessage("Volontario inesistente, riprovare",false);
+            }else{
+                finished = true;
+            }
+        }while(!finished);
+
+        return name;
+    }
+
+
+    private boolean volunteerExist(String name) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        locInfo.setKey(name);
+        return dataLayer.exists(locInfo);
+
+    }
     /**
      * inserire tempo nel formato hh:mm
      * @param message
@@ -218,7 +255,6 @@ public class ActivityUtil{
     }
 
     public List<ActivityRecord> getActiviyByState(ActivityState desiredState){
-        MonthlyPlanService monthlyPlanService = new MonthlyPlanService();
 
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
 

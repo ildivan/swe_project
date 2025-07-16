@@ -1,34 +1,41 @@
 package server.demonservices.demons;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import com.google.gson.JsonObject;
-
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.demonservices.IDemon;
+import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.PerformedActivity;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
+import server.utils.ConfigType;
 
 public class MonthlyPlanDemon implements IDemon{
 
 
     private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-    private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+    private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
-    private MonthlyConfigService monthlyConfigService = new MonthlyConfigService();
+    private MonthlyPlanService monthlyPlanService;
+    private MonthlyConfigService monthlyConfigService;
 
+    public MonthlyPlanDemon(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType) {
+        this.locInfoFactory = locInfoFactory;
+        this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType);
+        this.monthlyConfigService = new MonthlyConfigService(locInfoFactory);
+    }
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone
     @Override
     public void run() {
@@ -45,12 +52,187 @@ public class MonthlyPlanDemon implements IDemon{
 
     @Override
     public void tick() {
-       MonthlyPlan monthlyPlan = getMonthlyPlan();
+       MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
 
        if(monthlyPlan == null){
         return;
        }
-       JsonDataLocalizationInformation locInfo = locInfoFactory.getArchiveLocInfo();
+
+       checkIfActivitiesNeedToBeArchived(monthlyPlan);
+       monthlyPlan = checkActivities(monthlyPlan);
+       
+       //salvo i cambiamenti
+       monthlyPlanService.refreshMonthlyPlan(monthlyPlan);
+    }
+
+
+    /**
+     * controlla se è necessaria una variazione di stato in ogni attività
+     * @param monthlyPlan
+     */
+    private MonthlyPlan checkActivities(MonthlyPlan monthlyPlan) {
+        Map<LocalDate, DailyPlan> monthlyPlanMap = monthlyPlan.getMonthlyPlan();
+        for(Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlanMap.entrySet()) {
+            LocalDate date = dailyEntry.getKey();
+            DailyPlan dailyPlan = dailyEntry.getValue();
+            Map<String, ActivityInfo> activityMap = dailyPlan.getPlan();
+    
+            for (Map.Entry<String, ActivityInfo> activityEntry : activityMap.entrySet()) {
+                String activityName = activityEntry.getKey();
+                Activity activity = getActivity(activityName);
+                ActivityInfo activityInfo = activityEntry.getValue();
+
+                //eseguo i controlli
+                activityInfo = checkActivityState(activityInfo,activity, date);
+
+                activityMap.put(activityName, activityInfo);
+
+            }
+
+            dailyPlan.setPlan(activityMap);
+            monthlyPlanMap.put(date, dailyPlan);
+        }
+
+        return monthlyPlan;
+    }
+
+
+    /**
+     * 
+     */
+    private ActivityInfo checkActivityState(ActivityInfo activityInfo, Activity activity, LocalDate date) {
+        //controllo se è al completo
+        if(checkIfActivitiesHaveMaxNumberOfSubscriptions(activityInfo, activity)){
+            activityInfo.setState(ActivityState.COMPLETA);
+        }else{
+            //faccio cosi perche se qualcuno disdice almeno torna proposta
+            activityInfo.setState(ActivityState.PROPOSTA);
+        }
+
+        //controllo se è possibile confermarla, altimenti elimino
+        if(checkIfActivitiesNeedToBeConfirmed(activityInfo, activity, date)){
+            //se posso confermarla la confermo
+            activityInfo.setState(ActivityState.CONFERMATA);
+        }else{
+            //altrimenti la elimino
+            activityInfo.setState(ActivityState.CANCELLATA);
+        }
+
+        //controllo se è eseguita
+        if(checkIfActivitiesNeedAreDone(activityInfo, activity, date)){
+            activityInfo.setState(ActivityState.EFFETTUATA);
+        }
+        
+        return activityInfo;
+    }
+
+
+    /**
+     * metodo per controllare se ci sono attività al completo
+     * @param activityInfo
+     * @param activity
+     * @return
+     */
+    private boolean checkIfActivitiesHaveMaxNumberOfSubscriptions(ActivityInfo activityInfo, Activity activity) {
+        if(activityInfo.getNumberOfSub()==activity.getMaxPartecipanti()){
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * metodo che controlla se una attività deve essere confermata
+     * @param activityInfo
+     * @param activity
+     * @return
+     */
+    private boolean checkIfActivitiesNeedToBeConfirmed(ActivityInfo activityInfo, Activity activity, LocalDate date) {
+        if(isTimeToCheckActivityConfirmation(date)){
+            if(minNumberOfSubsReached(activityInfo, activity)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * util method to checkIfActivitiesNeedToBeConfirmed,
+     * controlla se ho raggiunto il numero minimo di iscrizioni
+     * @return
+     */
+    private boolean minNumberOfSubsReached(ActivityInfo activityInfo, Activity activity) {
+        if(activityInfo.getNumberOfSub()>=activity.getMinPartecipanti()){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * util method to checkIfActivitiesNeedToBeConfirmed,
+     * controlla se ho superato la data per vericare le iscrizioni minime
+     * @return
+     */
+    private boolean isTimeToCheckActivityConfirmation(LocalDate date) {
+       LocalDate dateOfToday = LocalDate.now();
+       long daysOfDifference = ChronoUnit.DAYS.between(dateOfToday, date); //positivo se data > dateOfToday
+
+       if (daysOfDifference>0) {
+            if(daysOfDifference<getDaysBeforeConfirmation()){
+                return true;
+            }
+       }
+
+       return false;
+    }
+
+
+    /**
+     * util method to isTimeToCheckActivityConfirmation,
+     * metodo per ottenere a quanti gionri da una attività devo controllare se è confermata
+     * @return
+     */
+    private long getDaysBeforeConfirmation() {
+        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+        return mc.getDaysBeforeActivityConfirmation();
+    }
+
+
+    /**
+     * metodo per controllare se una attività è stata eseguita
+     * @param activityInfo
+     * @param activity
+     * @return
+     */
+    private boolean checkIfActivitiesNeedAreDone(ActivityInfo activityInfo, Activity activity, LocalDate date) {
+        if(ChronoUnit.DAYS.between(date, LocalDate.now())>0 && activityInfo.getState()==ActivityState.CONFERMATA){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     * ottengo i dati dell'attività
+     * @param name
+     * @return
+     */
+    private Activity getActivity(String name) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        locInfo.setKey(name);
+        return jsonFactoryService.createObject(dataLayer.get(locInfo), Activity.class);
+    }
+
+
+    /**
+     * metodo per contorllare se le attivita necessitano di essere archiviate
+     */
+    private void checkIfActivitiesNeedToBeArchived(MonthlyPlan monthlyPlan) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getArchiveLocInfo();
        
        //ottengo la lista di attività da aggiungere e le aggiungo al file di archivio
        
@@ -73,8 +255,8 @@ public class MonthlyPlanDemon implements IDemon{
             }
         }
     
-       //le aggiunge
     }
+
 
     private boolean activityArchived(String name, LocalDate date) {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getArchiveLocInfo();
@@ -89,22 +271,5 @@ public class MonthlyPlanDemon implements IDemon{
 
         return pf.getDate().equals(date) && pf.getName().equals(name);
     }
-
-    private MonthlyPlan getMonthlyPlan(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getMonthlyPlanLocInfo();
-        locInfo.setKey(getMonthlyPlanDate());
-        JsonObject mpJO = dataLayer.get(locInfo);
-
-        return jsonFactoryService.createObject(mpJO, MonthlyPlan.class);
-    }
-
-    private String getMonthlyPlanDate(){
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
-        LocalDate date = mc.isPlanConfigured().keySet().iterator().next();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return date.format(formatter);
-    }
-
-    
     
 }

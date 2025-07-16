@@ -5,7 +5,6 @@ import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.jsonfactoryservice.IJsonFactoryService;
@@ -16,9 +15,12 @@ public class VMIOUtil{
      private static final String ROLE = "volontario";
  
      private IJsonFactoryService jsonFactoryService = new JsonFactoryService();
-     private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory = new JsonLocInfoFactory();
+     private ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
      private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
 
+    public VMIOUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
+        this.locInfoFactory = locInfoFactory;
+    }
      /**
      * method to add a new user profile to user database creating a new random password
      * @param name

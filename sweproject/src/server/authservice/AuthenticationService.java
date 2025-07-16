@@ -8,7 +8,6 @@ import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
-import server.datalayerservice.datalocalizationinformations.JsonLocInfoFactory;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.gsonfactoryservice.IGsonFactory;
 import server.ioservice.IInputOutput;
@@ -22,14 +21,17 @@ public class AuthenticationService extends MainService<User> {
     private final IGsonFactory gsonFactoryService = new GsonFactoryService();
     private final Gson gson = gsonFactoryService.getGson();
     //qua posso modificare il tipo di factory per polimorfismo
-    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory= new JsonLocInfoFactory();
+    private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final IInputOutput ioService = new IOService();
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer = new JsonDataLayer();
+    private final AuthenticationUtil authenticationUtil;
 
 
-    public AuthenticationService(Socket socket, ConnectionType connectionType) {
+    public AuthenticationService(Socket socket, ConnectionType connectionType, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory) {
         super(socket);
         this.connectionType = connectionType;
+        this.locInfoFactory = locInfoFactory;
+        this.authenticationUtil = new AuthenticationUtil(locInfoFactory);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class AuthenticationService extends MainService<User> {
             return null;
         }
 
-        if(AuthenticationUtil.checkIfTemp(username)){
+        if(authenticationUtil.checkIfTemp(username)){
             temp = true;
         }else{
             temp = false;
@@ -119,7 +121,7 @@ public class AuthenticationService extends MainService<User> {
 
             boolean exist = dataLayer.exists(locInfo);
             if(exist){
-                JsonObject userJO = AuthenticationUtil.getUserJsonObject(username);
+                JsonObject userJO = authenticationUtil.getUserJsonObject(username);
                 assert userJO != null : "User is null";
                  assert (
                     (userJO.get("role").getAsString().equals("configuratore") && connectionType == ConnectionType.Internal) ||
@@ -143,7 +145,7 @@ public class AuthenticationService extends MainService<User> {
             
         } while (riprovare.equalsIgnoreCase("y"));
 
-        JsonObject userJO = AuthenticationUtil.getUserJsonObject(username);
+        JsonObject userJO = authenticationUtil.getUserJsonObject(username);
         assert userJO != null : "User is null";
         assert (
                 (userJO.get("role").getAsString().equals("configuratore") && connectionType == ConnectionType.Internal) ||
@@ -160,12 +162,12 @@ public class AuthenticationService extends MainService<User> {
      * @param username username
      */
     private void changePassword(String username) {
-        assert AuthenticationUtil.getUserJsonObject(username) != null : "cannot change password of invalid username";
+        assert authenticationUtil.getUserJsonObject(username) != null : "cannot change password of invalid username";
 
         String newPassword = ioService.readString("\nPrimo accesso, cambio password necessario\n\nInserisci nuova password:");
 
         if (!newPassword.isEmpty()) {
-            if (AuthenticationUtil.changePassword(username, newPassword)) {
+            if (authenticationUtil.changePassword(username, newPassword)) {
                 ioService.writeMessage("Password cambiata con successo", false);
             }
 
@@ -176,14 +178,14 @@ public class AuthenticationService extends MainService<User> {
 
     private boolean verifyPassword(String username, String password, boolean temp) {
     
-        assert AuthenticationUtil.getUserJsonObject(username) != null : "cannot verify password of invalid username";
+        assert authenticationUtil.getUserJsonObject(username) != null : "cannot verify password of invalid username";
         assert !password.isEmpty() : "cannot verify password if empty";
 
         if (temp){
-            return AuthenticationUtil.verifyClearPassword(username, password);
+            return authenticationUtil.verifyClearPassword(username, password);
         }
 
-        return AuthenticationUtil.verifyPassword(username, password);
+        return authenticationUtil.verifyPassword(username, password);
        
     }
 
