@@ -48,6 +48,11 @@ public class AuthenticationService extends MainService<User> {
         JsonObject userJO = getUser();
         if (userJO == null) return null;
 
+        if(userNotActive(userJO)){
+            ioService.writeMessage("\nUtente non ancora attivo", false);
+            return null;
+        }
+
         String username = userJO.get("name").getAsString();
         String role = userJO.get("role").getAsString();
 
@@ -77,6 +82,15 @@ public class AuthenticationService extends MainService<User> {
 
         assert user != null : "User is null";
         return user;
+    }
+
+    /**
+     * method to check if user is active
+     * @param userJO
+     * @return
+     */
+    private boolean userNotActive(JsonObject userJO) {
+        return !userJO.get("active").getAsBoolean();
     }
 
     /**

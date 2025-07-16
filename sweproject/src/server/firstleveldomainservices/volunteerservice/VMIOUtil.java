@@ -22,11 +22,33 @@ public class VMIOUtil{
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
     }
+
+    public boolean checkVolunteerExistance(String name){
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+        locInfo.setKey(name);
+
+        return dataLayer.exists(locInfo);
+    }
+
+    /**
+     * method to add a volunteer
+     * @param name
+     * @return
+     */
+    public void addVolunteer(String name){
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+        locInfo.setKey(name);
+
+        dataLayer.add(jsonFactoryService.createJson(new Volunteer(name)), locInfo);
+
+        addNewVolunteerUserProfile(name);
+    }
+
      /**
      * method to add a new user profile to user database creating a new random password
      * @param name
      */
-    public void addNewVolunteerUserProfile(String name) {
+    private void addNewVolunteerUserProfile(String name) {
         IInputOutput ioService = new IOService();
         String tempPass = "temp_" + Math.random();
         ioService.writeMessage(String.format("Nuova password temporanea per volontario: %s\n%s", name, tempPass), false);
@@ -35,6 +57,33 @@ public class VMIOUtil{
         JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
         
         dataLayer.add(jsonFactoryService.createJson(u), locInfo);
+    }
 
+    /**
+     * method to delete volunteer
+     * @param name
+     */
+    public void deleteVolunteer(String name){
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+        locInfo.setKey(name);
+
+        dataLayer.delete(locInfo);
+
+        deleteVolunteerUser(name);
+    }
+
+    /**
+     * method to delete user of the deleted volunteer
+     * @param name
+     */
+    private void deleteVolunteerUser(String name) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
+        locInfo.setKey(name);
+
+        User user = jsonFactoryService.createObject(dataLayer.get(locInfo), User.class);
+
+        user.setIsDeleted(true);
+
+        dataLayer.modify(jsonFactoryService.createJson(user),locInfo);
     }
 }

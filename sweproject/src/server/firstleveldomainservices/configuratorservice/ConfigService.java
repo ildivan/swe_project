@@ -265,6 +265,7 @@ public class ConfigService extends MainService<Void>{
      * @post Se il volontario non esisteva, viene aggiunto al database. In caso contrario, viene mostrato un messaggio.
      */
     public void addVolunteer(boolean first) {
+        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
         if(!first){
             ioService.writeMessage(CLEAR,false);
         }
@@ -276,8 +277,8 @@ public class ConfigService extends MainService<Void>{
         JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
         locInfo.setKey(name);
 
-        if (!dataLayer.exists(locInfo)) {
-            dataLayer.add(jsonFactoryService.createJson(new Volunteer(name)), locInfo);
+        if(!volUtil.checkVolunteerExistance(name)) {
+            volUtil.addVolunteer(name);
 
             // Post-condizione: ora esiste
             boolean nowExists = dataLayer.exists(locInfo);
@@ -285,9 +286,6 @@ public class ConfigService extends MainService<Void>{
         } else {
             ioService.writeMessage("\nVolontario già esistente", false);
         }
-
-        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
-        volUtil.addNewVolunteerUserProfile(name);
     }   
 
     /**
@@ -568,15 +566,14 @@ public class ConfigService extends MainService<Void>{
      * - Le attività che restano senza volontari vengono eliminate.
      */
     public void deleteVolunteer() {
+        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+
         ioService.writeMessage(CLEAR, false);
         String name = ioService.readString("\nInserire nome del volontario da eliminare");
 
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
 
-        JsonDataLocalizationInformation volunteerLoc = locInfoFactory.getChangedVolunteersLocInfo();
-        volunteerLoc.setKey(name);
-
-        if (dataLayer.exists(volunteerLoc)) {
+        if (volUtil.checkVolunteerExistance(name)) {
 
             JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
             List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
@@ -607,8 +604,9 @@ public class ConfigService extends MainService<Void>{
                 }
             }
 
-            dataLayer.delete(volunteerLoc);
+            volUtil.deleteVolunteer(name);
             ioService.writeMessage("\nVolontario e attività orfane aggiornate/eliminate.", false);
+        
         } else {
             ioService.writeMessage("\nVolontario non esistente", false);
         }

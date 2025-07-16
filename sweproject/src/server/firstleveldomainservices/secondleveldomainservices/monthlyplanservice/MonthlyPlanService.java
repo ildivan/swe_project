@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import com.google.gson.JsonObject;
 import server.DateService;
+import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
@@ -106,8 +107,9 @@ public class MonthlyPlanService {
         refreshChangedPlaces();
         refreshChangedActivities();
         refreshChangedVolunteers();
+        refreshUsers();
     }
-    
+
     /**
      * metodo di utilita a refreshData
      * aggiorna le modifiche hai luoghi
@@ -154,6 +156,31 @@ public class MonthlyPlanService {
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * method to refresh users
+     */
+    private void refreshUsers() {
+        JsonDataLocalizationInformation lcoInfo = locInfoFactory.getUserLocInfo();
+        List<JsonObject> usersJO = dataLayer.getAll(lcoInfo);
+
+        for (JsonObject jsonObject : usersJO) {
+            if(jsonObject.get("deleted").getAsBoolean()){
+                JsonDataLocalizationInformation userLocInfo = locInfoFactory.getUserLocInfo();
+                userLocInfo.setKey(jsonObject.get("name").getAsString());
+                dataLayer.delete(userLocInfo);
+            }
+
+            if(!jsonObject.get("active").getAsBoolean()){
+                JsonDataLocalizationInformation userLocInfo = locInfoFactory.getUserLocInfo();
+                userLocInfo.setKey(jsonObject.get("name").getAsString());
+                User user = jsonFactoryService.createObject(jsonObject, User.class);
+                user.setActive(true);
+
+                dataLayer.modify(jsonFactoryService.createJson(user), userLocInfo);
+            }
         }
     }
 

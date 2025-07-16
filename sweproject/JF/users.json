@@ -3,62 +3,86 @@
     {
       "name": "ct",
       "password": "$2a$12$SXxe9/MMAE3ih7wa/T70v.iVQOz0qrgqWDxjloJ.MTTUMw4rcONKq",
-      "role": "configuratore"
+      "role": "configuratore",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Marco",
       "password": "temp0.12112121212121",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Lucia",
       "password": "temp0.12345678901230000000000",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Marta",
       "password": "temp0.2875994644928289",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Luca",
       "password": "$2a$12$ilvjNWh60.rWnaPbmU0xRuBL1BybVRiXATAEOFx2K5VbLQtk3wwdi",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Riccardo",
       "password": "$2a$12$umGPmtxvdADKdnrNPoapK..O0V1sK0dsgxVUzCIYrO50tt7drHjFe",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "CT2",
       "password": "temp_p2",
-      "role": "configuratore"
+      "role": "configuratore",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Nadia",
       "password": "temp0.9610413940237",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Erica",
       "password": "temp0.9610413232323237",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Corrado",
       "password": "temp1",
-      "role": "volontario"
+      "role": "volontario",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Fruitore-1",
       "password": "$2a$12$vLwgdztumqMzVgQPKcCkJemU81frT7CluAKk7XKuREF6TYAVJ4PdW",
-      "role": "fruitore"
+      "role": "fruitore",
+      "active": true,
+      "deleted": false
     },
     {
       "name": "Fruitore-2",
       "password": "temp0.1234567890123456",
-      "role": "fruitore"
+      "role": "fruitore",
+      "active": true,
+      "deleted": false
     }
   ]
 }
