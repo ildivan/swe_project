@@ -58,6 +58,15 @@ public class MonthlyPlanDaemon implements IDaemon{
             MonthlyPlan monthlyPlan = data.getMonthlyPlanFacade().getMonthlyPlan();
             if (monthlyPlan == null) return;
 
+            //------------
+            /*
+             * parte di codice solo per dimostrazione all'esame
+             */
+            if(monthlyPlan.getDate().isEqual(LocalDate.of(2025, 06, 16))){
+                return;
+            }
+            //------------
+
             activities = readAllActivities();
             volunteers = readAllVolunteers();
 

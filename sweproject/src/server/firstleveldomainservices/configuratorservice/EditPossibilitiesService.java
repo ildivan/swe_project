@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import server.data.Activity;
 import server.data.Address;
 import server.data.Place;
@@ -721,12 +720,49 @@ public class EditPossibilitiesService extends MainService<Void>{
                 }
             }
 
+            checkIfThereAreVolunteersToBeDeleted();
             data.getPlacesFacade().deletePlace(name);
             ioService.writeMessage("\nLuogo e attività collegate eliminate", false);
         } else {
             ioService.writeMessage("\nLuogo non esistente", false);
         }
     }
+
+    /**
+     * metodo per controllare se c'è qualche volontario che deve essere 
+     * eliminato perche non possiede piu nessuna visita
+     */
+    private void checkIfThereAreVolunteersToBeDeleted() {
+         VMIOUtil volUtil = new VMIOUtil(data);
+        List<Activity> activityList = data.getActivitiesFacade().getChangedActivities();
+        List<Volunteer> volontariDaControllare = data.getVolunteersFacade().getVolunteers();
+
+        for (Volunteer vol : volontariDaControllare) {
+            if(!checkIfVolunteerHasActivity(vol, activityList)){
+                volUtil.deactivateVolunteer(vol.getName());
+                ioService.writeMessage("\nVolontario " + vol.getName() + " eliminato perche non possiede piu nessuna visita", false);
+            }
+        }
+    }
+
+
+   private boolean checkIfVolunteerHasActivity(Volunteer vol, List<Activity> activityList) {
+        String volunteerName = vol.getName();
+
+        for (Activity activity : activityList) {
+            String[] volunteerNames = activity.getVolunteers();
+
+            for (String name : volunteerNames) {
+                if (name.equalsIgnoreCase(volunteerName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
 
 
     /**

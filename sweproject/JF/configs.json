@@ -4,10 +4,10 @@
       "configType": "noFirstConfig",
       "userConfigured": true,
       "areaOfIntrest": "Brescia",
-      "maxSubscriptions": 40,
+      "maxSubscriptions": 15,
       "placesFirtsConfigured": true,
       "activitiesFirtsConfigured": true,
-      "firstPlanConfigured": true
+      "firstPlanConfigured": false
     }
   ]
 }

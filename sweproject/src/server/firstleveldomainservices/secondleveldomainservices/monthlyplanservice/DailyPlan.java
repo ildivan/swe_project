@@ -33,7 +33,8 @@ public class DailyPlan {
         for (Activity a: bestActivities) {
             String title = a.getTitle();
             String orario = a.getProgrammableHour().format(formatter) + " - " + a.getEndTime().format(formatter);
-            ActivityInfo activityInfo = new ActivityInfo(0, ActivityState.PROPOSTA, orario);
+            ActivityInfo activityInfo = new ActivityInfo(0, ActivityState.PROPOSTA, orario, a.isBigliettoNecessario(),
+                a.getMeetingPoint());
             plan.put(title, activityInfo);
         }
         return this;

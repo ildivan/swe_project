@@ -1,56 +1,14 @@
 {
   "volunteers": [
     {
-      "name": "Marco",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
-      "name": "Lucia",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
-      "name": "Marta",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
       "name": "Luca",
       "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": [
-        "05-09-2025"
-      ]
+      "disponibilityDaysOld": ["15-07-2025"]
     },
     {
-      "name": "Riccardo",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
-      "name": "Nadia",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
-      "name": "Erica",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
-      "name": "Samuele",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
-      "name": "Elena",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
-    },
-    {
-      "name": "Adele",
-      "disponibilityDaysCurrent": [],
-      "disponibilityDaysOld": []
+      "name": "Corrado",
+      "disponibilityDaysCurrent": ["06-08-2025"],
+      "disponibilityDaysOld": ["03-07-2025"]
     }
   ]
 }

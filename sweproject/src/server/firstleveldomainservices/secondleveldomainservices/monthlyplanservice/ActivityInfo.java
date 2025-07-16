@@ -3,6 +3,7 @@ package server.firstleveldomainservices.secondleveldomainservices.monthlyplanser
 import java.util.HashSet;
 import java.util.Set;
 
+import server.data.Address;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 
 public class ActivityInfo {
@@ -10,12 +11,17 @@ public class ActivityInfo {
     private ActivityState state;
     private String timeOfTheActivity;
     private Set<Integer> subscriptions;
+    private boolean biglietto;
+    private Address meetingPoint;
 
-    public ActivityInfo(int numberOfSub, ActivityState state, String timeOfTheActivity) {
+    public ActivityInfo(int numberOfSub, ActivityState state, String timeOfTheActivity,
+                        boolean biglietto, Address meetingPoint) {
         this.numberOfSub = numberOfSub;
         this.state = state;
         this.timeOfTheActivity = timeOfTheActivity;
         this.subscriptions = new HashSet<>();
+        this.biglietto = biglietto;
+        this.meetingPoint = meetingPoint;
     }
 
     public int getNumberOfSub() {
@@ -64,5 +70,21 @@ public class ActivityInfo {
             subscriptions.remove(subscription.getSubscriptionId());
             numberOfSub -= subscription.getNumberOfSubscriptions();
         }
+    }
+
+    public boolean getbigliettoNecessario(){
+        return biglietto;
+    }
+
+    public void setbigliettoNecessario(boolean biglietto) {
+        this.biglietto = biglietto;
+    }
+
+    public Address getMeetingPoint() {
+        return meetingPoint;
+    }
+
+    public void setMeetingPoint(Address meetingPoint) {
+        this.meetingPoint = meetingPoint;
     }
 }

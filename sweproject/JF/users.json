@@ -8,27 +8,6 @@
       "deleted": false
     },
     {
-      "name": "Marco",
-      "password": "temp0.12112121212121",
-      "role": "volontario",
-      "active": true,
-      "deleted": false
-    },
-    {
-      "name": "Lucia",
-      "password": "temp0.12345678901230000000000",
-      "role": "volontario",
-      "active": true,
-      "deleted": false
-    },
-    {
-      "name": "Marta",
-      "password": "temp0.2875994644928289",
-      "role": "volontario",
-      "active": true,
-      "deleted": false
-    },
-    {
       "name": "Luca",
       "password": "$2a$12$ilvjNWh60.rWnaPbmU0xRuBL1BybVRiXATAEOFx2K5VbLQtk3wwdi",
       "role": "volontario",
@@ -36,29 +15,15 @@
       "deleted": false
     },
     {
-      "name": "Riccardo",
-      "password": "$2a$12$umGPmtxvdADKdnrNPoapK..O0V1sK0dsgxVUzCIYrO50tt7drHjFe",
-      "role": "volontario",
-      "active": true,
-      "deleted": false
-    },
-    {
-      "name": "CT2",
+      "name": "ct2",
       "password": "temp_p2",
       "role": "configuratore",
       "active": true,
       "deleted": false
     },
     {
-      "name": "Nadia",
-      "password": "temp0.9610413940237",
-      "role": "volontario",
-      "active": true,
-      "deleted": false
-    },
-    {
-      "name": "Erica",
-      "password": "temp0.9610413232323237",
+      "name": "Corrado",
+      "password": "temp1",
       "role": "volontario",
       "active": true,
       "deleted": false
@@ -72,15 +37,15 @@
     },
     {
       "name": "Fruitore-2",
-      "password": "$2a$12$LzHt4f7B3FEN/WwaZSso8eQSoyvdk/DHiLQfncuVDuY0yyxybyxKG",
+      "password": "temp0.1234567890123456",
       "role": "fruitore",
       "active": true,
       "deleted": false
     },
     {
-      "name": "Elena",
-      "password": "temp14556775",
-      "role": "volontario",
+      "name": "Fruitore-3",
+      "password": "temp0.1232",
+      "role": "fruitore",
       "active": true,
       "deleted": false
     }

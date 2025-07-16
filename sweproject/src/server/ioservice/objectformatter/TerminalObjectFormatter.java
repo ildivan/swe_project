@@ -167,7 +167,13 @@ public class TerminalObjectFormatter implements IIObjectFormatter<String> {
             "\n\nNome:\n" + record.getName() +
             "\n\nNumero di iscritti:\n" + record.getActivity().getNumberOfSub() +
             "\n\nStato visita:\n" + record.getActivity().getState() +
-            "\n\nOrario della visita:\n'" + record.getActivity().getTime();
+            "\n\nOrario della visita:\n" + record.getActivity().getTime() +
+            "\n\nBiglietto necessario:\n" + getBiglietto(record.getActivity().getbigliettoNecessario()) +
+            "\n\nPunto di incontro:\n" + formatAddress(record.getActivity().getMeetingPoint());
+    }
+
+    private String getBiglietto(boolean biglietto) {
+        return biglietto ? "Si" : "No";
     }
 
     /**
