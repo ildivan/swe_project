@@ -20,7 +20,6 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 
@@ -73,6 +72,7 @@ public class ActivityUtil{
         boolean finished = true;
         List<String> out = new ArrayList<>();
         do{
+
             String name = choseVolunteer();
             out.add(name);
             String continuare = ioService.readString("Inserire altro volontario? (y si altro no)");
@@ -102,7 +102,7 @@ public class ActivityUtil{
 
 
     private boolean volunteerExist(String name) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
         locInfo.setKey(name);
         return dataLayer.exists(locInfo);
 

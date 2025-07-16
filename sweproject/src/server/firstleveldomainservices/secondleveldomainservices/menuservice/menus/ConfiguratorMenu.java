@@ -55,7 +55,7 @@ public class ConfiguratorMenu extends MenuManager{
        
         
         
-        chiamateMetodi.put("Aggiungi Volontario", configService::addVolunteer);
+        chiamateMetodi.put("Aggiungi Volontario", () -> configService.addVolunteer(false));
         chiamateMetodi.put("Aggiungi Luogo", configService::addPlace);
         chiamateMetodi.put("Aggiungi Attività", configService::addActivity);
         chiamateMetodi.put("Aggiungi data preclusa", configService::addNonUsableDate);
@@ -90,7 +90,6 @@ public class ConfiguratorMenu extends MenuManager{
         }
 
         if(!configs.getFirstPlanConfigured()){
-            map.put("Aggiungi Volontario", false);
             map.put("Aggiungi Luogo", false);
             map.put("Aggiungi Attività", false);
             map.put("Mostra Attività Proposte", false);
@@ -104,7 +103,6 @@ public class ConfiguratorMenu extends MenuManager{
             map.put("Elimina Luogo", false);
             map.put("Elimina Attività", false);
         }else{
-            map.put("Aggiungi Volontario", true);
             map.put("Aggiungi Luogo", true);
             map.put("Aggiungi Attività", true);
             map.put("Mostra Attività Proposte", true);

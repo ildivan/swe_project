@@ -30,7 +30,7 @@ public class PlacesUtilForConfigService {
      * @return
      */
     public boolean existPlaceWithNoActivity(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
 
         locInfo.setKeyDesc("atLeastOneActivityRelated");
         locInfo.setKey("false");
@@ -43,7 +43,7 @@ public class PlacesUtilForConfigService {
     }
 
     public List<Place> getCustomList(){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getPlaceLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
 
         locInfo.setKeyDesc("atLeastOneActivityRelated");
         locInfo.setKey("false");

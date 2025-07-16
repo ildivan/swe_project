@@ -28,10 +28,13 @@ import server.utils.ServerConnectionPorts;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Server {
 
+    private static final String JSON_NORMAL_FUNCTION_DIRECTORY = "sweproject/JFNormalFunction";
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final int CLIENT_PORT = ServerConnectionPorts.CLIENT.getCode();
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
@@ -41,16 +44,64 @@ public class Server {
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     MonthlyPlanService monthlyPlanService;
 
-    public Server(ConfigType configType) {
+    public Server(ConfigType configType, List<User> users) {
         this.jsonReadWrite = new JsonReadWrite();
         this.dataLayer = new JsonDataLayer(jsonReadWrite);
         this.locInfoFactory = getLocInfoFactory(configType);
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        
         if(configType == ConfigType.NORMAL){
+            initializeJsonRepository();
+            initializeConfig();
+            initializeUsers(users);
+            initializeVolunteers();
             initializeMonthlyConfig();
         }
         this.demonsService = new DemonsService(locInfoFactory, configType, dataLayer);
 
+    }
+
+    /**
+     * method to create JFNormalFunction directory
+     */
+    private void initializeJsonRepository() {
+        File newFolder = new File(JSON_NORMAL_FUNCTION_DIRECTORY);
+
+        newFolder.mkdirs();
+     
+    }
+
+    /**
+     * method to initialize configs.json
+     */
+    private void initializeConfig() {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getConfigLocInfo();
+        Configs configs = new Configs();
+
+        dataLayer.add(jsonFactoryService.createJson(configs), locInfo);
+    }
+
+    /**
+     * method to initialize users.json
+     * @param users
+     */
+    private void initializeUsers(List<User> users) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
+
+        for (User user : users) {
+            dataLayer.add(jsonFactoryService.createJson(user), locInfo);
+        }
+    }
+
+    /**
+     * method to initialize volunteers.json
+     */
+    private void initializeVolunteers() {
+        JsonDataLocalizationInformation locInfoReadOnly = locInfoFactory.getVolunteerLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+
+        dataLayer.createJSONEmptyFile(locInfo);
+        dataLayer.createJSONEmptyFile(locInfoReadOnly);
     }
 
     /**
@@ -236,13 +287,19 @@ public class Server {
         
         ConfigType configType = ConfigType.NORMAL;
         //ConfigType configType = ConfigType.NO_FIRST_CONFIG;
-        Server s = new Server(configType);
-        
+
+        //creo gli utenti che mi servono
+        // configuratore, volontario, fruitore
+        List<User> users = new ArrayList<>();
+        User configuratore = new User("c1", "temp_123", "configuratore");
+        User fruitore = new User("f1", "temp_234", "fruitore");
+        users.add(fruitore);
+        users.add(configuratore);
+
+        Server s = new Server(configType,users);
+
         s.startServer(configType);
        
-        
-
-
     }
 
 }

@@ -30,7 +30,7 @@ public class VMIOUtil{
         IInputOutput ioService = new IOService();
         String tempPass = "temp_" + Math.random();
         ioService.writeMessage(String.format("Nuova password temporanea per volontario: %s\n%s", name, tempPass), false);
-        User u = new User(name, tempPass, ROLE);
+        User u = new User(name, tempPass, ROLE, false);
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
         

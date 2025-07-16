@@ -2,10 +2,14 @@ package server.firstleveldomainservices.configuratorservice;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import com.google.gson.JsonObject;
 import server.DateService;
+import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
@@ -21,6 +25,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
+import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
@@ -135,14 +140,11 @@ public class ConfigService extends MainService<Void>{
             String areaOfIntrest = configureArea();
             Integer maxSubscriptions = configureMaxSubscriptions();
     
-            //richiesta la configurazone dei luoghi e delle attivita
-            //in base a come vanno le due cose sopra, modifico i config in un metodo a parte
             Configs configs = new Configs();
             configs.setUserConfigured(true);
             configs.setAreaOfIntrest(areaOfIntrest);
             configs.setMaxSubscriptions(maxSubscriptions);
     
-       
             if(!checkIfConfigured(CONFIG_PLACE_KEY_DESC)){
                 ioService.writeMessage("Inizio prima configurazione luoghi", false);
                 addPlace();
@@ -155,14 +157,68 @@ public class ConfigService extends MainService<Void>{
                 configs.setActivitiesFirtsConfigured(true);
             }
             
+            //creo anche i file di sola lettura
+            copyToReadOnlyFiles();
+
             return configsUtil.save(configs, configType);
             
-
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return false;
         }
         
+    }
+
+    /**
+     * istanzio anche i file di sola lettura
+     */
+   private void copyToReadOnlyFiles() {
+
+        copyToReadOnlyPlace();
+        copyToReadOnlyActivity();
+        copyToReadOnlyVolunteer();
+    }
+
+    /**
+     * istanzio file sola lettura luoghi
+     */
+    private void copyToReadOnlyPlace() {
+        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
+        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
+
+        try {
+            Files.copy(changedPlacesPath, originalPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * istanzio file sola lettura luoghi
+     */
+    private void copyToReadOnlyActivity() {
+        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
+        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+
+        try {
+            Files.copy(changedActivitiesPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * istanzio file sola lettura luoghi
+     */
+    private void copyToReadOnlyVolunteer() {
+        Path changedVolunteerPath = Paths.get(locInfoFactory.getChangedVolunteersLocInfo().getPath());
+        Path originalVolunteerPath = Paths.get(locInfoFactory.getVolunteerLocInfo().getPath());
+
+        try {
+            Files.copy(changedVolunteerPath, originalVolunteerPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
    /**
@@ -208,8 +264,11 @@ public class ConfigService extends MainService<Void>{
      * @pre L’utente deve inserire un nome non nullo e non vuoto. Il volontario non deve esistere già.
      * @post Se il volontario non esisteva, viene aggiunto al database. In caso contrario, viene mostrato un messaggio.
      */
-    public void addVolunteer() {
-        ioService.writeMessage(CLEAR,false);
+    public void addVolunteer(boolean first) {
+        if(!first){
+            ioService.writeMessage(CLEAR,false);
+        }
+        
         String name = ioService.readString("\nInserire nome del volontario");
 
         assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
@@ -226,6 +285,9 @@ public class ConfigService extends MainService<Void>{
         } else {
             ioService.writeMessage("\nVolontario già esistente", false);
         }
+
+        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
+        volUtil.addNewVolunteerUserProfile(name);
     }   
 
     /**
@@ -342,10 +404,33 @@ public class ConfigService extends MainService<Void>{
     private void addActivityWithPlace(Place place) {
         assert place != null;
         JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
+
+        if(noVolunteersExists()){
+            //entro qua solo nella prima iterazione quando non ho nessun volontario, oppure se li elimino e non ho piu volontari
+            ioService.writeMessage("\nNecessario inserire almeno un volontario per procedere", false);
+            addVolunteer(true);
+        }
+
         Activity activity = activityUtil.getActivity(place);
 
         dataLayer.add(jsonFactoryService.createJson(activity), locInfo);
     
+    }
+
+
+    /**
+     * method that checks if there is at leat one volunteer declared
+     * 
+     * poiche il metodo è triggereato solo nella prima configurazione, o quando non ho piu volontari lavoro sul file changed
+     * @return
+     */
+    private boolean noVolunteersExists() {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+        if (dataLayer.get(locInfo) == null) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
