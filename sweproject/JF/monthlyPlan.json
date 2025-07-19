@@ -498,53 +498,6 @@
             }
           }
         },
-        "10-09-2025": {
-          "date": "10-09-2025",
-          "plan": {
-            "Visita Guidata al Duomo Vecchio": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30",
-              "subscriptions": []
-            },
-            "Tour della Piazza del Duomo di Brescia": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00",
-              "subscriptions": []
-            },
-            "Tour del Museo delle Armi": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:00",
-              "subscriptions": []
-            },
-            "Tour delle Antiche Armi": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 13:00",
-              "subscriptions": []
-            },
-            "Passeggiata Fascista: Architettura e Storia": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30",
-              "subscriptions": []
-            },
-            "Tour Artistico alla Pinacoteca": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "14:00 - 16:30",
-              "subscriptions": []
-            },
-            "Passeggiata Guidata al Parco Tarello": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30",
-              "subscriptions": []
-            }
-          }
-        },
         "11-09-2025": {
           "date": "11-09-2025",
           "plan": {

@@ -64,13 +64,6 @@
       "deleted": false
     },
     {
-      "name": "Corrado",
-      "password": "temp1",
-      "role": "volontario",
-      "active": true,
-      "deleted": false
-    },
-    {
       "name": "Fruitore-1",
       "password": "$2a$12$vLwgdztumqMzVgQPKcCkJemU81frT7CluAKk7XKuREF6TYAVJ4PdW",
       "role": "fruitore",
@@ -79,7 +72,7 @@
     },
     {
       "name": "Fruitore-2",
-      "password": "temp0.1234567890123456",
+      "password": "$2a$12$LzHt4f7B3FEN/WwaZSso8eQSoyvdk/DHiLQfncuVDuY0yyxybyxKG",
       "role": "fruitore",
       "active": true,
       "deleted": false

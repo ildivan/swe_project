@@ -124,7 +124,7 @@ public class DailyPlan {
 
             if (!overlap) {
                 result.add(activity);
-                usedVolunteers.addAll(normalizedVolunteers); // 🔒 blocco tutti i volontari usati
+                usedVolunteers.addAll(normalizedVolunteers); //volontari gia usati
                 samePlace.add(activity);
                 activitiesByPlace.put(place, samePlace);
             }

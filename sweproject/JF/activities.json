@@ -21,9 +21,7 @@
       "bigliettoNecessario": true,
       "maxPartecipanti": 15,
       "minPartecipanti": 5,
-      "volunteers": [
-        "Corrado"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Castello di Brescia",
@@ -121,9 +119,7 @@
       "bigliettoNecessario": true,
       "maxPartecipanti": 20,
       "minPartecipanti": 10,
-      "volunteers": [
-        "Corrado"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Lago di Garda",
@@ -474,9 +470,7 @@
       "bigliettoNecessario": false,
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
-      "volunteers": [
-        "Corrado"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Palazzo Martinengo Cesaresco",
@@ -499,9 +493,7 @@
       "bigliettoNecessario": true,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": [
-        "Corrado"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Museo del Risorgimento",
@@ -855,9 +847,7 @@
       "bigliettoNecessario": true,
       "maxPartecipanti": 25,
       "minPartecipanti": 5,
-      "volunteers": [
-        "Corrado"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Duomo Nuovo",
