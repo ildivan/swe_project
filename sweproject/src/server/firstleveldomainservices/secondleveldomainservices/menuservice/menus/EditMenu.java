@@ -16,8 +16,8 @@ public class EditMenu extends MenuManager{
         vociVisibili.put("Aggiungi Luogo", true);
         vociVisibili.put("Aggiungi Attività", true);
         vociVisibili.put("Modifica numero massimo di persone iscrivibili mediante una singola iscrizione", true);
-        vociVisibili.put("Modifica Attività", true);
-        vociVisibili.put("Modifica Luogo", true);
+        // vociVisibili.put("Modifica Attività", true);
+        // vociVisibili.put("Modifica Luogo", true);
         vociVisibili.put("Elimina Volontario", true);
         vociVisibili.put("Elimina Luogo", true);
         vociVisibili.put("Elimina Attività", true);
