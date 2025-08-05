@@ -10,6 +10,7 @@ import server.datalayerservice.datalocalizationinformations.JsonDataLocalization
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.precludedateservice.PrecludeDateService;
 
 public class MonthlyPlan{
 
@@ -19,50 +20,77 @@ public class MonthlyPlan{
     //questo non deve essere serializzato -> inserisco transient per risolvere il problema
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private transient MonthlyConfigService monthlyConfigService;
+    private transient PrecludeDateService precludeDateService;
+    private transient boolean firstMonthlyPlan;
 
-    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, MonthlyConfigService monthlyConfigService) {
+    public MonthlyPlan(Map<LocalDate, DailyPlan> montlyPlan, LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService,
+    boolean firstMonthlyPlan) {
+
         this.monthlyPlan = montlyPlan;
         this.date = date;
         this.locInfoFactory = locInfoFactory;
         this.monthlyConfigService = monthlyConfigService;
+        this.precludeDateService = precludeDateService;
+        this.firstMonthlyPlan = firstMonthlyPlan;
     }
 
-    public MonthlyPlan(LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, MonthlyConfigService monthlyConfigService) {
-        //write("Oggetto JSON caricato: " + dataLayer.get(new JSONDataContainer("JF/monthlyConfigs.json", "mc", "current", "type")), false);
-         this.date = date;
+    public MonthlyPlan(LocalDate date, ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory,
+    MonthlyConfigService monthlyConfigService, PrecludeDateService precludeDateService,
+    boolean firstMonthlyPlan) {
+        
+        this.date = date;
         this.locInfoFactory = locInfoFactory;
         this.monthlyConfigService = monthlyConfigService;
+        this.precludeDateService = precludeDateService;
+        this.firstMonthlyPlan = firstMonthlyPlan;
         this.monthlyPlan = buildMonthlyMap();
-       
 
     }
 
 
 
     private Map<LocalDate, DailyPlan> buildMonthlyMap() {
-        
+
         HashMap<LocalDate, DailyPlan> monthlyMap = new LinkedHashMap<>();
 
         MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
- 
+
+        //Data piano
+        LocalDate date;
+        
         date = mc.getMonthAndYear();
+        
+        
 
-        // Calcola il 16 del mese successivo
-        LocalDate nextMonth16 = date.plusMonths(1).withDayOfMonth(16);
+        // Primo giorno del mese successivo
+        LocalDate startDate = date.plusMonths(1).withDayOfMonth(1);
 
-        // Cicla su ogni data dal giorno di oggi fino al 16 del mese successivo
-        LocalDate currentDate = date.plusDays(1);
-        while (!currentDate.isAfter(nextMonth16)) {
-            if(mc.getPrecludeDates().contains(currentDate)) {
-                monthlyMap.put(currentDate, null); 
-            }else{
-                monthlyMap.put(currentDate, new DailyPlan(currentDate, locInfoFactory)); 
+        // Ultimo giorno del mese successivo
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
+
+        // Ciclo dal primo all'ultimo giorno del mese successivo
+        LocalDate currentDate = startDate;
+        while (!currentDate.isAfter(endDate)) {
+            if (isPrecludeDate(currentDate, date)) {
+                monthlyMap.put(currentDate, null);
+            } else {
+                monthlyMap.put(currentDate, new DailyPlan(currentDate, locInfoFactory));
             }
-            
+
             currentDate = currentDate.plusDays(1);
         }
 
         return monthlyMap;
+    }
+
+    /**
+     * method to check if is a preclude date for the current plan
+     * @param currentDate
+     * @return
+     */
+    private boolean isPrecludeDate(LocalDate currentDate, LocalDate dateOfPlanGeneration) {
+        return precludeDateService.checkIfIsPrecludeDate(currentDate, dateOfPlanGeneration);
     }
 
     public Map<LocalDate, DailyPlan> getMonthlyPlan() {

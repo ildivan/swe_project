@@ -17,6 +17,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
+import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
 import server.datalayerservice.datalayers.IDataLayer;
@@ -29,12 +30,14 @@ public class ActivityUtil{
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final MonthlyPlanService monthlyPlanService;
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
+    private final VMIOUtil volUtil;
 
     public ActivityUtil(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, ConfigType configType,
     IDataLayer<JsonDataLocalizationInformation> dataLayer) {
         this.locInfoFactory = locInfoFactory;
         this.dataLayer = dataLayer;
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
+        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
     }
     public Address getAddress(){
         IInputOutput ioService = getIOService();
@@ -102,11 +105,10 @@ public class ActivityUtil{
 
 
     private boolean volunteerExist(String name) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
-        locInfo.setKey(name);
-        return dataLayer.exists(locInfo);
-
+       return volUtil.checkVolunteerExistance(name);
     }
+
+    
     /**
      * inserire tempo nel formato hh:mm
      * @param message
@@ -260,7 +262,7 @@ public class ActivityUtil{
 
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
 
-        if( monthlyPlan == null){
+        if(monthlyPlan == null){
             return null;
         }
 

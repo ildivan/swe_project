@@ -30,6 +30,9 @@ public class NormalFunctionJsonLocInfoFactory implements ILocInfoFactory<JsonDat
     private static final String CHANGED_ACTIVITY_PATH = "sweproject/JFNormalFunction/changedActivities.json";
     private static final String CHANGED_PLACES_PATH = "sweproject/JFNormalFunction/changedPlaces.json";
     private static final String CHANGED_VOLUNTEER_PATH = "sweproject/JFNormalFunction/changedVolunteers.json";
+      private static final String PRECLUDE_DATES_PATH = "sweproject/JFNormalFunction/precludeDates.json";
+    private static final String PRECLUDE_DATES_PATH_MEMBER_NAME = "precludeDates";
+    private static final String PRECLUDE_DATES_PATH_KEY_DESC = "dateOfPlan";
 
     /**
      * metodo che ritorna le informazioni di localizzazione per dati salvati in
@@ -161,11 +164,11 @@ public class NormalFunctionJsonLocInfoFactory implements ILocInfoFactory<JsonDat
     }
 
     @Override
-    public JsonDataLocalizationInformation getChangedVolunteersLocInfo() {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(CHANGED_VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
-        return locInfo;
+    public JsonDataLocalizationInformation getPrecludeDatesLocInfo() {
+       JsonDataLocalizationInformation localizationInformation = new JsonDataLocalizationInformation();
+       localizationInformation.setPath(PRECLUDE_DATES_PATH);
+       localizationInformation.setMemberName(PRECLUDE_DATES_PATH_MEMBER_NAME);
+       localizationInformation.setKeyDesc(PRECLUDE_DATES_PATH_KEY_DESC);
+       return localizationInformation;
     }
 }

@@ -25,9 +25,11 @@ import server.utils.Configs;
 import server.utils.ConnectionType;
 import server.utils.MainService;
 import server.utils.ServerConnectionPorts;
-
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,8 +59,35 @@ public class Server {
             initializeVolunteers();
             initializeMonthlyConfig();
         }
+
+        if(configType == ConfigType.NO_FIRST_CONFIG){
+            initializeChangedFiles();
+        }
         this.demonsService = new DemonsService(locInfoFactory, configType, dataLayer);
 
+    }
+
+    /**
+     * method to initialize editable files
+     */
+    private void initializeChangedFiles() {
+        Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
+        Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
+
+        try {
+            Files.copy(originalPlacesPath, changedPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
+        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+
+        try {
+            Files.copy(originalActivitiesPath,changedActivitiesPath,  java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -97,11 +126,8 @@ public class Server {
      * method to initialize volunteers.json
      */
     private void initializeVolunteers() {
-        JsonDataLocalizationInformation locInfoReadOnly = locInfoFactory.getVolunteerLocInfo();
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
-
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         dataLayer.createJSONEmptyFile(locInfo);
-        dataLayer.createJSONEmptyFile(locInfoReadOnly);
     }
 
     /**
@@ -144,8 +170,9 @@ public class Server {
         try (ServerSocket clientSS = new ServerSocket(CLIENT_PORT);
             ServerSocket serverTerminalSS = new ServerSocket(SERVER_TERMINA_PORT)) {
 
-            System.out.println("Server is listening on port " + CLIENT_PORT);
-            System.out.println("Server is listening on port " + SERVER_TERMINA_PORT);
+            System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+            System.out.println("Server is listening on port " + CLIENT_PORT + " -> Client Port");
+            System.out.println("Server is listening on port " + SERVER_TERMINA_PORT + " -> Backend Port");
 
             // Avvio i demoni
             demonsService.run();
@@ -285,8 +312,8 @@ public class Server {
 
     public static void main(String[] args) {
         
-        ConfigType configType = ConfigType.NORMAL;
-        //ConfigType configType = ConfigType.NO_FIRST_CONFIG;
+        // ConfigType configType = ConfigType.NORMAL;
+        ConfigType configType = ConfigType.NO_FIRST_CONFIG;
 
         //creo gli utenti che mi servono
         // configuratore, volontario, fruitore

@@ -83,6 +83,13 @@
       "role": "fruitore",
       "active": true,
       "deleted": false
+    },
+    {
+      "name": "Ivan",
+      "password": "temp_0.049767161201580534",
+      "role": "volontario",
+      "active": false,
+      "deleted": false
     }
   ]
 }

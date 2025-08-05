@@ -11,10 +11,10 @@ public class MonthlyConfig {
     //di differenza dopo i quali non posso piu iscrivere
     private static final int DAYS_BEFORE_SUBSCRIPTION_CLOSURE = 3;
     
-    private LocalDate monthAndYear; //key a cui accedo, nel mese di aprile modifico il piano di maggio
-    //le date disponibili dei volontari di giugno e le date non utilizzabili di luglio
+    /*è la data in cui teoricamente genero il prossimo piano , il 16-07-2025 genero i piano dal 17-08-2025 al 17-09-2025 */
+    private LocalDate monthAndYear; //key
+
     private Map<LocalDate, Boolean> previousPlanlanConfigured;
-    private Set<LocalDate> precludeDates;
     private String type = "current"; //old or current depends if is the current or not
     private Map<PlanState, Boolean> planStateMap; //permette di ottenere sequenzialita
     private int sequenceSubscriptionNumber;
@@ -23,11 +23,10 @@ public class MonthlyConfig {
     public MonthlyConfig(LocalDate date, Map<LocalDate, Boolean> planConfigured, Set<LocalDate> precludeDates) {
         this.monthAndYear = date;
         this.previousPlanlanConfigured = planConfigured;
-        this.precludeDates = precludeDates;
         this.planStateMap = new HashMap<>(Map.of(
-        PlanState.GENERAZIONE_PIANO, true,
+        PlanState.GENERAZIONE_PIANO, false,
         PlanState.MODIFICHE_APERTE, false,
-        PlanState.DISPONIBILITA_APERTE, false
+        PlanState.DISPONIBILITA_APERTE, true
         ));
         this.sequenceSubscriptionNumber = 1;
         this.daysBeforeActivityConfirmation = DAYS_BEFORE_SUBSCRIPTION_CLOSURE;
@@ -52,14 +51,6 @@ public class MonthlyConfig {
 
     public void setPlanConfigured(Map<LocalDate, Boolean> planConfigured) {
         this.previousPlanlanConfigured = planConfigured;
-    }
-
-    public Set<LocalDate> getPrecludeDates() {
-        return precludeDates;
-    }
-
-    public void setPrecludeDates(Set<LocalDate> precludeDates) {
-        this.precludeDates = precludeDates;
     }
 
     public String getType() {

@@ -34,10 +34,8 @@ public class ConfiguratorMenu extends MenuManager{
         this.monthlyConfigService = monthlyConfigService;
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
 
-        vociVisibili.put("Aggiungi Volontario", true);
-        vociVisibili.put("Aggiungi Luogo", true);
-        vociVisibili.put("Aggiungi Attività", true);
-        vociVisibili.put("Aggiungi data preclusa", true);
+        
+        vociVisibili.put("Inserisci data preclusa", true);
         vociVisibili.put("Mostra Volontari", true);
         vociVisibili.put("Mostra Luoghi", true);
         vociVisibili.put("Mostra Bozza delle Attività", true);
@@ -49,16 +47,12 @@ public class ConfiguratorMenu extends MenuManager{
         vociVisibili.put("Mostra Piano Mensile", true);
         vociVisibili.put("Modifica dati", true);
         vociVisibili.put("Genera Piano Mensile", true);
-        vociVisibili.put("Elimina Volontario", true);
-        vociVisibili.put("Elimina Luogo", true);
-        vociVisibili.put("Elimina Attività", true);
+       
        
         
         
-        chiamateMetodi.put("Aggiungi Volontario", () -> configService.addVolunteer(false));
-        chiamateMetodi.put("Aggiungi Luogo", configService::addPlace);
-        chiamateMetodi.put("Aggiungi Attività", configService::addActivity);
-        chiamateMetodi.put("Aggiungi data preclusa", configService::addNonUsableDate);
+        
+        chiamateMetodi.put("Inserisci data preclusa", configService::addPrecludeDate);
         chiamateMetodi.put("Mostra Volontari", configService::showVolunteers);
         chiamateMetodi.put("Mostra Luoghi", configService::showPlaces);
         chiamateMetodi.put("Mostra Bozza delle Attività", configService::showActivities);
@@ -70,9 +64,7 @@ public class ConfiguratorMenu extends MenuManager{
         chiamateMetodi.put("Mostra Piano Mensile", configService::showMonthlyPlan);
         chiamateMetodi.put("Modifica dati", () -> configService.modifyData(configType));
         chiamateMetodi.put("Genera Piano Mensile", configService::generateMonthlyPlan);
-        chiamateMetodi.put("Elimina Volontario", configService::deleteVolunteer);
-        chiamateMetodi.put("Elimina Luogo", configService::deletePlace);
-        chiamateMetodi.put("Elimina Attività", configService::deleteActivity);
+        
 
         
     }
@@ -90,8 +82,6 @@ public class ConfiguratorMenu extends MenuManager{
         }
 
         if(!configs.getFirstPlanConfigured()){
-            map.put("Aggiungi Luogo", false);
-            map.put("Aggiungi Attività", false);
             map.put("Mostra Attività Proposte", false);
             map.put("Mostra Attività Confermata", false);
             map.put("Mostra Attività Completa", false);
@@ -99,12 +89,7 @@ public class ConfiguratorMenu extends MenuManager{
             map.put("Mostra Attività Effettuata", false);
             map.put("Mostra Piano Mensile", false);
             map.put("Modifica dati", false);
-            map.put("Elimina Volontario", false);
-            map.put("Elimina Luogo", false);
-            map.put("Elimina Attività", false);
         }else{
-            map.put("Aggiungi Luogo", true);
-            map.put("Aggiungi Attività", true);
             map.put("Mostra Attività Proposte", true);
             map.put("Mostra Attività Confermata", true);
             map.put("Mostra Attività Completa", true);
@@ -112,9 +97,6 @@ public class ConfiguratorMenu extends MenuManager{
             map.put("Mostra Attività Effettuata", true);
             map.put("Mostra Piano Mensile", true);
             map.put("Modifica dati", true);
-            map.put("Elimina Volontario", true);
-            map.put("Elimina Luogo", true);
-            map.put("Elimina Attività", true);
         }
 
         return map;
@@ -187,11 +169,11 @@ public class ConfiguratorMenu extends MenuManager{
         menuOut.append("\n\n\n------------------\n\n\n");
         menuOut.append("BENVENUTO NEL MENU CONFIGURATORE!");
         menuOut.append("\n\nSelezionare una opzione:\n");
-        menuOut.append(obtainMenuString("\n\nFunzioni di aggiunta:\n\n", "Aggiungi", menu));
+        menuOut.append(obtainMenuString("\n\nFunzioni di inserimento:\n\n", "Inserisci", menu));
         menuOut.append(obtainMenuString("\n\nFunzioni di visualizzazione:\n\n", "Mostra", menu));
         menuOut.append(obtainMenuString("\n\nFunzioni di modifica:\n\n", "Modifica", menu));
         menuOut.append(obtainMenuString("\n\nFunzioni di generazione:\n\n", "Genera", menu));
-        menuOut.append(obtainMenuString("\n\nFunzioni di eliminazione:\n\n", "Elimina", menu));
+       
 
         return menuOut.toString();
     }

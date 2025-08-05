@@ -6,26 +6,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import com.google.gson.JsonObject;
 import server.DateService;
-import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Address;
 import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.ConfiguratorMenu;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.precludedateservice.PrecludeDateService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlanService;
-import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;
@@ -42,6 +40,7 @@ import server.utils.MainService;
 
 public class ConfigService extends MainService<Void>{
   
+    private static final int MONTH_TO_ADD_PRECLUDE_DATE = 3;
     // private static final String GONFIG_MENU = "\n1) Inserire nuovo volotario\n2) Inserire nuovo luogo\n3) Mostra volontari\n4) Mostra luoghi";
     private static final String CONFIG_PLACE_KEY_DESC = "placesFirtsConfigured";
     private static final String CONFIG_ACTIVITY_KEY_DESC = "activitiesFirtsConfigured";
@@ -58,9 +57,10 @@ public class ConfigService extends MainService<Void>{
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private final MonthlyConfigService monthlyConfigService;
     private final ActivityUtil activityUtil;
-    private final PlacesUtilForConfigService placesUtilForConfigService;
     private final MonthlyPlanService monthlyPlanService;
     private final ConfigsUtil configsUtil;
+    private final PrecludeDateService precludeDateService;
+    private final EditPossibilitiesService editPossibilitiesService;
     
   
 
@@ -71,11 +71,12 @@ public class ConfigService extends MainService<Void>{
         this.dataLayer = dataLayer;
         this.configType = configType;
         this.locInfoFactory = locInfoFactory;
-        this.placesUtilForConfigService = new PlacesUtilForConfigService(locInfoFactory, dataLayer);
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory,dataLayer);
         this.activityUtil = new ActivityUtil(locInfoFactory, configType, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
+        this.precludeDateService = new PrecludeDateService(locInfoFactory, dataLayer);
+        this.editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer, configsUtil);
         this.menu = new ConfiguratorMenu(this, configType, monthlyConfigService, locInfoFactory, dataLayer);
     }
 
@@ -147,13 +148,13 @@ public class ConfigService extends MainService<Void>{
     
             if(!checkIfConfigured(CONFIG_PLACE_KEY_DESC)){
                 ioService.writeMessage("Inizio prima configurazione luoghi", false);
-                addPlace();
+                editPossibilitiesService.addPlace();
                 configs.setPlacesFirtsConfigured(true);
             }
                 //forse devo inglobare anche l'attiità boh io farei unalrtra var nei configs che me lo dice se sono gia configurate
             if(!checkIfConfigured(CONFIG_ACTIVITY_KEY_DESC)){
                 ioService.writeMessage("Inizio prima configurazione attività", false);
-                addActivity();
+                editPossibilitiesService.addActivity();
                 configs.setActivitiesFirtsConfigured(true);
             }
             
@@ -176,7 +177,6 @@ public class ConfigService extends MainService<Void>{
 
         copyToReadOnlyPlace();
         copyToReadOnlyActivity();
-        copyToReadOnlyVolunteer();
     }
 
     /**
@@ -202,20 +202,6 @@ public class ConfigService extends MainService<Void>{
 
         try {
             Files.copy(changedActivitiesPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * istanzio file sola lettura luoghi
-     */
-    private void copyToReadOnlyVolunteer() {
-        Path changedVolunteerPath = Paths.get(locInfoFactory.getChangedVolunteersLocInfo().getPath());
-        Path originalVolunteerPath = Paths.get(locInfoFactory.getVolunteerLocInfo().getPath());
-
-        try {
-            Files.copy(changedVolunteerPath, originalVolunteerPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -255,180 +241,6 @@ public class ConfigService extends MainService<Void>{
 
         return max;
 
-    }
-
-    /**
-     * Aggiunge un nuovo volontario al sistema, chiedendo il nome e controllando che non esista già.
-     * Se non esiste, lo aggiunge al database dei volontari con password temporanea.
-     *
-     * @pre L’utente deve inserire un nome non nullo e non vuoto. Il volontario non deve esistere già.
-     * @post Se il volontario non esisteva, viene aggiunto al database. In caso contrario, viene mostrato un messaggio.
-     */
-    public void addVolunteer(boolean first) {
-        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
-        if(!first){
-            ioService.writeMessage(CLEAR,false);
-        }
-        
-        String name = ioService.readString("\nInserire nome del volontario");
-
-        assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
-        locInfo.setKey(name);
-
-        if(!volUtil.checkVolunteerExistance(name)) {
-            volUtil.addVolunteer(name);
-
-            // Post-condizione: ora esiste
-            boolean nowExists = dataLayer.exists(locInfo);
-            assert nowExists : "Aggiunta volontario fallita";
-        } else {
-            ioService.writeMessage("\nVolontario già esistente", false);
-        }
-    }   
-
-    /**
-     * Aggiunge un nuovo luogo al sistema dopo aver richiesto il nome, la descrizione e l'indirizzo.
-     * Se il luogo non esiste già, viene aggiunto al database.
-     *
-     * @pre Il nome e la descrizione del luogo devono essere non nulli e non vuoti. Il luogo non deve esistere già.
-     * @post Il luogo viene aggiunto al database se non esiste già. In caso contrario, viene mostrato un messaggio.
-     */
-    public void addPlace(){
-        ioService.writeMessage(CLEAR,false);
-        boolean continuare;
-        
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-
-        do{
-                String name = ioService.readString("Inserire nome luogo");
-                locInfo.setKey(name);
-
-                assert name != null && !name.trim().isEmpty() : "Il nome del luogo non può essere vuoto";
-
-                if(dataLayer.exists(locInfo)){
-                    ioService.writeMessage("Luogo già esistente", false);
-                    return;
-                }
-                String description = ioService.readString("Inserire descrizione luogo");
-                ioService.writeMessage("Inserire indirizzo luogo", false);
-                Address address = addNewAddress();
-
-                dataLayer.add((jsonFactoryService.createJson(new Place(name, address, description))),locInfo);
-
-                // Post-condizione: il luogo è stato aggiunto
-        boolean placeAdded = dataLayer.exists(locInfo);
-        assert placeAdded : "Aggiunta del luogo fallita";
-
-            continuare = continueChoice("inserimento luoghi");
-        }while(continuare);
-    }
-
-    /**
-     * util method for the previous method to add a new address
-     * @return the new address
-     */
-    private Address addNewAddress() {
-        return activityUtil.getAddress();
-    }
-
-    /**
-     * Aggiunge una nuova attività al sistema, chiedendo di selezionare un luogo esistente
-     * e quindi inserire i dettagli dell'attività.
-     * Se il luogo selezionato non ha già un'attività associata, l'attività viene aggiunta.
-     *
-     * @pre Deve esserci almeno un luogo configurato senza attività. Il luogo selezionato deve esistere.
-     */
-    public void addActivity() {
-        ioService.writeMessage(CLEAR,false);
-        boolean jump = false;
-
-        //controllo se ci sono luoghi senza attvità
-        if(placesUtilForConfigService.existPlaceWithNoActivity()){
-            ioService.writeMessage("\nSono presenti luoghi senza attività, inserire almeno una attività per ogniuno", false);
-            addActivityOnNoConfiguredPlaces();
-            if((ioService.readString("Si vogliono inserire nuove attività?: (y/n)")).equalsIgnoreCase("n")){
-                return;
-            }
-        }
-       
-        //aggiungo nuove attività
-        do{
-            if(jump){
-                continue;
-            }
-            showPlaces();
-            String placeName = ioService.readString("\nInserire luogo per l'attività");
-
-            JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-    
-            locInfo.setKey(placeName);
-
-            while(!dataLayer.exists(locInfo)){
-                ioService.writeMessage("Luogo non esistente, riprovare", false);
-                placeName = ioService.readString("\nInserire luogo per l'attività");
-
-            }
-                
-            Place place = jsonFactoryService.createObject(dataLayer.get(locInfo), Place.class);   
-
-            // Pre-condizione: il luogo selezionato deve esistere
-            assert place != null : "Il luogo selezionato non esiste";
-
-            addActivityWithPlace(place);
-
-
-        }while(continueChoice("aggiunta attività"));
-    
-
-    }
-
-    /**
-     * show places where there is no activity related
-     */
-    private void addActivityOnNoConfiguredPlaces() {
-        List<Place> places = placesUtilForConfigService.getCustomList();
-        for (Place place : places) {
-            ioService.writeMessage("Inserire attività per il luogo:\n " + formatter.formatPlace(place), false);
-              addActivityWithPlace(place);
-        }
-    }
-              
-    /**
-     * creat an activity on the place passed in input in the method
-     * @param place place to relate the activity
-     */
-    private void addActivityWithPlace(Place place) {
-        assert place != null;
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
-
-        if(noVolunteersExists()){
-            //entro qua solo nella prima iterazione quando non ho nessun volontario, oppure se li elimino e non ho piu volontari
-            ioService.writeMessage("\nNecessario inserire almeno un volontario per procedere", false);
-            addVolunteer(true);
-        }
-
-        Activity activity = activityUtil.getActivity(place);
-
-        dataLayer.add(jsonFactoryService.createJson(activity), locInfo);
-    
-    }
-
-
-    /**
-     * method that checks if there is at leat one volunteer declared
-     * 
-     * poiche il metodo è triggereato solo nella prima configurazione, o quando non ho piu volontari lavoro sul file changed
-     * @return
-     */
-    private boolean noVolunteersExists() {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
-        if (dataLayer.get(locInfo) == null) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -534,150 +346,37 @@ public class ConfigService extends MainService<Void>{
     }
 
     /**
-     * method to add a non usable date for the next monthly plan
+     * method to add a preclude date
      */
-    public void addNonUsableDate(){
+    public void addPrecludeDate(){
         DateService dateService = new DateService();
 
         ioService.writeMessage(CLEAR,false);
 
         MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
 
-        int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
+        int maxNumDay = dateService.getMaxNumDay(mc, MONTH_TO_ADD_PRECLUDE_DATE);
         int minNumDay = 1;
         
-        int day = ioService.readIntegerWithMinMax("Inserire giorno non disponibile", minNumDay, maxNumDay);
+        int day = ioService.readIntegerWithMinMax("Inserire giorno precluso alle visite", minNumDay, maxNumDay);
 
-        int month = dateService.setMonthOnPrecludeDay(mc, day);
-        int year = dateService.setYearOnPrecludeDay(mc, day);
-
-        mc.getPrecludeDates().add(LocalDate.of(year, month, day));
-        monthlyConfigService.saveMonthlyConfig(mc);
-
-    }
-
-    /**
-     * Metodo per eliminare un volontario e tutte le attività orfane in cui è coinvolto.
-     *
-     * @pre Il nome inserito deve essere non nullo e non vuoto.
-     * @post
-     * - Il volontario viene eliminato dal sistema.
-     * - Tutte le attività in cui era presente vengono aggiornate.
-     * - Le attività che restano senza volontari vengono eliminate.
-     */
-    public void deleteVolunteer() {
-        VMIOUtil volUtil = new VMIOUtil(locInfoFactory, dataLayer);
-
-        ioService.writeMessage(CLEAR, false);
-        String name = ioService.readString("\nInserire nome del volontario da eliminare");
-
-        assert name != null && !name.trim().isEmpty() : "Nome volontario non valido";
-
-        if (volUtil.checkVolunteerExistance(name)) {
-
-            JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
-            List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
-
-            for (JsonObject activity : allActivities) {
-                if (activity.has("volunteers")) {
-                    var volunteers = activity.getAsJsonArray("volunteers");
-
-                    // Rimuovi il volontario dalla lista
-                    for (int i = 0; i < volunteers.size(); i++) {
-                        if (volunteers.get(i).getAsString().equalsIgnoreCase(name)) {
-                            volunteers.remove(i);
-                            break;
-                        }
-                    }
-
-                    String activityName = activity.get("title").getAsString();
-                    JsonDataLocalizationInformation singleActLoc = locInfoFactory.getChangedActivitiesLocInfo();
-                    singleActLoc.setKey(activityName);
-
-                    if (volunteers.size() == 0) {
-                        // Nessun volontario rimasto → elimina l’attività
-                        dataLayer.delete(singleActLoc);
-                    } else {
-                        // Altrimenti salva la versione aggiornata dell’attività
-                        dataLayer.modify(activity, singleActLoc);
-                    }
-                }
-            }
-
-            volUtil.deleteVolunteer(name);
-            ioService.writeMessage("\nVolontario e attività orfane aggiornate/eliminate.", false);
+        boolean firstPlanConfigured = configsUtil.getConfig().getFirstPlanConfigured();
+        int month = mc.getMonthAndYear().getMonth().plus(2).getValue();
         
-        } else {
-            ioService.writeMessage("\nVolontario non esistente", false);
+        int year = mc.getMonthAndYear().getYear();
+
+        if(dateService.incrementYearOnPrecludeDay(mc.getMonthAndYear().getMonthValue(), firstPlanConfigured)){
+            year =+1;
         }
-    }
 
-    /**
-     * Metodo per eliminare un luogo dal sistema e tutte le attività che lo usano.
-     *
-     * @pre Il nome del luogo è non nullo e non vuoto.
-     * @post
-     * - Il luogo viene eliminato.
-     * - Tutte le attività che si svolgono in quel luogo vengono eliminate.
-     */
-    public void deletePlace() {
-        ioService.writeMessage(CLEAR, false);
-        String name = ioService.readString("\nInserire nome del luogo da eliminare");
+        precludeDateService.savePrecludeDate(LocalDate.of(year, month, day));
 
-        assert name != null && !name.trim().isEmpty() : "Nome luogo non valido";
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        ioService.writeMessage(String.format("Aggiunta data preclusa: %s", LocalDate.of(year, month, day).format(dateFormatter)), false);
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
-        locInfo.setKey(name);
-
-        if (dataLayer.exists(locInfo)) {
-            // Elimina tutte le attività che usano questo luogo
-            JsonDataLocalizationInformation activityLoc = locInfoFactory.getChangedActivitiesLocInfo();
-            List<JsonObject> allActivities = dataLayer.getAll(activityLoc);
-
-            for (JsonObject activity : allActivities) {
-                if (activity.has("placeName")) {
-                    String activityPlace = activity.get("placeName").getAsString();
-                    if (activityPlace.equalsIgnoreCase(name)) {
-                        JsonDataLocalizationInformation singleActLoc = locInfoFactory.getChangedActivitiesLocInfo();
-                        singleActLoc.setKey(activity.get("title").getAsString());
-                        dataLayer.delete(singleActLoc);
-                    }
-                }
-            }
-
-            dataLayer.delete(locInfo);
-            ioService.writeMessage("\nLuogo e attività collegate eliminate", false);
-        } else {
-            ioService.writeMessage("\nLuogo non esistente", false);
-        }
-    }
-
-
-    /**
-     * Metodo per eliminare un'attività dal sistema.
-     *
-     * @pre Il nome dell’attività è non nullo e valido.
-     * @post L’attività, se presente, viene eliminata dal sistema.
-     */
-    public void deleteActivity() {
-        ioService.writeMessage(CLEAR, false);
-        String name = ioService.readString("\nInserire nome dell'attività da eliminare");
-
-        assert name != null && !name.trim().isEmpty() : "Nome attività non valido";
-
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
-        locInfo.setKey(name);
-
-        if (dataLayer.exists(locInfo)) {
-            dataLayer.delete(locInfo);
-            ioService.writeMessage("\nAttività eliminata", false);
-        } else {
-            ioService.writeMessage("\nAttività non esistente", false);
-        }
     }
 
     public void modifyData(ConfigType configType) {
-        EditPossibilitiesService editPossibilitiesService = new EditPossibilitiesService(socket, locInfoFactory, configType, dataLayer);
         editPossibilitiesService.run();
     }
     

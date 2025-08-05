@@ -7,15 +7,12 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import com.google.gson.JsonObject;
 import server.DateService;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
@@ -37,6 +34,7 @@ import server.ioservice.objectformatter.TerminalObjectFormatter;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 import server.utils.ConfigType;
+import server.utils.ConfigsUtil;
 import server.utils.MainService;
 
 public class VolunteerService extends MainService<Void>{
@@ -53,6 +51,8 @@ public class VolunteerService extends MainService<Void>{
     private final ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private final IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private final MonthlyConfigService monthlyConfigService;
+    private final ConfigsUtil configsUtil;
+    private final VMIOUtil volUtil;
     private final String name;
     
   
@@ -65,6 +65,8 @@ public class VolunteerService extends MainService<Void>{
         this.locInfoFactory = locInfoFactory;
         this.monthlyPlanService = new MonthlyPlanService(locInfoFactory, configType, dataLayer);
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
+        this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
+        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
         this.menu = new VolunteerMenu(this, locInfoFactory, configType, dataLayer);
     }
     /**
@@ -102,6 +104,11 @@ public class VolunteerService extends MainService<Void>{
      */
     public void showMyActivities(){
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+
+        if(monthlyPlan == null){
+            ioService.writeMessage("\nPiano mensile non ancora generato", false);
+            return;
+        }
 
         List<ActivityRecord> result = new ArrayList<>();
 
@@ -146,12 +153,12 @@ public class VolunteerService extends MainService<Void>{
         MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
 
         if(!mc.getPlanStateMap().get(PlanState.DISPONIBILITA_APERTE)){
-            ioService.writeMessage("Piano mensile o modifica attivita in corso, non puoi aggiungere date precluse", false);
+            ioService.writeMessage("Piano mensile o modifica attivita in corso, non puoi aggiungere date di disponibilità", false);
             return;
         }
         
 
-        int maxNumDay = mc.getMonthAndYear().getMonth().length(mc.getMonthAndYear().isLeapYear());
+        int maxNumDay = dateService.getMaxNumDay(mc, 2);
         int minNumDay = 1;
         
         int day = ioService.readIntegerWithMinMax("\"Inserire giorno in cui si è disponibili nel prossimo mese", minNumDay, maxNumDay);
@@ -159,21 +166,28 @@ public class VolunteerService extends MainService<Void>{
         /*
          * prendere il mese e l'anno cosi permette di evitare race conditions
          */
-        int month = dateService.setMonthOnPrecludeDayVolunteer(mc, day);
-        int year = dateService.setYearOnPrecludeDayVolunteer(mc, day);
+        boolean firstPlanConfigured = configsUtil.getConfig().getFirstPlanConfigured();
+        int month = mc.getMonthAndYear().getMonth().plus(1).getValue();
+        
+        int year = mc.getMonthAndYear().getYear();
+
+        if(dateService.incrementYearOnDisponibilityDayVolunteer(mc.getMonthAndYear().getMonthValue(), firstPlanConfigured)){
+            year =+1;
+        }
 
         LocalDate date = LocalDate.of(year, month, day);
 
 
-        addDisponibilityDatesForVolunteer(date);
+        addDisponibilityDatesForVolunteer(date, firstPlanConfigured);
 
     }
 
     /**
      * metodo per aggiungere la data in cui il volontario è disponibile al file
      * @param date
+     * @param firstPlanConfigured
      */
-    private void addDisponibilityDatesForVolunteer(LocalDate date){
+    private void addDisponibilityDatesForVolunteer(LocalDate date, boolean firstPlanConfigured){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String formattedDate = date.format(formatter);
@@ -185,26 +199,8 @@ public class VolunteerService extends MainService<Void>{
             return;
         }
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        locInfo.setKey(name);
-        JsonObject volunteerJO = dataLayer.get(locInfo);
-        Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
-        Set<String> disponibilityDays;
-
-        if(volunteer.getDisponibilityDaysCurrent() == null){
-            disponibilityDays = new LinkedHashSet<String>();
-        }else{
-            disponibilityDays = volunteer.getDisponibilityDaysCurrent();
-        }
-
-        disponibilityDays.add(formattedDate);
-
-        volunteer.setDisponibilityDaysCurrent(disponibilityDays);
-
-        JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);
-
-        dataLayer.modify(newVolunteerJO, locInfo);
-
+        volUtil.addDisponibilityDate(firstPlanConfigured, name, formattedDate);
+        
         ioService.writeMessage("Data " + formattedDate + " aggiunta con successo come data di disponibilità", false);
     }
 
@@ -280,6 +276,11 @@ public class VolunteerService extends MainService<Void>{
         
         List<ConfirmedActivity> myActivities = getMyConfirmedActivities();
 
+        if(myActivities == null){
+            ioService.writeMessage("\nPiano mensile non ancora generato", false);
+            return;
+        }
+
         
         ioService.writeMessage(formatter.formatListConfirmedActivity(myActivities), false);
         ioService.writeMessage(SPACE,false);
@@ -291,6 +292,10 @@ public class VolunteerService extends MainService<Void>{
      */
     private List<ConfirmedActivity> getMyConfirmedActivities() {
         MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+        
+        if(monthlyPlan == null){
+            return null;
+        }
         
         List<ConfirmedActivity> myActivities = new ArrayList<>();
 

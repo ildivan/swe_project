@@ -16,7 +16,6 @@ import com.google.gson.JsonObject;
 import server.DateService;
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.firstleveldomainservices.Activity;
@@ -24,7 +23,9 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigse
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigService;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfigUpdater;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.PlanState;
+import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.precludedateservice.PrecludeDateService;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
+import server.firstleveldomainservices.volunteerservice.VMIOUtil;
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.jsonfactoryservice.IJsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
@@ -41,6 +42,7 @@ public class MonthlyPlanService {
     private transient ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory;
     private transient IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private MonthlyConfigService monthlyConfigService;
+    private VMIOUtil volUtil;
     private final ConfigsUtil configsUtil;
     private final ConfigType configType;
 
@@ -52,13 +54,14 @@ public class MonthlyPlanService {
         this.dataLayer = dataLayer;
         this.monthlyConfigService = new MonthlyConfigService(locInfoFactory, dataLayer);
         this.configsUtil = new ConfigsUtil(locInfoFactory, configType, dataLayer);
+        this.volUtil = new VMIOUtil(locInfoFactory, dataLayer);
 
     }
 
     public boolean buildMonthlyPlan() {
 
         boolean firstMonthlyPlan = checkIfFirstMonthlyPlan();
-        LocalDate today = dateService.getTodayDate();
+        LocalDate today = dateService.getTodayDate().withDayOfMonth(16);
 
         //permette di evitare race conditions durante la configurazione del piano mensile
         MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
@@ -68,7 +71,7 @@ public class MonthlyPlanService {
         mc = setIsBeingConfigured(mc, PlanState.DISPONIBILITA_APERTE, false);
         mc = setIsBeingConfigured(mc,PlanState.GENERAZIONE_PIANO, true);
 
-        MonthlyPlan monthlyPlan = new MonthlyPlan(today, locInfoFactory, monthlyConfigService);
+        MonthlyPlan monthlyPlan = new MonthlyPlan(today, locInfoFactory, monthlyConfigService, new PrecludeDateService(locInfoFactory, dataLayer), firstMonthlyPlan);
         MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today, locInfoFactory, dataLayer);
 
         JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
@@ -82,20 +85,18 @@ public class MonthlyPlanService {
 
         dataLayer.erase(monthlyPlanLocInfo);
         dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
-       
-        monthlyConfigManager.updateMonthlyConfigAfterPlan();
             
-        refreshVolunteers();
+        if(firstMonthlyPlan){
+            updateConfigAfterFirstPlanGenerated();
+        }
+
+        refreshData(monthlyConfigManager, today);
 
         //conclusione della generazine del piano, esco dalla sezione critica
         setIsBeingConfigured(mc, PlanState.GENERAZIONE_PIANO, false);
         setIsBeingConfigured(mc, PlanState.MODIFICHE_APERTE, true); //una volta generato il piano posso modificare le attività, entreranno in vigore dal mese successivo
 
-        if(firstMonthlyPlan){
-            updateConfigAfterFirstPlanGenerated();
-        }
-
-        refreshData();
+        
         return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
         //DA FARE
     }
@@ -103,11 +104,14 @@ public class MonthlyPlanService {
     /**
      * metodo per applicare le modifiche effettuate nel mese precedente
      */
-    private void refreshData() {
+    private void refreshData(MonthlyConfigUpdater monthlyConfigManager, LocalDate date) {
+        
+        monthlyConfigManager.updateMonthlyConfigAfterPlan();
         refreshChangedPlaces();
         refreshChangedActivities();
-        refreshChangedVolunteers();
         refreshUsers();
+        refreshVolunteers();
+        refreshPrecludeDates(date);
     }
 
     /**
@@ -141,25 +145,6 @@ public class MonthlyPlanService {
     }
 
     /**
-     * metodo di utilita a refreshData
-     * aggiorna le modifiche hai volontari
-     */
-    private void refreshChangedVolunteers() {
-        /* leggo il file con le modifiche, sovrascrivo quello in cui si legge 
-         * con il file modificato*/
-
-        Path locInfoWithChangesPath = Paths.get(locInfoFactory.getChangedVolunteersLocInfo().getPath());
-        Path locInfoToUpdatePath = Paths.get(locInfoFactory.getVolunteerLocInfo().getPath());
-
-        try {
-            Files.copy(locInfoWithChangesPath, locInfoToUpdatePath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * method to refresh users
      */
     private void refreshUsers() {
@@ -171,6 +156,10 @@ public class MonthlyPlanService {
                 JsonDataLocalizationInformation userLocInfo = locInfoFactory.getUserLocInfo();
                 userLocInfo.setKey(jsonObject.get("name").getAsString());
                 dataLayer.delete(userLocInfo);
+
+                if(jsonObject.get("role").getAsString().equalsIgnoreCase("volontario")){
+                    volUtil.deleteVolunteer(jsonObject.get("name").getAsString());
+                }
             }
 
             if(!jsonObject.get("active").getAsBoolean()){
@@ -183,6 +172,19 @@ public class MonthlyPlanService {
             }
         }
     }
+
+    /**
+     * method to refrehs preclude dates
+     */
+    private void refreshPrecludeDates(LocalDate dateOfPlan) {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getPrecludeDatesLocInfo();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = dateOfPlan.format(formatter);
+        locInfo.setKey(formattedDate);
+
+        dataLayer.delete(locInfo);
+    }
+
 
     /**
      * aggiorno i config indicando che il piano è stato generato la prima volta
@@ -279,6 +281,10 @@ public class MonthlyPlanService {
         locInfo.setKey(getMonthlyPlanDate());
         JsonObject mpJO = dataLayer.get(locInfo);
 
+        if(mpJO == null){
+            return null;
+        }
+
         return jsonFactoryService.createObject(mpJO, MonthlyPlan.class);
     }
 
@@ -350,6 +356,12 @@ public class MonthlyPlanService {
     }
 
     private DailyPlan getDailyPlan(LocalDate date) {
+        MonthlyPlan monthlyPlan = getMonthlyPlan();
+
+        if(monthlyPlan == null){
+            return null;
+        }
+        
         Map<LocalDate, DailyPlan> monthlyMap = getMonthlyPlan().getMonthlyPlan();
 
         if(monthlyMap.containsKey(date)) {

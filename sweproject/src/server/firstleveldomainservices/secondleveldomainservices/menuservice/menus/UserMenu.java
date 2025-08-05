@@ -16,7 +16,7 @@ public class UserMenu extends MenuManager{
         vociVisibili.put("Mostra Attività Confermata", true);
         vociVisibili.put("Mostra Attività Cancellata", true);
         vociVisibili.put("Mostra iscrizioni effettuate", true);
-        vociVisibili.put("Cancellazione iscrizione", true);
+        vociVisibili.put("Cancellazione", true);
         
         
         chiamateMetodi.put("Aggiungi iscrizione", userService::addSubscription);
@@ -24,7 +24,7 @@ public class UserMenu extends MenuManager{
         chiamateMetodi.put("Mostra Attività Confermata", () -> userService.showActivitiesWithCondition(ActivityState.CONFERMATA));
         chiamateMetodi.put("Mostra Attività Cancellata", () -> userService.showActivitiesWithCondition(ActivityState.CANCELLATA));
         chiamateMetodi.put("Mostra iscrizioni effettuate", userService::showSubscriptions);
-        chiamateMetodi.put("Cancellazione iscrizione", userService::deleteSubscription);
+        chiamateMetodi.put("Cancellazione", userService::deleteSubscription);
     }
 
     @Override

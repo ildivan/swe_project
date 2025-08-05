@@ -1,5 +1,10 @@
 package server.firstleveldomainservices.volunteerservice;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import com.google.gson.JsonObject;
+
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
@@ -24,7 +29,7 @@ public class VMIOUtil{
     }
 
     public boolean checkVolunteerExistance(String name){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
 
         return dataLayer.exists(locInfo);
@@ -36,7 +41,7 @@ public class VMIOUtil{
      * @return
      */
     public void addVolunteer(String name){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
 
         dataLayer.add(jsonFactoryService.createJson(new Volunteer(name)), locInfo);
@@ -60,11 +65,11 @@ public class VMIOUtil{
     }
 
     /**
-     * method to delete volunteer
+     * method to delete volunteer from the database
      * @param name
      */
     public void deleteVolunteer(String name){
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedVolunteersLocInfo();
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
         locInfo.setKey(name);
 
         dataLayer.delete(locInfo);
@@ -85,5 +90,53 @@ public class VMIOUtil{
         user.setIsDeleted(true);
 
         dataLayer.modify(jsonFactoryService.createJson(user),locInfo);
+    }
+
+    /**
+     * method used to deactivate volunteer
+     * @param name
+     */
+    public void deactivateVolunteer(String name) {
+       JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
+       locInfo.setKey(name);
+
+       User user = jsonFactoryService.createObject(dataLayer.get(locInfo), User.class);
+
+       user.setActive(false);
+
+       dataLayer.modify(jsonFactoryService.createJson(user), locInfo);
+    }
+
+    /**
+     * method to add disponibility date
+     * @param firstPlanConfigured
+     * @param name
+     */
+    public void addDisponibilityDate(boolean firstPlanConfigured, String name, String formattedDate){
+
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        locInfo.setKey(name);
+        JsonObject volunteerJO = dataLayer.get(locInfo);
+        Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
+        Set<String> disponibilityDays;
+
+        disponibilityDays = volunteer.getDisponibilityDaysCurrent();
+
+        if(disponibilityDays == null){
+            disponibilityDays = new LinkedHashSet<String>();
+        }
+        
+        disponibilityDays.add(formattedDate);
+
+        volunteer.setDisponibilityDaysCurrent(disponibilityDays);
+
+        saveVolunteer(volunteer, locInfo);
+
+    }
+
+    private void saveVolunteer(Volunteer volunteer, JsonDataLocalizationInformation locInfo){
+        JsonObject newVolunteerJO = jsonFactoryService.createJson(volunteer);
+
+        dataLayer.modify(newVolunteerJO, locInfo);
     }
 }

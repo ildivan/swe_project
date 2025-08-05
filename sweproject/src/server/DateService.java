@@ -4,7 +4,6 @@ import java.time.*;
 
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 
-
 public class DateService {
 
     public LocalDate getTodayDate(){
@@ -27,82 +26,60 @@ public class DateService {
         return !target.isBefore(start) && !target.isAfter(end);
     }
 
-    /*
-     * setta l'anno in base al giorno
+    /**
+     * ottengo l'anno in base al mese e l'anno in cui sto ottenendo i dati
+     * poiche inserisco nel mese i+3 controllo se sono in ottobre novembre o dicembre
+     * @param month mese in cui sto inserendo la data
+     * @return inf needs to be incremented 
      */
-    public int setYearOnPrecludeDay(MonthlyConfig mc, int day) {
-        int year = mc.getMonthAndYear().getYear();
-
-        if(day>=17 && day<=31){
-            return year;
-        }else{
-            if( mc.getMonthAndYear().getMonthValue() == 12){
-                return year +1;
-            }
-            return year;
+    public boolean setYearOnPrecludeDay(int month) {
+        if(month == 10 || month == 11 || month == 12){
+            return true;
         }
+
+        return false;
     }
 
-    /*
-     * asssegna al giorno il mese,
-     * da 17 a 31 assegna il mese dello sviluppo del piano
-     * da 1 a 16 assegna il mese successivo
+    /**
+     * ottengo l'anno in base al mese e l'anno in cui sto ottenendo i dati
+     * poiche inserisco nel mese i+2 controllo se sono in novembre o dicembre
+     * @param month mese in cui sto inserendo la data
+     * @param firstPlanConfigured
+     * @return inf needs to be incremented 
      */
-    public int setMonthOnPrecludeDay(MonthlyConfig mc, int day) {
-        int monthOfPlan = mc.getMonthAndYear().getMonthValue();
-        
-        if(day>=17 && day<=31){
-            return monthOfPlan;
-        }else{
-            if(monthOfPlan == 12){
-                return 1;
-            }
-            return monthOfPlan+1;
-        }
-    }
-
-    /*
-     * setta l'anno in base al giorno per il volontario
-     */
-    public int setYearOnPrecludeDayVolunteer(MonthlyConfig mc, int day) {
-        int year = mc.getMonthAndYear().getYear();
-        int month = mc.getMonthAndYear().getMonthValue();
-
-        if(day>=17 && day<=31){
+    public boolean incrementYearOnDisponibilityDayVolunteer(int month, boolean firstPlanConfigured) {
+        if(!firstPlanConfigured){
             if(month == 12){
-                return year+1;
+                return true;
             }
-            return year;
         }else{
             if(month == 11 || month == 12){
-                return year +1;
+                return true;
             }
-            return year;
         }
+            
+            return false;
     }
 
-    /*
-     * asssegna al giorno il mese per il volontario
-     * da 17 a 31 assegna il mese dello sviluppo del piano
-     * da 1 a 16 assegna il mese successivo
+     /**
+     * ottengo l'anno in base al mese e l'anno in cui sto ottenendo i dati
+     * poiche inserisco nel mese i+3 controllo se sono in novembre o dicembre
+     * @param month mese in cui sto inserendo la data
+     * @param firstPlanConfigured
+     * @return inf needs to be incremented 
      */
-    public int setMonthOnPrecludeDayVolunteer(MonthlyConfig mc, int day) {
-        int monthOfPlan = mc.getMonthAndYear().getMonthValue();
-        
-        if(day>=17 && day<=31){
-            if(monthOfPlan == 12){
-                return 1;
+    public boolean incrementYearOnPrecludeDay(int month, boolean firstPlanConfigured) {
+        if(!firstPlanConfigured){
+            if(month == 11 || month == 12){
+                return true;
             }
-            return monthOfPlan+1;
         }else{
-            if(monthOfPlan == 11){
-                return 1;
+            if(month==10 || month == 11 || month == 12){
+                return true;
             }
-            if(monthOfPlan == 12){
-                return 2;
-            }
-            return monthOfPlan+2;
         }
+            
+            return false;
     }
 
     /**
@@ -141,5 +118,21 @@ public class DateService {
             }
             return year;
         }
+    }
+
+    /**
+     * metodo per ottenre il massimo numero del giorno
+     * @param mc
+     * @param numberOfMonthToIncrement
+     */
+    public int getMaxNumDay(MonthlyConfig mc, int numberOfMonthToIncrement) {
+        Month month = mc.getMonthAndYear().getMonth();
+        Month nextMonth = month.plus(numberOfMonthToIncrement);
+        int year = mc.getMonthAndYear().getYear();
+
+        boolean isLeapYear = YearMonth.of(year, 1).isLeapYear();
+
+        return nextMonth.length(isLeapYear);
+
     }
 }

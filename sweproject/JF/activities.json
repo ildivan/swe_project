@@ -176,31 +176,6 @@
       ]
     },
     {
-      "placeName": "Teatro Grande",
-      "title": "Spettacolo Teatrale al Teatro Grande",
-      "description": "Un'esperienza immersiva con uno spettacolo teatrale all'interno del famoso teatro di Brescia.",
-      "meetingPoint": {
-        "street": "Piazza Cesare Beccaria",
-        "city": "Brescia",
-        "state": "Italia",
-        "zipCode": "25121"
-      },
-      "firstProgrammableDate": "10-05-2025",
-      "lastProgrammableDate": "30-09-2025",
-      "programmableDays": [
-        "Venerdi",
-        "Domenica"
-      ],
-      "programmableHour": "20:30",
-      "duration": "02:00",
-      "bigliettoNecessario": true,
-      "maxPartecipanti": 100,
-      "minPartecipanti": 5,
-      "volunteers": [
-        "Riccardo"
-      ]
-    },
-    {
       "placeName": "Lago di Garda",
       "title": "Escursione al Lago di Garda",
       "description": "Partecipa a una passeggiata panoramica lungo il Lago di Garda, godendo della bellezza naturale del lago.",
@@ -325,32 +300,6 @@
       "minPartecipanti": 5,
       "volunteers": [
         "Nadia"
-      ]
-    },
-    {
-      "placeName": "Tempio Capitolino",
-      "title": "Alla Scoperta del Tempio Capitolino",
-      "description": "Un tour approfondito tra le rovine del Tempio Capitolino, sito UNESCO che racconta la Brescia romana.",
-      "meetingPoint": {
-        "street": "Via dei Musei, 57",
-        "city": "Brescia",
-        "state": "Italia",
-        "zipCode": "25121"
-      },
-      "firstProgrammableDate": "08-04-2025",
-      "lastProgrammableDate": "30-09-2025",
-      "programmableDays": [
-        "Martedi",
-        "Giovedi",
-        "Sabato"
-      ],
-      "programmableHour": "09:30",
-      "duration": "01:30",
-      "bigliettoNecessario": true,
-      "maxPartecipanti": 20,
-      "minPartecipanti": 5,
-      "volunteers": [
-        "Erica"
       ]
     },
     {
@@ -834,31 +783,6 @@
       ]
     },
     {
-      "placeName": "Teatro Grande",
-      "title": "Spettacolo Teatrale al Teatro Grande",
-      "description": "Un'esperienza immersiva in uno spettacolo teatrale all'interno di uno dei teatri più importanti di Brescia.",
-      "meetingPoint": {
-        "street": "Piazza Cesare Beccaria",
-        "city": "Brescia",
-        "state": "Italia",
-        "zipCode": "25121"
-      },
-      "firstProgrammableDate": "10-04-2025",
-      "lastProgrammableDate": "30-09-2025",
-      "programmableDays": [
-        "Venerdi",
-        "Domenica"
-      ],
-      "programmableHour": "20:00",
-      "duration": "02:30",
-      "bigliettoNecessario": true,
-      "maxPartecipanti": 100,
-      "minPartecipanti": 5,
-      "volunteers": [
-        "Nadia"
-      ]
-    },
-    {
       "placeName": "Duomo Nuovo",
       "title": "Visita Guidata al Duomo Nuovo",
       "description": "Scopri la storia e l'architettura del Duomo Nuovo, una delle chiese più imponenti della città.",
@@ -881,31 +805,6 @@
       "minPartecipanti": 5,
       "volunteers": [
         "Riccardo"
-      ]
-    },
-    {
-      "placeName": "Pinacoteca Tosio Martinengo",
-      "title": "Tour Artistico alla Pinacoteca",
-      "description": "Ammira le opere di grandi maestri del Rinascimento in un tour guidato attraverso la Pinacoteca.",
-      "meetingPoint": {
-        "street": "Piazza Moretto, 4",
-        "city": "Brescia",
-        "state": "Italia",
-        "zipCode": "25121"
-      },
-      "firstProgrammableDate": "16-04-2025",
-      "lastProgrammableDate": "30-09-2025",
-      "programmableDays": [
-        "Mercoledi",
-        "Venerdi"
-      ],
-      "programmableHour": "14:00",
-      "duration": "02:00",
-      "bigliettoNecessario": true,
-      "maxPartecipanti": 20,
-      "minPartecipanti": 5,
-      "volunteers": [
-        "Erica"
       ]
     },
     {

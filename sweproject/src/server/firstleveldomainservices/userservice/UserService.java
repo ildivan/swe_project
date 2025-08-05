@@ -82,6 +82,11 @@ public class UserService extends MainService<Void> {
     public void showActivitiesWithCondition(ActivityState desiredState) {
         
         List<ActivityRecord> result = activityUtil.getActiviyByState(desiredState);
+
+        if(result == null){
+            ioService.writeMessage("\nPiano mensile non ancora creato", false);
+            return;
+        }
     
         ioService.writeMessage(formatter.formatListActivityRecord(result), false);
         ioService.writeMessage(SPACE,false);
@@ -90,14 +95,15 @@ public class UserService extends MainService<Void> {
     /**
      * metotodo per visualizzare le iscrizioni effettuate dall'utente
      */
-    public void showSubscriptions(){
+    public boolean showSubscriptions(){
         Set<Subscription> subscriptions = subscriptionService.getSubscriptionsForUser();
         if(subscriptions.isEmpty()){
             ioService.writeMessage("Non hai sottoscrizioni attive.", false);
-            return;
+            return false;
         }
         ioService.writeMessage(formatter.formatListSubscription(subscriptions), false);
         ioService.writeMessage(SPACE,false);
+        return true;
     }
 
     /**
@@ -106,7 +112,9 @@ public class UserService extends MainService<Void> {
     public void deleteSubscription() {
         int subCode;
         ioService.writeMessage("\n\nIscrizioni effettuate:\n", false);
-        showSubscriptions();
+        if(!showSubscriptions()){
+            return;
+        }
         subCode = getSubCode();
         subscriptionService.deleteSubscription(subCode);
     }

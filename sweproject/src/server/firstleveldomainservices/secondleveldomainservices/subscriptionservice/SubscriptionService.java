@@ -60,7 +60,7 @@ public class SubscriptionService {
 
         DailyPlan dailyPlan = monthlyPlanService.getDailyPlanOfTheChosenDay(day);
         if(dailyPlan == null) {
-            ioService.writeMessage("Impossibile trovare attività per la data selezionata per la data selezionata.", false);
+            ioService.writeMessage("Impossibile trovare attività per la data selezionata.", false);
             return;
         }
 
@@ -86,7 +86,7 @@ public class SubscriptionService {
         int subscriptionCode = monthlyConfigService.getCurrentSubCode();
         int numberOfSubscriptions = ioService.readIntegerWithMinMax("\nInserisci il numero di iscrizioni: ",1,getMaxNumberOfSubscriptions());
 
-        if(checkIfCanSubscribeEveryone(numberOfSubscriptions,activityName, activityInfo)){
+        if(!checkIfCanSubscribeEveryone(numberOfSubscriptions,activityName, activityInfo)){
             ioService.writeMessage("Impossibile iscriversi a questa visita: MASSIMO NUMERO DI ISCRITTI SUPERATO", false);
             return;
         }
@@ -303,6 +303,7 @@ public class SubscriptionService {
 
         if(!(activityInfo.getState()==ActivityState.PROPOSTA)){
             ioService.writeMessage(String.format("Impossibile eliminare iscrizione a questa visita:\nMotivo: %s",getErrorMessagebaseOnState(activityInfo)), false);
+            return;
         }
 
         if (subscription != null) {

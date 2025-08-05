@@ -29,7 +29,9 @@ public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationI
     private static final String SUBSCRIPTION_MEMBER_NAME = "activitySubscription";
     private static final String CHANGED_ACTIVITY_PATH = "sweproject/JF/changedActivities.json";
     private static final String CHANGED_PLACES_PATH = "sweproject/JF/changedPlaces.json";
-    private static final String CHANGED_VOLUNTEER_PATH = "sweproject/JF/changedVolunteers.json";
+    private static final String PRECLUDE_DATES_PATH = "sweproject/JF/precludeDates.json";
+    private static final String PRECLUDE_DATES_PATH_MEMBER_NAME = "precludeDates";
+    private static final String PRECLUDE_DATES_PATH_KEY_DESC = "dateOfPlan";
 
 
     /**
@@ -162,12 +164,12 @@ public class JsonLocInfoFactory implements ILocInfoFactory<JsonDataLocalizationI
     }
 
     @Override
-    public JsonDataLocalizationInformation getChangedVolunteersLocInfo() {
-        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
-        locInfo.setPath(CHANGED_VOLUNTEER_PATH);
-        locInfo.setMemberName(VOLUNTEER_MEMBER_NAME);
-        locInfo.setKeyDesc(VOLUNTEER_KEY_DESC);
-        return locInfo;
+    public JsonDataLocalizationInformation getPrecludeDatesLocInfo() {
+       JsonDataLocalizationInformation localizationInformation = new JsonDataLocalizationInformation();
+       localizationInformation.setPath(PRECLUDE_DATES_PATH);
+       localizationInformation.setMemberName(PRECLUDE_DATES_PATH_MEMBER_NAME);
+       localizationInformation.setKeyDesc(PRECLUDE_DATES_PATH_KEY_DESC);
+       return localizationInformation;
     }
     
 }

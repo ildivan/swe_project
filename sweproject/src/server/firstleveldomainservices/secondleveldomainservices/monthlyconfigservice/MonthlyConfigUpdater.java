@@ -32,26 +32,11 @@ public class MonthlyConfigUpdater {
 
     public void updateMonthlyConfigAfterPlan() {
 
-        //clear the precluded dates
-        clearPrecludedDates();
-
         //increment month of plan
         incrementMonthOfPlan();
 
         //set the plan build flag as true
         setPlanBuildFlagAsTrue();
-    }
-
-    /**
-     * clear the preclude dates in the config of the monthly plan
-     */
-    private void clearPrecludedDates() {
-        
-        mc.setPrecludeDates(new HashSet<>());
-
-
-        monthlyConfigService.saveMonthlyConfig(mc);
-
     }
 
     /**

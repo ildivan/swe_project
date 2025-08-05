@@ -3,10 +3,12 @@ package server.demonservices.demons;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.google.gson.JsonObject;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.demonservices.IDemon;
@@ -46,7 +48,7 @@ public class MonthlyPlanDemon implements IDemon{
         while (true) {
             try {
                 tick();
-                Thread.sleep(1000); 
+                Thread.sleep(5000); 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 break;
@@ -76,28 +78,36 @@ public class MonthlyPlanDemon implements IDemon{
      */
     private MonthlyPlan checkActivities(MonthlyPlan monthlyPlan) {
         Map<LocalDate, DailyPlan> monthlyPlanMap = monthlyPlan.getMonthlyPlan();
-        for(Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlanMap.entrySet()) {
+
+        for (Map.Entry<LocalDate, DailyPlan> dailyEntry : monthlyPlanMap.entrySet()) {
             LocalDate date = dailyEntry.getKey();
             DailyPlan dailyPlan = dailyEntry.getValue();
             Map<String, ActivityInfo> activityMap = dailyPlan.getPlan();
-    
+
+            Map<String, ActivityInfo> updates = new HashMap<>();
+            List<String> removals = new ArrayList<>();
+
             for (Map.Entry<String, ActivityInfo> activityEntry : activityMap.entrySet()) {
                 String activityName = activityEntry.getKey();
                 Activity activity = getActivity(activityName);
                 ActivityInfo activityInfo = activityEntry.getValue();
 
-                //eseguo i controlli
-                if(needsToBeDeleted(activityInfo,activity, date)){
-                    //se è da eliminare la elimino definitivamente, una volta superato
-                    //il giorno della sua teorica esecuzione
-                    activityMap.remove(activityName);
-                }else{
-                    //altrimenti eseguo gli altri controlli
-                    activityInfo = checkActivityState(activityInfo,activity, date);
-
-                    activityMap.put(activityName, activityInfo);
+                if (needsToBeDeleted(activityInfo, activity, date)) {
+                    removals.add(activityName); 
+                } else {
+                    ActivityInfo updatedInfo = checkActivityState(activityInfo, activity, date);
+                    updates.put(activityName, updatedInfo);
                 }
-            
+            }
+
+            // rimuovo per evitare race conditions lo faccio dopo
+            for (String activityName : removals) {
+                activityMap.remove(activityName);
+            }
+
+            // aggiorno dopo per evitare race conditions
+            for (Map.Entry<String, ActivityInfo> update : updates.entrySet()) {
+                activityMap.put(update.getKey(), update.getValue());
             }
 
             dailyPlan.setPlan(activityMap);
@@ -106,6 +116,7 @@ public class MonthlyPlanDemon implements IDemon{
 
         return monthlyPlan;
     }
+
 
     /**
      * metodo per controllare se una visita è definitivamente da eliminare
@@ -136,12 +147,16 @@ public class MonthlyPlanDemon implements IDemon{
         }
 
         //controllo se è possibile confermarla, altimenti elimino
-        if(checkIfActivitiesNeedToBeConfirmed(activityInfo, activity, date)){
-            //se posso confermarla la confermo
-            activityInfo.setState(ActivityState.CONFERMATA);
-        }else{
-            //altrimenti la elimino
-            activityInfo.setState(ActivityState.CANCELLATA);
+        if(isTimeToCheckActivityConfirmation(date)){
+
+            if(checkIfActivityCanBeConfirmed(activityInfo, activity, date)){
+                //se posso confermarla la confermo
+                activityInfo.setState(ActivityState.CONFERMATA);
+            }else{
+                //altrimenti la elimino
+                activityInfo.setState(ActivityState.CANCELLATA);
+            }
+            
         }
 
         //controllo se è eseguita
@@ -173,11 +188,9 @@ public class MonthlyPlanDemon implements IDemon{
      * @param activity
      * @return
      */
-    private boolean checkIfActivitiesNeedToBeConfirmed(ActivityInfo activityInfo, Activity activity, LocalDate date) {
-        if(isTimeToCheckActivityConfirmation(date)){
-            if(minNumberOfSubsReached(activityInfo, activity) && isVolunteerAvailable(activity, date)){
-                return true;
-            }
+    private boolean checkIfActivityCanBeConfirmed(ActivityInfo activityInfo, Activity activity, LocalDate date) {
+        if(minNumberOfSubsReached(activityInfo, activity) && isVolunteerAvailable(activity, date)){
+            return true;
         }
         return false;
     }
