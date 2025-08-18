@@ -199,6 +199,7 @@ public class ActivityUtil{
         return str != null && str.matches("\\d+");
     }
 
+
     /**
      * method to read a day from the user, until he stops
      * @param message
@@ -206,20 +207,32 @@ public class ActivityUtil{
      */
     public String[] insertDays() {
         IInputOutput ioService = getIOService();
-        
+
         List<String> days = new ArrayList<>();
 
         boolean cont = true;
         while (cont) {
-          
-            String day = ioService.readString("Inserisci un giorno della settimana in cui la visita si può programmare (es Lunedi): ");
-            day = day.replace('ì', 'i');
+            String day;
+            while (true) {
+                day = ioService.readString("Inserisci un giorno della settimana in cui la visita si può programmare (es. Lunedì): ");
+                day = day.replace('ì', 'i');
+
+                // Controlla che la stringa abbia la prima lettera maiuscola e le altre minuscole
+                if (day.matches("Lunedi|Martedi|Mercoledi|Giovedi|Venerdi|Sabato|Domenica")) {
+                    break;
+                } else {
+                    ioService.writeMessage("Formato errato. Inserisci il giorno con la prima lettera maiuscola e le altre minuscole (es. Lunedì).", false);
+                }
+            }
+
             days.add(day);
+
             String answer = ioService.readString("Vuoi inserire un altro giorno? (s/n): ");
             if (!answer.equalsIgnoreCase("s")) {
                 cont = false;
             }
         }
+
         return days.toArray(new String[0]);
     }
 
