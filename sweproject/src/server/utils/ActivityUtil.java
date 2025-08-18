@@ -76,9 +76,20 @@ public class ActivityUtil{
         boolean finished = true;
         List<String> out = new ArrayList<>();
         do{
+            boolean end;
+            String name;
+            do{
+                end = false;
+                name = choseVolunteer();
+                if(name == null){
+                    ioService.writeMessage("volontario inesistente, riprovare", false);
+                }else{
+                    end = true;
+                }
+            }while(!end);
 
-            String name = choseVolunteer();
             out.add(name);
+            
             String continuare = ioService.readString("Inserire altro volontario? (y si altro no)");
             if(!continuare.equalsIgnoreCase("y")){
                 finished=false;
@@ -90,16 +101,11 @@ public class ActivityUtil{
     
     private String choseVolunteer() {
        IInputOutput ioService = getIOService();
-       boolean finished = false;
        String name;
-       do{
             name = ioService.readString("Inserire volontario nell'attività");
             if(!data.getVolunteersFacade().doesVolunteerExist(name)){
-                ioService.writeMessage("Volontario inesistente, riprovare",false);
-            }else{
-                finished = true;
+                return null;
             }
-        }while(!finished);
 
         return name;
     }
