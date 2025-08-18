@@ -6,7 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.JsonObject;
+
+import lock.MonthlyPlanLockManager;
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
@@ -55,54 +59,76 @@ public class SubscriptionService {
      * metodo per aggiungere una iscrizione
      */
     public void addSubscription() {
+        boolean locked = false;
+        try {
+            // Provo a prendere il lock, aspetto massimo 2 secondi
+            locked = MonthlyPlanLockManager.tryLock(2, TimeUnit.SECONDS);
+            if (!locked) {
+                ioService.writeMessage("Sistema occupato. Riprova tra qualche secondo: il demone è in esecuzione.", false);
+                return;
+            }
 
-        int day = ioService.readIntegerWithMinMax("Inserisci il giorno per la sottoscrizione (1-31): ",1,31);
+            int day = ioService.readIntegerWithMinMax("Inserisci il giorno per la sottoscrizione (1-31): ", 1, 31);
 
-        DailyPlan dailyPlan = monthlyPlanService.getDailyPlanOfTheChosenDay(day);
-        if(dailyPlan == null) {
-            ioService.writeMessage("Impossibile trovare attività per la data selezionata.", false);
-            return;
+            DailyPlan dailyPlan = monthlyPlanService.getDailyPlanOfTheChosenDay(day);
+            if (dailyPlan == null) {
+                ioService.writeMessage("Impossibile trovare attività per la data selezionata.", false);
+                return;
+            }
+
+            String activityName = choseActivity(day, dailyPlan); 
+            ActivityInfo activityInfo = getActInfoOfTheChosenActivity(dailyPlan, activityName);
+
+            if (activityInfo == null) {
+                return;
+            }
+
+            if (activityInfo.getState() != ActivityState.PROPOSTA) {
+                ioService.writeMessage(String.format("Impossibile iscriversi a questa visita:\nMotivo: %s", getErrorMessagebaseOnState(activityInfo)), false);
+                return;
+            }
+
+            if (!isInTimeToSubscribe(activityInfo, dailyPlan.getDate())) {
+                ioService.writeMessage("Impossibile iscriversi a questa visita: SUPERATA LA DATA DI TERMINE DELLE ISCRIZIONI", false);
+                return;
+            }
+
+            String userName = user.getName();
+            int subscriptionCode = monthlyConfigService.getCurrentSubCode();
+            int numberOfSubscriptions = ioService.readIntegerWithMinMax("\nInserisci il numero di iscrizioni: ", 1, getMaxNumberOfSubscriptions());
+
+            if (!checkIfCanSubscribeEveryone(numberOfSubscriptions, activityName, activityInfo)) {
+                ioService.writeMessage("Impossibile iscriversi a questa visita: MASSIMO NUMERO DI ISCRITTI SUPERATO", false);
+                return;
+            }
+
+            Subscription subscription = new Subscription(
+                userName,
+                numberOfSubscriptions,
+                activityName,
+                subscriptionCode,
+                LocalDate.now(),
+                monthlyPlanService.getFullDateOfChosenDay(day)
+            );
+
+            DailyPlan updatedDailyPlan = updateDailyPlan(dailyPlan, activityInfo, subscription, subscriptionCode, activityName);
+            LocalDate dateOfSubscription = dailyPlan.getDate();
+
+            saveSubscription(subscription);
+            monthlyPlanService.updateMonthlyPlan(dateOfSubscription, updatedDailyPlan);
+
+            ioService.writeMessage("Sottoscrizione aggiunta con successo!", false);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            ioService.writeMessage("Operazione interrotta.", false);
+        } finally {
+            if (locked && MonthlyPlanLockManager.isHeldByCurrentThread()) {
+                MonthlyPlanLockManager.unlock();
+            }
         }
-
-        String activityName  = choseActivity(day, dailyPlan); 
-
-        ActivityInfo activityInfo = getActInfoOfTheChosenActivity(dailyPlan, activityName);
-
-        if(activityInfo == null) {
-            return;
-        }
-
-        if(!(activityInfo.getState()==ActivityState.PROPOSTA)){
-            ioService.writeMessage(String.format("Impossibile iscriversi a questa visita:\nMotivo: %s",getErrorMessagebaseOnState(activityInfo)), false);
-            return;
-        }
-
-        if(!isInTimeToSubscribe(activityInfo, dailyPlan.getDate())){
-            ioService.writeMessage(String.format("Impossibile iscriversi a questa visita: SUPERATA LA DATA DI TERMINE DELLE ISCRIZIONI",getErrorMessagebaseOnState(activityInfo)), false);
-            return;
-        }
-
-        String userName = user.getName();
-        int subscriptionCode = monthlyConfigService.getCurrentSubCode();
-        int numberOfSubscriptions = ioService.readIntegerWithMinMax("\nInserisci il numero di iscrizioni: ",1,getMaxNumberOfSubscriptions());
-
-        if(!checkIfCanSubscribeEveryone(numberOfSubscriptions,activityName, activityInfo)){
-            ioService.writeMessage("Impossibile iscriversi a questa visita: MASSIMO NUMERO DI ISCRITTI SUPERATO", false);
-            return;
-        }
-
-        Subscription subscription = new Subscription(userName, numberOfSubscriptions, activityName, subscriptionCode, LocalDate.now(), monthlyPlanService.getFullDateOfChosenDay(day));
-
-        DailyPlan updatedDailyPlan = updateDailyPlan(dailyPlan, activityInfo, subscription, subscriptionCode, activityName);
-    
-        LocalDate dateOfSubscription = dailyPlan.getDate(); //ottengo la data del piano giornaliero a cui mi sto iscrivendo
-        //cosi da poter aggiurnare il piano mensile
-        
-        saveSubscription(subscription);
-        monthlyPlanService.updateMonthlyPlan(dateOfSubscription, updatedDailyPlan);
-
-        ioService.writeMessage("Sottoscrizione aggiunta con successo!", false);
     }
+
 
     /**
      * metodo che controlla se sono in tempo per iscrivermi

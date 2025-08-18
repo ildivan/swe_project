@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.JsonObject;
+
+import lock.MonthlyPlanLockManager;
 import server.datalayerservice.datalayers.IDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
@@ -34,6 +38,8 @@ public class MonthlyPlanDemon implements IDemon{
     private IDataLayer<JsonDataLocalizationInformation> dataLayer;
     private MonthlyPlanService monthlyPlanService;
     private MonthlyConfigService monthlyConfigService;
+    private Map<String, Activity> activities;
+    private Map<String, Volunteer> volunteers;
 
     public MonthlyPlanDemon(ILocInfoFactory<JsonDataLocalizationInformation> locInfoFactory, 
     ConfigType configType, IDataLayer<JsonDataLocalizationInformation> dataLayer) {
@@ -56,19 +62,68 @@ public class MonthlyPlanDemon implements IDemon{
         }
     }
 
+
     @Override
     public void tick() {
-       MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+        boolean lockAcquired = false;
+        try {
+            lockAcquired = MonthlyPlanLockManager.tryLock(2, TimeUnit.SECONDS);
 
-       if(monthlyPlan == null){
-        return;
-       }
+            if (!lockAcquired) {
+                System.out.println("Demone: impossibile acquisire il lock, operazione saltata.");
+                return;
+            }
 
-       checkIfActivitiesNeedToBeArchived(monthlyPlan);
-       monthlyPlan = checkActivities(monthlyPlan);
-       
-       //salvo i cambiamenti
-       monthlyPlanService.refreshMonthlyPlan(monthlyPlan);
+            MonthlyPlan monthlyPlan = monthlyPlanService.getMonthlyPlan();
+            if (monthlyPlan == null) return;
+
+            activities = readAllActivities();
+            volunteers = readAllVolunteers();
+
+            checkIfActivitiesNeedToBeArchived(monthlyPlan);
+            monthlyPlan = checkActivities(monthlyPlan);
+
+            monthlyPlanService.refreshMonthlyPlan(monthlyPlan);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Demone interrotto durante l’attesa del lock.");
+        } finally {
+            if (lockAcquired && MonthlyPlanLockManager.isHeldByCurrentThread()) {
+                MonthlyPlanLockManager.unlock();
+            }
+        }
+    }
+
+
+    /**
+     * method to read activities data to avoid logical race condition while refreshing data afther monthlyplan generation
+     * @return
+     */
+    private Map<String, Activity> readAllActivities() {
+        //leggo dal file non modificato ovviamente, in quanto il piano attuale si basa su di esso
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+        Map<String, Activity> map = new HashMap<>();
+        for (JsonObject jo : dataLayer.getAll(locInfo)) {
+            Activity a = jsonFactoryService.createObject(jo, Activity.class);
+            map.put(a.getTitle(), a);
+        }
+        return map;
+    }
+
+
+    /**
+     * method to read volunteers info to avoid logical race condition while refreshing data afther monthlyplan generation
+     * @return
+     */
+    private Map<String, Volunteer> readAllVolunteers() {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
+        Map<String, Volunteer> map = new HashMap<>();
+        for (JsonObject jo : dataLayer.getAll(locInfo)) {
+            Volunteer v = jsonFactoryService.createObject(jo, Volunteer.class);
+            map.put(v.getName(), v);
+        }
+        return map;
     }
 
 
@@ -92,7 +147,7 @@ public class MonthlyPlanDemon implements IDemon{
                 Activity activity = getActivity(activityName);
                 ActivityInfo activityInfo = activityEntry.getValue();
 
-                if (needsToBeDeleted(activityInfo, activity, date)) {
+                if(needsToBeDeleted(activityInfo, date)) {
                     removals.add(activityName); 
                 } else {
                     ActivityInfo updatedInfo = checkActivityState(activityInfo, activity, date);
@@ -121,11 +176,10 @@ public class MonthlyPlanDemon implements IDemon{
     /**
      * metodo per controllare se una visita è definitivamente da eliminare
      * @param activityInfo
-     * @param activity
      * @param dateOfActivity
      * @return
      */
-    private boolean needsToBeDeleted(ActivityInfo activityInfo, Activity activity, LocalDate dateOfActivity) {
+    private boolean needsToBeDeleted(ActivityInfo activityInfo, LocalDate dateOfActivity) {
         if((activityInfo.getState() == ActivityState.CANCELLATA) && ((ChronoUnit.DAYS.between(LocalDate.now(), dateOfActivity))<0)){
             return true;
         }
@@ -142,8 +196,11 @@ public class MonthlyPlanDemon implements IDemon{
         if(checkIfActivitiesHaveMaxNumberOfSubscriptions(activityInfo, activity)){
             activityInfo.setState(ActivityState.COMPLETA);
         }else{
-            //faccio cosi perche se qualcuno disdice almeno torna proposta
-            activityInfo.setState(ActivityState.PROPOSTA);
+            if(!(ChronoUnit.DAYS.between(LocalDate.now(), date)<=0)){
+                //faccio cosi perche se qualcuno disdice almeno torna proposta
+                activityInfo.setState(ActivityState.PROPOSTA);
+            }
+            
         }
 
         //controllo se è possibile confermarla, altimenti elimino
@@ -204,31 +261,21 @@ public class MonthlyPlanDemon implements IDemon{
      * @return
      */
     private boolean isVolunteerAvailable (Activity activity, LocalDate dateOfActivity) {
-        String [] volunteers = activity.getVolunteers();
-       
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getVolunteerLocInfo();
-        
-        for (String name : volunteers) {
+        String[] names = activity.getVolunteers();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = dateOfActivity.format(formatter);
 
-            locInfo.setKey(name);
-
-            JsonObject volunteerJO = dataLayer.get(locInfo);
-            Volunteer volunteer = jsonFactoryService.createObject(volunteerJO, Volunteer.class);
-
-            if(volunteer.getDisponibilityDaysOld()==null || volunteer.getDisponibilityDaysOld().isEmpty()){
-                return false; 
-            }
+        for (String name : names) {
+            Volunteer volunteer = volunteers.get(name);
+            if (volunteer == null || volunteer.getDisponibilityDaysOld() == null) continue;
 
             for (String d : volunteer.getDisponibilityDaysOld()) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                String formattedDate = dateOfActivity.format(formatter);
-
-                if(d.equalsIgnoreCase(formattedDate.toString())){
+                if (d.equalsIgnoreCase(formattedDate)) {
                     return true;
                 }
             }
-
         }
+
         return false;
     }
 
@@ -297,9 +344,7 @@ public class MonthlyPlanDemon implements IDemon{
      * @return
      */
     private Activity getActivity(String name) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-        locInfo.setKey(name);
-        return jsonFactoryService.createObject(dataLayer.get(locInfo), Activity.class);
+        return activities.get(name);
     }
 
 

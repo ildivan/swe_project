@@ -12,7 +12,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.JsonObject;
+
+import lock.MonthlyPlanLockManager;
 import server.DateService;
 import server.authservice.User;
 import server.datalayerservice.datalayers.IDataLayer;
@@ -59,47 +63,66 @@ public class MonthlyPlanService {
     }
 
     public boolean buildMonthlyPlan() {
+        boolean lockAcquired = false;
+        try {
+            // Provo ad acquisire il lock entro 2 secondi
+            lockAcquired = MonthlyPlanLockManager.tryLock(2, TimeUnit.SECONDS);
 
-        boolean firstMonthlyPlan = checkIfFirstMonthlyPlan();
-        LocalDate today = dateService.getTodayDate().withDayOfMonth(16);
+            if (!lockAcquired) {
+                System.out.println("Impossibile generare il piano mensile: risorsa già in uso.");
+                return false;
+            }
 
-        //permette di evitare race conditions durante la configurazione del piano mensile
-        MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+            boolean firstMonthlyPlan = checkIfFirstMonthlyPlan();
+            LocalDate today = dateService.getTodayDate().withDayOfMonth(16);
 
+            // Evita race condition modificando lo stato del piano in configurazione
+            MonthlyConfig mc = monthlyConfigService.getMonthlyConfig();
+            mc = setIsBeingConfigured(mc, PlanState.DISPONIBILITA_APERTE, false);
+            mc = setIsBeingConfigured(mc, PlanState.GENERAZIONE_PIANO, true);
 
-        // si potrebbe fare un metodo nel maager che fa questi, ma non credo sia necessatio
-        mc = setIsBeingConfigured(mc, PlanState.DISPONIBILITA_APERTE, false);
-        mc = setIsBeingConfigured(mc,PlanState.GENERAZIONE_PIANO, true);
+            MonthlyPlan monthlyPlan = new MonthlyPlan(
+                today, locInfoFactory, monthlyConfigService,
+                new PrecludeDateService(locInfoFactory, dataLayer),
+                firstMonthlyPlan
+            );
 
-        MonthlyPlan monthlyPlan = new MonthlyPlan(today, locInfoFactory, monthlyConfigService, new PrecludeDateService(locInfoFactory, dataLayer), firstMonthlyPlan);
-        MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today, locInfoFactory, dataLayer);
+            MonthlyConfigUpdater monthlyConfigManager = new MonthlyConfigUpdater(mc, today, locInfoFactory, dataLayer);
 
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
-    
-        List<JsonObject> activityJO = dataLayer.getAll(locInfo);
-        List<Activity> activity = jsonFactoryService.createObjectList(activityJO, Activity.class);
+            JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityLocInfo();
+            List<JsonObject> activityJO = dataLayer.getAll(locInfo);
+            List<Activity> activity = jsonFactoryService.createObjectList(activityJO, Activity.class);
 
-        monthlyPlan.generateMonthlyPlan(activity);
+            monthlyPlan.generateMonthlyPlan(activity);
 
-        final JsonDataLocalizationInformation monthlyPlanLocInfo = locInfoFactory.getMonthlyPlanLocInfo();
+            JsonDataLocalizationInformation monthlyPlanLocInfo = locInfoFactory.getMonthlyPlanLocInfo();
+            dataLayer.erase(monthlyPlanLocInfo);
+            dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
 
-        dataLayer.erase(monthlyPlanLocInfo);
-        dataLayer.add(jsonFactoryService.createJson(monthlyPlan), monthlyPlanLocInfo);
-            
-        if(firstMonthlyPlan){
-            updateConfigAfterFirstPlanGenerated();
+            if (firstMonthlyPlan) {
+                updateConfigAfterFirstPlanGenerated();
+            }
+
+            refreshData(monthlyConfigManager, today);
+
+            //aggiorno mappa per permetter di modificare, garantisco la sequenzialità
+            setIsBeingConfigured(mc, PlanState.GENERAZIONE_PIANO, false);
+            setIsBeingConfigured(mc, PlanState.MODIFICHE_APERTE, true);
+
+            return true;
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.out.println("Thread interrotto durante l’attesa del lock.");
+            return false;
+
+        } finally {
+            if (lockAcquired) {
+                MonthlyPlanLockManager.unlock();
+            }
         }
-
-        refreshData(monthlyConfigManager, today);
-
-        //conclusione della generazine del piano, esco dalla sezione critica
-        setIsBeingConfigured(mc, PlanState.GENERAZIONE_PIANO, false);
-        setIsBeingConfigured(mc, PlanState.MODIFICHE_APERTE, true); //una volta generato il piano posso modificare le attività, entreranno in vigore dal mese successivo
-
-        
-        return true;//return true se va tutto bene, sarebbe meglio implementare anche iil false con delle eccezioni dentro
-        //DA FARE
     }
+
 
     /**
      * metodo per applicare le modifiche effettuate nel mese precedente
@@ -155,8 +178,10 @@ public class MonthlyPlanService {
             if(jsonObject.get("deleted").getAsBoolean()){
                 JsonDataLocalizationInformation userLocInfo = locInfoFactory.getUserLocInfo();
                 userLocInfo.setKey(jsonObject.get("name").getAsString());
+                //elimina l'utente
                 dataLayer.delete(userLocInfo);
 
+                //se è un volontario elimina anche il volontario
                 if(jsonObject.get("role").getAsString().equalsIgnoreCase("volontario")){
                     volUtil.deleteVolunteer(jsonObject.get("name").getAsString());
                 }

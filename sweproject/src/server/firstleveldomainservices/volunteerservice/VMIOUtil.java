@@ -74,22 +74,6 @@ public class VMIOUtil{
 
         dataLayer.delete(locInfo);
 
-        deleteVolunteerUser(name);
-    }
-
-    /**
-     * method to delete user of the deleted volunteer
-     * @param name
-     */
-    private void deleteVolunteerUser(String name) {
-        JsonDataLocalizationInformation locInfo = locInfoFactory.getUserLocInfo();
-        locInfo.setKey(name);
-
-        User user = jsonFactoryService.createObject(dataLayer.get(locInfo), User.class);
-
-        user.setIsDeleted(true);
-
-        dataLayer.modify(jsonFactoryService.createJson(user),locInfo);
     }
 
     /**
@@ -103,6 +87,7 @@ public class VMIOUtil{
        User user = jsonFactoryService.createObject(dataLayer.get(locInfo), User.class);
 
        user.setActive(false);
+       user.setIsDeleted(true);
 
        dataLayer.modify(jsonFactoryService.createJson(user), locInfo);
     }

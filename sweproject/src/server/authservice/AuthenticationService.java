@@ -5,7 +5,6 @@ import java.net.Socket;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import server.datalayerservice.datalayers.IDataLayer;
-import server.datalayerservice.datalayers.JsonDataLayer;
 import server.datalayerservice.datalocalizationinformations.ILocInfoFactory;
 import server.datalayerservice.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.gsonfactoryservice.GsonFactoryService;

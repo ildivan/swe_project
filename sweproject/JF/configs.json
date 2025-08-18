@@ -7,7 +7,7 @@
       "maxSubscriptions": 33,
       "placesFirtsConfigured": true,
       "activitiesFirtsConfigured": true,
-      "firstPlanConfigured": true
+      "firstPlanConfigured": false
     }
   ]
 }
