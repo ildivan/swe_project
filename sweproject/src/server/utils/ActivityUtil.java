@@ -184,7 +184,6 @@ public class ActivityUtil{
                volunteers.add(vol);
             }else{
                 ioService.writeMessage("Volontario non esistente, aggiungere un volontario corretto", false);
-                continue;
             }
         }while(continueChoice("aggiunta volontari all'attività"));
         return volunteers.toArray(new String[volunteers.size()]);
