@@ -19,6 +19,8 @@ public interface IPlacesFacade {
 
     public boolean modifyPlace(String placeName, String newName, String newDescription, Optional<Address> newAddress);
 
+    public boolean savePlace(String placeName, Place place);
+
     public boolean deletePlace(String placeName);
 
     public boolean doesPlaceExist(String placeName);

@@ -169,8 +169,8 @@ public class MonthlyPlanBuilder {
             data.getVolunteersFacade().modifyVolunteer(
                 volunteer.getName(), 
                 Optional.empty(),
-                Optional.of(newDays),
-                Optional.of(new LinkedHashSet<>())
+                Optional.of(new LinkedHashSet<>()),
+                Optional.of(newDays)
             );
         }
        

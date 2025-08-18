@@ -243,9 +243,20 @@ public class EditPossibilitiesService extends MainService<Void>{
         for (Place place : places) {
             ioService.writeMessage("Inserire attività per il luogo:\n " + formatter.formatPlace(place), false);
             addActivityWithPlace(place);
+            setHasOneActivityPlace(place);
         }
     }
-              
+    
+    /**
+     * method to set true on atLeastOneActivityRelated
+     * @param place
+     */
+    private void setHasOneActivityPlace(Place place) {
+        place.setAtLeastOneActivityRelated(true);
+        data.getPlacesFacade().savePlace(place.getName(),place);
+    }
+
+
     /**
      * creat an activity on the place passed in input in the method
      * @param place place to relate the activity

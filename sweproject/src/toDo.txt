@@ -1,2 +1,5 @@
+mettere nella versione 4 parte a
 
-
+fix dellattributo sul palce
+fix sul demone
+fix su controllo gionro

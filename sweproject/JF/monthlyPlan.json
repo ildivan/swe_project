@@ -3,65 +3,6 @@
     {
       "date": "16-08-2025",
       "monthlyPlan": {
-        "01-09-2025": {
-          "date": "01-09-2025",
-          "plan": {
-            "Visita Guidata al Duomo Vecchio": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 11:30",
-              "subscriptions": []
-            },
-            "Alla Scoperta del Tempio Capitolino": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30",
-              "subscriptions": []
-            },
-            "Tour della Piazza del Duomo di Brescia": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 11:00",
-              "subscriptions": []
-            },
-            "Visita Serale al Duomo Nuovo": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "17:30 - 19:30",
-              "subscriptions": []
-            },
-            "Visita alla Basilica di San Salvatore": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30",
-              "subscriptions": []
-            },
-            "Passeggiata Fascista: Architettura e Storia": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "11:00 - 12:30",
-              "subscriptions": []
-            },
-            "Tour del Museo di Santa Giulia": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "10:00 - 12:30",
-              "subscriptions": []
-            },
-            "Passeggiata al Parco del Castello": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "15:00 - 17:00",
-              "subscriptions": []
-            },
-            "Passeggiata Guidata al Parco Tarello": {
-              "numberOfSub": 0,
-              "state": "PROPOSTA",
-              "timeOfTheActivity": "09:00 - 10:30",
-              "subscriptions": []
-            }
-          }
-        },
         "02-09-2025": {
           "date": "02-09-2025",
           "plan": {

@@ -197,9 +197,7 @@
       "bigliettoNecessario": true,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": [
-        "Elena"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Duomo Nuovo",
@@ -804,9 +802,7 @@
       "bigliettoNecessario": true,
       "maxPartecipanti": 80,
       "minPartecipanti": 10,
-      "volunteers": [
-        "Elena"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Museo delle Armi",
@@ -830,9 +826,7 @@
       "bigliettoNecessario": true,
       "maxPartecipanti": 20,
       "minPartecipanti": 5,
-      "volunteers": [
-        "Elena"
-      ]
+      "volunteers": []
     },
     {
       "placeName": "Castello di Brescia",

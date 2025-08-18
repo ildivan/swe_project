@@ -1,4 +1,4 @@
-package server.demonservices.demons;
+package server.daemonservices.daemons;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import lock.MonthlyPlanLockManager;
+import server.daemonservices.IDaemon;
 import server.data.facade.FacadeHub;
-import server.demonservices.IDemon;
 import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
@@ -20,13 +20,13 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.utils.ConfigType;
 
-public class MonthlyPlanDemon implements IDemon{
+public class MonthlyPlanDaemon implements IDaemon{
 
     private Map<String, Activity> activities;
     private Map<String, Volunteer> volunteers;
     private FacadeHub data;
 
-    public MonthlyPlanDemon(ConfigType configType, FacadeHub data) {
+    public MonthlyPlanDaemon(ConfigType configType, FacadeHub data) {
         this.data = data;
     }
     //ogni secondo viene chiamato il metodo tick che esegue il compito del demone

@@ -33,9 +33,10 @@ public class MonthlyPlan{
     FacadeHub data) {
         
         this.date = date;
+        this.data = data;
         this.precludeDateService = precludeDateService;
         this.monthlyPlan = buildMonthlyMap();
-        this.data = data;
+        
 
     }
 

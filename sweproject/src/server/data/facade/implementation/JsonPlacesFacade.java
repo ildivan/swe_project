@@ -111,8 +111,7 @@ public class JsonPlacesFacade implements IPlacesFacade{
         return saved;
     }
 
-
-    private boolean savePlace(String placeName, Place place) {
+    public boolean savePlace(String placeName, Place place) {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedPlacesLocInfo();
         locInfo.setKey(placeName);
         

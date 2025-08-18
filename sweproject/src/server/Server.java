@@ -2,12 +2,12 @@ package server;
 
 import server.authservice.AuthenticationService;
 import server.authservice.User;
+import server.daemonservices.DaemonsService;
 import server.data.facade.FacadeHub;
 import server.data.facade.implementation.NoFirstConfigJsonFacadeFactory;
 import server.data.facade.implementation.NormalFunctionJsonFacadeFactory;
 import server.data.facade.implementation.TestJsonFacadeFactory;
 import server.data.facade.interfaces.IFacadeAbstractFactory;
-import server.demonservices.DemonsService;
 import server.firstleveldomainservices.configuratorservice.ConfigService;
 import server.firstleveldomainservices.userservice.UserService;
 import server.firstleveldomainservices.volunteerservice.VolunteerService;
@@ -30,7 +30,7 @@ public class Server {
     private final int SERVER_TERMINA_PORT = ServerConnectionPorts.SERVER.getCode();
 
 
-    DemonsService demonsService;
+    DaemonsService demonsService;
     private final FacadeHub data;
 
     public Server(ConfigType configType, List<User> users, IFacadeAbstractFactory facadeFactory) {
@@ -47,7 +47,7 @@ public class Server {
         if(configType == ConfigType.NO_FIRST_CONFIG){
             initializeChangedFiles();
         }
-        this.demonsService = new DemonsService(configType,data);
+        this.demonsService = new DaemonsService(configType,data);
 
     }
 
@@ -229,8 +229,8 @@ public class Server {
 
     public static void main(String[] args) {
         
-        ConfigType configType = ConfigType.NORMAL;
-        // ConfigType configType = ConfigType.NO_FIRST_CONFIG;
+        // ConfigType configType = ConfigType.NORMAL;
+        ConfigType configType = ConfigType.NO_FIRST_CONFIG;
 
         //creo gli utenti che mi servono
         // configuratore, fruitore -> volontario è aggiunto successivamente
