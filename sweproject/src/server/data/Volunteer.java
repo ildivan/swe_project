@@ -1,4 +1,4 @@
-package server.firstleveldomainservices.volunteerservice;
+package server.data;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

@@ -3,8 +3,8 @@ package server.data.facade.interfaces;
 import java.util.List;
 import java.util.Optional;
 
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
+import server.data.Address;
+import server.data.Place;
 
 public interface IPlacesFacade {
     public List<Place> getPlaces();

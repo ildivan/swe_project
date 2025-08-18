@@ -5,7 +5,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import server.Server;
-import server.authservice.User;
+import server.data.User;
 import server.data.facade.implementation.TestJsonFacadeFactory;
 import server.utils.ConfigType;
 import static org.junit.Assert.*;

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import server.firstleveldomainservices.volunteerservice.Volunteer;
+import server.data.Volunteer;
 
 public interface IVolunteersFacade {
     public boolean addVolunteer(String name);

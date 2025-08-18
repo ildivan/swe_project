@@ -2,6 +2,7 @@ package server.authservice;
 
 import java.net.Socket;
 
+import server.data.User;
 import server.data.facade.FacadeHub;
 import server.ioservice.IInputOutput;
 import server.ioservice.IOService;

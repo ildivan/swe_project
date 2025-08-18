@@ -11,6 +11,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import server.data.Activity;
+import server.data.Address;
+import server.data.Place;
 import server.data.facade.implementation.JsonActivitiesFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
@@ -18,9 +22,6 @@ import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizat
 import server.data.json.datalayer.datalocalizationinformations.TestJsonLocInfoFactory;
 import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
 import server.data.json.datalayer.datareadwrite.JsonReadWrite;
-import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.*;
 import server.jsonfactoryservice.JsonFactoryService;
 

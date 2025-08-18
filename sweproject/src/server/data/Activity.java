@@ -1,4 +1,4 @@
-package server.firstleveldomainservices;
+package server.data;
 
 import java.time.Duration;
 import java.time.LocalDate;

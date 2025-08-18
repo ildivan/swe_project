@@ -10,13 +10,13 @@ import java.util.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import server.data.Address;
+import server.data.Place;
 import server.data.facade.interfaces.IPlacesFacade;
 import server.data.json.datalayer.datalayers.JsonDataLayer;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.JsonDataLocalizationInformation;
 import server.data.json.datalayer.datareadwrite.IJsonReadWrite;
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
 import server.gsonfactoryservice.GsonFactoryService;
 import server.jsonfactoryservice.JsonFactoryService;
 

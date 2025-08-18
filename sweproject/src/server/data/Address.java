@@ -1,4 +1,4 @@
-package server.firstleveldomainservices;
+package server.data;
 
 public class Address {
     

@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 import java.util.Set;
-import server.authservice.User;
+
+import server.data.User;
 import server.data.facade.FacadeHub;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.MenuService;
 import server.firstleveldomainservices.secondleveldomainservices.menuservice.menus.UserMenu;

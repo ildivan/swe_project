@@ -2,11 +2,12 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import java.util.*;
+
+import server.data.Volunteer;
 import server.data.facade.implementation.JsonVolunteersFacade;
 import server.data.json.datalayer.datalocalizationinformations.IJsonLocInfoFactory;
 import server.data.json.datalayer.datalocalizationinformations.TestJsonLocInfoFactory;
 import server.data.json.datalayer.datareadwrite.JsonReadWrite;
-import server.firstleveldomainservices.volunteerservice.Volunteer;
 
 public class JsonVolunteersFacadeTest {
 

@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import server.firstleveldomainservices.Activity;
-import server.firstleveldomainservices.Address;
-import server.firstleveldomainservices.Place;
+
+import server.data.Activity;
+import server.data.Address;
+import server.data.Place;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityRecord;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;

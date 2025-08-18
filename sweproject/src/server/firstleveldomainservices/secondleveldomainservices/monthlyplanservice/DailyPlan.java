@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 import server.DateService;
-import server.firstleveldomainservices.Activity;
+import server.data.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.subscriptionservice.Subscription;
 
 public class DailyPlan {
