@@ -239,6 +239,7 @@ public class VolunteerService extends MainService<Void>{
         //lo formatto per averlo in italiano e con solo la prima lettera maiuscola
         nameDay = dayOfWeek.getDisplayName(TextStyle.FULL, Locale.ITALIAN);
         nameDay = Character.toUpperCase(nameDay.charAt(0)) + nameDay.substring(1);
+        nameDay = nameDay.replace("ì", "i");
         for (Activity a : myActivities) {
             String[] days = a.getProgrammableDays();
             for (String day : days) {

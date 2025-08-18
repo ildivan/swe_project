@@ -64,7 +64,7 @@ public class ConfiguratorMenu extends MenuManager{
         Configs configs = data.getConfigFacade().getConfig(configType);
         MonthlyConfig mc = data.getMonthlyConfigFacade().getMonthlyConfig();
         
-        if(correctDateToGeneratePlan(mc)&& checkIfAlredyBuildPlan()){
+        if(correctDateToGeneratePlan(mc) && checkIfAlredyBuildPlan()){
             map.put("Genera Piano Mensile", true);
             //fare che se il piano non è stato generato il 16 laprima cosa da fare è quella, vanno osxurate tutte le altre voci
         }else{
