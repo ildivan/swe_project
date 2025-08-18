@@ -11,14 +11,14 @@ import java.util.concurrent.TimeUnit;
 import lock.MonthlyPlanLockManager;
 import server.daemonservices.IDaemon;
 import server.data.facade.FacadeHub;
-import server.firstleveldomainservices.Activity;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyconfigservice.MonthlyConfig;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityInfo;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.ActivityState;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.DailyPlan;
 import server.firstleveldomainservices.secondleveldomainservices.monthlyplanservice.MonthlyPlan;
-import server.firstleveldomainservices.volunteerservice.Volunteer;
 import server.utils.ConfigType;
+import server.data.Activity;
+import server.data.Volunteer;
 
 public class MonthlyPlanDaemon implements IDaemon{
 
@@ -85,7 +85,7 @@ public class MonthlyPlanDaemon implements IDaemon{
         //leggo dal file non modificato ovviamente, in quanto il piano attuale si basa su di esso
         
         Map<String, Activity> map = new HashMap<>();
-        for (Activity a : data.getActivitiesFacade().getActivities()) {
+        for (Activity a : data.getActivitiesFacade().getDaemonActivities()) {
             map.put(a.getTitle(), a);
         }
         return map;

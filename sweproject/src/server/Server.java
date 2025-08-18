@@ -1,8 +1,8 @@
 package server;
 
 import server.authservice.AuthenticationService;
-import server.authservice.User;
 import server.daemonservices.DaemonsService;
+import server.data.User;
 import server.data.facade.FacadeHub;
 import server.data.facade.implementation.NoFirstConfigJsonFacadeFactory;
 import server.data.facade.implementation.NormalFunctionJsonFacadeFactory;
@@ -42,10 +42,12 @@ public class Server {
             data.getConfigFacade().initializeConfig();
             data.getUsersFacade().addUsers(users);
             data.getMonthlyConfigFacade().initializeMonthlyConfig();
+            data.getActivitiesFacade().refreshDeamonActivities();
         }
 
         if(configType == ConfigType.NO_FIRST_CONFIG){
             initializeChangedFiles();
+            data.getActivitiesFacade().refreshDeamonActivities();
         }
         this.demonsService = new DaemonsService(configType,data);
 

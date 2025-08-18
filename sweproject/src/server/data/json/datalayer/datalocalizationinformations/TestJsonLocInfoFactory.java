@@ -32,7 +32,7 @@ public class TestJsonLocInfoFactory implements IJsonLocInfoFactory {
     private static final String PRECLUDE_DATES_PATH = "test/JFTest/precludeDates.json";
     private static final String PRECLUDE_DATES_PATH_MEMBER_NAME = "precludeDates";
     private static final String PRECLUDE_DATES_PATH_KEY_DESC = "dateOfPlan";
-
+    private static final String DAEMON_ACTIVITY_PATH = "test/JFTest/daemonAct.json";
 
     /**
      * metodo che ritorna le informazioni di localizzazione per dati salvati in
@@ -170,6 +170,15 @@ public class TestJsonLocInfoFactory implements IJsonLocInfoFactory {
        localizationInformation.setMemberName(PRECLUDE_DATES_PATH_MEMBER_NAME);
        localizationInformation.setKeyDesc(PRECLUDE_DATES_PATH_KEY_DESC);
        return localizationInformation;
+    }
+
+    @Override
+    public JsonDataLocalizationInformation getActivityDaemonLocInfo() {
+        JsonDataLocalizationInformation locInfo = new JsonDataLocalizationInformation();
+        locInfo.setPath(DAEMON_ACTIVITY_PATH);
+        locInfo.setMemberName(ACTIVITY_MEMBER_NAME);
+        locInfo.setKeyDesc(ACTIVITY_KEY_DESC);
+        return locInfo;
     }
     
 }

@@ -14,6 +14,7 @@ import server.firstleveldomainservices.secondleveldomainservices.monthlyplanserv
 
 public interface IActivitiesFacade {
     public List<Activity> getActivities();
+    public List<Activity> getDaemonActivities();
     public List<Activity> getChangedActivities();
     public Activity getActivity(String activityName);
     public Activity getChangedActivity(String activityName);
@@ -53,4 +54,5 @@ public interface IActivitiesFacade {
     public void copyToReadOnlyActivity();
     public void initializeChangedFiles();
     public void refreshChangedActivities();
+    public void refreshDeamonActivities();
 }

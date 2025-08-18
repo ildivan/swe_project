@@ -17,9 +17,7 @@
     },
     {
       "name": "Luca",
-      "disponibilityDaysCurrent": [
-        "06-09-2025"
-      ],
+      "disponibilityDaysCurrent": [],
       "disponibilityDaysOld": []
     },
     {
@@ -48,12 +46,12 @@
       "disponibilityDaysOld": []
     },
     {
-      "name": "Adele",
+      "name": "Elena",
       "disponibilityDaysCurrent": [],
       "disponibilityDaysOld": []
     },
     {
-      "name": "Test",
+      "name": "Adele",
       "disponibilityDaysCurrent": [],
       "disponibilityDaysOld": []
     }

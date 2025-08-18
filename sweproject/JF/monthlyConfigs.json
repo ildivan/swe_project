@@ -12,8 +12,8 @@
         "DISPONIBILITA_APERTE": false,
         "MODIFICHE_APERTE": true
       },
-      "sequenceSubscriptionNumber": 2,
-      "daysBeforeActivityConfirmation": 3
+      "sequenceSubscriptionNumber": 1,
+      "daysBeforeActivityConfirmation": 2
     }
   ]
 }

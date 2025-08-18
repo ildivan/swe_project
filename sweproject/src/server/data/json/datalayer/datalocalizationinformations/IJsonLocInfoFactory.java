@@ -13,4 +13,5 @@ public interface IJsonLocInfoFactory {
     JsonDataLocalizationInformation getChangedActivitiesLocInfo();
     JsonDataLocalizationInformation getChangedPlacesLocInfo();
     JsonDataLocalizationInformation getPrecludeDatesLocInfo();
+    JsonDataLocalizationInformation getActivityDaemonLocInfo();
 }

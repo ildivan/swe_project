@@ -90,6 +90,7 @@ public class MonthlyPlanBuilder {
     private void refreshData(MonthlyConfig mc, LocalDate date) {
         
         data.getMonthlyConfigFacade().updateMonthlyConfigAfterPlan(mc, date);
+        data.getActivitiesFacade().refreshDeamonActivities();
         data.getPlacesFacade().refreshChangedPlaces();
         data.getActivitiesFacade().refreshChangedActivities();
         refreshUsers();

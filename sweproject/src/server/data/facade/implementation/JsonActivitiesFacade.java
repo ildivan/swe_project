@@ -51,6 +51,16 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
     }
 
     @Override
+    public List<Activity> getDaemonActivities() {
+        JsonDataLocalizationInformation locInfo = locInfoFactory.getActivityDaemonLocInfo();
+
+        List<JsonObject> activitiesJO = dataLayer.getAll(locInfo);
+        List<Activity> activities = jsonFactoryService.createObjectList(activitiesJO, Activity.class);
+
+        return activities;
+    }
+
+    @Override
     public List<Activity> getChangedActivities() {
         JsonDataLocalizationInformation locInfo = locInfoFactory.getChangedActivitiesLocInfo();
 
@@ -271,6 +281,18 @@ public class JsonActivitiesFacade implements IActivitiesFacade {
             Files.copy(changedActivitiesPath, tempPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             // Move atomico
             Files.move(tempPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.ATOMIC_MOVE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+     @Override
+     public void refreshDeamonActivities() {
+        Path deamonActivitiesPath = Paths.get(locInfoFactory.getActivityDaemonLocInfo().getPath());
+        Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+
+        try {
+            Files.copy(originalActivitiesPath,deamonActivitiesPath , java.nio.file.StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
