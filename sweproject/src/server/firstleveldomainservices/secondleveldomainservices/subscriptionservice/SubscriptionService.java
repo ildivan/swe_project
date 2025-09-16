@@ -94,13 +94,14 @@ public class SubscriptionService {
             }
 
             String userName = user.getName();
-            int subscriptionCode = monthlyConfigService.getCurrentSubCode();
             int numberOfSubscriptions = ioService.readIntegerWithMinMax("\nInserisci il numero di iscrizioni: ", 1, getMaxNumberOfSubscriptions());
 
             if (!checkIfCanSubscribeEveryone(numberOfSubscriptions, activityName, activityInfo)) {
                 ioService.writeMessage("Impossibile iscriversi a questa visita: MASSIMO NUMERO DI ISCRITTI SUPERATO", false);
                 return;
             }
+
+            int subscriptionCode = monthlyConfigService.getCurrentSubCode();
 
             Subscription subscription = new Subscription(
                 userName,
@@ -291,14 +292,15 @@ public class SubscriptionService {
      */
     public Set<Subscription> getSubscriptionsForUser() {
         Set<Subscription> subscriptions = getSubscriptions(); //questo metodo deve essere inserito nella facade per il datalayer
+        Set<Subscription> userSubscriptions = new HashSet<>();
 
         for (Subscription subscription : subscriptions) {
             if (subscription.getUserName().equals(user.getName())) {
-                subscriptions.add(subscription);
+                userSubscriptions.add(subscription);
             }
         }
 
-        return subscriptions;
+        return userSubscriptions;
     }
 
     /**
@@ -327,7 +329,7 @@ public class SubscriptionService {
 
         ActivityInfo activityInfo = monthlyPlanService.getActivityInfoBasedOnSubCode(subscription);
 
-        if(!(activityInfo.getState()==ActivityState.PROPOSTA)){
+        if (!(activityInfo.getState() == ActivityState.PROPOSTA || activityInfo.getState() == ActivityState.COMPLETA)){
             ioService.writeMessage(String.format("Impossibile eliminare iscrizione a questa visita:\nMotivo: %s",getErrorMessagebaseOnState(activityInfo)), false);
             return;
         }
@@ -339,11 +341,7 @@ public class SubscriptionService {
         } else {
             ioService.writeMessage("Iscrizione non trovata.", false);
         }
-
-        
-
-        
-        
+ 
     }
 
     /**

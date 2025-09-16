@@ -142,11 +142,18 @@ public class MonthlyPlanService {
      * aggiorna le modifiche hai luoghi
      */
     private void refreshChangedPlaces() {
+
+        //file temporaneo per rendere atomica la copia, altrimenti possibili inconsistenze
+        //NECESSARIA ATOMIC_MOVE support
         Path changedPlacesPath = Paths.get(locInfoFactory.getChangedPlacesLocInfo().getPath());
         Path originalPlacesPath = Paths.get(locInfoFactory.getPlaceLocInfo().getPath());
+        Path tempPath = originalPlacesPath.resolveSibling(originalPlacesPath.getFileName() + ".tmp");
 
         try {
-            Files.copy(changedPlacesPath, originalPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // Copia su file temporaneo
+            Files.copy(changedPlacesPath, tempPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // Move atomico (rinomina il file temporaneo in quello definitivo)
+            Files.move(tempPath, originalPlacesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.ATOMIC_MOVE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -157,11 +164,18 @@ public class MonthlyPlanService {
      * aggiorna le modifiche alle attività
      */
     private void refreshChangedActivities() {
+
+        //file temporaneo per rendere atomica la copia, altrimenti possibili inconsistenze
+        //NECESSARIA ATOMIC_MOVE support
         Path changedActivitiesPath = Paths.get(locInfoFactory.getChangedActivitiesLocInfo().getPath());
         Path originalActivitiesPath = Paths.get(locInfoFactory.getActivityLocInfo().getPath());
+        Path tempPath = originalActivitiesPath.resolveSibling(originalActivitiesPath.getFileName() + ".tmp");
 
         try {
-            Files.copy(changedActivitiesPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // Copia su file temporaneo
+            Files.copy(changedActivitiesPath, tempPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            // Move atomico
+            Files.move(tempPath, originalActivitiesPath, java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.ATOMIC_MOVE);
         } catch (IOException e) {
             e.printStackTrace();
         }

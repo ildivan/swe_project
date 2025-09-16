@@ -193,14 +193,16 @@ public class MonthlyPlanDemon implements IDemon{
      */
     private ActivityInfo checkActivityState(ActivityInfo activityInfo, Activity activity, LocalDate date) {
         //controllo se è al completo
-        if(checkIfActivitiesHaveMaxNumberOfSubscriptions(activityInfo, activity)){
-            activityInfo.setState(ActivityState.COMPLETA);
-        }else{
-            if(!(ChronoUnit.DAYS.between(LocalDate.now(), date)<=0)){
-                //faccio cosi perche se qualcuno disdice almeno torna proposta
-                activityInfo.setState(ActivityState.PROPOSTA);
+        if(!(activityInfo.getState() == ActivityState.CONFERMATA || activityInfo.getState() == ActivityState.EFFETTUATA)){
+            if(checkIfActivitiesHaveMaxNumberOfSubscriptions(activityInfo, activity)){
+                activityInfo.setState(ActivityState.COMPLETA);
+            }else{
+                if(!(ChronoUnit.DAYS.between(LocalDate.now(), date)<=0)){
+                    //faccio cosi perche se qualcuno disdice almeno torna proposta
+                    activityInfo.setState(ActivityState.PROPOSTA);
+                }
+                
             }
-            
         }
 
         //controllo se è possibile confermarla, altimenti elimino
